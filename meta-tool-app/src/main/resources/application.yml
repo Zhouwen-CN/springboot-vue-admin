@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: meta-tool-app
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/meta_tool
+    username: root
+    password: 123
