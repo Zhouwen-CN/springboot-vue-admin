@@ -11,6 +11,6 @@ import com.yeeiee.entity.DataRange;
  * @author chen
  * @since 2024-04-27
  */
-public interface IDataRangeService extends IService<DataRange> {
+public interface DataRangeService extends IService<DataRange> {
 
 }

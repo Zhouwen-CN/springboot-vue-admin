@@ -11,6 +11,6 @@ import com.yeeiee.entity.DataField;
  * @author chen
  * @since 2024-04-27
  */
-public interface IDataFieldService extends IService<DataField> {
+public interface DataFieldService extends IService<DataField> {
 
 }

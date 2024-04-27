@@ -1,8 +1,7 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.RootWord;
-import com.yeeiee.mapper.RootWordMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-04-27
  */
 @RestController
-@RequestMapping("/word")
+@RequestMapping("/rootWord")
 @Tag(name = "词根表 控制器")
-public class RootWordController extends BaseController<RootWordMapper, RootWord> {
+public class RootWordController extends BaseController<RootWord> {
 
-    public RootWordController(ServiceImpl<RootWordMapper, RootWord> service) {
+    public RootWordController(IService<RootWord> service) {
         super(service);
     }
 }

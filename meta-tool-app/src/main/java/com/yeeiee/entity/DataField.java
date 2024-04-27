@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -20,21 +21,21 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@TableName("t_data_field")
+@TableName("`t_data_field`")
 @Schema(name = "DataField", description = "数据域表")
 public class DataField implements Serializable {
-
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "主键")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "领域名称")
-    @TableField("name")
+    @TableField("`name`")
     private String name;
 
     @Schema(description = "说明")
-    @TableField("description")
-    private String description;
+    @TableField("`desc`")
+    private String desc;
 }

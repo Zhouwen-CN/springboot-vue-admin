@@ -3,7 +3,7 @@ package com.yeeiee.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.DataStorey;
 import com.yeeiee.mapper.DataStoreyMapper;
-import com.yeeiee.service.IDataStoreyService;
+import com.yeeiee.service.DataStoreyService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2024-04-27
  */
 @Service
-public class DataStoreyServiceImpl extends ServiceImpl<DataStoreyMapper, DataStorey> implements IDataStoreyService {
+public class DataStoreyServiceImpl extends ServiceImpl<DataStoreyMapper, DataStorey> implements DataStoreyService {
 
 }

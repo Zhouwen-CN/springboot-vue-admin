@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -20,21 +21,21 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@TableName("t_data_range")
+@TableName("`t_data_range`")
 @Schema(name = "DataRange", description = "数据范围表")
 public class DataRange implements Serializable {
-
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "主键")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "范围/周期")
-    @TableField("range")
+    @TableField("`range`")
     private String range;
 
     @Schema(description = "说明")
-    @TableField("description")
-    private String description;
+    @TableField("`desc`")
+    private String desc;
 }

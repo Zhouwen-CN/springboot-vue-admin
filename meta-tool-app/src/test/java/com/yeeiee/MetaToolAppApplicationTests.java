@@ -17,7 +17,7 @@ class MetaToolAppApplicationTests {
 	void contextLoads() {
 		val dataField = new DataField();
 		dataField.setName("test5");
-		dataField.setDescription("测试事务5");
-		dataFieldService.saveOne(dataField);
+		dataField.setDesc("测试事务5");
+		dataFieldService.save(dataField);
 	}
 }

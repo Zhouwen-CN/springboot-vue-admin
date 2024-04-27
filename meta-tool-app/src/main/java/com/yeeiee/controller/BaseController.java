@@ -1,9 +1,8 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +25,10 @@ import java.util.List;
  * @author chen
  * @since 2024-04-27
  */
-public abstract class BaseController<M extends BaseMapper<T>, T> {
-    protected ServiceImpl<M, T> service;
+public abstract class BaseController<T> {
+    protected IService<T> service;
 
-    public BaseController(ServiceImpl<M, T> service) {
+    public BaseController(IService<T> service) {
         this.service = service;
     }
 

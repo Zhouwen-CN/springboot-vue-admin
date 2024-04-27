@@ -6,13 +6,13 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.DataStorey">
         <id column="id" property="id"/>
         <result column="storey" property="storey"/>
-        <result column="description" property="description"/>
+        <result column="desc" property="desc"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        , storey, description
+        , storey, desc
     </sql>
 
 </mapper>

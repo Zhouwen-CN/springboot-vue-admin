@@ -1,16 +1,16 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.DataStorey;
+import com.yeeiee.entity.RootWord;
 
 /**
  * <p>
- * 数仓层级表 服务类
+ * 词根表 服务类
  * </p>
  *
  * @author chen
  * @since 2024-04-27
  */
-public interface IDataStoreyService extends IService<DataStorey> {
+public interface RootWordService extends IService<RootWord> {
 
 }

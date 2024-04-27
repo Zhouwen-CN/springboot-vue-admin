@@ -40,9 +40,9 @@ DROP TABLE IF EXISTS `t_data_field`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_field`
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name`        varchar(100) NOT NULL COMMENT '领域名称',
-    `description` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`   bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name` varchar(100) NOT NULL COMMENT '领域名称',
+    `desc` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_name` (`name`)
 ) ENGINE = InnoDB
@@ -75,9 +75,9 @@ DROP TABLE IF EXISTS `t_data_range`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_range`
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `range`       varchar(100) NOT NULL COMMENT '范围/周期',
-    `description` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`    bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `range` varchar(100) NOT NULL COMMENT '范围/周期',
+    `desc`  varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_range` (`range`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数据范围表';
@@ -112,9 +112,9 @@ DROP TABLE IF EXISTS `t_data_storey`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_storey`
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `storey`      varchar(100) NOT NULL COMMENT '层名',
-    `description` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`     bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `storey` varchar(100) NOT NULL COMMENT '层名',
+    `desc`   varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_storey` (`storey`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数仓层级表';
@@ -149,9 +149,9 @@ DROP TABLE IF EXISTS `t_root_word`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_root_word`
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `word`        varchar(100) NOT NULL COMMENT '单词',
-    `description` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`   bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `word` varchar(100) NOT NULL COMMENT '单词',
+    `desc` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_word` (`word`)
 ) ENGINE=InnoDB AUTO_INCREMENT=851 DEFAULT CHARSET=utf8mb3 COMMENT='词根表';

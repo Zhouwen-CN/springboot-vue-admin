@@ -7,3 +7,7 @@ spring:
     url: jdbc:mysql://192.168.135.199:3306/meta_tool
     username: root
     password: 1234
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
