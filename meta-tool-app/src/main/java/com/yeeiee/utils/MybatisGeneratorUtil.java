@@ -54,7 +54,7 @@ public class MybatisGeneratorUtil {
                             .addTablePrefix("t_"); // 设置过滤表前缀
 
                     builder.entityBuilder()
-                            .javaTemplate("/template/entity.java")
+                            .javaTemplate("/templates/entity.java")
                             .idType(IdType.AUTO)
                             .enableRemoveIsPrefix()
                             .enableTableFieldAnnotation()
@@ -62,7 +62,7 @@ public class MybatisGeneratorUtil {
                             .enableFileOverride();
 
                     builder.controllerBuilder()
-                            .template("/template/controller.java")
+                            .template("/templates/controller.java")
                             .superClass(BaseController.class)
                             .enableRestStyle()
                             .enableFileOverride();
