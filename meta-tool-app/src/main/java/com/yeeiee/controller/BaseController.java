@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.exception.DmlOperationFailureException;
+import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -60,7 +60,7 @@ public abstract class BaseController<M extends BaseMapper<T>, T> {
     public R<T> removeById(@PathVariable("id") Long id) {
         val status = service.removeById(id);
         if (!status) {
-            throw new DmlOperationFailureException("删除失败【id】：" + id);
+            throw new DmlOperationException("删除失败【id】：" + id);
         }
         return R.ok();
     }
@@ -70,7 +70,7 @@ public abstract class BaseController<M extends BaseMapper<T>, T> {
     public R<T> save(@RequestBody T entity) {
         val status = service.save(entity);
         if (!status) {
-            throw new DmlOperationFailureException("新增失败【entity】：" + entity);
+            throw new DmlOperationException("新增失败【entity】：" + entity);
         }
         return R.ok();
     }
@@ -80,7 +80,7 @@ public abstract class BaseController<M extends BaseMapper<T>, T> {
     public R<T> update(@RequestBody T entity) {
         val status = service.updateById(entity);
         if (!status) {
-            throw new DmlOperationFailureException("更新失败【entity】：" + entity);
+            throw new DmlOperationException("更新失败【entity】：" + entity);
         }
         return R.ok();
     }
@@ -90,7 +90,7 @@ public abstract class BaseController<M extends BaseMapper<T>, T> {
     public R<T> saveOrUpdate(@RequestBody T entity) {
         val status = service.saveOrUpdate(entity);
         if (!status) {
-            throw new DmlOperationFailureException("upsert失败【entity】：" + entity);
+            throw new DmlOperationException("upsert失败【entity】：" + entity);
         }
         return R.ok();
     }

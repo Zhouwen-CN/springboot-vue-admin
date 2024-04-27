@@ -1,6 +1,6 @@
 package com.yeeiee.handler;
 
-import com.yeeiee.exception.DmlOperationFailureException;
+import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.utils.R;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(DmlOperationFailureException.class)
-    public R<Void> dmlFailureHandler(DmlOperationFailureException e) {
+    @ExceptionHandler(DmlOperationException.class)
+    public R<Void> dmlFailureHandler(DmlOperationException e) {
         return R.error(HttpStatus.NOT_MODIFIED, e);
     }
 
