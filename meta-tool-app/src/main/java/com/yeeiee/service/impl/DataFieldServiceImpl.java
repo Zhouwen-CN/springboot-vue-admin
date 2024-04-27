@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.DataField;
 import com.yeeiee.mapper.DataFieldMapper;
 import com.yeeiee.service.IDataFieldService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataFieldServiceImpl extends ServiceImpl<DataFieldMapper, DataField> implements IDataFieldService {
 
+    @Autowired
+    DataFieldMapper dataFieldMapper;
+
+    /**
+     * todo：测试事务
+     */
+    public void saveOne(DataField dataField) {
+        dataFieldMapper.insert(dataField);
+        throw new RuntimeException("do transaction test");
+    }
 }
