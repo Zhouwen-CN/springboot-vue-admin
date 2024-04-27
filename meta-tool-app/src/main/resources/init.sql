@@ -4,49 +4,50 @@
 -- ------------------------------------------------------
 -- Server version	8.1.0
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40103 SET @OLD_TIME_ZONE = @@TIME_ZONE */;
+/*!40103 SET TIME_ZONE = '+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS, UNIQUE_CHECKS = 0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
+/*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
 
 create
-database if not exists `meta-tool`;
-use
-`meta-tool`;
+    database if not exists `meta_tool`;
+use `meta_tool`;
 
 SET
-@MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+    @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET
-@@SESSION.SQL_LOG_BIN= 0;
+    @@SESSION.SQL_LOG_BIN = 0;
 
 --
 -- GTID state at the beginning of the backup 
 --
 
 SET
-@@GLOBAL.GTID_PURGED=/*!80000 '+'*/ 'c356e02c-5051-11ee-87d0-e070eacf9427:1-131664';
+    @@GLOBAL.GTID_PURGED = /*!80000 '+'*/ 'c356e02c-5051-11ee-87d0-e070eacf9427:1-131664';
 
 --
 -- Table structure for table `t_data_field`
 --
 
 DROP TABLE IF EXISTS `t_data_field`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_field`
 (
-    `id`   bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name` varchar(100) NOT NULL COMMENT '领域名称',
-    `desc` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(100) NOT NULL COMMENT '领域名称',
+    `description` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COMMENT='数据域表';
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8mb3 COMMENT ='数据域表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,9 +75,9 @@ DROP TABLE IF EXISTS `t_data_range`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_range`
 (
-    `id`    bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `range` varchar(100) NOT NULL COMMENT '范围/周期',
-    `desc`  varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `range`       varchar(100) NOT NULL COMMENT '范围/周期',
+    `description` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_range` (`range`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数据范围表';
@@ -111,9 +112,9 @@ DROP TABLE IF EXISTS `t_data_storey`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_data_storey`
 (
-    `id`     bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `storey` varchar(100) NOT NULL COMMENT '层名',
-    `desc`   varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `storey`      varchar(100) NOT NULL COMMENT '层名',
+    `description` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_storey` (`storey`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数仓层级表';
@@ -148,9 +149,9 @@ DROP TABLE IF EXISTS `t_root_word`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_root_word`
 (
-    `id`   bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `word` varchar(100) NOT NULL COMMENT '单词',
-    `desc` varchar(255) DEFAULT NULL COMMENT '说明',
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `word`        varchar(100) NOT NULL COMMENT '单词',
+    `description` varchar(255) DEFAULT NULL COMMENT '说明',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_word` (`word`)
 ) ENGINE=InnoDB AUTO_INCREMENT=851 DEFAULT CHARSET=utf8mb3 COMMENT='词根表';

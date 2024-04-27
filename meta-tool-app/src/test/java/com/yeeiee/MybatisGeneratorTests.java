@@ -1,9 +1,11 @@
 package com.yeeiee;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.yeeiee.controller.BaseController;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,13 +25,13 @@ class MybatisGeneratorTests {
 	@Value("${spring.datasource.password}")
 	private String password;
 
-	@Test
-	void generator() {
+
+	void generatorCRUD(String... tableName) {
 		val projectPath = System.getProperty("user.dir");
 
 		FastAutoGenerator.create(url, username, password)
 				.globalConfig(builder -> builder.author("chen")
-						.enableSwagger()
+						.enableSpringdoc()
 						.outputDir(projectPath + "/src/main/java")
 				)
 				.dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
@@ -50,28 +52,28 @@ class MybatisGeneratorTests {
 							.pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "/src/main/resources/mapper")); // 设置mapperXml生成路径
 				})
 				.strategyConfig(builder -> {
-					builder.addInclude("t_data_field") // 设置需要生成的表名
-							.addTablePrefix("t_", "c_"); // 设置过滤表前缀
+					builder.addInclude(tableName) // 设置需要生成的表名
+							.addTablePrefix("t_"); // 设置过滤表前缀
 
 					builder.entityBuilder()
+							.idType(IdType.AUTO)
 							.enableRemoveIsPrefix()
 							.enableTableFieldAnnotation()
 							.enableLombok()
 							.enableFileOverride();
 
 					builder.controllerBuilder()
-							.enableRestStyle()
-							.enableFileOverride();
+							.template("controller.java")
+							.superClass(BaseController.class)
+							.enableRestStyle();
+					// .enableFileOverride();
 
 					builder.serviceBuilder()
-							.formatServiceFileName("%sService")
-							.formatServiceImplFileName("%sServiceImpl")
 							.enableFileOverride();
 
 					builder.mapperBuilder()
 							.enableBaseResultMap()
-							.formatMapperFileName("%sMapper")
-							.formatXmlFileName("%sMapper")
+							.enableBaseColumnList()
 							.enableFileOverride();
 
 				})
@@ -79,4 +81,8 @@ class MybatisGeneratorTests {
 				.execute();
 	}
 
+	@Test
+	void generatorTest() {
+		generatorCRUD("t_data_field", "t_data_range", "t_data_storey", "t_root_word");
+	}
 }
