@@ -9,7 +9,7 @@ import com.yeeiee.entity.DataRange;
  * </p>
  *
  * @author chen
- * @since 2024-04-27
+ * @since 2024-04-28
  */
 public interface DataRangeService extends IService<DataRange> {
 

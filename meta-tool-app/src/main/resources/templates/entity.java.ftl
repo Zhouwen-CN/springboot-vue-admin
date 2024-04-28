@@ -1,7 +1,6 @@
 package ${package.Entity};
 
 <#list table.importPackages as pkg>
-    import java.io.Serial;
     import ${pkg};
 </#list>
 <#if springdoc>
@@ -13,6 +12,7 @@ package ${package.Entity};
 <#if entityLombokModel>
     import lombok.Getter;
     import lombok.Setter;
+    import lombok.ToString;
     <#if chainModel>
         import lombok.experimental.Accessors;
     </#if>
@@ -29,6 +29,7 @@ package ${package.Entity};
 <#if entityLombokModel>
     @Getter
     @Setter
+    @ToString
     <#if chainModel>
         @Accessors(chain = true)
     </#if>
@@ -51,7 +52,6 @@ package ${package.Entity};
     public class ${entity} {
 </#if>
 <#if entitySerialVersionUID>
-    @Serial
     private static final long serialVersionUID = 1L;
 </#if>
 <#-- ----------  BEGIN 字段循环遍历  ---------->

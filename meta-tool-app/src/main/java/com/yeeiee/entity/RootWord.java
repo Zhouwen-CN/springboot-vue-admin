@@ -1,15 +1,12 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import java.io.Serial;
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -17,15 +14,14 @@ import java.io.Serializable;
  * </p>
  *
  * @author chen
- * @since 2024-04-27
+ * @since 2024-04-28
  */
 @Getter
 @Setter
+@ToString
 @TableName("`t_root_word`")
 @Schema(name = "RootWord", description = "词根表")
-public class RootWord implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class RootWord {
 
     @Schema(description = "主键")
     @TableId(value = "`id`", type = IdType.AUTO)
@@ -38,4 +34,12 @@ public class RootWord implements Serializable {
     @Schema(description = "说明")
     @TableField("`desc`")
     private String desc;
+
+    @Schema(description = "创建时间")
+    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    @Schema(description = "更新时间")
+    @TableField(value = "`update_time`", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 }

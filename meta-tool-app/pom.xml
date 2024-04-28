@@ -13,6 +13,7 @@
     <groupId>com.yeeiee</groupId>
     <artifactId>meta-tool-app</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>meta-tool-app</name>
 
     <dependencies>
         <dependency>

@@ -7,12 +7,14 @@
         <id column="id" property="id"/>
         <result column="word" property="word"/>
         <result column="desc" property="desc"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
-        , word, desc
+        , word, desc, create_time, update_time
     </sql>
 
 </mapper>

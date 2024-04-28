@@ -1,10 +1,12 @@
 package com.yeeiee.utils;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.fill.Column;
 import com.yeeiee.controller.BaseController;
 import lombok.val;
 
@@ -22,9 +24,9 @@ import java.util.Collections;
 public class MybatisGeneratorUtil {
 
     public static void generator(String... tableName) {
-        val url = "jdbc:mysql://192.168.135.199:3306/meta_tool";
+        val url = "jdbc:mysql://localhost:3306/meta_tool";
         val username = "root";
-        val password = "1234";
+        val password = "123";
         val projectPath = System.getProperty("user.dir") + "\\meta-tool-app";
 
         FastAutoGenerator.create(url, username, password)
@@ -59,6 +61,11 @@ public class MybatisGeneratorUtil {
                             .enableRemoveIsPrefix()
                             .enableTableFieldAnnotation()
                             .enableLombok()
+                            .disableSerialVersionUID()
+                            .addTableFills(
+                                    new Column("create_time", FieldFill.INSERT),
+                                    new Column("update_time", FieldFill.INSERT_UPDATE)
+                            )
                             .enableFileOverride();
 
                     builder.controllerBuilder()
