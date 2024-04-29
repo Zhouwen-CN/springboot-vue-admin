@@ -5,6 +5,7 @@ import com.yeeiee.utils.R;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * <p>
@@ -20,6 +21,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DmlOperationException.class)
     public R<Void> dmlFailureHandler(DmlOperationException e) {
         return R.error(HttpStatus.NOT_MODIFIED, e);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public R<Void> noResourceFoundHandler(NoResourceFoundException e) {
+        return R.error(HttpStatus.NOT_FOUND, e);
     }
 
     @ExceptionHandler(Exception.class)
