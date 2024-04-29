@@ -38,3 +38,5 @@ build/
 .DS_Store
 .idea
 static
+meta-tool-web/auto-imports.d.ts
+meta-tool-web/components.d.ts
