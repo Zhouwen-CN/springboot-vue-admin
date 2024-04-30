@@ -12,6 +12,13 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const app = createApp(App)
 
+// global error handler
+app.config.errorHandler = (err, instance, info) => {
+    console.error('😂😂😂Component route:', instance?.$route, '\n',
+        'Error message:', err, '\n',
+        'From:', info);
+};
+
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus, {

@@ -3,31 +3,11 @@ import {RouterView} from 'vue-router'
 </script>
 
 <template>
-  <div class="common-layout">
-    <el-container>
-      <el-header class="header">
-      </el-header>
-      <el-container>
-        <el-aside class="aside" width="200px">
-        </el-aside>
-        <el-main class="main">
-          <RouterView/>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
+  <RouterLink to="/layout/home">go home</RouterLink>
+  <br/><br/>
+  <RouterLink to="/login">go login</RouterLink>
+  <br/><br/>
+  <RouterView></RouterView>
 </template>
 
-<style lang="scss">
-.header {
-  background-color: yellow;
-}
-
-.aside {
-  background-color: green;
-}
-
-.main {
-  background-color: pink;
-}
-</style>
+<style lang="scss"></style>
