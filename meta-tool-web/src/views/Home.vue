@@ -1,16 +1,8 @@
 <script lang="ts" setup>
-import {getUserInfo} from '@/api/User'
+import {getUserInfo} from '@/api/user'
+import useRequest from '@/hooks/useRequest';
 
-
-const useRequest = () => {
-  getUserInfo()
-      .then(res => {
-        console.log(res);
-
-      })
-}
-
-
+const {loading, data, refresh} = useRequest(() => getUserInfo())
 
 
 </script>
@@ -18,7 +10,9 @@ const useRequest = () => {
 
 <template>
   <h1>主页</h1>
-  <button @click="useRequest">这是一个按钮</button>
+  <button @click="refresh">这是一个按钮</button>
+  <h2>{{ loading }}</h2>
+  <h2>{{ data }}</h2>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped></style>@/api/user@/hooks/useRequest
