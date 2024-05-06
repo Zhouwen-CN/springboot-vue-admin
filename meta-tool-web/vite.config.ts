@@ -8,34 +8,34 @@ import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
-export default defineConfig(({command, mode}) => {
-    const env = loadEnv(mode, process.cwd())
-    const regExp = new RegExp(`^${env.VITE_APP_BASE_URL}`)
-    return {
-        plugins: [
-            vue(),
-            VueDevTools(),
-            AutoImport({
-                resolvers: [ElementPlusResolver()]
-            }),
-            Components({
-                resolvers: [ElementPlusResolver()]
-            })
-        ],
-        resolve: {
-            alias: {
-                '@': fileURLToPath(new URL('./src', import.meta.url))
-            }
-        },
-        css: {},
-        server: {
-            proxy: {
-                [env.VITE_APP_BASE_URL]: {
-                    target: env.VITE_APP_SERVER,
-                    changeOrigin: true,
-                    rewrite: (path) => path.replace(regExp, '')
-                }
-            }
+export default defineConfig(({mode}) => {
+  const env = loadEnv(mode, process.cwd())
+  const regExp = new RegExp(`^${env.VITE_APP_BASE_URL}`)
+  return {
+    plugins: [
+      vue(),
+      VueDevTools(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()]
+      })
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    },
+    css: {},
+    server: {
+      proxy: {
+        [env.VITE_APP_BASE_URL]: {
+          target: env.VITE_APP_SERVER,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(regExp, '')
         }
+      }
     }
+  }
 })

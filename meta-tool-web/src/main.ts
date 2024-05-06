@@ -10,6 +10,8 @@ import 'element-plus/dist/index.css'
 // @ts-ignore
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
+import '@/assets/css/reset.scss'
+
 const app = createApp(App)
 
 // global error handler

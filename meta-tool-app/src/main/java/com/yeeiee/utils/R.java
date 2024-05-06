@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 @Schema(title = "R", description = "统一响应对象")
-public class R<T> {
+public final class R<T> {
 
     @Schema(title = "是否成功")
     private boolean success;
@@ -51,5 +51,9 @@ public class R<T> {
 
     public static <T> R<T> error(HttpStatus httpStatus, Exception e) {
         return new R<>(false, null, httpStatus.value(), e.getMessage());
+    }
+
+    public static <T> R<T> error(HttpStatus httpStatus, String message) {
+        return new R<>(false, null, httpStatus.value(), message);
     }
 }

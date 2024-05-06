@@ -1,8 +1,11 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {pendingRequest} from '@/api/request'
+import request from '@/api/request'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    scrollBehavior() {
+        return {left: 0, top: 0}
+    },
     routes: [
         {
             path: '/',
@@ -37,11 +40,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     // 遍历pendingRequest，将上一个页面的所有请求cancel掉
+    const pendingRequest = request.getPendingRequest()
     pendingRequest.forEach((cancel) => {
         cancel()
     })
     pendingRequest.clear()
-
     next()
 })
 

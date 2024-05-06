@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-04-28
  */
 @RestController
-@RequestMapping("/dataField")
+@RequestMapping("/field")
 @Tag(name = "数据域表 控制器")
 public class DataFieldController extends BaseController<DataField> {
 

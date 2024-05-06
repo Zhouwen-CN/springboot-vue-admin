@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="authorities" ofType="java.lang.String">
+            <result column="authority"/>
+        </collection>
+    </resultMap>
+
+    <select id="getUserByName" resultMap="BaseResultMap">
+        select a.*,
+               c.authority
+        from (select id,
+                     username,
+                     `password`
+              from t_user
+              where username = #{username}) a
+                 left join t_user_auth b
+                           on a.id = b.user_id
+                 left join t_auth c
+                           on b.auth_id = c.id
+    </select>
+
+</mapper>

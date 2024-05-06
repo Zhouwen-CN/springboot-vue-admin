@@ -1,12 +1,9 @@
 <script lang="ts" setup>
 import {getUserInfo} from '@/api/user'
-import useRequest from '@/hooks/useRequest';
+import useRequest from '@/hooks/useRequest'
 
 const {loading, data, refresh} = useRequest(() => getUserInfo())
-
-
 </script>
-
 
 <template>
   <h1>主页</h1>
@@ -15,4 +12,4 @@ const {loading, data, refresh} = useRequest(() => getUserInfo())
   <h2>{{ data }}</h2>
 </template>
 
-<style lang="scss" scoped></style>@/api/user@/hooks/useRequest
+<style lang="scss" scoped></style>

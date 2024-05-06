@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-04-28
  */
 @RestController
-@RequestMapping("/dataRange")
+@RequestMapping("/range")
 @Tag(name = "数据范围表 控制器")
 public class DataRangeController extends BaseController<DataRange> {
 

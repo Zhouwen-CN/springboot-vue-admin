@@ -21,7 +21,7 @@ import java.util.Collections;
  * @author chen
  * @since 2024-04-27
  */
-public class MybatisGeneratorUtil {
+public final class MybatisGeneratorUtil {
 
     public static void generator(String... tableName) {
         val url = "jdbc:mysql://localhost:3306/meta_tool";

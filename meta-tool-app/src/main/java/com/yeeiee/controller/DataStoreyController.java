@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-04-28
  */
 @RestController
-@RequestMapping("/dataStorey")
+@RequestMapping("/storey")
 @Tag(name = "数仓层级表 控制器")
 public class DataStoreyController extends BaseController<DataStorey> {
 

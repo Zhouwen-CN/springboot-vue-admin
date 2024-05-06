@@ -16,8 +16,11 @@ interface ImportMeta {
 
 // 定义环境变量类型
 interface ImportMetaEnv {
-    readonly VITE_APP_NAME: string
+    // 请求路径前缀
     readonly VITE_APP_BASE_URL: string
+    // 请求服务器地址
     readonly VITE_APP_SERVER: string
+    // axios超时时间
+    readonly VITE_APP_TIMEOUT: number
     // 更多环境变量...
 }

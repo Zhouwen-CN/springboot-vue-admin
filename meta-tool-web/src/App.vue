@@ -3,10 +3,10 @@ import {RouterView} from 'vue-router'
 </script>
 
 <template>
-  <RouterLink to="/layout/home">go home</RouterLink>
-  <br/><br/>
+  <!-- <RouterLink to="/home">go home</RouterLink>
+  <br /><br />
   <RouterLink to="/login">go login</RouterLink>
-  <br/><br/>
+  <br /><br /> -->
   <RouterView></RouterView>
 </template>
 

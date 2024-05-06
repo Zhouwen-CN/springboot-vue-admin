@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-04-28
  */
 @RestController
-@RequestMapping("/rootWord")
+@RequestMapping("/word")
 @Tag(name = "词根表 控制器")
 public class RootWordController extends BaseController<RootWord> {
 
