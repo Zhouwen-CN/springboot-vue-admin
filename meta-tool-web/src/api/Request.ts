@@ -37,8 +37,7 @@ class Request {
             (response) => {
                 const {data, config} = response
                 this.removePath(config)
-                // TODO 应该是 !==200
-                if (data.code > 200) {
+                if (data.code !== 200) {
                     this.alterMessage(data.code, data.message)
                     return Promise.reject(data.message)
                 }
@@ -64,12 +63,20 @@ class Request {
         return this.instance.get(url, config)
     }
 
-    public post<T>(url: string, config?: AxiosRequestConfig): Promise<ResultData<T>> {
-        return this.instance.post(url, config)
+    public post<T, D = unknown>(
+        url: string,
+        data?: D,
+        config?: AxiosRequestConfig
+    ): Promise<ResultData<T>> {
+        return this.instance.post(url, data, config)
     }
 
-    public put<T>(url: string, config?: AxiosRequestConfig): Promise<ResultData<T>> {
-        return this.instance.put(url, config)
+    public put<T, D = unknown>(
+        url: string,
+        data?: D,
+        config?: AxiosRequestConfig
+    ): Promise<ResultData<T>> {
+        return this.instance.put(url, data, config)
     }
 
     public delete<T>(url: string, config?: AxiosRequestConfig): Promise<ResultData<T>> {
@@ -102,6 +109,9 @@ class Request {
         }
     }
 
+    /**
+     * 消息提示
+     */
     private alterMessage(code: number, message: string): void {
         if (code > 200 && code < 400) {
             ElMessage.info(message)

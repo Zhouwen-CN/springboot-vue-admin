@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
-import com.yeeiee.entity.LoginDto;
 import com.yeeiee.entity.User;
+import com.yeeiee.entity.dto.LoginDto;
 
 /**
  * <p>

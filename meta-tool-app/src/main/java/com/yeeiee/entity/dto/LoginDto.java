@@ -1,4 +1,4 @@
-package com.yeeiee.entity;
+package com.yeeiee.entity.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 用户登入传输对象
+ * 用户登入 传输对象
  * </p>
  *
  * @author chen
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "LoginDto", description = "登入传输对象")
+@Schema(name = "LoginDto", description = "用户登入传输对象")
 public class LoginDto {
     @Schema(description = "用户名")
     private String username;

@@ -1,7 +1,7 @@
 package com.yeeiee.service.impl;
 
-import com.yeeiee.entity.LoginDto;
 import com.yeeiee.entity.User;
+import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;

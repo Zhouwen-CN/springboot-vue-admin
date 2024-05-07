@@ -1,15 +1,20 @@
 <script lang="ts" setup>
 import {reactive, ref} from 'vue';
 import {Lock, User} from '@element-plus/icons-vue';
-import type {FormInstance, FormRules} from 'element-plus';
+import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {useRouter} from 'vue-router';
+import type {LoginForm} from '@/api/user';
+import useUserStore from '@/stores/user';
 
 const router = useRouter();
+const useStore = useUserStore()
 
+
+const loading = ref<boolean>(false)
 
 const ruleFormRef = ref<FormInstance>();
 
-const loginForm = reactive({
+const loginForm = reactive<LoginForm>({
   username: 'admin',
   password: 'admin',
 });
@@ -27,13 +32,21 @@ const rules = reactive<FormRules<typeof loginForm>>({
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      router.push('/')
-    } else {
-      console.log('error submit!', fields)
+  loading.value = true
+  try {
+    await formEl.validate()
+    await useStore.doLogin(loginForm)
+    let redirect = router.currentRoute.value.query.redirect;
+    if (!redirect) {
+      redirect = '/';
     }
-  })
+    await router.replace(redirect as string);
+    ElMessage.success("登入成功")
+  } catch (e: any) {
+    // do nothing
+  } finally {
+    loading.value = false
+  }
 }
 
 const onCancel = (formEl: FormInstance | undefined) => {
@@ -55,7 +68,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
           <el-input v-model="loginForm.password" :prefix-icon="Lock" show-password type="password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
+          <el-button :loading="loading" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
           <el-button @click="onCancel(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>

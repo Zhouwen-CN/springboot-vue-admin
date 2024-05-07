@@ -3,6 +3,7 @@ package com.yeeiee.handler;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.utils.R;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -18,9 +19,14 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public R<Void> badCredentialsHandler() {
+        return R.error(HttpStatus.FORBIDDEN, "用户名或密码错误");
+    }
+
     @ExceptionHandler(DmlOperationException.class)
     public R<Void> dmlFailureHandler(DmlOperationException e) {
-        return R.error(HttpStatus.NOT_MODIFIED, e);
+        return R.error(HttpStatus.NO_CONTENT, e);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)

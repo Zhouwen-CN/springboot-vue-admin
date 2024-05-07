@@ -1,7 +1,6 @@
 spring:
   application:
     name: meta-tool-app
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    url: jdbc:mysql://192.168.135.199:3306/meta_tool

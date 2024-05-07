@@ -1,10 +1,11 @@
 package com.yeeiee.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeeiee.utils.R;
-import com.yeeiee.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+
 /**
  * <p>
  * spring security 配置类
@@ -28,16 +31,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @since 2024/5/7
  */
 @Configuration
-//@EnableWebSecurity
-//@EnableMethodSecurity
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-    private JwtUserDetailService jwtUserDetailService;
+    private JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
 
     private JwtAuthenticationFilter jwtAuthFilter;
 
     private static final String[] WHITE_LIST = new String[]{
+            "/",
+            "/index.html",
+            "/favicon.ico",
+            "/assets/**.js",
+            "/assets/**.css",
+            "/assets/**.jpg",
+            "/assets/**.png",
             "/login",
             "/swagger-ui.html",
             "/v3/api-docs/**",
@@ -70,13 +78,12 @@ public class WebSecurityConfig {
                             exception.authenticationEntryPoint((HttpServletRequest request,
                                                                 HttpServletResponse response,
                                                                 AuthenticationException authException
-                                    ) -> ResponseUtil.writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, authException))
-                            );
-                            // 未授权处理
-                            exception.accessDeniedHandler((HttpServletRequest request,
-                                                           HttpServletResponse response,
-                                                           AccessDeniedException accessDeniedException
-                            ) -> ResponseUtil.writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, accessDeniedException)));
+                                    ) -> writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未认证"))
+                                    // 未授权处理
+                            ).accessDeniedHandler((HttpServletRequest request,
+                                                   HttpServletResponse response,
+                                                   AccessDeniedException accessDeniedException
+                            ) -> writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未授权")));
                         }
                 );
         return http.build();
@@ -85,12 +92,19 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(passwordEncoder());
-        provider.setUserDetailsService(jwtUserDetailService);
+        provider.setUserDetailsService(jwtUserDetailServiceImpl);
         return provider;
     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
+        val objectMapper = new ObjectMapper();
+        val resultAsJson = objectMapper.writeValueAsString(result);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().println(resultAsJson);
     }
 }

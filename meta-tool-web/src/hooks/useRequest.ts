@@ -9,7 +9,6 @@ export default function useRequest<T = unknown>(request: () => Promise<ResultDat
         loading.value = true
         request()
             .then((res) => {
-                console.log(res)
                 data.value = res.data
             })
             .catch((error) => {

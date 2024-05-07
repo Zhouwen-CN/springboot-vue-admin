@@ -1,7 +1,7 @@
 package com.yeeiee.controller;
 
-import com.yeeiee.entity.LoginDto;
 import com.yeeiee.entity.User;
+import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;

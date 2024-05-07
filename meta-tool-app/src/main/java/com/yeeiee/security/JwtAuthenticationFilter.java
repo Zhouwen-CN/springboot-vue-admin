@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String HEADER_STRING = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    private JwtUserDetailService jwtUserDetailService;
+    private JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 从 token 获取 username
             val username = optional.get();
             // 加载与令 token 关联的用户
-            val userDetails = jwtUserDetailService.loadUserByUsername(username);
+            val userDetails = jwtUserDetailServiceImpl.loadUserByUsername(username);
             // 将用户信息存入 authentication
             val authenticated = UsernamePasswordAuthenticationToken.authenticated(
                     userDetails,

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
-public class JwtUserDetailService implements UserDetailsService {
+public class JwtUserDetailServiceImpl implements UserDetailsService {
 
     private UserMapper userMapper;
 
@@ -27,7 +27,7 @@ public class JwtUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         val securityUser = userMapper.getUserByName(username);
         if (securityUser == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException("cannot find username: " + username);
         }
         return User.builder()
                 .username(securityUser.getUsername())

@@ -1,9 +1,6 @@
-interface BaseResult {
+export interface ResultData<T = unknown> {
     success: boolean
     code: number
-    message: string
-}
-
-export interface ResultData<T = unknown> extends BaseResult {
     data: T
+    message: string
 }

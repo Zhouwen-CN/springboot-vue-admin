@@ -1,8 +1,9 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import request from '@/api/request'
+import useUserStore from '@/stores/user'
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     scrollBehavior() {
         return {left: 0, top: 0}
     },
@@ -17,6 +18,11 @@ const router = createRouter({
                     path: 'home',
                     name: 'Home',
                     component: () => import('@/views/Home.vue')
+                },
+                {
+                    path: 'user',
+                    name: 'User',
+                    component: () => import('@/views/User.vue')
                 },
                 {
                     path: '404',
@@ -45,7 +51,22 @@ router.beforeEach((to, from, next) => {
         cancel()
     })
     pendingRequest.clear()
-    next()
+
+    // 判断是否登录
+    const userStore = useUserStore()
+    if (userStore.token) {
+        if (to.path === '/login') {
+            next({path: '/home'})
+        } else {
+            next()
+        }
+    } else {
+        if (to.path === '/login') {
+            next()
+        } else {
+            next({path: '/login', query: {redirect: to.path}})
+        }
+    }
 })
 
 export default router
