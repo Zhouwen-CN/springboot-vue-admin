@@ -25,6 +25,16 @@ const router = createRouter({
                     component: () => import('@/views/User.vue')
                 },
                 {
+                    path: 'tree',
+                    name: 'Tree',
+                    component: () => import('@/views/auth/Tree.vue')
+                },
+                {
+                    path: 'transfer',
+                    name: 'Transfer',
+                    component: () => import('@/views/auth/Transfer.vue')
+                },
+                {
                     path: '404',
                     name: '404',
                     component: () => import('@/views/404.vue')

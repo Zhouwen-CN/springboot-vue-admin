@@ -89,6 +89,10 @@ class Request {
         return this.instance.delete(url, config)
     }
 
+    public request<T, D = unknown>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
+        return this.instance.request(config)
+    }
+
     /**
      * 如果请求在等待列表，则取消请求，并从列表删除
      */
@@ -129,4 +133,5 @@ class Request {
     }
 }
 
-export default new Request(config)
+const request = new Request(config)
+export default request

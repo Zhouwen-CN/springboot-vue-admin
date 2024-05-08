@@ -15,7 +15,3 @@ export interface User {
     password: string
     authorities: string[]
 }
-
-export function reqUser() {
-    return request.get<User>('/user')
-}

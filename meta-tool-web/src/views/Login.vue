@@ -5,6 +5,7 @@ import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {useRouter} from 'vue-router';
 import type {LoginForm} from '@/api/user';
 import useUserStore from '@/stores/user';
+import useSettingStore from '@/stores/setting'
 
 const router = useRouter();
 const loading = ref<boolean>(false)
@@ -58,7 +59,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
     <el-col :span="13"></el-col>
     <el-col :span="8" class="content">
       <el-form ref="ruleFormRef" :model="loginForm" :rules="rules" class="form" size="large">
-        <h1> Meta Tool </h1>
+        <h1> {{ useSettingStore().title }} </h1>
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" :prefix-icon="User"></el-input>
         </el-form-item>

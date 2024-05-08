@@ -1,24 +1,20 @@
 <script lang="ts" setup>
+import useSettingStore from '@/stores/setting';
 import {RouterView} from 'vue-router'
+
+const settingStore = useSettingStore()
 </script>
 
 <template>
   <el-container>
     <el-aside class="aside" width="200px">
       <el-scrollbar>
-        <h1> Meta Tool </h1>
+        <h1> {{ settingStore.title }} </h1>
         <el-menu active-text-color="#409eff" background-color="#304156" router text-color="#bfcbd9" unique-opened>
           <el-menu-item index="/home">首页</el-menu-item>
-          <div v-for="item in 100" :key="item">
-            <el-menu-item index="/user">用户</el-menu-item>
-          </div>
-
-          <!-- <el-sub-menu index="3">
-          <template #title>权限管理</template>
-          <el-menu-item index="3-1">用户管理</el-menu-item>
-          <el-menu-item index="3-2">角色管理</el-menu-item>
-          <el-menu-item index="3-3">菜单管理</el-menu-item>
-        </el-sub-menu> -->
+          <el-menu-item index="/user">用户</el-menu-item>
+          <el-menu-item index="/tree">树形菜单</el-menu-item>
+          <el-menu-item index="/transfer">穿梭框</el-menu-item>
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -26,7 +22,11 @@ import {RouterView} from 'vue-router'
       <el-header class="header">header</el-header>
       <el-main class="main">
         <el-scrollbar>
-          <RouterView/>
+          <router-view v-slot="{ Component }">
+            <transition name="fade">
+              <component :is="Component" :key="settingStore.refresh"></component>
+            </transition>
+          </router-view>
         </el-scrollbar>
       </el-main>
     </el-container>
@@ -34,6 +34,19 @@ import {RouterView} from 'vue-router'
 </template>
 
 <style lang="scss" scoped>
+// 动画
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: all 1s;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
 .header {
   background-color: yellow;
   height: $base_header_height;
