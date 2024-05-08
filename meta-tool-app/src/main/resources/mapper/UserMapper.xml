@@ -2,8 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeeiee.mapper.UserMapper">
 
-    <!-- 通用查询映射结果 -->
+    <!-- BaseResultMap -->
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- UserDto -->
+    <resultMap id="UserDto" type="com.yeeiee.entity.dto.UserDto">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -12,7 +21,13 @@
         </collection>
     </resultMap>
 
-    <select id="getUserByName" resultMap="BaseResultMap">
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , username, password, create_time, update_time
+    </sql>
+
+    <select id="getUserByName" resultMap="UserDto">
         select a.*,
                c.authority
         from (select id,
@@ -25,5 +40,4 @@
                  left join t_auth c
                            on b.auth_id = c.id
     </select>
-
 </mapper>

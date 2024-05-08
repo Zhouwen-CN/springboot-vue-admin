@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户表
+ * 用户权限关系表
  * </p>
  *
  * @author chen
@@ -19,21 +19,21 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_user`")
-@Schema(name = "User", description = "用户表")
-public class User {
+@TableName("`t_user_auth`")
+@Schema(name = "UserAuth", description = "用户权限关系表")
+public class UserAuth {
 
     @Schema(description = "主键")
     @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
-    @Schema(description = "用户名")
-    @TableField("`username`")
-    private String username;
+    @Schema(description = "用户id")
+    @TableField("`user_id`")
+    private Long userId;
 
-    @Schema(description = "密码")
-    @TableField("`password`")
-    private String password;
+    @Schema(description = "角色id")
+    @TableField("`auth_id`")
+    private Long authId;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

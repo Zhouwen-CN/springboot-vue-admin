@@ -90,6 +90,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_data_field", "t_data_range", "t_data_storey", "t_root_word");
+        generator("t_auth", "t_user", "t_user_auth");
     }
 }

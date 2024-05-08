@@ -67,6 +67,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/range/**").hasAuthority("range")
                         .requestMatchers("/storey/**").hasAuthority("storey")
                         .requestMatchers("/word/**").hasAuthority("word")
+                        .requestMatchers("/auth/**").hasAuthority("auth")
+                        .requestMatchers("/userAuth/**").hasAuthority("userAuth")
                         // 对所有的请求开启权限保护
                         .anyRequest()
                         // 已认证的请求会被自动授权
