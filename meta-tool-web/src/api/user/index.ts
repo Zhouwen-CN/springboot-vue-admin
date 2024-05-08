@@ -8,3 +8,14 @@ export interface LoginForm {
 export function reqLogin(loginForm: LoginForm) {
     return request.post<string, LoginForm>('/login', loginForm)
 }
+
+export interface User {
+    id: number
+    username: string
+    password: string
+    authorities: string[]
+}
+
+export function reqUser() {
+    return request.get<User>('/user')
+}

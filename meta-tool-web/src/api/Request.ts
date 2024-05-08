@@ -2,6 +2,7 @@ import type {AxiosInstance, AxiosRequestConfig, Canceler, InternalAxiosRequestCo
 import axios, {AxiosError} from 'axios'
 import {ElMessage} from 'element-plus'
 import type {ResultData} from '@/api/types'
+import useUserStore from '@/stores/user'
 
 const config = {
     baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -24,6 +25,11 @@ class Request {
             (config) => {
                 this.removePath(config)
                 this.addPath(config)
+                // set token to request header if exists
+                const userStore = useUserStore()
+                if (userStore.token) {
+                    config.headers.Authorization = `Bearer ${userStore.token}`
+                }
                 // 设置请求头 config.headers
                 return config
             },

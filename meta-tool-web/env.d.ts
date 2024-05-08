@@ -16,6 +16,8 @@ interface ImportMeta {
 
 // 定义环境变量类型
 interface ImportMetaEnv {
+    // 项目名称
+    readonly VITE_APP_TITLE: string
     // 请求路径前缀
     readonly VITE_APP_BASE_URL: string
     // 请求服务器地址

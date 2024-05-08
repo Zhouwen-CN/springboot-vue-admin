@@ -69,4 +69,26 @@ router.beforeEach((to, from, next) => {
     }
 })
 
+// import type { Component } from 'vue'
+// interface FileType {
+//   [key: string]: Component
+// }
+// const files: Record<string, FileType> = import.meta.glob('@/views/**/*.vue', { eager: true })
+// Object.keys(files).forEach((path: string) => {
+//   console.log('paht', path)
+//   const fileName = path.substring(path.lastIndexOf('/') + 1)
+//   console.log('fileName', fileName)
+//   const componentName = fileName.replace('.vue', '')
+//   console.log('componentName', componentName)
+// })
+
+// interface MyRouter {
+//   id: number
+//   authority: string
+//   title: string
+//   path: string
+//   icon: string
+//   parentId?: number
+// }
+
 export default router

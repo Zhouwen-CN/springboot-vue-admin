@@ -7,18 +7,14 @@ import type {LoginForm} from '@/api/user';
 import useUserStore from '@/stores/user';
 
 const router = useRouter();
-const useStore = useUserStore()
-
-
 const loading = ref<boolean>(false)
-
 const ruleFormRef = ref<FormInstance>();
-
 const loginForm = reactive<LoginForm>({
   username: 'admin',
   password: 'admin',
 });
 
+// 登入表单校验
 const rules = reactive<FormRules<typeof loginForm>>({
   username: [
     {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -30,12 +26,13 @@ const rules = reactive<FormRules<typeof loginForm>>({
   ]
 })
 
+// 表单提交
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   loading.value = true
   try {
     await formEl.validate()
-    await useStore.doLogin(loginForm)
+    await useUserStore().doLogin(loginForm)
     let redirect = router.currentRoute.value.query.redirect;
     if (!redirect) {
       redirect = '/';
@@ -49,6 +46,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   }
 }
 
+// 表单重置
 const onCancel = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
@@ -60,7 +58,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
     <el-col :span="13"></el-col>
     <el-col :span="8" class="content">
       <el-form ref="ruleFormRef" :model="loginForm" :rules="rules" class="form" size="large">
-        <h1>Meta Tool</h1>
+        <h1> Meta Tool </h1>
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" :prefix-icon="User"></el-input>
         </el-form-item>
