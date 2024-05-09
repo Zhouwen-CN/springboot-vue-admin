@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.SecondLevelMenu;
+import com.yeeiee.entity.Menu;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.yeeiee.entity.SecondLevelMenu;
  * @author chen
  * @since 2024-05-09
  */
-public interface SecondLevelMenuService extends IService<SecondLevelMenu> {
+public interface MenuService extends IService<Menu> {
 
 }

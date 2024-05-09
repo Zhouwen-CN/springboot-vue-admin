@@ -1,6 +1,10 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 二级菜单表
+ * 角色表
  * </p>
  *
  * @author chen
@@ -19,33 +23,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_second_level_menu`")
-@Schema(name = "SecondLevelMenu", description = "二级菜单表")
-public class SecondLevelMenu {
+@TableName("`t_role`")
+@Schema(name = "Role", description = "角色表")
+public class Role {
 
     @Schema(description = "主键")
     @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
-    @Schema(description = "标题")
-    @TableField("`title`")
-    private String title;
-
-    @Schema(description = "访问路径")
-    @TableField("`access_path`")
-    private String accessPath;
-
-    @Schema(description = "文件路径")
-    @TableField("`file_path`")
-    private String filePath;
-
-    @Schema(description = "图标")
-    @TableField("`icon`")
-    private String icon;
-
-    @Schema(description = "一级菜单id")
-    @TableField("`pid`")
-    private Long pid;
+    @Schema(description = "角色名称")
+    @TableField("`role_name`")
+    private String roleName;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

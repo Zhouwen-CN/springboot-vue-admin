@@ -1,25 +1,25 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.Auth;
+import com.yeeiee.entity.RoleMenu;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 权限表
+ * 用户权限关系表
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
 @RestController
-@RequestMapping("/auth")
-@Tag(name = "权限表 控制器")
-public class AuthController extends BaseController<Auth> {
+@RequestMapping("/roleMenu")
+@Tag(name = "用户权限关系表 控制器")
+public class RoleMenuController extends BaseController<RoleMenu> {
 
-    public AuthController(IService<Auth> service) {
+    public RoleMenuController(IService<RoleMenu> service) {
         super(service);
     }
 }

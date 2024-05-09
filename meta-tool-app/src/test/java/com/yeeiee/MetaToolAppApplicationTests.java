@@ -1,24 +1,40 @@
 package com.yeeiee;
 
 import com.yeeiee.entity.dto.MenuDto;
-import com.yeeiee.service.FirstLevelMenuService;
-import lombok.val;
+import com.yeeiee.entity.dto.UserDto;
+import com.yeeiee.mapper.MenuMapper;
+import com.yeeiee.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @SpringBootTest
 class MetaToolAppApplicationTests {
 
     @Autowired
-    FirstLevelMenuService firstLevelMenuService;
+    MenuMapper menuMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Test
     void contextLoads() {
-        val menu = firstLevelMenuService.getMenus();
-        for (MenuDto menuDto : menu) {
+    }
+
+    @Test
+    void getMenusTest() {
+        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleId(1);
+        for (MenuDto menuDto : menuDtos) {
             System.out.println(menuDto);
         }
-//        System.out.println(menu);
+    }
+
+    @Test
+    void getUserTest() {
+        UserDto admin = userMapper.selectByUserName("admin");
+
+        System.out.println(admin);
     }
 }

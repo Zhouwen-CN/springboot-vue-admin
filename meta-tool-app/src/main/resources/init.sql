@@ -1,25 +1,3 @@
-create table t_auth
-(
-    id          bigint auto_increment comment '主键'
-        primary key,
-    authority   varchar(100)                        not null comment '权限',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_auth
-        unique (authority)
-)
-    comment '权限表';
-
-INSERT INTO meta_tool.t_auth (id, authority, create_time, update_time)
-VALUES (1, 'field', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-INSERT INTO meta_tool.t_auth (id, authority, create_time, update_time)
-VALUES (2, 'range', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-INSERT INTO meta_tool.t_auth (id, authority, create_time, update_time)
-VALUES (3, 'storey', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-INSERT INTO meta_tool.t_auth (id, authority, create_time, update_time)
-VALUES (4, 'word', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-
-
 create table t_data_field
 (
     id          bigint auto_increment comment '主键'
@@ -1819,7 +1797,6 @@ VALUES (849, 'white', '白色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53')
 INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
 VALUES (850, 'wrong', '错误的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
 
-
 create table t_user
 (
     id          bigint auto_increment comment '主键'
@@ -1833,6 +1810,7 @@ create table t_user
 )
     comment '用户表';
 
+
 INSERT INTO meta_tool.t_user (id, username, password, create_time, update_time)
 VALUES (1, 'admin', '$2a$10$wTV12Fs5hQfhG9RzZuKd6.c135tv2y8PTJAtKRhlXnU.9xS5Qqcxu', '2024-05-06 21:45:21',
         '2024-05-06 21:45:21');
@@ -1841,72 +1819,104 @@ VALUES (2, 'test', '$2a$10$2lxM1kdya4nhyNQ6AYItD.1JFnwL9ImzEXQ44p0itoZwq8WBLfxuq
         '2024-05-06 21:45:21');
 
 
-create table t_user_auth
+create table t_role
 (
     id          bigint auto_increment comment '主键'
         primary key,
+    role_name   varchar(100)                        not null comment '角色名称',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_role_name unique (role_name)
+)
+    comment '角色表';
+
+INSERT INTO meta_tool.t_role (id, role_name, create_time, update_time)
+VALUES (1, 'admin', '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+INSERT INTO meta_tool.t_role (id, role_name, create_time, update_time)
+VALUES (2, 'test', '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+
+
+create table t_user_role
+(
+    id          bigint auto_increment comment '主键' primary key,
     user_id     bigint                              not null comment '用户id',
-    auth_id     bigint                              not null comment '角色id',
+    role_id     bigint                              not null comment '角色id',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
+)
+    comment '用户角色关系表';
+
+INSERT INTO meta_tool.t_user_role (id, user_id, role_id, create_time, update_time)
+VALUES (1, 1, 1, '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+INSERT INTO meta_tool.t_user_role (id, user_id, role_id, create_time, update_time)
+VALUES (2, 2, 2, '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+
+
+create table t_role_menu
+(
+    id          bigint auto_increment comment '主键'
+        primary key,
+    role_id     bigint                              not null comment '角色id',
+    menu_id     bigint                              not null comment '菜单id',
     create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
     update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
 )
     comment '用户权限关系表';
 
-INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
+
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
 VALUES (1, 1, 1, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
 VALUES (2, 1, 2, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
 VALUES (3, 1, 3, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
 VALUES (4, 1, 4, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
-VALUES (5, 2, 4, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (5, 1, 5, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (6, 1, 6, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (7, 1, 7, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (8, 2, 1, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (9, 2, 2, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
+INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
+VALUES (10, 2, 4, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
 
 
-create table t_first_level_menu
+create table t_menu
 (
     `id`          bigint auto_increment               not null comment '主键',
     `title`       varchar(100)                        not null comment '标题',
     `access_path` varchar(100)                        not null comment '访问路径',
-    `file_path`   varchar(255) comment '文件路径，为null则重定向到第一个子元素',
+    `file_path`   varchar(255) comment '文件路径',
     `icon`        varchar(100)                        not null comment '图标',
-    `create_time` timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    primary key (`id`)
-) comment '一级菜单表';
-
-create table t_second_level_menu
-(
-    `id`          bigint auto_increment               not null comment '主键',
-    `title`       varchar(100)                        not null comment '标题',
-    `access_path` varchar(100)                        not null comment '访问路径',
-    `file_path`   varchar(255)                        not null comment '文件路径',
-    `icon`        varchar(100)                        not null comment '图标',
-    `pid`         bigint                              not null comment '一级菜单id',
+    `pid`         bigint comment '一级菜单id',
     `create_time` timestamp default CURRENT_TIMESTAMP null comment '创建时间',
     `update_time` timestamp default CURRENT_TIMESTAMP null comment '更新时间',
     primary key (`id`)
 ) comment '二级菜单表';
 
 
-insert into t_first_level_menu
-values (1, '权限管理', 'auth', null, 'Lock', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-insert into t_second_level_menu
-values (1, '用户管理', 'user', '/src/views/layout/auth/User.vue', 'User', 1, '2024-05-06 21:46:48',
+insert into t_menu
+values (1, '权限管理', 'auth', null, 'Lock', null, '2024-05-06 21:46:48', '2024-05-06 21:46:48');
+insert into t_menu
+values (2, '用户管理', 'user', '/src/views/layout/auth/User.vue', 'User', 1, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');
-insert into t_second_level_menu
-values (2, '角色管理', 'role', '/src/views/layout/auth/Role.vue', 'UserFilled', 1, '2024-05-06 21:46:48',
+insert into t_menu
+values (3, '角色管理', 'role', '/src/views/layout/auth/Role.vue', 'UserFilled', 1, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');
-insert into t_first_level_menu
-values (2, '数据域管理', 'filed', '/src/views/layout/field/Field.vue', 'Location', '2024-05-06 21:46:48',
+insert into t_menu
+values (4, '数据域管理', 'filed', '/src/views/layout/field/Field.vue', 'Location', null, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');
-insert into t_first_level_menu
-values (3, '数据范围管理', 'range', '/src/views/layout/range/Range.vue', 'Location', '2024-05-06 21:46:48',
+insert into t_menu
+values (5, '数据范围管理', 'range', '/src/views/layout/range/Range.vue', 'Location', null, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');
-insert into t_first_level_menu
-values (4, '数仓层级管理', 'storey', '/src/views/layout/storey/Storey.vue', 'Location', '2024-05-06 21:46:48',
+insert into t_menu
+values (6, '数仓层级管理', 'storey', '/src/views/layout/storey/Storey.vue', 'Location', null, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');
-insert into t_first_level_menu
-values (5, '词根管理', 'word', '/src/views/layout/word/Word.vue', 'Location', '2024-05-06 21:46:48',
+insert into t_menu
+values (7, '词根管理', 'word', '/src/views/layout/word/Word.vue', 'Location', null, '2024-05-06 21:46:48',
         '2024-05-06 21:46:48');

@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.Param;
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
 public interface UserMapper extends BaseMapper<User> {
-    UserDto getUserByName(@Param("username") String username);
+    UserDto selectByUserName(@Param("username") String username);
 }

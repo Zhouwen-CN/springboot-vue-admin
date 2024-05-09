@@ -19,8 +19,8 @@ import java.util.List;
 @Setter
 @ToString
 public class MenuDto {
-    private Integer level;
     private Long id;
+    private Integer level;
     private String title;
     private String accessPath;
     private String filePath;

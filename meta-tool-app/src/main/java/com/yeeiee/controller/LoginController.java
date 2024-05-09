@@ -7,7 +7,6 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,14 +30,16 @@ public class LoginController {
     @Operation(summary = "获取用户信息")
     @GetMapping("/user")
     public R<UserDto> getUser() {
-        val userDto = userService.getUser();
-        return R.ok(userDto);
+        // val userDto = userService.getUser();
+        // return R.ok(userDto);
+        return null;
     }
 
     @Operation(summary = "用户登入")
     @PostMapping("/login")
     public R<String> login(@RequestBody LoginDto loginDto) {
-        val token = userService.login(loginDto);
-        return R.ok(token);
+        // val token = userService.login(loginDto);
+        // return R.ok(token);
+        return null;
     }
 }

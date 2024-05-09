@@ -1,6 +1,10 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,26 +14,30 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 权限表
+ * 用户角色关系表
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
 @Getter
 @Setter
 @ToString
-@TableName("`t_auth`")
-@Schema(name = "Auth", description = "权限表")
-public class Auth {
+@TableName("`t_user_role`")
+@Schema(name = "UserRole", description = "用户角色关系表")
+public class UserRole {
 
     @Schema(description = "主键")
     @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
-    @Schema(description = "权限")
-    @TableField("`authority`")
-    private String authority;
+    @Schema(description = "用户id")
+    @TableField("`user_id`")
+    private Long userId;
+
+    @Schema(description = "角色id")
+    @TableField("`role_id`")
+    private Long roleId;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

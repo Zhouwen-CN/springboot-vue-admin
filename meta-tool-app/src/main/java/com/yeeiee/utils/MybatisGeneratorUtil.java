@@ -24,9 +24,9 @@ import java.util.Collections;
 public final class MybatisGeneratorUtil {
 
     public static void generator(String... tableName) {
-        val url = "jdbc:mysql://localhost:3306/meta_tool";
+        val url = "jdbc:mysql://192.168.135.199:3306/meta_tool";
         val username = "root";
-        val password = "123";
+        val password = "1234";
         val projectPath = System.getProperty("user.dir") + "\\meta-tool-app";
 
         FastAutoGenerator.create(url, username, password)
@@ -90,6 +90,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_first_level_menu", "t_second_level_menu");
+        generator("t_user", "t_role", "t_menu", "t_user_role", "t_role_menu");
     }
 }

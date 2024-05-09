@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yeeiee.entity.UserAuth;
+import com.yeeiee.entity.RoleMenu;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.yeeiee.entity.UserAuth;
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
-public interface UserAuthMapper extends BaseMapper<UserAuth> {
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
 }

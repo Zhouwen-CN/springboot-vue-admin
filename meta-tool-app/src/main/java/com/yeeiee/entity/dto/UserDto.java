@@ -1,11 +1,10 @@
 package com.yeeiee.entity.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * <p>
@@ -18,14 +17,10 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@Schema(name = "User", description = "用户传输对象")
 public class UserDto {
-    @Schema(description = "主键")
     private Long id;
-    @Schema(description = "用户名")
     private String username;
-    @Schema(description = "密码")
     private String password;
-    @Schema(description = "权限列表")
-    private Set<String> authorities;
+    private List<String> roles;
+    private List<MenuDto> menus;
 }

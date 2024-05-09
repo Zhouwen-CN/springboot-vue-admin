@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yeeiee.mapper.FirstLevelMenuMapper">
+<mapper namespace="com.yeeiee.mapper.MenuMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.dto.MenuDto">
@@ -22,13 +22,13 @@
         </collection>
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id
-        , title, access_path, file_path, icon, create_time, update_time
-    </sql>
-
-    <select id="selectMenus" resultMap="BaseResultMap">
+    <select id="selectMenusByRoleId" resultMap="BaseResultMap">
+        with t1 as (select b.*
+                    from (select menu_id
+                          from t_role_menu
+                          where role_id = #{roleId}) a
+                             join t_menu b
+                                  on a.menu_id = b.id)
         select a.level       as p_level,
                a.id          as p_id,
                a.title       as p_title,
@@ -50,7 +50,7 @@
                      file_path,
                      icon,
                      update_time
-              from t_first_level_menu) a
+              from t1) a
                  left join (select 2 as level,
                                    id,
                                    title,
@@ -59,10 +59,8 @@
                                    icon,
                                    pid,
                                    update_time
-                            from t_second_level_menu) b
+                            from t1) b
                            on a.id = b.pid
         order by p_id, c_id
     </select>
-
-
 </mapper>

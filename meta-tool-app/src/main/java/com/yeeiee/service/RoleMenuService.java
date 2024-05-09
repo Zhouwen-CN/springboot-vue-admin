@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.UserAuth;
+import com.yeeiee.entity.RoleMenu;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.yeeiee.entity.UserAuth;
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
-public interface UserAuthService extends IService<UserAuth> {
+public interface RoleMenuService extends IService<RoleMenu> {
 
 }

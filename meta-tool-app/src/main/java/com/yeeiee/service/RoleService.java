@@ -1,16 +1,16 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.Auth;
+import com.yeeiee.entity.Role;
 
 /**
  * <p>
- * 权限表 服务类
+ * 角色表 服务类
  * </p>
  *
  * @author chen
- * @since 2024-05-08
+ * @since 2024-05-09
  */
-public interface AuthService extends IService<Auth> {
+public interface RoleService extends IService<Role> {
 
 }

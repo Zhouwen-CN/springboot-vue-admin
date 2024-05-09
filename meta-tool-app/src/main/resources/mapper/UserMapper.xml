@@ -2,42 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeeiee.mapper.UserMapper">
 
-    <!-- BaseResultMap -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.User">
-        <id column="id" property="id"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.entity.dto.UserDto">
+        <id column="u_id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
-    </resultMap>
-
-    <!-- UserDto -->
-    <resultMap id="UserDto" type="com.yeeiee.entity.dto.UserDto">
-        <id column="id" property="id"/>
-        <result column="username" property="username"/>
-        <result column="password" property="password"/>
-        <collection property="authorities" ofType="java.lang.String">
-            <result column="authority"/>
+        <collection property="roles" ofType="java.lang.String">
+            <result column="role_name"/>
+        </collection>
+        <collection column="role_id" property="menus" select="com.yeeiee.mapper.MenuMapper.selectMenusByRoleId">
         </collection>
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id
-        , username, password, create_time, update_time
-    </sql>
-
-    <select id="getUserByName" resultMap="UserDto">
-        select a.*,
-               c.authority
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        select a.id as u_id,
+               a.username,
+               a.`password`,
+               b.role_id,
+               c.role_name
         from (select id,
                      username,
-                     `password`
+                     password
               from t_user
               where username = #{username}) a
-                 left join t_user_auth b
-                           on a.id = b.user_id
-                 left join t_auth c
-                           on b.auth_id = c.id
+                 join t_user_role b
+                      on a.id = b.user_id
+                 join t_role c
+                      on b.role_id = c.id
     </select>
+
 </mapper>

@@ -1,25 +1,25 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.SecondLevelMenu;
+import com.yeeiee.entity.UserRole;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 二级菜单表
+ * 用户角色关系表
  * </p>
  *
  * @author chen
  * @since 2024-05-09
  */
 @RestController
-@RequestMapping("/m2")
-@Tag(name = "二级菜单表 控制器")
-public class SecondLevelMenuController extends BaseController<SecondLevelMenu> {
+@RequestMapping("/userRole")
+@Tag(name = "用户角色关系表 控制器")
+public class UserRoleController extends BaseController<UserRole> {
 
-    public SecondLevelMenuController(IService<SecondLevelMenu> service) {
+    public UserRoleController(IService<UserRole> service) {
         super(service);
     }
 }
