@@ -90,6 +90,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_auth", "t_user", "t_user_auth");
+        generator("t_first_level_menu", "t_second_level_menu");
     }
 }

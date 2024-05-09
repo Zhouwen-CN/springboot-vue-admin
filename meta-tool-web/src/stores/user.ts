@@ -4,10 +4,10 @@ import {defineStore} from 'pinia'
 import {ref} from 'vue'
 
 const useUserStore = defineStore('user', () => {
-    const token = ref<string>(localStorage.getItem('token') as string)
+    const token = ref<string>(localStorage.getItem('token') || '')
 
     async function doLogin(loginForm: LoginForm) {
-        const result = await reqLogin(loginForm)
+        let result = await reqLogin(loginForm)
         token.value = result.data
         localStorage.setItem('token', result.data)
     }

@@ -1862,3 +1862,51 @@ INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_tim
 VALUES (4, 1, 4, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
 INSERT INTO meta_tool.t_user_auth (id, user_id, auth_id, create_time, update_time)
 VALUES (5, 2, 4, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
+
+
+create table t_first_level_menu
+(
+    `id`          bigint auto_increment               not null comment '主键',
+    `title`       varchar(100)                        not null comment '标题',
+    `access_path` varchar(100)                        not null comment '访问路径',
+    `file_path`   varchar(255) comment '文件路径，为null则重定向到第一个子元素',
+    `icon`        varchar(100)                        not null comment '图标',
+    `create_time` timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    primary key (`id`)
+) comment '一级菜单表';
+
+create table t_second_level_menu
+(
+    `id`          bigint auto_increment               not null comment '主键',
+    `title`       varchar(100)                        not null comment '标题',
+    `access_path` varchar(100)                        not null comment '访问路径',
+    `file_path`   varchar(255)                        not null comment '文件路径',
+    `icon`        varchar(100)                        not null comment '图标',
+    `pid`         bigint                              not null comment '一级菜单id',
+    `create_time` timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    primary key (`id`)
+) comment '二级菜单表';
+
+
+insert into t_first_level_menu
+values (1, '权限管理', 'auth', null, 'Lock', '2024-05-06 21:46:48', '2024-05-06 21:46:48');
+insert into t_second_level_menu
+values (1, '用户管理', 'user', '/src/views/layout/auth/User.vue', 'User', 1, '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');
+insert into t_second_level_menu
+values (2, '角色管理', 'role', '/src/views/layout/auth/Role.vue', 'UserFilled', 1, '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');
+insert into t_first_level_menu
+values (2, '数据域管理', 'filed', '/src/views/layout/field/Field.vue', 'Location', '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');
+insert into t_first_level_menu
+values (3, '数据范围管理', 'range', '/src/views/layout/range/Range.vue', 'Location', '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');
+insert into t_first_level_menu
+values (4, '数仓层级管理', 'storey', '/src/views/layout/storey/Storey.vue', 'Location', '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');
+insert into t_first_level_menu
+values (5, '词根管理', 'word', '/src/views/layout/word/Word.vue', 'Location', '2024-05-06 21:46:48',
+        '2024-05-06 21:46:48');

@@ -2,7 +2,7 @@
 import {type User} from '@/api/user';
 import useRequest from '@/hooks/useRequest';
 
-const {loading, data, refresh} = useRequest<User>({url: '/user'})
+const {data, refresh} = useRequest<User>({url: '/user'})
 
 </script>
 
@@ -11,7 +11,7 @@ const {loading, data, refresh} = useRequest<User>({url: '/user'})
     <h1>主页</h1>
     <button @click="refresh">获取用户</button>
     <div v-if="data">
-      <p>loading：{{ loading }}</p>
+      <!-- <p>loading：{{ loading }}</p> -->
       <p>用户id：{{ data.id }}</p>
       <p>用户名：{{ data.username }}</p>
       <p>密码：{{ data.password }}</p>

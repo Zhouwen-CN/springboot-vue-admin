@@ -4,8 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import java.util.Calendar;
@@ -47,13 +45,5 @@ public final class JwtTokenUtil {
             // do nothing
         }
         return Optional.empty();
-    }
-
-    public static void main(String[] args) {
-        val unauthenticated = UsernamePasswordAuthenticationToken.unauthenticated("test", "test");
-        val token = generateToken(unauthenticated);
-        System.out.println("token = " + token);
-        val subject = getSubject(token);
-        System.out.println("subject = " + subject);
     }
 }

@@ -21,7 +21,7 @@ import java.util.Set;
 @Schema(name = "User", description = "用户传输对象")
 public class UserDto {
     @Schema(description = "主键")
-    private Integer id;
+    private Long id;
     @Schema(description = "用户名")
     private String username;
     @Schema(description = "密码")

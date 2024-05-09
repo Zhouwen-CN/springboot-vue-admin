@@ -1,26 +1,24 @@
 package com.yeeiee;
 
-import com.yeeiee.security.JwtUserDetailServiceImpl;
+import com.yeeiee.entity.dto.MenuDto;
+import com.yeeiee.service.FirstLevelMenuService;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootTest
 class MetaToolAppApplicationTests {
 
     @Autowired
-    JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
-
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    FirstLevelMenuService firstLevelMenuService;
 
     @Test
     void contextLoads() {
-        UserDetails admin = jwtUserDetailServiceImpl.loadUserByUsername("test");
-
-        System.out.println(admin);
-        System.out.println(admin.getAuthorities());
+        val menu = firstLevelMenuService.getMenus();
+        for (MenuDto menuDto : menu) {
+            System.out.println(menuDto);
+        }
+//        System.out.println(menu);
     }
 }

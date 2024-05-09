@@ -17,22 +17,49 @@ const router = createRouter({
                 {
                     path: 'home',
                     name: 'Home',
-                    component: () => import('@/views/Home.vue')
+                    component: () => import('@/views/layout/Home.vue')
                 },
                 {
-                    path: 'user',
-                    name: 'User',
-                    component: () => import('@/views/User.vue')
+                    path: 'auth',
+                    name: 'Auth',
+                    redirect: '/auth/user',
+                    children: [
+                        {
+                            path: 'user',
+                            name: 'User',
+                            component: () => import('@/views/layout/auth/User.vue')
+                        },
+                        {
+                            path: 'role',
+                            name: 'Role',
+                            component: () => import('@/views/layout/auth/Role.vue')
+                        },
+                        {
+                            path: 'menu',
+                            name: 'Menu',
+                            component: () => import('@/views/layout/auth/Menu.vue')
+                        }
+                    ]
                 },
                 {
-                    path: 'tree',
-                    name: 'Tree',
-                    component: () => import('@/views/auth/Tree.vue')
+                    path: 'field',
+                    name: 'Field',
+                    component: () => import('@/views/layout/field/Field.vue')
                 },
                 {
-                    path: 'transfer',
-                    name: 'Transfer',
-                    component: () => import('@/views/auth/Transfer.vue')
+                    path: 'range',
+                    name: 'Range',
+                    component: () => import('@/views/layout/range/Range.vue')
+                },
+                {
+                    path: 'storey',
+                    name: 'Storey',
+                    component: () => import('@/views/layout/storey/Storey.vue')
+                },
+                {
+                    path: 'word',
+                    name: 'Word',
+                    component: () => import('@/views/layout/word/Word.vue')
                 },
                 {
                     path: '404',

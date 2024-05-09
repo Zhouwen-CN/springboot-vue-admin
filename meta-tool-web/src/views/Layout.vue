@@ -12,9 +12,16 @@ const settingStore = useSettingStore()
         <h1> {{ settingStore.title }} </h1>
         <el-menu active-text-color="#409eff" background-color="#304156" router text-color="#bfcbd9" unique-opened>
           <el-menu-item index="/home">首页</el-menu-item>
-          <el-menu-item index="/user">用户</el-menu-item>
-          <el-menu-item index="/tree">树形菜单</el-menu-item>
-          <el-menu-item index="/transfer">穿梭框</el-menu-item>
+          <el-sub-menu index="/auth">
+            <template #title>权限管理</template>
+            <el-menu-item index="/auth/user">用户管理</el-menu-item>
+            <el-menu-item index="/auth/role">角色管理</el-menu-item>
+            <el-menu-item index="/auth/menu">菜单管理</el-menu-item>
+          </el-sub-menu>
+          <el-menu-item index="/field">数据域管理</el-menu-item>
+          <el-menu-item index="/range">数据范围管理</el-menu-item>
+          <el-menu-item index="/storey">数仓层级管理</el-menu-item>
+          <el-menu-item index="/word">词根管理</el-menu-item>
         </el-menu>
       </el-scrollbar>
     </el-aside>
