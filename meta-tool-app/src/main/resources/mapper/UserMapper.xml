@@ -7,18 +7,18 @@
         <id column="u_id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
-        <collection property="roles" ofType="java.lang.String">
-            <result column="role_name"/>
+        <collection property="roles" ofType="com.yeeiee.entity.dto.RoleDto">
+            <id column="r_id" property="id"/>
+            <result column="role_name" property="name"/>
         </collection>
-        <collection column="role_id" property="menus" select="com.yeeiee.mapper.MenuMapper.selectMenusByRoleId">
-        </collection>
+
     </resultMap>
 
     <select id="selectByUserName" resultMap="BaseResultMap">
         select a.id as u_id,
                a.username,
                a.`password`,
-               b.role_id,
+               c.id as r_id,
                c.role_name
         from (select id,
                      username,

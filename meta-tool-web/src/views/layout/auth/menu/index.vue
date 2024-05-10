@@ -2,9 +2,7 @@
 import {Delete, Edit, Plus} from '@element-plus/icons-vue';
 import {reactive} from 'vue';
 import type {MenuItemForm} from '@/api/auth/menu'
-import useMenuStore from '@/stores/menu';
-
-const menuStore = useMenuStore()
+import useUserStore from '@/stores/user';
 
 const diglog = reactive({
   flag: false,
@@ -40,16 +38,20 @@ function clean() {
 }
 
 </script>
-
 <template>
   <div>
-    <h1>菜单管理</h1>
-    <el-table :border="true" :data="menuStore.menus" row-key="id">
+    <el-table :border="true" :data="useUserStore().menus" row-key="id">
       <el-table-column label="菜单名称" prop="title"/>
       <el-table-column label="访问路径" prop="accessPath"/>
       <el-table-column label="文件路径" prop="filePath"/>
-      <el-table-column label="菜单图标" prop="icon"/>
       <el-table-column label="更新时间" prop="updateTime"/>
+      <el-table-column align="center" label="图标" width="60">
+        <template #default="{ row }">
+          <el-icon :size="24">
+            <component :is="row.icon"></component>
+          </el-icon>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template #header>
           <el-button :icon="Plus" type="primary" @click="addFirstLevelMenu">添加一级菜单</el-button>

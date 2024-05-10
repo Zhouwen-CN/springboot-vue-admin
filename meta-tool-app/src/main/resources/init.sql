@@ -1,1922 +1,1235 @@
-create table t_data_field
+-- MySQL dump 10.13  Distrib 8.1.0, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: meta_tool
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE = @@TIME_ZONE */;
+/*!40103 SET TIME_ZONE = '+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS, UNIQUE_CHECKS = 0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
+/*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN = 0;
+
+--
+-- GTID state at the beginning of the backup
+--
+
+SET @@GLOBAL.GTID_PURGED = /*!80000 '+'*/ 'c356e02c-5051-11ee-87d0-e070eacf9427:1-135858';
+
+--
+-- Table structure for table `t_data_field`
+--
+
+DROP TABLE IF EXISTS `t_data_field`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_data_field`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    name        varchar(100)                        not null comment '领域名称',
-    `desc`      varchar(255)                        null comment '说明',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_name
-        unique (name)
-)
-    comment '数据域表' charset = utf8mb3;
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(100) NOT NULL COMMENT '领域名称',
+    `desc`        varchar(255)      DEFAULT NULL COMMENT '说明',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_name` (`name`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8mb3 COMMENT ='数据域表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_data_field (id, name, `desc`, create_time, update_time)
-VALUES (1, 'bdf', '基础数据域', '2024-05-06 21:57:21', '2024-05-06 21:57:21');
-INSERT INTO meta_tool.t_data_field (id, name, `desc`, create_time, update_time)
-VALUES (2, 'psf', '产销信息域', '2024-05-06 21:57:21', '2024-05-06 21:57:21');
-INSERT INTO meta_tool.t_data_field (id, name, `desc`, create_time, update_time)
-VALUES (3, 'vuf', '车辆使用域', '2024-05-06 21:57:21', '2024-05-06 21:57:21');
-INSERT INTO meta_tool.t_data_field (id, name, `desc`, create_time, update_time)
-VALUES (4, 'asf', '车辆售后域', '2024-05-06 21:57:21', '2024-05-06 21:57:21');
+--
+-- Dumping data for table `t_data_field`
+--
 
+LOCK TABLES `t_data_field` WRITE;
+/*!40000 ALTER TABLE `t_data_field`
+    DISABLE KEYS */;
+INSERT INTO `t_data_field`
+VALUES (1, 'bdf', '基础数据域', '2024-05-06 13:57:21', '2024-05-06 13:57:21'),
+       (2, 'psf', '产销信息域', '2024-05-06 13:57:21', '2024-05-06 13:57:21'),
+       (3, 'vuf', '车辆使用域', '2024-05-06 13:57:21', '2024-05-06 13:57:21'),
+       (4, 'asf', '车辆售后域', '2024-05-06 13:57:21', '2024-05-06 13:57:21');
+/*!40000 ALTER TABLE `t_data_field`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table t_data_range
+--
+-- Table structure for table `t_data_range`
+--
+
+DROP TABLE IF EXISTS `t_data_range`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_data_range`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    `range`     varchar(100)                        not null comment '范围/周期',
-    `desc`      varchar(255)                        null comment '说明',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_range
-        unique (`range`)
-)
-    comment '数据范围表' charset = utf8mb3;
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `range`       varchar(100) NOT NULL COMMENT '范围/周期',
+    `desc`        varchar(255)      DEFAULT NULL COMMENT '说明',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_range` (`range`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 9
+  DEFAULT CHARSET = utf8mb3 COMMENT ='数据范围表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (1, 'i', '增量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (2, 'f', '分区全量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (3, 'a', '非分区全量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (4, 'z', '拉链表', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (5, 'd', '日快照', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (6, 'w', '周', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (7, 'm', '月', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_range (id, `range`, `desc`, create_time, update_time)
-VALUES (8, 'y', '年', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
+--
+-- Dumping data for table `t_data_range`
+--
 
+LOCK TABLES `t_data_range` WRITE;
+/*!40000 ALTER TABLE `t_data_range`
+    DISABLE KEYS */;
+INSERT INTO `t_data_range`
+VALUES (1, 'i', '增量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (2, 'f', '分区全量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (3, 'a', '非分区全量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (4, 'z', '拉链表', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (5, 'd', '日快照', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (6, 'w', '周', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (7, 'm', '月', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (8, 'y', '年', '2024-05-06 13:57:53', '2024-05-06 13:57:53');
+/*!40000 ALTER TABLE `t_data_range`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table t_data_storey
+--
+-- Table structure for table `t_data_storey`
+--
+
+DROP TABLE IF EXISTS `t_data_storey`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_data_storey`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    storey      varchar(100)                        not null comment '层名',
-    `desc`      varchar(255)                        null comment '说明',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_storey
-        unique (storey)
-)
-    comment '数仓层级表' charset = utf8mb3;
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `storey`      varchar(100) NOT NULL COMMENT '层名',
+    `desc`        varchar(255)      DEFAULT NULL COMMENT '说明',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_storey` (`storey`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 9
+  DEFAULT CHARSET = utf8mb3 COMMENT ='数仓层级表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (1, 'ods', '原始数据层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (2, 'dwd', '数据明细层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (3, 'dwm', '数据中间层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (4, 'dws', '数据服务层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (5, 'ads', '数据应用层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (6, 'dim', '维度层', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (7, 'mid', '中间表-可以删除', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_data_storey (id, storey, `desc`, create_time, update_time)
-VALUES (8, 'tmp', '临时表-可以删除', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
+--
+-- Dumping data for table `t_data_storey`
+--
 
+LOCK TABLES `t_data_storey` WRITE;
+/*!40000 ALTER TABLE `t_data_storey`
+    DISABLE KEYS */;
+INSERT INTO `t_data_storey`
+VALUES (1, 'ods', '原始数据层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (2, 'dwd', '数据明细层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (3, 'dwm', '数据中间层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (4, 'dws', '数据服务层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (5, 'ads', '数据应用层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (6, 'dim', '维度层', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (7, 'mid', '中间表-可以删除', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (8, 'tmp', '临时表-可以删除', '2024-05-06 13:57:53', '2024-05-06 13:57:53');
+/*!40000 ALTER TABLE `t_data_storey`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table t_root_word
+--
+-- Table structure for table `t_menu`
+--
+
+DROP TABLE IF EXISTS `t_menu`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_menu`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    word        varchar(100)                        not null comment '单词',
-    `desc`      varchar(255)                        null comment '说明',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_word
-        unique (word)
-)
-    comment '词根表' charset = utf8mb3;
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `title`       varchar(100) NOT NULL COMMENT '标题',
+    `access_path` varchar(100) NOT NULL COMMENT '访问路径',
+    `file_path`   varchar(255)      DEFAULT NULL COMMENT '文件路径',
+    `icon`        varchar(100) NOT NULL COMMENT '图标',
+    `pid`         bigint            DEFAULT NULL COMMENT '一级菜单id',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 9
+  DEFAULT CHARSET = utf8mb3 COMMENT ='菜单表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (1, 'be', '( am   is   are   was   were   been   being ) 是', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (2, 'go', '( went   gone   going   goes ) 去', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (3, 'come', '( came   coming ) 来', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (4, 'get', '( got ) 获得', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (5, 'give', '( gave   given ) 给予', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (6, 'take', '( took   taken ) 拿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (7, 'put', '放', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (8, 'make', '( made ) 制作', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (9, 'do', '( did   done   doing   does ) 做', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (10, 'have', '( had   having   has ) 有', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (11, 'keep', '( kept ) 持有', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (12, 'let', '让', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (13, 'seem', '看来好像', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (14, 'see', '( saw   seen   seeing ) 看', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (15, 'say', '( said   saying   says ) 说', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (16, 'send', '( sent ) 进', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (17, 'will', '( would ) 将；愿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (18, 'may', '( might ) 可能；可以', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (19, 'on', '在...上', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (20, 'off', '离开', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (21, 'of', '...的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (22, 'at', '在...地点，在...时刻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (23, 'in', '在...里', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (24, 'out', '在外', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (25, 'from', '从', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (26, 'to', '到', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (27, 'before', '在...以前', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (28, 'after', '在...以后', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (29, 'up', '向...上', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (30, 'down', '往...下方', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (31, 'over', '在...之上', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (32, 'under', '在...下面', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (33, 'across', '横越', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (34, 'through', '穿过', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (35, 'for', '为', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (36, 'against', '反对', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (37, 'between', '在...（两者）之间', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (38, 'among', '在...之中', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (39, 'about', '关于；在...的附近', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (40, 'by', '被；由；在...的旁边', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (41, 'with', '用', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (42, 'as', '作为；像...一样；当...时', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (43, 'till', '直到...为止', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (44, 'than', '比', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (45, 'a', '一', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (46, 'the', '这；那', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (47, 'all', '全体', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (48, 'any', '任何一个', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (49, 'every', '每一个', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (50, 'little', '少的；小的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (51, 'much', '许多；非常', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (52, 'no', '不；没有', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (53, 'other', '另一个；其余的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (54, 'some', '有些；某些', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (55, 'such', '这样的；如此的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (56, 'that', '那', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (57, 'this', '这', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (58, 'I', '我', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (59, 'he', '他', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (60, 'you', '你', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (61, 'who', '谁', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (62, 'and', '和', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (63, 'because', '因为', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (64, 'but', '但是', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (65, 'or', '或者', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (66, 'if', '如果；是否', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (67, 'though', '虽然', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (68, 'while', '当...的时候', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (69, 'how', '怎样', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (70, 'when', '什么时候', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (71, 'where', '哪里', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (72, 'why', '为什么', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (73, 'again', '再', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (74, 'ever', '从来；永远', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (75, 'far', '远', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (76, 'forward', '向前', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (77, 'here', '这里', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (78, 'near', '近；接近', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (79, 'now', '现在', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (80, 'still', '还；还是', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (81, 'then', '那时', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (82, 'there', '在那里', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (83, 'together', '一起', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (84, 'well', '很好', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (85, 'almost', '几乎', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (86, 'enough', '足够的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (87, 'even', '甚至', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (88, 'not', '不', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (89, 'only', '只', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (90, 'quite', '相当', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (91, 'so', '这么，那么', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (92, 'very', '非常，很', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (93, 'tomorrow', '明天', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (94, 'yesterday', '昨天', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (95, 'north', '北', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (96, 'south', '南', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (97, 'east', '东', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (98, 'west', '西', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (99, 'please', '请；使高兴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (100, 'yes', '是', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (101, 'angle', '角；角度', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (102, 'ant', '蚂蚁', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (103, 'apple', '苹果', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (104, 'arch', '拱形；弧形', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (105, 'arm', '臂', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (106, 'army', '军队', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (107, 'baby', '婴儿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (108, 'bag', '袋', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (109, 'ball', '球', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (110, 'band', '带子；乐队', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (111, 'basin', '盆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (112, 'basket', '篮', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (113, 'bath', '浴缸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (114, 'bed', '床', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (115, 'bee', '蜜蜂', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (116, 'bell', '钟；铃', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (117, 'berry', '莓果', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (118, 'bird', '鸟', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (119, 'blade', '刀身', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (120, 'board', '木板', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (121, 'boat', '小船', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (122, 'bone', '骨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (123, 'book', '书', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (124, 'boot', '靴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (125, 'bottle', '瓶子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (126, 'box', '箱；盒', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (127, 'boy', '男孩', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (128, 'brain', '脑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (129, 'brake', '煞车', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (130, 'branch', '树枝', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (131, 'brick', '砖', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (132, 'bridge', '桥', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (133, 'brush', '刷子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (134, 'bucket', '水桶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (135, 'bulb', '球茎；灯泡', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (136, 'button', '纽扣', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (137, 'cake', '蛋糕', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (138, 'camera', '照相机', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (139, 'card', '卡片；纸牌', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (140, 'cart', '小车', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (141, 'carriage', '车厢', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (142, 'cat', '猫', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (143, 'chain', '链', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (144, 'cheese', '乳酪', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (145, 'chest', '胸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (146, 'chicken', '鸡', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (147, 'chin', '下巴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (148, 'church', '教堂', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (149, 'circle', '圆圈', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (150, 'clock', '时钟', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (151, 'cloud', '云', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (152, 'coat', '外套，大衣', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (153, 'collar', '衣领', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (154, 'comb', '梳子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (155, 'cord', '绳子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (156, 'cow', '母牛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (157, 'cup', '杯子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (158, 'curtain', '帘；幕', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (159, 'cushion', '垫子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (160, 'dog', '狗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (161, 'door', '门', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (162, 'drain', '排水管', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (163, 'drawer', '抽屉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (164, 'dress', '女装', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (165, 'drop', '滴；落下', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (166, 'ear', '耳', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (167, 'egg', '蛋；鸡蛋', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (168, 'engine', '发动机；机车', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (169, 'eye', '眼睛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (170, 'face', '脸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (171, 'farm', '农场', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (172, 'feather', '羽毛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (173, 'finger', '手指', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (174, 'fish', '鱼', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (175, 'flag', '旗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (176, 'floor', '地板', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (177, 'fly', '苍蝇', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (178, 'foot', '脚', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (179, 'fork', '叉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (180, 'frame', '结构；框架', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (181, 'garden', '花园', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (182, 'girl', '姑娘', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (183, 'glove', '手套', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (184, 'goat', '山羊', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (185, 'gun', '枪；炮', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (186, 'hair', '毛发', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (187, 'hammer', '铁锤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (188, 'hand', '手', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (189, 'hat', '帽子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (190, 'head', '头', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (191, 'heart', '心脏', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (192, 'hook', '钩', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (193, 'horn', '角；号角', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (194, 'horse', '马', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (195, 'hospital', '医院', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (196, 'house', '房子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (197, 'island', '岛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (198, 'jewel', '宝石', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (199, 'kettle', '水壶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (200, 'key', '钥匙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (201, 'knee', '膝', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (202, 'knife', '刀', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (203, 'knot', '（绳）结', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (204, 'leaf', '叶子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (205, 'leg', '腿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (206, 'library', '图书馆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (207, 'line', '线，绳', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (208, 'lip', '嘴唇', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (209, 'lock', '锁', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (210, 'map', '地图', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (211, 'match', '火柴；比赛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (212, 'monkey', '猴子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (213, 'moon', '月亮', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (214, 'mouth', '嘴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (215, 'muscle', '肌肉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (216, 'nail', '指甲', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (217, 'neck', '脖子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (218, 'needle', '针', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (219, 'nerve', '神经', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (220, 'net', '网', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (221, 'nose', '鼻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (222, 'nut', '坚果', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (223, 'office', '办公室', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (224, 'orange', '橙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (225, 'oven', '炉；烤箱', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (226, 'parcel', '包裹', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (227, 'pen', '钢笔', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (228, 'pencil', '铅笔', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (229, 'picture', '画', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (230, 'pig', '猪', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (231, 'pin', '大头针；别针', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (232, 'pipe', '管', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (233, 'plane', '平面；飞机', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (234, 'plate', '盘子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (235, 'plow', '犁', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (236, 'pocket', '口袋', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (237, 'pot', '罐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (238, 'potato', '马铃薯', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (239, 'prison', '监狱', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (240, 'pump', '抽水机；打气筒', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (241, 'rail', '栏杆；铁轨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (242, 'rat', '老鼠', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (243, 'receipt', '收据', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (244, 'ring', '环；戒指', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (245, 'rod', '棒，杆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (246, 'roof', '屋顶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (247, 'root', '根', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (248, 'sail', '帆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (249, 'school', '学校', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (250, 'scissors', '剪刀', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (251, 'screw', '螺丝钉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (252, 'seed', '种子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (253, 'sheep', '绵羊', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (254, 'shelf', '架子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (255, 'ship', '船', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (256, 'shirt', '衬衫', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (257, 'shoe', '鞋', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (258, 'skin', '皮肤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (259, 'skirt', '裙子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (260, 'snake', '蛇', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (261, 'sock', '短袜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (262, 'spade', '铲', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (263, 'sponge', '海绵', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (264, 'spoon', '匙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (265, 'spring', '春天；弹簧；泉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (266, 'square', '正方形；广场', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (267, 'stamp', '邮票', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (268, 'star', '星', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (269, 'station', '车站', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (270, 'stem', '茎', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (271, 'stick', '枝条；棒；杖', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (272, 'stocking', '长袜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (273, 'stomach', '胃；腹部', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (274, 'store', '店', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (275, 'street', '街', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (276, 'sun', '太阳', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (277, 'table', '桌子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (278, 'tail', '尾巴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (279, 'thread', '线', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (280, 'throat', '咽喉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (281, 'thumb', '拇指', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (282, 'ticket', '票', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (283, 'toe', '脚趾', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (284, 'tongue', '舌', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (285, 'tooth', '牙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (286, 'town', '市镇', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (287, 'train', '火车', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (288, 'tray', '托盘', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (289, 'tree', '树', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (290, 'trousers', '裤子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (291, 'umbrella', '雨伞', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (292, 'wall', '墙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (293, 'watch', '手表', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (294, 'wheel', '轮子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (295, 'whip', '鞭子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (296, 'whistle', '口哨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (297, 'window', '窗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (298, 'wing', '翅膀', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (299, 'wire', '金属线；电线', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (300, 'worm', '虫', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (301, 'account', '帐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (302, 'act', '行动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (303, 'addition', '加', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (304, 'adjustment', '调节', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (305, 'advertisement', '广告', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (306, 'agreement', '同意', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (307, 'air', '空气', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (308, 'amount', '数量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (309, 'amusement', '乐趣', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (310, 'animal', '动物', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (311, 'answer', '回答', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (312, 'apparatus', '器悈', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (313, 'approval', '批准', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (314, 'argument', '争执', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (315, 'art', '艺术', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (316, 'attack', '进攻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (317, 'attempt', '试图', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (318, 'attention', '注意', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (319, 'attraction', '吸引', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (320, 'authority', '权；官方', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (321, 'back', '背部；后背', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (322, 'balance', '平衡', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (323, 'base', '基', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (324, 'behavior', '行为', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (325, 'belief', '相信', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (326, 'birth', '出生', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (327, 'bit', '小片；少量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (328, 'bite', '咬', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (329, 'blood', '血', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (330, 'blow', '吹动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (331, 'body', '身体', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (332, 'brass', '黄铜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (333, 'bread', '面包', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (334, 'breath', '呼吸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (335, 'brother', '兄弟', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (336, 'building', '建筑物', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (337, 'burn', '烧伤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (338, 'burst', '爆发；破裂', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (339, 'business', '生意', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (340, 'butter', '奶油', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (341, 'canvas', '帆布', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (342, 'care', '照料；小心；忧虑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (343, 'cause', '原因；目标', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (344, 'chalk', '粉笔', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (345, 'chance', '机会', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (346, 'change', '变化', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (347, 'cloth', '布', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (348, 'coal', '煤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (349, 'color', '颜色', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (350, 'comfort', '舒适', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (351, 'committee', '委员会', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (352, 'company', '公司；陪伴', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (353, 'comparison', '比较', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (354, 'competition', '竞争；比赛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (355, 'condition', '情况', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (356, 'connection', '连接；关系', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (357, 'control', '控制', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (358, 'cook', '厨师', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (359, 'copper', '铜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (360, 'copy', '抄本；复印', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (361, 'cork', '软木', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (362, 'cotton', '棉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (363, 'cough', '咳嗽', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (364, 'country', '国家；乡下', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (365, 'cover', '遮盖物', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (366, 'crack', '裂缝', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (367, 'credit', '赊账；信用', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (368, 'crime', '罪', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (369, 'crush', '压碎', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (370, 'cry', '哭；喊叫', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (371, 'current', '流动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (372, 'curve', '曲线', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (373, 'damage', '损害', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (374, 'danger', '危险', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (375, 'daughter', '女儿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (376, 'day', '日', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (377, 'death', '死', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (378, 'debt', '债', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (379, 'decision', '决定', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (380, 'degree', '度；程度；学位', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (381, 'design', '设计', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (382, 'desire', '渴望', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (383, 'destruction', '毁灭', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (384, 'detail', '细节', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (385, 'development', '发展', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (386, 'digestion', '消化', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (387, 'direction', '方向', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (388, 'discovery', '发现', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (389, 'discussion', '讨论', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (390, 'disease', '病', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (391, 'disgust', '厌恶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (392, 'distance', '距离', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (393, 'distribution', '分配；分布；销售', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (394, 'division', '分开', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (395, 'doubt', '怀疑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (396, 'drink', '饮料', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (397, 'driving', '操纵；驾驶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (398, 'dust', '灰尘', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (399, 'earth', '地球；地面；土', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (400, 'edge', '边缘', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (401, 'education', '教育', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (402, 'effect', '结果；效果', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (403, 'end', '末端；结束', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (404, 'error', '错误', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (405, 'event', '事件', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (406, 'example', '例子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (407, 'exchange', '交换', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (408, 'existence', '存在；生存', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (409, 'expansion', '扩展', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (410, 'experience', '经验', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (411, 'expert', '专家', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (412, 'fact', '事实', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (413, 'fall', '落下；秋天', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (414, 'family', '家', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (415, 'father', '父亲', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (416, 'fear', '害怕', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (417, 'feeling', '感觉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (418, 'fiction', '小说', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (419, 'field', '田野；场', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (420, 'fight', '战斗；争吵', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (421, 'fire', '火', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (422, 'flame', '火焰', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (423, 'flight', '飞行', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (424, 'flower', '花', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (425, 'fold', '折叠', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (426, 'food', '食物', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (427, 'force', '力量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (428, 'form', '形状', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (429, 'friend', '朋友', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (430, 'front', '前面', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (431, 'fruit', '水果', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (432, 'glass', '玻璃', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (433, 'gold', '金', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (434, 'government', '政府', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (435, 'grain', '谷粒', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (436, 'grass', '草', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (437, 'grip', '紧握', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (438, 'group', '群；团体', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (439, 'growth', '生长', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (440, 'guide', '向导；指南', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (441, 'harbor', '港湾', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (442, 'harmony', '和睦；和谐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (443, 'hate', '仇恨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (444, 'hearing', '听', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (445, 'heat', '热', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (446, 'help', '帮助', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (447, 'history', '历史', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (448, 'hole', '洞', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (449, 'hope', '希望', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (450, 'hour', '小时', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (451, 'humor', '幽默', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (452, 'ice', '冰', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (453, 'idea', '注意', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (454, 'impulse', '冲动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (455, 'increase', '增加', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (456, 'industry', '工业', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (457, 'ink', '墨水', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (458, 'insect', '昆虫', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (459, 'instrument', '仪器', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (460, 'insurance', '保险', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (461, 'interest', '兴趣', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (462, 'invention', '发明', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (463, 'iron', '铁', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (464, 'jelly', '胶冻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (465, 'join', '连接处', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (466, 'journey', '旅行', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (467, 'judge', '法官', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (468, 'jump', '跳', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (469, 'kick', '踢', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (470, 'kiss', '吻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (471, 'knowledge', '知识', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (472, 'land', '陆地', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (473, 'language', '语言', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (474, 'laugh', '笑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (475, 'law', '法律', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (476, 'lead', '铅', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (477, 'learn', '学习', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (478, 'leather', '皮革', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (479, 'letter', '字母；信；文字', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (480, 'level', '水平；高度', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (481, 'lift', '提', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (482, 'light', '光；灯', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (483, 'limit', '限度', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (484, 'linen', '亚麻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (485, 'liquid', '液体', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (486, 'list', '表目录；名单', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (487, 'look', '看', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (488, 'loss', '丧失；损失', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (489, 'love', '爱', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (490, 'machine', '机器', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (491, 'man', '男人', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (492, 'manager', '经理', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (493, 'mark', '痕迹；记号', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (494, 'market', '市场', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (495, 'mass', '团块；堆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (496, 'meal', '进餐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (497, 'measure', '度量；措施', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (498, 'meat', '肉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (499, 'meeting', '会议', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (500, 'memory', '记忆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (501, 'metal', '金属', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (502, 'middle', '中部', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (503, 'milk', '牛奶', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (504, 'mind', '头脑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (505, 'mine', '矿', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (506, 'minute', '分钟', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (507, 'mist', '薄雾', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (508, 'money', '钱', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (509, 'month', '月份', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (510, 'morning', '早晨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (511, 'mother', '母亲', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (512, 'motion', '运动；动作', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (513, 'mountain', '山', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (514, 'move', '移动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (515, 'music', '音乐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (516, 'name', '名字', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (517, 'nation', '国民；国家', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (518, 'need', '需要', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (519, 'news', '新闻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (520, 'night', '夜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (521, 'noise', '响声；噪音', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (522, 'note', '笔记；便条；纸巾', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (523, 'number', '数字', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (524, 'observation', '观察', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (525, 'offer', '提供；出价', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (526, 'oil', '油', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (527, 'operation', '运转；操作', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (528, 'opinion', '意见', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (529, 'order', '顺序；命令；订货', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (530, 'organization', '组织', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (531, 'ornament', '装饰', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (532, 'owner', '物主', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (533, 'page', '页', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (534, 'pain', '痛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (535, 'paint', '油漆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (536, 'paper', '纸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (537, 'part', '一部分', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (538, 'paste', '浆糊', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (539, 'payment', '支付', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (540, 'peace', '和平', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (541, 'person', '人', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (542, 'place', '地方', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (543, 'plant', '植物', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (544, 'play', '玩；戏剧', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (545, 'pleasure', '愉快', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (546, 'point', '尖端；一点', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (547, 'poison', '毒', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (548, 'polish', '磨光；擦亮', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (549, 'porter', '搬运工', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (550, 'position', '位置', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (551, 'powder', '粉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (552, 'power', '权力；力量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (553, 'price', '价格', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (554, 'print', '印刷', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (555, 'process', '过程；步骤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (556, 'produce', '产品', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (557, 'profit', '利润', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (558, 'property', '财产；房地产', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (559, 'prose', '散文', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (560, 'protest', '抗议', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (561, 'pull', '拉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (562, 'punishment', '惩罚', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (563, 'purpose', '目的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (564, 'push', '推', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (565, 'quality', '质量；特性', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (566, 'question', '问题', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (567, 'rain', '雨', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (568, 'range', '排；行；范围', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (569, 'rate', '比率；速度', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (570, 'ray', '光线', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (571, 'reaction', '反应', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (572, 'reading', '阅读', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (573, 'reason', '理由', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (574, 'record', '记录；唱片', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (575, 'regret', '懊悔；遗憾', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (576, 'relation', '关系', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (577, 'religion', '宗教', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (578, 'representative', '代表', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (579, 'request', '要求；请求', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (580, 'respect', '尊敬', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (581, 'rest', '休息', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (582, 'reward', '报答；奖赏', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (583, 'rhythm', '节奏', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (584, 'rice', '米', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (585, 'river', '江；河', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (586, 'road', '路', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (587, 'roll', '滚动；（一）卷', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (588, 'room', '房间', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (589, 'rub', '摩擦', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (590, 'rule', '规则；统治', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (591, 'run', '跑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (592, 'salt', '盐', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (593, 'sand', '沙', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (594, 'scale', '刻度；比例', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (595, 'science', '科学', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (596, 'sea', '海', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (597, 'seat', '座位', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (598, 'secretary', '秘书', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (599, 'selection', '选择', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (600, 'self', '自己', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (601, 'sense', '感觉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (602, 'servant', '仆人', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (603, 'sex', '性', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (604, 'shade', '荫；阴暗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (605, 'shake', '摇动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (606, 'shame', '羞耻', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (607, 'shock', '冲击；震惊', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (608, 'side', '边；旁边', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (609, 'sign', '记号；标志；征兆', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (610, 'silk', '丝；丝绸', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (611, 'silver', '银', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (612, 'sister', '姐妹', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (613, 'size', '尺寸；大小', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (614, 'sky', '天空', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (615, 'sleep', '睡觉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (616, 'slip', '滑动；下降；溜走；疏忽', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (617, 'slope', '倾斜', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (618, 'smash', '打碎；猛撞', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (619, 'smell', '气味', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (620, 'smile', '微笑', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (621, 'smoke', '烟', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (622, 'sneeze', '喷嚏', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (623, 'snow', '雪', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (624, 'soap', '肥皂', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (625, 'society', '社会', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (626, 'son', '儿子', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (627, 'song', '歌曲', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (628, 'sort', '种类', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (629, 'sound', '声音', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (630, 'soup', '汤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (631, 'space', '空间', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (632, 'stage', '舞台', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (633, 'start', '开始', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (634, 'statement', '陈述；生明', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (635, 'steam', '蒸汽', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (636, 'steel', '钢', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (637, 'step', '脚步', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (638, 'stitch', '一针', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (639, 'stone', '石头', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (640, 'stop', '停止', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (641, 'story', '故事', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (642, 'stretch', '伸展', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (643, 'structure', '结构', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (644, 'substance', '物质', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (645, 'sugar', '糖', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (646, 'suggestion', '建议', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (647, 'summer', '夏天', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (648, 'support', '支撑；支持', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (649, 'surprise', '惊奇', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (650, 'swim', '游泳', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (651, 'system', '系统', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (652, 'talk', '谈话', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (653, 'taste', '味觉', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (654, 'tax', '税', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (655, 'teach', '教', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (656, 'tendency', '倾向；接触', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (657, 'test', '实验；测试', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (658, 'theory', '理论', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (659, 'thing', '物；东西', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (660, 'thought', '思想', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (661, 'thunder', '雷；雷声', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (662, 'time', '时间', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (663, 'tin', '锡', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (664, 'top', '顶部', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (665, 'touch', '触觉；接触', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (666, 'trade', '贸易', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (667, 'transport', '运输', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (668, 'trick', '诡计', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (669, 'trouble', '烦恼；麻烦', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (670, 'turn', '转动', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (671, 'twist', '扭转', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (672, 'unit', '单位', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (673, 'use', '使用', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (674, 'value', '价值', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (675, 'verse', '诗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (676, 'vessel', '容器；船', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (677, 'view', '观看；景色；观点', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (678, 'voice', '（人的）声音', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (679, 'walk', '走；散步', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (680, 'war', '战争', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (681, 'wash', '洗', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (682, 'waste', '浪费', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (683, 'water', '水', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (684, 'wave', '波；波浪', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (685, 'wax', '蜡', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (686, 'way', '路；方向；方法', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (687, 'weather', '天气', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (688, 'week', '星期', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (689, 'weight', '质量', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (690, 'wind', '风', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (691, 'wine', '酒', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (692, 'winter', '冬天', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (693, 'woman', '女人', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (694, 'wood', '木头', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (695, 'wool', '羊毛', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (696, 'word', '词；一句话', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (697, 'work', '工作', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (698, 'wound', '伤', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (699, 'writing', '写', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (700, 'year', '年。', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (701, 'able', '有能力的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (702, 'acid', '酸的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (703, 'angry', '发怒的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (704, 'automatic', '自动的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (705, 'beautiful', '美丽的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (706, 'black', '黑色', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (707, 'boiling', '沸腾的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (708, 'bright', '明亮的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (709, 'broken', '损坏的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (710, 'brown', '褐色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (711, 'cheap', '便宜的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (712, 'chemical', '化学的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (713, 'chief', '首要的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (714, 'clean', '干净的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (715, 'clear', '清澈的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (716, 'common', '普通的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (717, 'complex', '复杂的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (718, 'conscious', '有意识的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (719, 'cut', '切过的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (720, 'deep', '深的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (721, 'dependent', '依靠的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (722, 'early', '早的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (723, 'elastic', '有弹性的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (724, 'electric', '电的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (725, 'equal', '相等的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (726, 'fat', '肥的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (727, 'fertile', '多产的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (728, 'first', '第一的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (729, 'fixed', '固定的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (730, 'flat', '平的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (731, 'free', '自由的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (732, 'frequent', '经常的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (733, 'full', '满的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (734, 'general', '一般的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (735, 'good', '好的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (736, 'great', '大的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (737, 'grey', '灰色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (738, 'hanging', '悬挂的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (739, 'happy', '高兴的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (740, 'hard', '硬的；困难的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (741, 'healthy', '健康的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (742, 'high', '高的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (743, 'hollow', '空的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (744, 'important', '重要的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (745, 'kind', '亲切的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (746, 'like', '相似的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (747, 'living', '活的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (748, 'long', '长的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (749, 'male', '男性的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (750, 'married', '已婚的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (751, 'material', '物质的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (752, 'medical', '医学的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (753, 'military', '军事的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (754, 'natural', '自然的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (755, 'necessary', '必要的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (756, 'new', '新的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (757, 'normal', '正常的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (758, 'open', '打开的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (759, 'parallel', '平行的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (760, 'past', '过去的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (761, 'physical', '身体的；物质的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (762, 'political', '政治的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (763, 'poor', '贫穷的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (764, 'possible', '可能的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (765, 'present', '在场的；现在的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (766, 'private', '个人的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (767, 'probable', '很可能的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (768, 'quick', '快的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (769, 'quiet', '安静的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (770, 'ready', '准备好的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (771, 'red', '红色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (772, 'regular', '规则的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (773, 'responsible', '负责任的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (774, 'right', '右的；对的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (775, 'round', '圆的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (776, 'same', '同样的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (777, 'second', '第二的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (778, 'separate', '分开的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (779, 'serious', '严重的；严肃的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (780, 'sharp', '锋利的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (781, 'smooth', '平滑的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (782, 'sticky', '粘的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (783, 'stiff', '硬的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (784, 'straight', '直的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (785, 'strong', '强的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (786, 'sudden', '突然的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (787, 'sweet', '甜的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (788, 'tall', '身材高的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (789, 'thick', '厚的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (790, 'tight', '紧的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (791, 'tired', '疲倦的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (792, 'TRUE', '真实的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (793, 'violent', '激烈的；暴力的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (794, 'waiting', '等待的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (795, 'warm', '温暖的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (796, 'wet', '湿的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (797, 'wide', '宽阔的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (798, 'wise', '聪明的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (799, 'yellow', '黄色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (800, 'young', '年青的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (801, 'awake', '清醒的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (802, 'bad', '坏的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (803, 'bent', '弯曲的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (804, 'bitter', '苦的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (805, 'blue', '蓝色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (806, 'certain', '肯定的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (807, 'cold', '冷的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (808, 'complete', '完整的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (809, 'cruel', '残酷的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (810, 'dark', '黑暗的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (811, 'dead', '死的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (812, 'expensive', '昂贵的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (813, 'dear', '亲爱的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (814, 'delicate', '娇贵的；微妙的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (815, 'different', '不同的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (816, 'dirty', '脏的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (817, 'dry', '干的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (818, 'FALSE', '假的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (819, 'female', '女性的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (820, 'foolish', '愚蠢的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (821, 'future', '未来的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (822, 'green', '绿的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (823, 'ill', '生病的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (824, 'last', '最后的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (825, 'late', '晚的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (826, 'left', '左的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (827, 'loose', '松的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (828, 'loud', '大声的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (829, 'low', '低的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (830, 'mixed', '混合的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (831, 'narrow', '窄的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (832, 'old', '老的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (833, 'opposite', '相反的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (834, 'public', '公众的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (835, 'rough', '粗糙的；狂暴的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (836, 'sad', '悲哀的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (837, 'safe', '安全的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (838, 'secret', '秘密的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (839, 'short', '短的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (840, 'shut', '关闭的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (841, 'simple', '简单的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (842, 'slow', '慢的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (843, 'small', '小的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (844, 'soft', '柔软的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (845, 'solid', '固定的；结实的；纯的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (846, 'special', '特殊的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (847, 'strange', '奇怪的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (848, 'thin', '薄的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (849, 'white', '白色的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
-INSERT INTO meta_tool.t_root_word (id, word, `desc`, create_time, update_time)
-VALUES (850, 'wrong', '错误的', '2024-05-06 21:57:53', '2024-05-06 21:57:53');
+--
+-- Dumping data for table `t_menu`
+--
 
-create table t_user
+LOCK TABLES `t_menu` WRITE;
+/*!40000 ALTER TABLE `t_menu`
+    DISABLE KEYS */;
+INSERT INTO `t_menu`
+VALUES (1, '权限管理', '/auth', NULL, 'Lock', NULL, '2024-05-06 13:46:48', '2024-05-06 13:46:48'),
+       (2, '用户管理', '/auth/user', '/layout/auth/user/index.vue', 'User', 1, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (3, '角色管理', '/auth/role', '/layout/auth/role/index.vue', 'UserFilled', 1, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (4, '菜单管理', '/auth/menu', '/layout/auth/menu/index.vue', 'UserFilled', 1, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (5, '数据域管理', '/filed', '/layout/field/index.vue', 'Location', NULL, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (6, '数据范围管理', '/range', '/layout/range/index.vue', 'Location', NULL, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (7, '数仓层级管理', '/storey', '/layout/storey/index.vue', 'Location', NULL, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48'),
+       (8, '词根管理', '/word', '/layout/word/index.vue', 'Location', NULL, '2024-05-06 13:46:48',
+        '2024-05-06 13:46:48');
+/*!40000 ALTER TABLE `t_menu`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_role`
+--
+
+DROP TABLE IF EXISTS `t_role`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_role`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    username    varchar(100)                        not null comment '用户名',
-    password    varchar(255)                        not null comment '密码',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_username
-        unique (username)
-)
-    comment '用户表';
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `role_name`   varchar(100) NOT NULL COMMENT '角色名称',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_role_name` (`role_name`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8mb3 COMMENT ='角色表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `t_role`
+--
 
-INSERT INTO meta_tool.t_user (id, username, password, create_time, update_time)
-VALUES (1, 'admin', '$2a$10$wTV12Fs5hQfhG9RzZuKd6.c135tv2y8PTJAtKRhlXnU.9xS5Qqcxu', '2024-05-06 21:45:21',
-        '2024-05-06 21:45:21');
-INSERT INTO meta_tool.t_user (id, username, password, create_time, update_time)
-VALUES (2, 'test', '$2a$10$2lxM1kdya4nhyNQ6AYItD.1JFnwL9ImzEXQ44p0itoZwq8WBLfxuq', '2024-05-06 21:45:21',
-        '2024-05-06 21:45:21');
+LOCK TABLES `t_role` WRITE;
+/*!40000 ALTER TABLE `t_role`
+    DISABLE KEYS */;
+INSERT INTO `t_role`
+VALUES (1, 'admin', '2024-05-06 13:45:21', '2024-05-06 13:45:21'),
+       (2, 'test', '2024-05-06 13:45:21', '2024-05-06 13:45:21');
+/*!40000 ALTER TABLE `t_role`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `t_role_menu`
+--
 
-create table t_role
+DROP TABLE IF EXISTS `t_role_menu`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_role_menu`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    role_name   varchar(100)                        not null comment '角色名称',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    constraint uniq_role_name unique (role_name)
-)
-    comment '角色表';
+    `id`          bigint    NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `role_id`     bigint    NOT NULL COMMENT '角色id',
+    `menu_id`     bigint    NOT NULL COMMENT '菜单id',
+    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 11
+  DEFAULT CHARSET = utf8mb3 COMMENT ='用户权限关系表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_role (id, role_name, create_time, update_time)
-VALUES (1, 'admin', '2024-05-06 21:45:21', '2024-05-06 21:45:21');
-INSERT INTO meta_tool.t_role (id, role_name, create_time, update_time)
-VALUES (2, 'test', '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+--
+-- Dumping data for table `t_role_menu`
+--
 
+LOCK TABLES `t_role_menu` WRITE;
+/*!40000 ALTER TABLE `t_role_menu`
+    DISABLE KEYS */;
+INSERT INTO `t_role_menu`
+VALUES (1, 1, 1, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (2, 1, 2, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (3, 1, 3, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (4, 1, 4, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (5, 1, 5, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (6, 1, 6, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (7, 1, 7, '2024-05-06 13:47:11', '2024-05-06 13:47:11'),
+       (8, 2, 1, '2024-05-06 13:47:16', '2024-05-06 13:47:16'),
+       (9, 2, 2, '2024-05-06 13:47:16', '2024-05-06 13:47:16'),
+       (10, 2, 4, '2024-05-06 13:47:16', '2024-05-06 13:47:16');
+/*!40000 ALTER TABLE `t_role_menu`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table t_user_role
+--
+-- Table structure for table `t_root_word`
+--
+
+DROP TABLE IF EXISTS `t_root_word`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_root_word`
 (
-    id          bigint auto_increment comment '主键' primary key,
-    user_id     bigint                              not null comment '用户id',
-    role_id     bigint                              not null comment '角色id',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
-)
-    comment '用户角色关系表';
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `word`        varchar(100) NOT NULL COMMENT '单词',
+    `desc`        varchar(255)      DEFAULT NULL COMMENT '说明',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_word` (`word`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 851
+  DEFAULT CHARSET = utf8mb3 COMMENT ='词根表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO meta_tool.t_user_role (id, user_id, role_id, create_time, update_time)
-VALUES (1, 1, 1, '2024-05-06 21:45:21', '2024-05-06 21:45:21');
-INSERT INTO meta_tool.t_user_role (id, user_id, role_id, create_time, update_time)
-VALUES (2, 2, 2, '2024-05-06 21:45:21', '2024-05-06 21:45:21');
+--
+-- Dumping data for table `t_root_word`
+--
 
+LOCK TABLES `t_root_word` WRITE;
+/*!40000 ALTER TABLE `t_root_word`
+    DISABLE KEYS */;
+INSERT INTO `t_root_word`
+VALUES (1, 'be', '( am   is   are   was   were   been   being ) 是', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (2, 'go', '( went   gone   going   goes ) 去', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (3, 'come', '( came   coming ) 来', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (4, 'get', '( got ) 获得', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (5, 'give', '( gave   given ) 给予', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (6, 'take', '( took   taken ) 拿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (7, 'put', '放', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (8, 'make', '( made ) 制作', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (9, 'do', '( did   done   doing   does ) 做', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (10, 'have', '( had   having   has ) 有', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (11, 'keep', '( kept ) 持有', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (12, 'let', '让', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (13, 'seem', '看来好像', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (14, 'see', '( saw   seen   seeing ) 看', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (15, 'say', '( said   saying   says ) 说', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (16, 'send', '( sent ) 进', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (17, 'will', '( would ) 将；愿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (18, 'may', '( might ) 可能；可以', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (19, 'on', '在...上', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (20, 'off', '离开', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (21, 'of', '...的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (22, 'at', '在...地点，在...时刻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (23, 'in', '在...里', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (24, 'out', '在外', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (25, 'from', '从', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (26, 'to', '到', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (27, 'before', '在...以前', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (28, 'after', '在...以后', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (29, 'up', '向...上', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (30, 'down', '往...下方', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (31, 'over', '在...之上', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (32, 'under', '在...下面', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (33, 'across', '横越', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (34, 'through', '穿过', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (35, 'for', '为', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (36, 'against', '反对', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (37, 'between', '在...（两者）之间', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (38, 'among', '在...之中', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (39, 'about', '关于；在...的附近', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (40, 'by', '被；由；在...的旁边', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (41, 'with', '用', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (42, 'as', '作为；像...一样；当...时', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (43, 'till', '直到...为止', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (44, 'than', '比', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (45, 'a', '一', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (46, 'the', '这；那', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (47, 'all', '全体', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (48, 'any', '任何一个', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (49, 'every', '每一个', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (50, 'little', '少的；小的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (51, 'much', '许多；非常', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (52, 'no', '不；没有', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (53, 'other', '另一个；其余的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (54, 'some', '有些；某些', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (55, 'such', '这样的；如此的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (56, 'that', '那', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (57, 'this', '这', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (58, 'I', '我', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (59, 'he', '他', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (60, 'you', '你', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (61, 'who', '谁', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (62, 'and', '和', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (63, 'because', '因为', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (64, 'but', '但是', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (65, 'or', '或者', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (66, 'if', '如果；是否', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (67, 'though', '虽然', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (68, 'while', '当...的时候', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (69, 'how', '怎样', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (70, 'when', '什么时候', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (71, 'where', '哪里', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (72, 'why', '为什么', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (73, 'again', '再', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (74, 'ever', '从来；永远', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (75, 'far', '远', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (76, 'forward', '向前', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (77, 'here', '这里', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (78, 'near', '近；接近', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (79, 'now', '现在', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (80, 'still', '还；还是', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (81, 'then', '那时', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (82, 'there', '在那里', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (83, 'together', '一起', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (84, 'well', '很好', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (85, 'almost', '几乎', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (86, 'enough', '足够的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (87, 'even', '甚至', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (88, 'not', '不', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (89, 'only', '只', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (90, 'quite', '相当', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (91, 'so', '这么，那么', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (92, 'very', '非常，很', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (93, 'tomorrow', '明天', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (94, 'yesterday', '昨天', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (95, 'north', '北', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (96, 'south', '南', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (97, 'east', '东', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (98, 'west', '西', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (99, 'please', '请；使高兴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (100, 'yes', '是', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (101, 'angle', '角；角度', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (102, 'ant', '蚂蚁', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (103, 'apple', '苹果', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (104, 'arch', '拱形；弧形', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (105, 'arm', '臂', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (106, 'army', '军队', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (107, 'baby', '婴儿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (108, 'bag', '袋', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (109, 'ball', '球', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (110, 'band', '带子；乐队', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (111, 'basin', '盆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (112, 'basket', '篮', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (113, 'bath', '浴缸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (114, 'bed', '床', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (115, 'bee', '蜜蜂', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (116, 'bell', '钟；铃', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (117, 'berry', '莓果', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (118, 'bird', '鸟', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (119, 'blade', '刀身', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (120, 'board', '木板', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (121, 'boat', '小船', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (122, 'bone', '骨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (123, 'book', '书', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (124, 'boot', '靴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (125, 'bottle', '瓶子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (126, 'box', '箱；盒', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (127, 'boy', '男孩', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (128, 'brain', '脑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (129, 'brake', '煞车', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (130, 'branch', '树枝', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (131, 'brick', '砖', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (132, 'bridge', '桥', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (133, 'brush', '刷子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (134, 'bucket', '水桶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (135, 'bulb', '球茎；灯泡', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (136, 'button', '纽扣', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (137, 'cake', '蛋糕', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (138, 'camera', '照相机', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (139, 'card', '卡片；纸牌', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (140, 'cart', '小车', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (141, 'carriage', '车厢', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (142, 'cat', '猫', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (143, 'chain', '链', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (144, 'cheese', '乳酪', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (145, 'chest', '胸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (146, 'chicken', '鸡', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (147, 'chin', '下巴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (148, 'church', '教堂', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (149, 'circle', '圆圈', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (150, 'clock', '时钟', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (151, 'cloud', '云', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (152, 'coat', '外套，大衣', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (153, 'collar', '衣领', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (154, 'comb', '梳子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (155, 'cord', '绳子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (156, 'cow', '母牛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (157, 'cup', '杯子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (158, 'curtain', '帘；幕', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (159, 'cushion', '垫子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (160, 'dog', '狗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (161, 'door', '门', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (162, 'drain', '排水管', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (163, 'drawer', '抽屉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (164, 'dress', '女装', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (165, 'drop', '滴；落下', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (166, 'ear', '耳', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (167, 'egg', '蛋；鸡蛋', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (168, 'engine', '发动机；机车', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (169, 'eye', '眼睛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (170, 'face', '脸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (171, 'farm', '农场', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (172, 'feather', '羽毛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (173, 'finger', '手指', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (174, 'fish', '鱼', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (175, 'flag', '旗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (176, 'floor', '地板', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (177, 'fly', '苍蝇', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (178, 'foot', '脚', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (179, 'fork', '叉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (180, 'frame', '结构；框架', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (181, 'garden', '花园', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (182, 'girl', '姑娘', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (183, 'glove', '手套', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (184, 'goat', '山羊', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (185, 'gun', '枪；炮', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (186, 'hair', '毛发', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (187, 'hammer', '铁锤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (188, 'hand', '手', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (189, 'hat', '帽子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (190, 'head', '头', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (191, 'heart', '心脏', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (192, 'hook', '钩', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (193, 'horn', '角；号角', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (194, 'horse', '马', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (195, 'hospital', '医院', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (196, 'house', '房子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (197, 'island', '岛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (198, 'jewel', '宝石', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (199, 'kettle', '水壶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (200, 'key', '钥匙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (201, 'knee', '膝', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (202, 'knife', '刀', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (203, 'knot', '（绳）结', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (204, 'leaf', '叶子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (205, 'leg', '腿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (206, 'library', '图书馆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (207, 'line', '线，绳', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (208, 'lip', '嘴唇', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (209, 'lock', '锁', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (210, 'map', '地图', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (211, 'match', '火柴；比赛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (212, 'monkey', '猴子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (213, 'moon', '月亮', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (214, 'mouth', '嘴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (215, 'muscle', '肌肉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (216, 'nail', '指甲', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (217, 'neck', '脖子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (218, 'needle', '针', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (219, 'nerve', '神经', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (220, 'net', '网', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (221, 'nose', '鼻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (222, 'nut', '坚果', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (223, 'office', '办公室', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (224, 'orange', '橙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (225, 'oven', '炉；烤箱', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (226, 'parcel', '包裹', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (227, 'pen', '钢笔', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (228, 'pencil', '铅笔', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (229, 'picture', '画', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (230, 'pig', '猪', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (231, 'pin', '大头针；别针', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (232, 'pipe', '管', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (233, 'plane', '平面；飞机', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (234, 'plate', '盘子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (235, 'plow', '犁', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (236, 'pocket', '口袋', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (237, 'pot', '罐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (238, 'potato', '马铃薯', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (239, 'prison', '监狱', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (240, 'pump', '抽水机；打气筒', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (241, 'rail', '栏杆；铁轨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (242, 'rat', '老鼠', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (243, 'receipt', '收据', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (244, 'ring', '环；戒指', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (245, 'rod', '棒，杆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (246, 'roof', '屋顶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (247, 'root', '根', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (248, 'sail', '帆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (249, 'school', '学校', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (250, 'scissors', '剪刀', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (251, 'screw', '螺丝钉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (252, 'seed', '种子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (253, 'sheep', '绵羊', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (254, 'shelf', '架子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (255, 'ship', '船', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (256, 'shirt', '衬衫', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (257, 'shoe', '鞋', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (258, 'skin', '皮肤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (259, 'skirt', '裙子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (260, 'snake', '蛇', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (261, 'sock', '短袜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (262, 'spade', '铲', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (263, 'sponge', '海绵', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (264, 'spoon', '匙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (265, 'spring', '春天；弹簧；泉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (266, 'square', '正方形；广场', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (267, 'stamp', '邮票', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (268, 'star', '星', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (269, 'station', '车站', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (270, 'stem', '茎', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (271, 'stick', '枝条；棒；杖', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (272, 'stocking', '长袜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (273, 'stomach', '胃；腹部', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (274, 'store', '店', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (275, 'street', '街', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (276, 'sun', '太阳', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (277, 'table', '桌子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (278, 'tail', '尾巴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (279, 'thread', '线', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (280, 'throat', '咽喉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (281, 'thumb', '拇指', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (282, 'ticket', '票', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (283, 'toe', '脚趾', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (284, 'tongue', '舌', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (285, 'tooth', '牙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (286, 'town', '市镇', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (287, 'train', '火车', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (288, 'tray', '托盘', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (289, 'tree', '树', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (290, 'trousers', '裤子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (291, 'umbrella', '雨伞', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (292, 'wall', '墙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (293, 'watch', '手表', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (294, 'wheel', '轮子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (295, 'whip', '鞭子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (296, 'whistle', '口哨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (297, 'window', '窗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (298, 'wing', '翅膀', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (299, 'wire', '金属线；电线', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (300, 'worm', '虫', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (301, 'account', '帐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (302, 'act', '行动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (303, 'addition', '加', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (304, 'adjustment', '调节', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (305, 'advertisement', '广告', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (306, 'agreement', '同意', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (307, 'air', '空气', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (308, 'amount', '数量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (309, 'amusement', '乐趣', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (310, 'animal', '动物', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (311, 'answer', '回答', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (312, 'apparatus', '器悈', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (313, 'approval', '批准', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (314, 'argument', '争执', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (315, 'art', '艺术', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (316, 'attack', '进攻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (317, 'attempt', '试图', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (318, 'attention', '注意', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (319, 'attraction', '吸引', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (320, 'authority', '权；官方', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (321, 'back', '背部；后背', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (322, 'balance', '平衡', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (323, 'base', '基', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (324, 'behavior', '行为', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (325, 'belief', '相信', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (326, 'birth', '出生', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (327, 'bit', '小片；少量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (328, 'bite', '咬', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (329, 'blood', '血', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (330, 'blow', '吹动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (331, 'body', '身体', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (332, 'brass', '黄铜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (333, 'bread', '面包', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (334, 'breath', '呼吸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (335, 'brother', '兄弟', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (336, 'building', '建筑物', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (337, 'burn', '烧伤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (338, 'burst', '爆发；破裂', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (339, 'business', '生意', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (340, 'butter', '奶油', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (341, 'canvas', '帆布', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (342, 'care', '照料；小心；忧虑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (343, 'cause', '原因；目标', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (344, 'chalk', '粉笔', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (345, 'chance', '机会', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (346, 'change', '变化', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (347, 'cloth', '布', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (348, 'coal', '煤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (349, 'color', '颜色', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (350, 'comfort', '舒适', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (351, 'committee', '委员会', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (352, 'company', '公司；陪伴', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (353, 'comparison', '比较', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (354, 'competition', '竞争；比赛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (355, 'condition', '情况', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (356, 'connection', '连接；关系', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (357, 'control', '控制', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (358, 'cook', '厨师', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (359, 'copper', '铜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (360, 'copy', '抄本；复印', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (361, 'cork', '软木', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (362, 'cotton', '棉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (363, 'cough', '咳嗽', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (364, 'country', '国家；乡下', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (365, 'cover', '遮盖物', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (366, 'crack', '裂缝', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (367, 'credit', '赊账；信用', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (368, 'crime', '罪', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (369, 'crush', '压碎', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (370, 'cry', '哭；喊叫', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (371, 'current', '流动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (372, 'curve', '曲线', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (373, 'damage', '损害', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (374, 'danger', '危险', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (375, 'daughter', '女儿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (376, 'day', '日', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (377, 'death', '死', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (378, 'debt', '债', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (379, 'decision', '决定', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (380, 'degree', '度；程度；学位', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (381, 'design', '设计', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (382, 'desire', '渴望', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (383, 'destruction', '毁灭', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (384, 'detail', '细节', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (385, 'development', '发展', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (386, 'digestion', '消化', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (387, 'direction', '方向', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (388, 'discovery', '发现', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (389, 'discussion', '讨论', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (390, 'disease', '病', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (391, 'disgust', '厌恶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (392, 'distance', '距离', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (393, 'distribution', '分配；分布；销售', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (394, 'division', '分开', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (395, 'doubt', '怀疑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (396, 'drink', '饮料', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (397, 'driving', '操纵；驾驶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (398, 'dust', '灰尘', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (399, 'earth', '地球；地面；土', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (400, 'edge', '边缘', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (401, 'education', '教育', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (402, 'effect', '结果；效果', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (403, 'end', '末端；结束', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (404, 'error', '错误', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (405, 'event', '事件', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (406, 'example', '例子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (407, 'exchange', '交换', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (408, 'existence', '存在；生存', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (409, 'expansion', '扩展', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (410, 'experience', '经验', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (411, 'expert', '专家', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (412, 'fact', '事实', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (413, 'fall', '落下；秋天', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (414, 'family', '家', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (415, 'father', '父亲', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (416, 'fear', '害怕', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (417, 'feeling', '感觉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (418, 'fiction', '小说', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (419, 'field', '田野；场', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (420, 'fight', '战斗；争吵', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (421, 'fire', '火', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (422, 'flame', '火焰', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (423, 'flight', '飞行', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (424, 'flower', '花', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (425, 'fold', '折叠', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (426, 'food', '食物', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (427, 'force', '力量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (428, 'form', '形状', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (429, 'friend', '朋友', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (430, 'front', '前面', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (431, 'fruit', '水果', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (432, 'glass', '玻璃', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (433, 'gold', '金', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (434, 'government', '政府', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (435, 'grain', '谷粒', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (436, 'grass', '草', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (437, 'grip', '紧握', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (438, 'group', '群；团体', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (439, 'growth', '生长', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (440, 'guide', '向导；指南', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (441, 'harbor', '港湾', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (442, 'harmony', '和睦；和谐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (443, 'hate', '仇恨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (444, 'hearing', '听', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (445, 'heat', '热', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (446, 'help', '帮助', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (447, 'history', '历史', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (448, 'hole', '洞', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (449, 'hope', '希望', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (450, 'hour', '小时', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (451, 'humor', '幽默', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (452, 'ice', '冰', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (453, 'idea', '注意', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (454, 'impulse', '冲动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (455, 'increase', '增加', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (456, 'industry', '工业', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (457, 'ink', '墨水', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (458, 'insect', '昆虫', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (459, 'instrument', '仪器', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (460, 'insurance', '保险', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (461, 'interest', '兴趣', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (462, 'invention', '发明', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (463, 'iron', '铁', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (464, 'jelly', '胶冻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (465, 'join', '连接处', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (466, 'journey', '旅行', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (467, 'judge', '法官', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (468, 'jump', '跳', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (469, 'kick', '踢', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (470, 'kiss', '吻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (471, 'knowledge', '知识', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (472, 'land', '陆地', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (473, 'language', '语言', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (474, 'laugh', '笑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (475, 'law', '法律', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (476, 'lead', '铅', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (477, 'learn', '学习', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (478, 'leather', '皮革', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (479, 'letter', '字母；信；文字', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (480, 'level', '水平；高度', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (481, 'lift', '提', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (482, 'light', '光；灯', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (483, 'limit', '限度', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (484, 'linen', '亚麻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (485, 'liquid', '液体', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (486, 'list', '表目录；名单', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (487, 'look', '看', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (488, 'loss', '丧失；损失', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (489, 'love', '爱', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (490, 'machine', '机器', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (491, 'man', '男人', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (492, 'manager', '经理', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (493, 'mark', '痕迹；记号', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (494, 'market', '市场', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (495, 'mass', '团块；堆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (496, 'meal', '进餐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (497, 'measure', '度量；措施', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (498, 'meat', '肉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (499, 'meeting', '会议', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (500, 'memory', '记忆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (501, 'metal', '金属', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (502, 'middle', '中部', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (503, 'milk', '牛奶', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (504, 'mind', '头脑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (505, 'mine', '矿', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (506, 'minute', '分钟', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (507, 'mist', '薄雾', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (508, 'money', '钱', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (509, 'month', '月份', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (510, 'morning', '早晨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (511, 'mother', '母亲', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (512, 'motion', '运动；动作', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (513, 'mountain', '山', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (514, 'move', '移动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (515, 'music', '音乐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (516, 'name', '名字', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (517, 'nation', '国民；国家', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (518, 'need', '需要', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (519, 'news', '新闻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (520, 'night', '夜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (521, 'noise', '响声；噪音', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (522, 'note', '笔记；便条；纸巾', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (523, 'number', '数字', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (524, 'observation', '观察', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (525, 'offer', '提供；出价', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (526, 'oil', '油', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (527, 'operation', '运转；操作', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (528, 'opinion', '意见', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (529, 'order', '顺序；命令；订货', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (530, 'organization', '组织', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (531, 'ornament', '装饰', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (532, 'owner', '物主', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (533, 'page', '页', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (534, 'pain', '痛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (535, 'paint', '油漆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (536, 'paper', '纸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (537, 'part', '一部分', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (538, 'paste', '浆糊', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (539, 'payment', '支付', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (540, 'peace', '和平', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (541, 'person', '人', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (542, 'place', '地方', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (543, 'plant', '植物', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (544, 'play', '玩；戏剧', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (545, 'pleasure', '愉快', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (546, 'point', '尖端；一点', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (547, 'poison', '毒', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (548, 'polish', '磨光；擦亮', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (549, 'porter', '搬运工', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (550, 'position', '位置', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (551, 'powder', '粉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (552, 'power', '权力；力量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (553, 'price', '价格', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (554, 'print', '印刷', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (555, 'process', '过程；步骤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (556, 'produce', '产品', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (557, 'profit', '利润', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (558, 'property', '财产；房地产', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (559, 'prose', '散文', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (560, 'protest', '抗议', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (561, 'pull', '拉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (562, 'punishment', '惩罚', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (563, 'purpose', '目的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (564, 'push', '推', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (565, 'quality', '质量；特性', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (566, 'question', '问题', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (567, 'rain', '雨', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (568, 'range', '排；行；范围', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (569, 'rate', '比率；速度', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (570, 'ray', '光线', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (571, 'reaction', '反应', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (572, 'reading', '阅读', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (573, 'reason', '理由', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (574, 'record', '记录；唱片', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (575, 'regret', '懊悔；遗憾', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (576, 'relation', '关系', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (577, 'religion', '宗教', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (578, 'representative', '代表', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (579, 'request', '要求；请求', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (580, 'respect', '尊敬', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (581, 'rest', '休息', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (582, 'reward', '报答；奖赏', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (583, 'rhythm', '节奏', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (584, 'rice', '米', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (585, 'river', '江；河', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (586, 'road', '路', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (587, 'roll', '滚动；（一）卷', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (588, 'room', '房间', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (589, 'rub', '摩擦', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (590, 'rule', '规则；统治', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (591, 'run', '跑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (592, 'salt', '盐', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (593, 'sand', '沙', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (594, 'scale', '刻度；比例', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (595, 'science', '科学', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (596, 'sea', '海', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (597, 'seat', '座位', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (598, 'secretary', '秘书', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (599, 'selection', '选择', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (600, 'self', '自己', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (601, 'sense', '感觉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (602, 'servant', '仆人', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (603, 'sex', '性', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (604, 'shade', '荫；阴暗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (605, 'shake', '摇动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (606, 'shame', '羞耻', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (607, 'shock', '冲击；震惊', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (608, 'side', '边；旁边', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (609, 'sign', '记号；标志；征兆', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (610, 'silk', '丝；丝绸', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (611, 'silver', '银', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (612, 'sister', '姐妹', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (613, 'size', '尺寸；大小', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (614, 'sky', '天空', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (615, 'sleep', '睡觉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (616, 'slip', '滑动；下降；溜走；疏忽', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (617, 'slope', '倾斜', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (618, 'smash', '打碎；猛撞', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (619, 'smell', '气味', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (620, 'smile', '微笑', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (621, 'smoke', '烟', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (622, 'sneeze', '喷嚏', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (623, 'snow', '雪', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (624, 'soap', '肥皂', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (625, 'society', '社会', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (626, 'son', '儿子', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (627, 'song', '歌曲', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (628, 'sort', '种类', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (629, 'sound', '声音', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (630, 'soup', '汤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (631, 'space', '空间', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (632, 'stage', '舞台', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (633, 'start', '开始', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (634, 'statement', '陈述；生明', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (635, 'steam', '蒸汽', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (636, 'steel', '钢', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (637, 'step', '脚步', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (638, 'stitch', '一针', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (639, 'stone', '石头', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (640, 'stop', '停止', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (641, 'story', '故事', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (642, 'stretch', '伸展', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (643, 'structure', '结构', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (644, 'substance', '物质', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (645, 'sugar', '糖', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (646, 'suggestion', '建议', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (647, 'summer', '夏天', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (648, 'support', '支撑；支持', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (649, 'surprise', '惊奇', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (650, 'swim', '游泳', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (651, 'system', '系统', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (652, 'talk', '谈话', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (653, 'taste', '味觉', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (654, 'tax', '税', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (655, 'teach', '教', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (656, 'tendency', '倾向；接触', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (657, 'test', '实验；测试', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (658, 'theory', '理论', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (659, 'thing', '物；东西', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (660, 'thought', '思想', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (661, 'thunder', '雷；雷声', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (662, 'time', '时间', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (663, 'tin', '锡', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (664, 'top', '顶部', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (665, 'touch', '触觉；接触', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (666, 'trade', '贸易', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (667, 'transport', '运输', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (668, 'trick', '诡计', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (669, 'trouble', '烦恼；麻烦', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (670, 'turn', '转动', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (671, 'twist', '扭转', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (672, 'unit', '单位', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (673, 'use', '使用', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (674, 'value', '价值', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (675, 'verse', '诗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (676, 'vessel', '容器；船', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (677, 'view', '观看；景色；观点', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (678, 'voice', '（人的）声音', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (679, 'walk', '走；散步', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (680, 'war', '战争', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (681, 'wash', '洗', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (682, 'waste', '浪费', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (683, 'water', '水', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (684, 'wave', '波；波浪', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (685, 'wax', '蜡', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (686, 'way', '路；方向；方法', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (687, 'weather', '天气', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (688, 'week', '星期', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (689, 'weight', '质量', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (690, 'wind', '风', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (691, 'wine', '酒', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (692, 'winter', '冬天', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (693, 'woman', '女人', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (694, 'wood', '木头', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (695, 'wool', '羊毛', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (696, 'word', '词；一句话', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (697, 'work', '工作', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (698, 'wound', '伤', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (699, 'writing', '写', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (700, 'year', '年。', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (701, 'able', '有能力的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (702, 'acid', '酸的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (703, 'angry', '发怒的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (704, 'automatic', '自动的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (705, 'beautiful', '美丽的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (706, 'black', '黑色', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (707, 'boiling', '沸腾的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (708, 'bright', '明亮的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (709, 'broken', '损坏的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (710, 'brown', '褐色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (711, 'cheap', '便宜的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (712, 'chemical', '化学的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (713, 'chief', '首要的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (714, 'clean', '干净的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (715, 'clear', '清澈的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (716, 'common', '普通的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (717, 'complex', '复杂的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (718, 'conscious', '有意识的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (719, 'cut', '切过的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (720, 'deep', '深的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (721, 'dependent', '依靠的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (722, 'early', '早的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (723, 'elastic', '有弹性的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (724, 'electric', '电的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (725, 'equal', '相等的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (726, 'fat', '肥的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (727, 'fertile', '多产的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (728, 'first', '第一的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (729, 'fixed', '固定的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (730, 'flat', '平的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (731, 'free', '自由的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (732, 'frequent', '经常的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (733, 'full', '满的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (734, 'general', '一般的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (735, 'good', '好的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (736, 'great', '大的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (737, 'grey', '灰色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (738, 'hanging', '悬挂的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (739, 'happy', '高兴的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (740, 'hard', '硬的；困难的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (741, 'healthy', '健康的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (742, 'high', '高的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (743, 'hollow', '空的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (744, 'important', '重要的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (745, 'kind', '亲切的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (746, 'like', '相似的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (747, 'living', '活的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (748, 'long', '长的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (749, 'male', '男性的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (750, 'married', '已婚的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (751, 'material', '物质的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (752, 'medical', '医学的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (753, 'military', '军事的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (754, 'natural', '自然的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (755, 'necessary', '必要的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (756, 'new', '新的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (757, 'normal', '正常的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (758, 'open', '打开的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (759, 'parallel', '平行的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (760, 'past', '过去的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (761, 'physical', '身体的；物质的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (762, 'political', '政治的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (763, 'poor', '贫穷的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (764, 'possible', '可能的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (765, 'present', '在场的；现在的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (766, 'private', '个人的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (767, 'probable', '很可能的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (768, 'quick', '快的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (769, 'quiet', '安静的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (770, 'ready', '准备好的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (771, 'red', '红色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (772, 'regular', '规则的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (773, 'responsible', '负责任的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (774, 'right', '右的；对的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (775, 'round', '圆的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (776, 'same', '同样的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (777, 'second', '第二的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (778, 'separate', '分开的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (779, 'serious', '严重的；严肃的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (780, 'sharp', '锋利的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (781, 'smooth', '平滑的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (782, 'sticky', '粘的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (783, 'stiff', '硬的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (784, 'straight', '直的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (785, 'strong', '强的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (786, 'sudden', '突然的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (787, 'sweet', '甜的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (788, 'tall', '身材高的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (789, 'thick', '厚的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (790, 'tight', '紧的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (791, 'tired', '疲倦的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (792, 'TRUE', '真实的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (793, 'violent', '激烈的；暴力的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (794, 'waiting', '等待的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (795, 'warm', '温暖的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (796, 'wet', '湿的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (797, 'wide', '宽阔的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (798, 'wise', '聪明的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (799, 'yellow', '黄色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (800, 'young', '年青的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (801, 'awake', '清醒的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (802, 'bad', '坏的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (803, 'bent', '弯曲的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (804, 'bitter', '苦的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (805, 'blue', '蓝色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (806, 'certain', '肯定的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (807, 'cold', '冷的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (808, 'complete', '完整的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (809, 'cruel', '残酷的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (810, 'dark', '黑暗的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (811, 'dead', '死的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (812, 'expensive', '昂贵的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (813, 'dear', '亲爱的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (814, 'delicate', '娇贵的；微妙的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (815, 'different', '不同的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (816, 'dirty', '脏的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (817, 'dry', '干的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (818, 'FALSE', '假的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (819, 'female', '女性的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (820, 'foolish', '愚蠢的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (821, 'future', '未来的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (822, 'green', '绿的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (823, 'ill', '生病的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (824, 'last', '最后的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (825, 'late', '晚的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (826, 'left', '左的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (827, 'loose', '松的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (828, 'loud', '大声的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (829, 'low', '低的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (830, 'mixed', '混合的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (831, 'narrow', '窄的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (832, 'old', '老的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (833, 'opposite', '相反的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (834, 'public', '公众的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (835, 'rough', '粗糙的；狂暴的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (836, 'sad', '悲哀的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (837, 'safe', '安全的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (838, 'secret', '秘密的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (839, 'short', '短的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (840, 'shut', '关闭的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (841, 'simple', '简单的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (842, 'slow', '慢的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (843, 'small', '小的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (844, 'soft', '柔软的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (845, 'solid', '固定的；结实的；纯的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (846, 'special', '特殊的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (847, 'strange', '奇怪的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (848, 'thin', '薄的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (849, 'white', '白色的', '2024-05-06 13:57:53', '2024-05-06 13:57:53'),
+       (850, 'wrong', '错误的', '2024-05-06 13:57:53', '2024-05-06 13:57:53');
+/*!40000 ALTER TABLE `t_root_word`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
-create table t_role_menu
+--
+-- Table structure for table `t_user`
+--
+
+DROP TABLE IF EXISTS `t_user`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_user`
 (
-    id          bigint auto_increment comment '主键'
-        primary key,
-    role_id     bigint                              not null comment '角色id',
-    menu_id     bigint                              not null comment '菜单id',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
-)
-    comment '用户权限关系表';
+    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `username`    varchar(100) NOT NULL COMMENT '用户名',
+    `password`    varchar(255) NOT NULL COMMENT '密码',
+    `create_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_username` (`username`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8mb3 COMMENT ='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `t_user`
+--
 
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (1, 1, 1, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (2, 1, 2, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (3, 1, 3, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (4, 1, 4, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (5, 1, 5, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (6, 1, 6, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (7, 1, 7, '2024-05-06 21:47:11', '2024-05-06 21:47:11');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (8, 2, 1, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (9, 2, 2, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
-INSERT INTO meta_tool.t_role_menu (id, role_id, menu_id, create_time, update_time)
-VALUES (10, 2, 4, '2024-05-06 21:47:16', '2024-05-06 21:47:16');
+LOCK TABLES `t_user` WRITE;
+/*!40000 ALTER TABLE `t_user`
+    DISABLE KEYS */;
+INSERT INTO `t_user`
+VALUES (1, 'admin', '$2a$10$wTV12Fs5hQfhG9RzZuKd6.c135tv2y8PTJAtKRhlXnU.9xS5Qqcxu', '2024-05-06 13:45:21',
+        '2024-05-06 13:45:21'),
+       (2, 'test', '$2a$10$2lxM1kdya4nhyNQ6AYItD.1JFnwL9ImzEXQ44p0itoZwq8WBLfxuq', '2024-05-06 13:45:21',
+        '2024-05-06 13:45:21');
+/*!40000 ALTER TABLE `t_user`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `t_user_role`
+--
 
-create table t_menu
+DROP TABLE IF EXISTS `t_user_role`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `t_user_role`
 (
-    `id`          bigint auto_increment               not null comment '主键',
-    `title`       varchar(100)                        not null comment '标题',
-    `access_path` varchar(100)                        not null comment '访问路径',
-    `file_path`   varchar(255) comment '文件路径',
-    `icon`        varchar(100)                        not null comment '图标',
-    `pid`         bigint comment '一级菜单id',
-    `create_time` timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP null comment '更新时间',
-    primary key (`id`)
-) comment '二级菜单表';
+    `id`          bigint    NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`     bigint    NOT NULL COMMENT '用户id',
+    `role_id`     bigint    NOT NULL COMMENT '角色id',
+    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8mb3 COMMENT ='用户角色关系表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `t_user_role`
+--
 
-insert into t_menu
-values (1, '权限管理', 'auth', null, 'Lock', null, '2024-05-06 21:46:48', '2024-05-06 21:46:48');
-insert into t_menu
-values (2, '用户管理', 'user', '/src/views/layout/auth/User.vue', 'User', 1, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
-insert into t_menu
-values (3, '角色管理', 'role', '/src/views/layout/auth/Role.vue', 'UserFilled', 1, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
-insert into t_menu
-values (4, '数据域管理', 'filed', '/src/views/layout/field/Field.vue', 'Location', null, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
-insert into t_menu
-values (5, '数据范围管理', 'range', '/src/views/layout/range/Range.vue', 'Location', null, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
-insert into t_menu
-values (6, '数仓层级管理', 'storey', '/src/views/layout/storey/Storey.vue', 'Location', null, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
-insert into t_menu
-values (7, '词根管理', 'word', '/src/views/layout/word/Word.vue', 'Location', null, '2024-05-06 21:46:48',
-        '2024-05-06 21:46:48');
+LOCK TABLES `t_user_role` WRITE;
+/*!40000 ALTER TABLE `t_user_role`
+    DISABLE KEYS */;
+INSERT INTO `t_user_role`
+VALUES (1, 1, 1, '2024-05-06 13:45:21', '2024-05-06 13:45:21'),
+       (2, 2, 2, '2024-05-06 13:45:21', '2024-05-06 13:45:21');
+/*!40000 ALTER TABLE `t_user_role`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
+/*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-05-10  8:37:19

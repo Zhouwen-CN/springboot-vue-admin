@@ -6,12 +6,20 @@ export interface LoginForm {
 }
 
 export function reqLogin(loginForm: LoginForm) {
-    return request.post<string, LoginForm>('/login', loginForm)
+    return request.post<string, LoginForm>('/user/login', loginForm)
 }
 
-export interface User {
+export interface Menu {
     id: number
-    username: string
-    password: string
-    authorities: string[]
+    level: number
+    title: string
+    accessPath: string
+    filePath: string
+    icon: string
+    updateTime: string
+    children: Array<Menu>
+}
+
+export function reqUserMenus() {
+    return request.get<Menu[]>('/user/menus')
 }

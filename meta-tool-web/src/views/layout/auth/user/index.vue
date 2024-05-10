@@ -60,16 +60,17 @@ function submit() {
 </script>
 
 <template>
-  <el-input v-model="query" placeholder="Please enter keyword" style="width: 240px" @input="onQueryChanged"/>
-  <el-tree-v2 ref="treeRef" :data="data" :filter-method="filterMethod" :height="208" :props="props"
-              show-checkbox style="max-width: 600px">
-    <template #default="{ node }">
-      <span :class="{ 'is-leaf': node.isLeaf }" class="prefix">[ElementPlus]</span>
-      <span>{{ node.label }}</span>
-    </template>
-  </el-tree-v2>
-  <el-button size="default" type="primary" @click="submit">点我</el-button>
-
+  <div>
+    <el-input v-model="query" placeholder="Please enter keyword" style="width: 240px" @input="onQueryChanged"/>
+    <el-tree-v2 ref="treeRef" :data="data" :filter-method="filterMethod" :height="208" :props="props" show-checkbox
+                style="max-width: 600px">
+      <template #default="{ node }">
+        <span :class="{ 'is-leaf': node.isLeaf }" class="prefix">[ElementPlus]</span>
+        <span>{{ node.label }}</span>
+      </template>
+    </el-tree-v2>
+    <el-button size="default" type="primary" @click="submit">点我</el-button>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

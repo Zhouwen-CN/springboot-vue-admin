@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 二级菜单表
+ * 菜单表
  * </p>
  *
  * @author chen

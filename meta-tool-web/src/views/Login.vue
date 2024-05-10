@@ -6,7 +6,8 @@ import {useRouter} from 'vue-router';
 import type {LoginForm} from '@/api/user';
 import useUserStore from '@/stores/user';
 import useSettingStore from '@/stores/setting'
-import useMenuStore from '@/stores/menu'
+
+const userStore = useUserStore()
 
 const router = useRouter();
 const loading = ref<boolean>(false)
@@ -34,8 +35,9 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   loading.value = true
   try {
     await formEl.validate()
-    await useUserStore().doLogin(loginForm)
-    await useMenuStore().doGetMenu()
+    await userStore.doLogin(loginForm)
+    await userStore.getUserMenus()
+
     let redirect = router.currentRoute.value.query.redirect;
     if (!redirect) {
       redirect = '/';

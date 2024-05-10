@@ -46,7 +46,7 @@ public class WebSecurityConfig {
             "/assets/**.css",
             "/assets/**.jpg",
             "/assets/**.png",
-            "/login",
+            "/user/login",
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-ui/**"
@@ -54,23 +54,25 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(WHITE_LIST)
-                        // permitAll 表示不进行拦截
-                        .permitAll()
-                        // 访问某些资源需要某些权限，这是使用更为简单的ACL，而不是RBAC
-                        .requestMatchers("/field/**").hasAuthority("field")
-                        .requestMatchers("/range/**").hasAuthority("range")
-                        .requestMatchers("/storey/**").hasAuthority("storey")
-                        .requestMatchers("/word/**").hasAuthority("word")
-                        // 对所有的请求开启权限保护
-                        .anyRequest()
-                        // 已认证的请求会被自动授权
-                        .authenticated()
+                .authorizeHttpRequests(authorize ->
+
+                        authorize.requestMatchers(WHITE_LIST)
+                                // permitAll 表示不进行拦截
+                                .permitAll()
+                                // 改为使用 RBAC。小的放前面，大的放后面，最后托底
+                                .requestMatchers("/user/info").authenticated()
+                                .requestMatchers("/word/**").hasRole("test")
+                                .requestMatchers("/**").hasRole("admin")
+                                // 对所有的请求开启权限保护
+                                .anyRequest()
+                                // 已认证的请求会被自动授权
+                                .authenticated()
                 )
                 // 在账号密码认证之前，先进行jwt校验
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,8 +1,17 @@
 <script lang="ts" setup>
 import useSettingStore from '@/stores/setting';
-import {RouterView} from 'vue-router'
+import useUserStore from '@/stores/user';
+import {RouterView, useRouter} from 'vue-router'
+import {HomeFilled} from '@element-plus/icons-vue'
 
+const userStore = useUserStore()
 const settingStore = useSettingStore()
+const router = useRouter()
+
+function logout() {
+  userStore.$reset()
+  router.replace('/login')
+}
 </script>
 
 <template>
@@ -11,22 +20,53 @@ const settingStore = useSettingStore()
       <el-scrollbar>
         <h1> {{ settingStore.title }} </h1>
         <el-menu active-text-color="#409eff" background-color="#304156" router text-color="#bfcbd9" unique-opened>
-          <el-menu-item index="/home">首页</el-menu-item>
-          <el-sub-menu index="/auth">
-            <template #title>权限管理</template>
-            <el-menu-item index="/auth/user">用户管理</el-menu-item>
-            <el-menu-item index="/auth/role">角色管理</el-menu-item>
-            <el-menu-item index="/auth/menu">菜单管理</el-menu-item>
-          </el-sub-menu>
-          <el-menu-item index="/field">数据域管理</el-menu-item>
-          <el-menu-item index="/range">数据范围管理</el-menu-item>
-          <el-menu-item index="/storey">数仓层级管理</el-menu-item>
-          <el-menu-item index="/word">词根管理</el-menu-item>
+
+          <el-menu-item index="/home">
+            <template #title>
+              <el-icon :size="24">
+                <el-icon>
+                  <HomeFilled/>
+                </el-icon>
+              </el-icon>
+              首页
+            </template>
+          </el-menu-item>
+
+          <template v-for="item in userStore.menus" :key="item.id">
+
+            <el-menu-item v-if="item.children?.length === 0" :index="item.accessPath">
+              <template #title>
+                <el-icon :size="24">
+                  <component :is="item.icon"></component>
+                </el-icon>
+                {{ item.title }}
+              </template>
+            </el-menu-item>
+
+            <el-sub-menu v-if="item.children?.length > 0" index="">
+              <template #title>
+                <el-icon :size="24">
+                  <component :is="item.icon"></component>
+                </el-icon>
+                {{ item.title }}
+              </template>
+              <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.accessPath">
+                <template #title>
+                  <el-icon :size="24">
+                    <component :is="subItem.icon"></component>
+                  </el-icon>
+                  {{ subItem.title }}
+                </template>
+              </el-menu-item>
+            </el-sub-menu>
+          </template>
         </el-menu>
       </el-scrollbar>
     </el-aside>
     <el-container>
-      <el-header class="header">header</el-header>
+      <el-header class="header">
+        <el-button @click="logout">退出登入</el-button>
+      </el-header>
       <el-main class="main">
         <el-scrollbar>
           <router-view v-slot="{ Component }">

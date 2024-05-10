@@ -1,6 +1,6 @@
 package com.yeeiee.security;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yeeiee.entity.dto.RoleDto;
 import com.yeeiee.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -26,14 +26,16 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        val user = userMapper.selectOne(new QueryWrapper<com.yeeiee.entity.User>().eq("username", username));
-        if (user == null) {
+        val userDto = userMapper.selectByUserName(username);
+        if (userDto == null) {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
-        // TODO: 这里暂时不做授权
+        // 授权角色
+        val roles = userDto.getRoles().stream().map(RoleDto::getName).toArray(String[]::new);
         return User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
+                .username(userDto.getUsername())
+                .password(userDto.getPassword())
+                .roles(roles)
                 .build();
     }
 }

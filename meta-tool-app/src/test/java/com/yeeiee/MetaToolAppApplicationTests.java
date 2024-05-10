@@ -21,11 +21,12 @@ class MetaToolAppApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
     @Test
     void getMenusTest() {
-        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleId(1);
+        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L, 2L));
         for (MenuDto menuDto : menuDtos) {
             System.out.println(menuDto);
         }

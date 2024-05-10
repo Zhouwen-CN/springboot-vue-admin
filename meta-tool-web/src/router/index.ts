@@ -10,59 +10,17 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'Layout',
+            name: 'layout',
             component: () => import('@/views/Layout.vue'),
             redirect: '/home',
             children: [
                 {
-                    path: 'home',
-                    name: 'Home',
-                    component: () => import('@/views/layout/Home.vue')
+                    path: '/home',
+                    name: 'home',
+                    component: () => import('@/views/layout/home/index.vue')
                 },
                 {
-                    path: 'auth',
-                    name: 'Auth',
-                    redirect: '/auth/user',
-                    children: [
-                        {
-                            path: 'user',
-                            name: 'User',
-                            component: () => import('@/views/layout/auth/User.vue')
-                        },
-                        {
-                            path: 'role',
-                            name: 'Role',
-                            component: () => import('@/views/layout/auth/Role.vue')
-                        },
-                        {
-                            path: 'menu',
-                            name: 'Menu',
-                            component: () => import('@/views/layout/auth/Menu.vue')
-                        }
-                    ]
-                },
-                {
-                    path: 'field',
-                    name: 'Field',
-                    component: () => import('@/views/layout/field/Field.vue')
-                },
-                {
-                    path: 'range',
-                    name: 'Range',
-                    component: () => import('@/views/layout/range/Range.vue')
-                },
-                {
-                    path: 'storey',
-                    name: 'Storey',
-                    component: () => import('@/views/layout/storey/Storey.vue')
-                },
-                {
-                    path: 'word',
-                    name: 'Word',
-                    component: () => import('@/views/layout/word/Word.vue')
-                },
-                {
-                    path: '404',
+                    path: '/404',
                     name: '404',
                     component: () => import('@/views/404.vue')
                 }
@@ -70,12 +28,12 @@ const router = createRouter({
         },
         {
             path: '/login',
-            name: 'Login',
+            name: 'login',
             component: () => import('@/views/Login.vue')
         },
         {
             path: '/:pathMatch(.*)*',
-            name: 'NotFound',
+            name: 'not found',
             redirect: '/404'
         }
     ]
@@ -89,9 +47,51 @@ router.beforeEach((to, from, next) => {
     })
     pendingRequest.clear()
 
-    // 判断是否登录
+    // 是否登录
     const userStore = useUserStore()
     if (userStore.token) {
+        // 动态加载路由
+        if (userStore.menus?.length !== 0) {
+            userStore.menus.forEach((prentMenu) => {
+                const prentAccessPath = prentMenu.accessPath
+
+                // 存在二级菜单
+                if (prentMenu.children?.length !== 0) {
+                    const children = prentMenu.children.map((childMenu) => {
+                        let childAccessPath = childMenu.accessPath
+                        return {
+                            path: childAccessPath,
+                            name: childAccessPath,
+                            component: () => import(/* @vite-ignore */ `../views${childMenu.filePath}`)
+                        }
+                    })
+
+                    // 父路由不存在则添加
+                    if (!router.hasRoute(prentAccessPath)) {
+                        router.addRoute('layout', {
+                            path: prentAccessPath,
+                            name: prentAccessPath,
+                            redirect: prentMenu.children[0].accessPath,
+                            children
+                        })
+                    }
+
+                    // 不存在二级菜单
+                } else {
+                    if (!router.hasRoute(prentAccessPath)) {
+                        router.addRoute('layout', {
+                            path: prentAccessPath,
+                            name: prentAccessPath,
+                            component: () => import(/* @vite-ignore */ `../views${prentMenu.filePath}`),
+                            children: []
+                        })
+                    }
+                }
+            })
+        } else {
+            userStore.getUserMenus()
+        }
+
         if (to.path === '/login') {
             next({path: '/home'})
         } else {
@@ -105,27 +105,5 @@ router.beforeEach((to, from, next) => {
         }
     }
 })
-
-// import type { Component } from 'vue'
-// interface FileType {
-//   [key: string]: Component
-// }
-// const files: Record<string, FileType> = import.meta.glob('@/views/**/*.vue', { eager: true })
-// Object.keys(files).forEach((path: string) => {
-//   console.log('paht', path)
-//   const fileName = path.substring(path.lastIndexOf('/') + 1)
-//   console.log('fileName', fileName)
-//   const componentName = fileName.replace('.vue', '')
-//   console.log('componentName', componentName)
-// })
-
-// interface MyRouter {
-//   id: number
-//   authority: string
-//   title: string
-//   path: string
-//   icon: string
-//   parentId?: number
-// }
 
 export default router

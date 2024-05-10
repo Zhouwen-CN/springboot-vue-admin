@@ -5,7 +5,7 @@ import com.yeeiee.entity.Menu;
 
 /**
  * <p>
- * 二级菜单表 服务类
+ * 菜单表 服务类
  * </p>
  *
  * @author chen

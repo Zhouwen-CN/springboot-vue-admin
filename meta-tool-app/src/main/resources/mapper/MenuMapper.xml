@@ -22,45 +22,71 @@
         </collection>
     </resultMap>
 
-    <select id="selectMenusByRoleId" resultMap="BaseResultMap">
-        with t1 as (select b.*
-                    from (select menu_id
-                          from t_role_menu
-                          where role_id = #{roleId}) a
-                             join t_menu b
-                                  on a.menu_id = b.id)
-        select a.level       as p_level,
-               a.id          as p_id,
-               a.title       as p_title,
-               a.access_path as p_access_path,
-               a.file_path   as p_file_path,
-               a.icon        as p_icon,
-               a.update_time as p_update_time,
-               b.level       as c_level,
-               b.id          as c_id,
-               b.title       as c_title,
-               b.access_path as c_access_path,
-               b.file_path   as c_file_path,
-               b.icon        as c_icon,
-               b.update_time as c_update_time
-        from (select 1 as level,
-                     id,
-                     title,
-                     access_path,
-                     file_path,
-                     icon,
-                     update_time
-              from t1) a
-                 left join (select 2 as level,
-                                   id,
-                                   title,
-                                   access_path,
-                                   file_path,
-                                   icon,
-                                   pid,
-                                   update_time
-                            from t1) b
-                           on a.id = b.pid
-        order by p_id, c_id
+    <select id="selectMenusByRoleIds" resultMap="BaseResultMap" parameterType="collection">
+        with t1 as (
+        select
+        b.*
+        from
+        (
+        select
+        menu_id
+        from
+        t_role_menu
+        where
+        role_id in
+        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by
+        menu_id
+        ) a
+        join t_menu b on a.menu_id = b.id
+        )
+        select
+        a.level as p_level,
+        a.id as p_id,
+        a.title as p_title,
+        a.access_path as p_access_path,
+        a.file_path as p_file_path,
+        a.icon as p_icon,
+        a.update_time as p_update_time,
+        b.level as c_level,
+        b.id as c_id,
+        b.title as c_title,
+        b.access_path as c_access_path,
+        b.file_path as c_file_path,
+        b.icon as c_icon,
+        b.update_time as c_update_time
+        from
+        (
+        select
+        1 as level,
+        id,
+        title,
+        access_path,
+        file_path,
+        icon,
+        update_time
+        from
+        t1
+        where pid is null
+        ) a
+        left join (
+        select
+        2 as level,
+        id,
+        title,
+        access_path,
+        file_path,
+        icon,
+        pid,
+        update_time
+        from
+        t1
+        where pid is not null
+        ) b on a.id = b.pid
+        order by
+        p_id,
+        c_id
     </select>
 </mapper>

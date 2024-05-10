@@ -21,6 +21,5 @@ public class UserDto {
     private Long id;
     private String username;
     private String password;
-    private List<String> roles;
-    private List<MenuDto> menus;
+    private List<RoleDto> roles;
 }
