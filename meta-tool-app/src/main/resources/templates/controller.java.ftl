@@ -1,7 +1,7 @@
 package ${package.Controller};
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName};
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
     class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
     <#if superControllerClass??>
-        public class ${table.controllerName} extends ${superControllerClass}<${entity}> {
+        public class ${table.controllerName} extends ${superControllerClass}<${table.serviceName},${entity}> {
 
-        public ${table.controllerName}(IService<${entity}> service) {
+        public ${table.controllerName}(${table.serviceName} service) {
         super(service);
         }
     <#else>

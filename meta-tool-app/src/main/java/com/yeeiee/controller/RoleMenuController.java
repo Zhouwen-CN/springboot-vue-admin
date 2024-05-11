@@ -1,7 +1,7 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.RoleMenu;
+import com.yeeiee.service.RoleMenuService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2024-05-11
  */
 @RestController
 @RequestMapping("/roleMenu")
 @Tag(name = "用户权限关系表 控制器")
-public class RoleMenuController extends BaseController<RoleMenu> {
+public class RoleMenuController extends BaseController<RoleMenuService, RoleMenu> {
 
-    public RoleMenuController(IService<RoleMenu> service) {
+    public RoleMenuController(RoleMenuService service) {
         super(service);
     }
 }

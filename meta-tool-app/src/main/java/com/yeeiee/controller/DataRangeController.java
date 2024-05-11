@@ -1,7 +1,7 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.DataRange;
+import com.yeeiee.service.DataRangeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author chen
- * @since 2024-04-28
+ * @since 2024-05-11
  */
 @RestController
 @RequestMapping("/range")
 @Tag(name = "数据范围表 控制器")
-public class DataRangeController extends BaseController<DataRange> {
+public class DataRangeController extends BaseController<DataRangeService, DataRange> {
 
-    public DataRangeController(IService<DataRange> service) {
+    public DataRangeController(DataRangeService service) {
         super(service);
     }
 }

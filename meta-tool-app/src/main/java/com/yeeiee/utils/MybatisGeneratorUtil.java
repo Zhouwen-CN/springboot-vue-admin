@@ -24,9 +24,9 @@ import java.util.Collections;
 public final class MybatisGeneratorUtil {
 
     public static void generator(String... tableName) {
-        val url = "jdbc:mysql://192.168.135.199:3306/meta_tool";
+        val url = "jdbc:mysql://localhost:3306/meta_tool";
         val username = "root";
-        val password = "1234";
+        val password = "123";
         val projectPath = System.getProperty("user.dir") + "\\meta-tool-app";
 
         FastAutoGenerator.create(url, username, password)
@@ -65,8 +65,8 @@ public final class MybatisGeneratorUtil {
                             .addTableFills(
                                     new Column("create_time", FieldFill.INSERT),
                                     new Column("update_time", FieldFill.INSERT_UPDATE)
-                            )
-                            .enableFileOverride();
+                            );
+                    //.enableFileOverride();
 
                     builder.controllerBuilder()
                             .template("/templates/controller.java")
@@ -75,13 +75,13 @@ public final class MybatisGeneratorUtil {
                             .enableFileOverride();
 
                     builder.serviceBuilder()
-                            .formatServiceFileName("%sService")
-                            .enableFileOverride();
+                            .formatServiceFileName("%sService");
+                    //.enableFileOverride();
 
                     builder.mapperBuilder()
                             .enableBaseResultMap()
-                            .enableBaseColumnList()
-                            .enableFileOverride();
+                            .enableBaseColumnList();
+                    //.enableFileOverride();
 
                 })
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
@@ -90,6 +90,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_user", "t_role", "t_menu", "t_user_role", "t_role_menu");
+        generator("t_data_field", "t_data_range", "t_data_storey", "t_menu", "t_role", "t_role_menu", "t_root_word", "t_user", "t_user_role");
     }
 }

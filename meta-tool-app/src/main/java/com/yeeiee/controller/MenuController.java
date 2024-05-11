@@ -1,7 +1,7 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.Menu;
+import com.yeeiee.service.MenuService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2024-05-11
  */
 @RestController
 @RequestMapping("/menu")
-@Tag(name = "二级菜单表 控制器")
-public class MenuController extends BaseController<Menu> {
+@Tag(name = "菜单表 控制器")
+public class MenuController extends BaseController<MenuService, Menu> {
 
-    public MenuController(IService<Menu> service) {
+    public MenuController(MenuService service) {
         super(service);
     }
 }

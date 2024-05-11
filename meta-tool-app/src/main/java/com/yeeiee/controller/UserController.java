@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.MenuDto;
@@ -19,29 +18,29 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2024-05-11
  */
 @RestController
 @RequestMapping("/user")
 @Tag(name = "用户表 控制器")
-public class UserController extends BaseController<User> {
+public class UserController extends BaseController<UserService, User> {
 
-    public UserController(IService<User> service) {
+    public UserController(UserService service) {
         super(service);
     }
 
-    @Operation(summary = "获取用户信息")
+    @Operation(summary = "获取用户菜单")
     @GetMapping("/menus")
     public R<List<MenuDto>> getUser() {
-        val userDto = ((UserService) service).getUserMenus();
+        val userDto = service.getUserMenus();
         return R.ok(userDto);
     }
 
     @Operation(summary = "用户登入")
     @PostMapping("/login")
     public R<String> login(@RequestBody LoginDto loginDto) {
-        val token = ((UserService) service).login(loginDto);
+        val token = service.login(loginDto);
         return R.ok(token);
     }
-}
+    }
 

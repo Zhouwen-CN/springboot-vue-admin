@@ -65,9 +65,10 @@ public class WebSecurityConfig {
                         authorize.requestMatchers(WHITE_LIST)
                                 // permitAll 表示不进行拦截
                                 .permitAll()
-                                // 改为使用 RBAC。小的放前面，大的放后面，最后托底
+                                // 改为使用 RBAC
+                                // 注意：匹配上前面的，后面的就不看了
                                 .requestMatchers("/user/info").authenticated()
-                                .requestMatchers("/word/**").hasRole("test")
+                                .requestMatchers("/word/**").hasAnyRole("admin", "test")
                                 .requestMatchers("/**").hasRole("admin")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
