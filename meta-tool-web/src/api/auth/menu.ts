@@ -2,8 +2,8 @@ import useRequest from '@/hooks/useRequest'
 import request from '@/api/request'
 
 export interface Menu {
-    levle: number
     id: number
+    pid: number
     title: string
     accessPath: string
     filePath: string
@@ -16,7 +16,7 @@ export function reqGetMenu() {
     return request.get<Menu[]>('/m1/menus')
 }
 
-export type MenuItemForm = Omit<Menu, 'children' | 'level' | 'id' | 'updateTime'> & {
+export type MenuItemForm = Omit<Menu, 'children' | 'pid' | 'id' | 'updateTime'> & {
     id?: number
     pid?: number
 }

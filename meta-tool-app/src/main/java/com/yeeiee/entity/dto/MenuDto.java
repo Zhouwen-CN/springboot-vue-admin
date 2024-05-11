@@ -20,7 +20,7 @@ import java.util.List;
 @ToString
 public class MenuDto {
     private Long id;
-    private Integer level;
+    private Integer pid;
     private String title;
     private String accessPath;
     private String filePath;

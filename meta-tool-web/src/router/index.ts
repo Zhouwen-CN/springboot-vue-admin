@@ -1,46 +1,44 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import request from '@/api/request'
 import useUserStore from '@/stores/user'
+import defaultRoutes from '@/router/defaultRoutes'
+import getAsyncRoutes from '@/router/asyncRoutes'
+import type {Menu, UserInfo} from '@/api/user'
 
+// 基础路由配置
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
     scrollBehavior() {
         return {left: 0, top: 0}
     },
-    routes: [
-        {
-            path: '/',
-            name: 'layout',
-            component: () => import('@/views/Layout.vue'),
-            redirect: '/home',
-            children: [
-                {
-                    path: '/home',
-                    name: 'home',
-                    component: () => import('@/views/layout/home/index.vue')
-                },
-                {
-                    path: '/404',
-                    name: '404',
-                    component: () => import('@/views/404.vue')
-                }
-            ]
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('@/views/Login.vue')
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'not found',
-            redirect: '/404'
-        }
-    ]
+    routes: defaultRoutes
 })
 
+// 添加路由方法
+function addRoutes(modules: Record<string, () => Promise<unknown>>, menus?: Menu[]) {
+    if (!menus) {
+        const localStorageUserInfo = localStorage.getItem('info') || '{}'
+        menus = (JSON.parse(localStorageUserInfo) as UserInfo).menus
+        if (!menus) {
+            return
+        }
+    }
+    const routes = getAsyncRoutes(modules, menus)
+    routes.forEach((route) => {
+        if (!router.hasRoute(route.name as string)) {
+            router.addRoute('layout', route)
+        }
+    })
+}
+
+// 加载所有动态模块
+const modules = import.meta.glob('../views/layout/**/*.vue')
+
+// 如果本地存储中存在菜单，添加路由（页面刷新时）
+addRoutes(modules)
+
 router.beforeEach((to, from, next) => {
-    // 遍历pendingRequest，将上一个页面的所有请求cancel掉
+    // 取消上一个页面的所有请求
     const pendingRequest = request.getPendingRequest()
     pendingRequest.forEach((cancel) => {
         cancel()
@@ -51,47 +49,12 @@ router.beforeEach((to, from, next) => {
     const userStore = useUserStore()
     if (userStore.token) {
         // 动态加载路由
-        if (userStore.menus?.length !== 0) {
-            userStore.menus.forEach((prentMenu) => {
-                const prentAccessPath = prentMenu.accessPath
-
-                // 存在二级菜单
-                if (prentMenu.children?.length !== 0) {
-                    const children = prentMenu.children.map((childMenu) => {
-                        let childAccessPath = childMenu.accessPath
-                        return {
-                            path: childAccessPath,
-                            name: childAccessPath,
-                            component: () => import(/* @vite-ignore */ `../views${childMenu.filePath}`)
-                        }
-                    })
-
-                    // 父路由不存在则添加
-                    if (!router.hasRoute(prentAccessPath)) {
-                        router.addRoute('layout', {
-                            path: prentAccessPath,
-                            name: prentAccessPath,
-                            redirect: prentMenu.children[0].accessPath,
-                            children
-                        })
-                    }
-
-                    // 不存在二级菜单
-                } else {
-                    if (!router.hasRoute(prentAccessPath)) {
-                        router.addRoute('layout', {
-                            path: prentAccessPath,
-                            name: prentAccessPath,
-                            component: () => import(/* @vite-ignore */ `../views${prentMenu.filePath}`),
-                            children: []
-                        })
-                    }
-                }
-            })
-        } else {
+        if (userStore.userInfo.menus?.length === 0) {
             userStore.getUserMenus()
         }
+        addRoutes(modules, userStore.userInfo.menus)
 
+        // 登入逻辑
         if (to.path === '/login') {
             next({path: '/home'})
         } else {

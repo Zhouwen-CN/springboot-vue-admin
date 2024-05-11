@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
-    @ExceptionHandler(Exception.class)
-    public R<Void> defaultHandler(Exception e) {
-        return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public R<Void> defaultHandler(Exception e) {
+//        return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
+//    }
 }

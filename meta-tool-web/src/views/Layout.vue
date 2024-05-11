@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import useSettingStore from '@/stores/setting';
 import useUserStore from '@/stores/user';
-import {RouterView, useRouter} from 'vue-router'
+import {RouterView, useRoute} from 'vue-router'
 import {HomeFilled} from '@element-plus/icons-vue'
+import Menu from '@/components/layout/Menu.vue'
+import Header from '@/components/layout/Header.vue'
 
-const userStore = useUserStore()
 const settingStore = useSettingStore()
-const router = useRouter()
-
-function logout() {
-  userStore.$reset()
-  router.replace('/login')
-}
 </script>
 
 <template>
@@ -19,53 +14,27 @@ function logout() {
     <el-aside class="aside" width="200px">
       <el-scrollbar>
         <h1> {{ settingStore.title }} </h1>
-        <el-menu active-text-color="#409eff" background-color="#304156" router text-color="#bfcbd9" unique-opened>
-
+        <el-menu :default-active="useRoute().path" active-text-color="#409eff" background-color="#304156" router
+                 text-color="#bfcbd9" unique-opened>
           <el-menu-item index="/home">
             <template #title>
-              <el-icon :size="24">
-                <el-icon>
+              <el-space>
+                <el-icon :size="24">
                   <HomeFilled/>
                 </el-icon>
-              </el-icon>
-              首页
+                <span>首页</span>
+              </el-space>
             </template>
           </el-menu-item>
 
-          <template v-for="item in userStore.menus" :key="item.id">
-
-            <el-menu-item v-if="item.children?.length === 0" :index="item.accessPath">
-              <template #title>
-                <el-icon :size="24">
-                  <component :is="item.icon"></component>
-                </el-icon>
-                {{ item.title }}
-              </template>
-            </el-menu-item>
-
-            <el-sub-menu v-if="item.children?.length > 0" index="">
-              <template #title>
-                <el-icon :size="24">
-                  <component :is="item.icon"></component>
-                </el-icon>
-                {{ item.title }}
-              </template>
-              <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.accessPath">
-                <template #title>
-                  <el-icon :size="24">
-                    <component :is="subItem.icon"></component>
-                  </el-icon>
-                  {{ subItem.title }}
-                </template>
-              </el-menu-item>
-            </el-sub-menu>
-          </template>
+          <Menu :menus="useUserStore().userInfo.menus"></Menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>
     <el-container>
       <el-header class="header">
-        <el-button @click="logout">退出登入</el-button>
+        <Header></Header>
+
       </el-header>
       <el-main class="main">
         <el-scrollbar>
@@ -87,7 +56,7 @@ function logout() {
 }
 
 .fade-enter-active {
-  transition: all 1s;
+  transition: all 0.3s;
 }
 
 .fade-enter-to {
@@ -95,7 +64,7 @@ function logout() {
 }
 
 .header {
-  background-color: yellow;
+  // background-color: yellow;
   height: $base_header_height;
 }
 

@@ -3,8 +3,8 @@ package com.yeeiee.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
-import com.yeeiee.entity.dto.MenuDto;
 import com.yeeiee.entity.dto.RoleDto;
+import com.yeeiee.entity.dto.UserDto;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.service.UserService;
@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -46,10 +45,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<MenuDto> getUserMenus() {
+    public UserDto getUserInfo() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         val userDto = userMapper.selectByUserName(userDetails.getUsername());
         val roleIds = userDto.getRoles().stream().map(RoleDto::getId).collect(Collectors.toSet());
-        return menuMapper.selectMenusByRoleIds(roleIds);
+        val menus = menuMapper.selectMenusByRoleIds(roleIds);
+        userDto.setPassword(null);
+        userDto.setMenus(menus);
+        return userDto;
     }
 }

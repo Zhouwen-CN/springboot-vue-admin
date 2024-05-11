@@ -26,7 +26,7 @@ class MetaToolAppApplicationTests {
 
     @Test
     void getMenusTest() {
-        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L, 2L));
+        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L));
         for (MenuDto menuDto : menuDtos) {
             System.out.println(menuDto);
         }

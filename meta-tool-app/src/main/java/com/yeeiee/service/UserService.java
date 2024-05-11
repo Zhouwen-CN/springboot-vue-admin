@@ -3,9 +3,7 @@ package com.yeeiee.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
-import com.yeeiee.entity.dto.MenuDto;
-
-import java.util.List;
+import com.yeeiee.entity.dto.UserDto;
 
 /**
  * <p>
@@ -19,5 +17,5 @@ public interface UserService extends IService<User> {
 
     String login(LoginDto loginDto);
 
-    List<MenuDto> getUserMenus();
+    UserDto getUserInfo();
 }

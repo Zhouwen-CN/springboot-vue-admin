@@ -1,11 +1,11 @@
-import type {LoginForm, Menu} from '@/api/user'
+import type {LoginForm, UserInfo} from '@/api/user'
 import {reqLogin, reqUserMenus} from '@/api/user'
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
 
 const useUserStore = defineStore('user', () => {
     const token = ref<string>(localStorage.getItem('token') || '')
-    const menus = ref<Menu[]>(JSON.parse(localStorage.getItem('menus') || '[]') as Menu[])
+    const userInfo = ref<UserInfo>(JSON.parse(localStorage.getItem('info') || '{}') as UserInfo)
 
     async function doLogin(loginForm: LoginForm) {
         let result = await reqLogin(loginForm)
@@ -15,18 +15,18 @@ const useUserStore = defineStore('user', () => {
 
     async function getUserMenus() {
         const result = await reqUserMenus()
-        menus.value = result.data
-        localStorage.setItem('menus', JSON.stringify(result.data))
+        userInfo.value = result.data
+        localStorage.setItem('info', JSON.stringify(result.data))
     }
 
     function $reset() {
         localStorage.removeItem('token')
-        localStorage.removeItem('menus')
+        localStorage.removeItem('info')
         token.value = ''
-        menus.value = []
+        userInfo.value = {} as UserInfo
     }
 
-    return {token, menus, doLogin, getUserMenus, $reset}
+    return {token, userInfo, doLogin, getUserMenus, $reset}
 })
 
 export default useUserStore

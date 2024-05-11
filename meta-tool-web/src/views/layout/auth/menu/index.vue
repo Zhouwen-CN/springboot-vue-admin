@@ -40,7 +40,7 @@ function clean() {
 </script>
 <template>
   <div>
-    <el-table :border="true" :data="useUserStore().menus" row-key="id">
+    <el-table :border="true" :data="useUserStore().userInfo.menus" row-key="id">
       <el-table-column label="菜单名称" prop="title"/>
       <el-table-column label="访问路径" prop="accessPath"/>
       <el-table-column label="文件路径" prop="filePath"/>

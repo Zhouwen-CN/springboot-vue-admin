@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {useRouter} from 'vue-router';
 
-console.log(useRouter().getRoutes());
+// console.log(useRouter().getRoutes());
 
 </script>
 
