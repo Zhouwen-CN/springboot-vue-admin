@@ -1,6 +1,6 @@
 package com.yeeiee;
 
-import com.yeeiee.entity.dto.MenuDto;
+import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.dto.UserDto;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.UserMapper;
@@ -26,9 +26,9 @@ class MetaToolAppApplicationTests {
 
     @Test
     void getMenusTest() {
-        List<MenuDto> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L));
-        for (MenuDto menuDto : menuDtos) {
-            System.out.println(menuDto);
+        List<Menu> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L));
+        for (Menu menu : menuDtos) {
+            System.out.println(menu);
         }
     }
 

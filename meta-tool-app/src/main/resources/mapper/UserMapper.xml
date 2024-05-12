@@ -7,9 +7,11 @@
         <id column="u_id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
-        <collection property="roles" ofType="com.yeeiee.entity.dto.RoleDto">
+        <collection property="roles" ofType="com.yeeiee.entity.Role">
             <id column="r_id" property="id"/>
-            <result column="role_name" property="name"/>
+            <result column="role_name" property="roleName"/>
+            <result column="create_time" property="createTime"/>
+            <result column="update_time" property="updateTime"/>
         </collection>
 
     </resultMap>
@@ -19,7 +21,9 @@
                a.username,
                a.`password`,
                c.id as r_id,
-               c.role_name
+               c.role_name,
+               c.create_time,
+               c.update_time
         from (select id,
                      username,
                      password

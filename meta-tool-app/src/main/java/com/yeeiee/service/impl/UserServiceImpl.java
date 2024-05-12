@@ -1,9 +1,10 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yeeiee.entity.Menu;
+import com.yeeiee.entity.Role;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
-import com.yeeiee.entity.dto.RoleDto;
 import com.yeeiee.entity.dto.UserDto;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.UserMapper;
@@ -17,6 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -48,10 +52,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserDto getUserInfo() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         val userDto = userMapper.selectByUserName(userDetails.getUsername());
-        val roleIds = userDto.getRoles().stream().map(RoleDto::getId).collect(Collectors.toSet());
-        val menus = menuMapper.selectMenusByRoleIds(roleIds);
+        val roleIds = userDto.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
+        val menuList = menuMapper.selectMenusByRoleIds(roleIds);
+        val menuTree = convertToMenuTree(menuList);
         userDto.setPassword(null);
-        userDto.setMenus(menus);
+        userDto.setMenus(menuTree);
         return userDto;
+    }
+
+    /**
+     * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
+     */
+    private List<Menu> convertToMenuTree(List<Menu> menuList) {
+        val menuItemMap = new HashMap<Long, Menu>(8);
+        val menuTree = new ArrayList<Menu>();
+        for (Menu menu : menuList) {
+            val id = menu.getId();
+            val pid = menu.getPid();
+
+            if (!menuItemMap.containsKey(id)) {
+                menuItemMap.put(id, new Menu().setChildren(new ArrayList<>()));
+            }
+
+            val item = menuItemMap.get(id);
+            if (item.getId() == null) {
+                Menu.mergeMenu(item, menu);
+            }
+
+            if (pid == 0) {
+                menuTree.add(item);
+            } else {
+                if (!menuItemMap.containsKey(pid)) {
+                    menuItemMap.put(pid, new Menu().setChildren(new ArrayList<>()));
+                }
+                val children = menuItemMap.get(pid).getChildren();
+                children.add(item);
+            }
+        }
+
+        return menuTree;
     }
 }

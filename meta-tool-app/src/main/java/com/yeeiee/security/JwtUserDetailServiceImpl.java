@@ -1,6 +1,6 @@
 package com.yeeiee.security;
 
-import com.yeeiee.entity.dto.RoleDto;
+import com.yeeiee.entity.Role;
 import com.yeeiee.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -31,7 +31,7 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
         // 授权角色
-        val roles = userDto.getRoles().stream().map(RoleDto::getName).toArray(String[]::new);
+        val roles = userDto.getRoles().stream().map(Role::getRoleName).toArray(String[]::new);
         return User.builder()
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())

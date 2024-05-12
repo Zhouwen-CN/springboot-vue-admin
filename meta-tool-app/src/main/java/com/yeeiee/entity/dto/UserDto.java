@@ -1,5 +1,7 @@
 package com.yeeiee.entity.dto;
 
+import com.yeeiee.entity.Menu;
+import com.yeeiee.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +23,6 @@ public class UserDto {
     private Long id;
     private String username;
     private String password;
-    private List<RoleDto> roles;
-    private List<MenuDto> menus;
+    private List<Role> roles;
+    private List<Menu> menus;
 }

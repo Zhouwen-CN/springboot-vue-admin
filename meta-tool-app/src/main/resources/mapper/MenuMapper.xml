@@ -3,30 +3,22 @@
 <mapper namespace="com.yeeiee.mapper.MenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.dto.MenuDto">
+    <resultMap id="BaseResultMap" type="com.yeeiee.entity.Menu">
         <id column="id" property="id"/>
-        <result column="pid" property="pid"/>
-        <result column="title" property="title"/>
         <result column="access_path" property="accessPath"/>
         <result column="file_path" property="filePath"/>
+        <result column="file_path" property="filePath"/>
         <result column="icon" property="icon"/>
+        <result column="pid" property="pid"/>
+        <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <collection property="children" ofType="com.yeeiee.entity.dto.MenuDto"
-                    column="id" select="com.yeeiee.mapper.MenuMapper.selectMenusByPid">
-        </collection>
     </resultMap>
 
     <select id="selectMenusByRoleIds" resultMap="BaseResultMap" parameterType="collection">
         select
-        b.id,
-        ifnull(b.pid,0) as pid,
-        b.title,
-        b.access_path,
-        b.file_path,
-        b.icon,
-        b.update_time
-        from
-        (
+        a.id, a.title, a.access_path, a.file_path, a.icon, ifnull(a.pid,0) as pid, a.create_time, a.update_time
+        from t_menu a
+        join (
         select
         menu_id
         from
@@ -38,24 +30,7 @@
         </foreach>
         group by
         menu_id
-        ) a
-        join (
-        select
-        *
-        from t_menu
-        where ifnull(pid,0) = 0
-        ) b on a.menu_id = b.id
-    </select>
-
-    <select id="selectMenusByPid" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select id,
-               pid,
-               title,
-               access_path,
-               file_path,
-               icon,
-               update_time
-        from t_menu
-        where pid = #{id}
+        ) b
+        on a.id = b.menu_id
     </select>
 </mapper>

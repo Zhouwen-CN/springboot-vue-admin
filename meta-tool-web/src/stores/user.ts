@@ -1,5 +1,5 @@
 import type {LoginForm, UserInfo} from '@/api/user'
-import {reqLogin, reqUserMenus} from '@/api/user'
+import {reqLogin, reqUserInfo} from '@/api/user'
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
 
@@ -13,8 +13,8 @@ const useUserStore = defineStore('user', () => {
         localStorage.setItem('token', result.data)
     }
 
-    async function getUserMenus() {
-        const result = await reqUserMenus()
+    async function getUserInfo() {
+        const result = await reqUserInfo()
         userInfo.value = result.data
         localStorage.setItem('info', JSON.stringify(result.data))
     }
@@ -26,7 +26,7 @@ const useUserStore = defineStore('user', () => {
         userInfo.value = {} as UserInfo
     }
 
-    return {token, userInfo, doLogin, getUserMenus, $reset}
+    return {token, userInfo, doLogin, getUserInfo, $reset}
 })
 
 export default useUserStore

@@ -67,9 +67,9 @@ public class WebSecurityConfig {
                                 .permitAll()
                                 // 改为使用 RBAC
                                 // 注意：匹配上前面的，后面的就不看了
-                                .requestMatchers("/user/info").authenticated()
-                                .requestMatchers("/word/**").hasAnyRole("admin", "test")
-                                .requestMatchers("/**").hasRole("admin")
+                                // .requestMatchers("/user/info").authenticated()
+                                // .requestMatchers("/word/**").hasAnyRole("admin", "test")
+                                // .requestMatchers("/**").hasRole("admin")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
                                 // 已认证的请求会被自动授权

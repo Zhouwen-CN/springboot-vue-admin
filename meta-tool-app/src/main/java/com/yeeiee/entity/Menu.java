@@ -1,12 +1,17 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -54,4 +59,26 @@ public class Menu {
     @Schema(description = "更新时间")
     @TableField(value = "`update_time`", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    @TableField(exist = false)
+    private List<Menu> children;
+
+    public static void mergeMenu(Menu dist, Menu src) {
+        dist.setId(src.getId());
+        dist.setTitle(src.getTitle());
+        dist.setAccessPath(src.getAccessPath());
+        dist.setFilePath(src.getFilePath());
+        dist.setIcon(src.getIcon());
+        dist.setPid(src.getPid());
+        dist.setCreateTime(src.getCreateTime());
+        dist.setUpdateTime(src.getUpdateTime());
+        if (src.getChildren() != null) {
+            dist.getChildren().addAll(src.getChildren());
+        }
+    }
+
+    public Menu setChildren(List<Menu> children) {
+        this.children = children;
+        return this;
+    }
 }

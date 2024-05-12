@@ -2,7 +2,6 @@ package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.dto.MenuDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
@@ -18,7 +17,12 @@ import java.util.List;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    List<MenuDto> selectMenusByRoleIds(@Param("roleIds") Collection<Long> roleIds);
+    /**
+     * 根据角色列表查询拥有权限的菜单，一个用户可能有多个角色
+     *
+     * @param roleIds 角色id列表
+     * @return 菜单列表
+     */
+    List<Menu> selectMenusByRoleIds(@Param("roleIds") Collection<Long> roleIds);
 
-    List<MenuDto> selectMenusByPid(@Param("id") Long id);
 }

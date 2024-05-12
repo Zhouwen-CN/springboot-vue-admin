@@ -36,7 +36,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   try {
     await formEl.validate()
     await userStore.doLogin(loginForm)
-    await userStore.getUserMenus()
+    await userStore.getUserInfo()
 
     let redirect = router.currentRoute.value.query.redirect;
     if (!redirect) {

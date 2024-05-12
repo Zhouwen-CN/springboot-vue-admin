@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
     if (userStore.token) {
         // 动态加载路由
         if (userStore.userInfo.menus?.length === 0) {
-            userStore.getUserMenus()
+            userStore.getUserInfo()
         }
         addRoutes(modules, userStore.userInfo.menus)
 
