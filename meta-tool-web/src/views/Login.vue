@@ -3,7 +3,7 @@ import {reactive, ref} from 'vue';
 import {Lock, User} from '@element-plus/icons-vue';
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {useRouter} from 'vue-router';
-import type {LoginForm} from '@/api/user';
+import type {LoginForm} from '@/api/auth/user';
 import useUserStore from '@/stores/user';
 import useSettingStore from '@/stores/setting'
 
@@ -21,11 +21,11 @@ const loginForm = reactive<LoginForm>({
 const rules = reactive<FormRules<typeof loginForm>>({
   username: [
     {required: true, message: '请输入用户名', trigger: 'blur'},
-    {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
+    {min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur'}
   ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
+    {min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur'}
   ]
 })
 
@@ -36,7 +36,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   try {
     await formEl.validate()
     await userStore.doLogin(loginForm)
-    await userStore.getUserInfo()
+    await userStore.getUserMenuInfo()
 
     let redirect = router.currentRoute.value.query.redirect;
     if (!redirect) {

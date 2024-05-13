@@ -1,31 +1,48 @@
 const defaultRoutes = [
     {
         path: '/',
-        name: 'layout',
+        name: 'Layout',
         component: () => import('@/views/Layout.vue'),
         redirect: '/home',
+        meta: {
+            title: '首页',
+            icon: 'HomeFilled',
+            require: true
+        },
         children: [
             {
                 path: '/home',
-                name: '/home',
-                component: () => import('@/views/Home.vue')
+                name: 'Home',
+                component: () => import('@/views/Home.vue'),
+                meta: {
+                    require: true
+                }
             },
             {
                 path: '/404',
                 name: '404',
-                component: () => import('@/views/404.vue')
+                component: () => import('@/views/404.vue'),
+                meta: {
+                    require: true
+                }
             }
         ]
     },
     {
         path: '/login',
-        name: '/login',
-        component: () => import('@/views/Login.vue')
+        name: 'Login',
+        component: () => import('@/views/Login.vue'),
+        meta: {
+            require: true
+        }
     },
     {
         path: '/:pathMatch(.*)*',
-        name: 'not found',
-        redirect: '/404'
+        name: 'NotFound',
+        redirect: '/404',
+        meta: {
+            require: true
+        }
     }
 ]
 

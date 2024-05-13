@@ -1,25 +1,24 @@
 import {ref} from 'vue'
 import request from '@/api/request'
+import type {AxiosRequestConfig} from 'axios'
 
-interface UseRequestParams<T> {
-    url: string
-    method?: 'get' | 'post' | 'put' | 'delete'
-    data?: T
-    immediate?: boolean
-}
-
-function useRequest<T = unknown>(param: UseRequestParams<T>) {
+/**
+ * 请求 hook
+ * @param config axios 请求配置
+ * @param immediate 是否立即执行请求
+ * @returns
+ */
+function useRequest<T = unknown, D = unknown>(
+    config: AxiosRequestConfig<D>,
+    immediate: boolean = false
+) {
     const loading = ref(false)
     const data = ref<T>()
-
-    param.method ??= 'get'
-    const immediate = param.immediate ?? false
-    delete param.immediate
 
     function refresh() {
         loading.value = true
         request
-            .request<T>(param)
+            .request<T, D>(config)
             .then((res) => {
                 data.value = res.data
             })

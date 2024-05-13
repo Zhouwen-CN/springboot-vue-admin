@@ -67,9 +67,8 @@ public class WebSecurityConfig {
                                 .permitAll()
                                 // 改为使用 RBAC
                                 // 注意：匹配上前面的，后面的就不看了
-                                // .requestMatchers("/user/info").authenticated()
-                                // .requestMatchers("/word/**").hasAnyRole("admin", "test")
-                                // .requestMatchers("/**").hasRole("admin")
+                                .requestMatchers("/user").authenticated()
+                                .requestMatchers("/user/**", "/userRole/**", "/role/**", "/roleMenu/**", "/menu/**").hasRole("admin")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
                                 // 已认证的请求会被自动授权
@@ -95,13 +94,13 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(passwordEncoder());
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(bCryptPasswordEncoder());
         provider.setUserDetailsService(jwtUserDetailServiceImpl);
         return provider;
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -11,7 +11,7 @@ defineOptions({
     <el-menu-item v-if="item.children?.length === 0" :index="item.accessPath">
       <template #title>
         <el-space>
-          <el-icon :size="24">
+          <el-icon :size="20">
             <component :is="item.icon"></component>
           </el-icon>
           <span> {{ item.title }}</span>
@@ -23,7 +23,7 @@ defineOptions({
     <el-sub-menu v-if="item.children?.length > 0" :index="item.accessPath">
       <template #title>
         <el-space>
-          <el-icon :size="24">
+          <el-icon :size="20">
             <component :is="item.icon"></component>
           </el-icon>
           <span> {{ item.title }}</span>

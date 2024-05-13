@@ -19,7 +19,7 @@ const settingStore = useSettingStore()
           <el-menu-item index="/home">
             <template #title>
               <el-space>
-                <el-icon :size="24">
+                <el-icon :size="20">
                   <HomeFilled/>
                 </el-icon>
                 <span>首页</span>
@@ -27,15 +27,16 @@ const settingStore = useSettingStore()
             </template>
           </el-menu-item>
 
-          <Menu :menus="useUserStore().userInfo.menus"></Menu>
+          <Menu :menus="useUserStore().userMenuInfo.menus"></Menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>
     <el-container>
       <el-header class="header">
         <Header></Header>
-
       </el-header>
+      <el-divider style="margin: 0;"></el-divider>
+
       <el-main class="main">
         <el-scrollbar>
           <router-view v-slot="{ Component }">
@@ -56,7 +57,7 @@ const settingStore = useSettingStore()
 }
 
 .fade-enter-active {
-  transition: all 0.3s;
+  transition: all 0.5s;
 }
 
 .fade-enter-to {
@@ -64,13 +65,12 @@ const settingStore = useSettingStore()
 }
 
 .header {
-  // background-color: yellow;
   height: $base_header_height;
 }
 
 .aside {
   width: $base_aside_width;
-  height: 100vh;
+  height: calc(100vh - 1px);
   background-color: $base_aside_bg_color;
 
   h1 {
@@ -79,12 +79,11 @@ const settingStore = useSettingStore()
     padding: 20px 0 20px 0;
     text-align: center;
   }
-
 }
 
 .main {
-  height: calc(100vh - $base_header_height);
-  background-color: pink;
+  /* -1为了防止出现滚动条 */
+  height: calc(100vh - $base_header_height - 1px);
   overflow: auto;
 }
 </style>

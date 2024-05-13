@@ -3,7 +3,7 @@
 <mapper namespace="com.yeeiee.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.dto.UserDto">
+    <resultMap id="UserDto" type="com.yeeiee.entity.dto.UserRoleDto">
         <id column="u_id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -13,26 +13,56 @@
             <result column="create_time" property="createTime"/>
             <result column="update_time" property="updateTime"/>
         </collection>
-
     </resultMap>
 
-    <select id="selectByUserName" resultMap="BaseResultMap">
+    <resultMap id="UserRoleVo" type="com.yeeiee.entity.vo.UserRoleVo">
+        <id column="u_id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="role_ids" property="roleIds"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="selectByUserName" resultMap="UserDto">
         select a.id as u_id,
                a.username,
                a.`password`,
                c.id as r_id,
-               c.role_name,
-               c.create_time,
-               c.update_time
+               c.role_name
         from (select id,
                      username,
                      password
               from t_user
               where username = #{username}) a
-                 join t_user_role b
-                      on a.id = b.user_id
-                 join t_role c
-                      on b.role_id = c.id
+                 left join t_user_role b
+                           on a.id = b.user_id
+                 left join t_role c
+                           on b.role_id = c.id
+    </select>
+
+    <select id="selectUserPages" resultMap="UserRoleVo">
+        select a.id as u_id,
+        a.username,
+        a.password,
+        a.create_time,
+        a.update_time,
+        group_concat(c.id) as role_ids
+        from (
+        select
+        *
+        from t_user
+        where username != #{currentUserName}
+        <if test="searchName != null and searchName.trim() != ''">
+            and username like concat('%',#{searchName},'%')
+        </if>
+        ) a
+        left join t_user_role b
+        on a.id = b.user_id
+        left join t_role c
+        on b.role_id = c.id
+        group by a.id, a.username, a.password, a.create_time, a.update_time
     </select>
 
 </mapper>

@@ -1,20 +1,21 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus} from '@element-plus/icons-vue';
 import {reactive} from 'vue';
-import type {MenuItemForm} from '@/api/auth/menu'
 import useUserStore from '@/stores/user';
 
-const diglog = reactive({
-  flag: false,
+const toggleDialog = reactive({
+  show: false,
   title: ''
 })
-const menuItemForm = reactive({} as MenuItemForm)
+
+// TODO: 待处理
+const menuItemForm = reactive({} as any)
 
 
 // 添加一级菜单
 function addFirstLevelMenu() {
-  diglog.flag = true
-  diglog.title = '添加一级菜单'
+  toggleDialog.show = true
+  toggleDialog.title = '添加一级菜单'
 }
 
 // 删除菜单
@@ -28,7 +29,7 @@ function confirmDeleteEvent(level: number, id: number) {
 
 // 打开对话框前的清理操作
 function clean() {
-  diglog.title = ''
+  toggleDialog.title = ''
   menuItemForm.id = undefined
   menuItemForm.title = ''
   menuItemForm.accessPath = ''
@@ -40,7 +41,7 @@ function clean() {
 </script>
 <template>
   <div>
-    <el-table :border="true" :data="useUserStore().userInfo.menus" row-key="id">
+    <el-table :border="true" :data="useUserStore().userMenuInfo.menus" row-key="id">
       <el-table-column label="菜单名称" prop="title"/>
       <el-table-column label="访问路径" prop="accessPath"/>
       <el-table-column label="文件路径" prop="filePath"/>
@@ -70,7 +71,8 @@ function clean() {
       </el-table-column>
     </el-table>
 
-    <el-dialog ref="dialog" v-model="diglog.flag" :title="diglog.title" align-center width="500" @close="clean">
+    <el-dialog ref="dialog" v-model="toggleDialog.show" :title="toggleDialog.title" align-center width="500"
+               @close="clean">
       <template #footer>
         <el-form :inline="false" :model="menuItemForm" label-width="80px">
           <el-form-item label="菜单名称">
@@ -87,8 +89,8 @@ function clean() {
           </el-form-item>
 
           <el-form-item>
-            <el-button @click="diglog.flag = false">取消</el-button>
-            <el-button type="primary" @click="diglog.flag = false">
+            <el-button @click="toggleDialog.show = false">取消</el-button>
+            <el-button type="primary" @click="toggleDialog.show = false">
               确认
             </el-button>
           </el-form-item>

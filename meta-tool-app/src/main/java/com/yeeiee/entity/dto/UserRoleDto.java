@@ -1,6 +1,5 @@
 package com.yeeiee.entity.dto;
 
-import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * 用户 传输对象
+ * 查询用户信息和用户角色信息
  * </p>
  *
  * @author chen
@@ -19,10 +18,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserDto {
+public class UserRoleDto {
     private Long id;
     private String username;
     private String password;
     private List<Role> roles;
-    private List<Menu> menus;
 }

@@ -1,6 +1,27 @@
+/**
+ * 请求api
+ *    1、如果需要状态存储，使用 request
+ *    2、如果请求有顺序要求的，使用 request
+ *    3、如果是分页，使用 usePagination
+ *    4、其他情况，使用 useRequest
+ */
+
 export interface ResultData<T = unknown> {
     success: boolean
     code: number
     data: T
     message: string
+}
+
+export interface CreateAndUpdateTime {
+    createTime?: string
+    updateTime?: string
+}
+
+export interface Page<T> {
+    records: T[]
+    total: number
+    size: number
+    current: number
+    pages: number
 }

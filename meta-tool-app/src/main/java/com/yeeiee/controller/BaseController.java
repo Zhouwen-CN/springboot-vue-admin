@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.exception.DmlOperationException;
@@ -31,12 +30,12 @@ public abstract class BaseController<S extends IService<D>, D> {
     @GetMapping("/{size}/{current}")
     public R<Page<D>> page(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                            @PathVariable("current") @Parameter(description = "当前页面") Integer current) {
-        val page = service.page(new Page<>(current, size), new QueryWrapper<>());
+        val page = service.page(new Page<>(current, size));
         return R.ok(page);
     }
 
     @Operation(summary = "查询所有")
-    @GetMapping("/")
+    @GetMapping("")
     public R<List<D>> getList() {
         val list = service.list();
         return R.ok(list);
@@ -51,7 +50,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
-    public R<D> removeById(@PathVariable("id") Long id) {
+    public R<Void> removeById(@PathVariable("id") Long id) {
         val status = service.removeById(id);
         if (!status) {
             throw new DmlOperationException("删除失败【id】：" + id);
@@ -60,8 +59,8 @@ public abstract class BaseController<S extends IService<D>, D> {
     }
 
     @Operation(summary = "新增")
-    @PostMapping("/")
-    public R<D> save(@RequestBody D entity) {
+    @PostMapping("")
+    public R<Void> save(@RequestBody D entity) {
         val status = service.save(entity);
         if (!status) {
             throw new DmlOperationException("新增失败【entity】：" + entity);
@@ -70,8 +69,8 @@ public abstract class BaseController<S extends IService<D>, D> {
     }
 
     @Operation(summary = "更新")
-    @PutMapping("/")
-    public R<D> update(@RequestBody D entity) {
+    @PutMapping("")
+    public R<Void> update(@RequestBody D entity) {
         val status = service.updateById(entity);
         if (!status) {
             throw new DmlOperationException("更新失败【entity】：" + entity);
@@ -81,7 +80,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "新增或者更新")
     @PostMapping("/save")
-    public R<D> saveOrUpdate(@RequestBody D entity) {
+    public R<Void> saveOrUpdate(@RequestBody D entity) {
         val status = service.saveOrUpdate(entity);
         if (!status) {
             throw new DmlOperationException("upsert失败【entity】：" + entity);

@@ -1,14 +1,14 @@
 package com.yeeiee;
 
-import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.dto.UserDto;
+import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.mapper.MenuMapper;
-import com.yeeiee.mapper.UserMapper;
+import com.yeeiee.service.UserService;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.Collections;
 
 @SpringBootTest
 class MetaToolAppApplicationTests {
@@ -17,25 +17,15 @@ class MetaToolAppApplicationTests {
     MenuMapper menuMapper;
 
     @Autowired
-    UserMapper userMapper;
+    UserService userService;
 
     @Test
     void contextLoads() {
+        val userRoleIdsDto = new UserRoleIdsDto();
 
-    }
-
-    @Test
-    void getMenusTest() {
-        List<Menu> menuDtos = menuMapper.selectMenusByRoleIds(List.of(1L));
-        for (Menu menu : menuDtos) {
-            System.out.println(menu);
-        }
-    }
-
-    @Test
-    void getUserTest() {
-        UserDto admin = userMapper.selectByUserName("admin");
-
-        System.out.println(admin);
+        userRoleIdsDto.setUsername("chenzhou");
+        userRoleIdsDto.setPassword("chenzhou");
+        userRoleIdsDto.setRoleIds(Collections.emptyList());
+        userService.addUserWithRoleIds(userRoleIdsDto);
     }
 }

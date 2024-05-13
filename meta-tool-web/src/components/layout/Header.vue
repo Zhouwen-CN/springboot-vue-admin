@@ -1,51 +1,77 @@
 <script lang="ts" setup>
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import useUserStore from '@/stores/user'
 import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting';
+import {computed, ref} from 'vue';
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 
-function logout() {
-  userStore.$reset()
-  router.replace('/login')
-}
+const editableTabsValue = ref('')
 
+// 刷新
 function refresh() {
-  console.log(settingStore.refresh);
-
   settingStore.refresh = !settingStore.refresh
 }
+
+// 切换全屏模式
+function toggleFullScreen() {
+  const isFullScreen = document.fullscreenElement
+
+  if (!isFullScreen) {
+    document.documentElement.requestFullscreen()
+  } else {
+    document.exitFullscreen()
+  }
+}
+
+// 登出
+function logout() {
+  // 删除默认路由以外的路由
+  const deleteNames = router.getRoutes().filter(r => !r.meta.require).map(r => (r.name as string))
+  deleteNames.forEach(name => router.removeRoute(name))
+
+  userStore.$reset()
+  router.replace({path: '/login', query: {redirect: route.path}})
+}
+
+// 路由信息
+const routeInfo = computed(() => {
+  return route.matched.filter(item => item.meta.title)
+})
 </script>
 
 <template>
   <div class="header">
+    <!-- 左侧面包屑 -->
     <el-breadcrumb :separator-icon="ArrowRight">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        权限管理
+      <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
+        <el-icon>
+          <component :is="item.meta.icon"></component>
+        </el-icon>
+        <span style="margin-left: 5px;">{{ item.meta.title }}</span>
       </el-breadcrumb-item>
-      <el-breadcrumb-item>
-        用户管理
-      </el-breadcrumb-item>
+
     </el-breadcrumb>
+    <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
         <el-button :icon="Refresh" circle size="default" @click="refresh"></el-button>
-        <el-button :icon="FullScreen" circle size="default"></el-button>
+        <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
         <el-avatar shape="square" size="default"
                    src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
         </el-avatar>
 
         <el-dropdown>
-                    <span>
-                        {{ userStore.userInfo.username }}
-                        <el-icon>
-                            <ArrowDown/>
-                        </el-icon>
-                    </span>
+          <span>
+            {{ userStore.userMenuInfo.username }}
+            <el-icon>
+              <ArrowDown/>
+            </el-icon>
+          </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="logout">退出登入</el-dropdown-item>

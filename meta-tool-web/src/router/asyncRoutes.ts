@@ -1,4 +1,4 @@
-import type {Menu} from '@/api/user'
+import type {Menu} from '@/api/auth/user'
 import type {RouteRecordSingleViewWithChildren} from 'vue-router'
 
 function getAsyncRoutes(
@@ -10,6 +10,10 @@ function getAsyncRoutes(
             path: menu.accessPath,
             name: menu.accessPath,
             component: modules[`../views${menu.filePath}`],
+            meta: {
+                title: menu.title,
+                icon: menu.icon
+            },
             children: []
         }
 

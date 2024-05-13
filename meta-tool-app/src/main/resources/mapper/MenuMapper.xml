@@ -23,11 +23,20 @@
         menu_id
         from
         t_role_menu
-        where
-        role_id in
-        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <where>
+
+            <choose>
+                <when test="roleIds != null and roleIds.size() > 0">
+                    role_id in
+                    <foreach collection="roleIds" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1!=1
+                </otherwise>
+            </choose>
+        </where>
         group by
         menu_id
         ) b
