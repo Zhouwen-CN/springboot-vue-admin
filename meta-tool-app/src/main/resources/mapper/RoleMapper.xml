@@ -3,9 +3,10 @@
 <mapper namespace="com.yeeiee.mapper.RoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.Role">
+    <resultMap id="BaseResultMap" type="com.yeeiee.entity.vo.RoleMenuVo">
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
+        <result column="desc" property="desc"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -14,5 +15,20 @@
     <sql id="Base_Column_List">
         id, role_name, create_time, update_time
     </sql>
+    <select id="selectRolePages" resultType="com.yeeiee.entity.vo.RoleMenuVo">
+        select
+        a.id, a.role_name, a.`desc`,group_concat(b.menu_id) as menu_ids, a.create_time, a.update_time
+        from (
+        select
+        *
+        from t_role
+        <if test="searchName != null and searchName.trim() != ''">
+            where t_role.role_name like concat('%',#{searchName},'%')
+        </if>
+        ) a
+        left join t_role_menu b
+        on a.id=b.role_id
+        group by a.id, a.role_name, a.`desc`, a.create_time, a.update_time
+    </select>
 
 </mapper>

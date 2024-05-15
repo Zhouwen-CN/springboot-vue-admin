@@ -35,7 +35,7 @@ function logout() {
   deleteNames.forEach(name => router.removeRoute(name))
 
   userStore.$reset()
-  router.replace({path: '/login', query: {redirect: route.path}})
+  router.replace('/login')
 }
 
 // 路由信息

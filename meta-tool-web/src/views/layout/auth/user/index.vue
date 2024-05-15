@@ -2,15 +2,15 @@
 import {Delete, Edit, Search} from '@element-plus/icons-vue';
 import {computed, onMounted, reactive, ref} from 'vue';
 import {
-  reqDeleteUserRole,
+  reqDeleteUser,
+  reqDeleteUsers,
   reqGetUserRolePage,
   reqSaveUserRole,
   type UserRoleForm,
   type UserRoleInfo
 } from '@/api/auth/user';
-import {ElMessage, ElTable, type FormInstance, type FormRules} from 'element-plus';
+import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {reqGetRoles} from '@/api/auth/role';
-import useUserStore from '@/stores/user';
 
 // 表单提交对象
 const userRoleForm = reactive<UserRoleForm>({
@@ -69,18 +69,6 @@ const handleCheckedCitiesChange = (value: string[]) => {
   checkAll.value = checkedCount === roleData.value?.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < (roleData.value?.length as number)
 }
-// 根据用户ids列表获取用户名称列表
-const getRoleNames = computed(() => (roleIds: string) => {
-  const ids = roleIds?.split(',').map(id => Number(id)) || []
-  const result: string[] = []
-  roleData.value?.forEach(role => {
-    if (ids.includes(role.id)) {
-      result.push(role.roleName)
-    }
-  })
-  return result.join(',')
-})
-
 
 // 添加用户
 function addUser() {
@@ -99,14 +87,36 @@ function updateUser(row: UserRoleInfo) {
 }
 
 // 删除用户
-function deleteUser(id: number) {
-  // try {
-  //   await reqDeleteUserRole(id)
-  // } finally {
-  //   pageRefresh()
-  // }
-  reqDeleteUserRole(id)
-  pageRefresh()
+async function deleteUser(id: number) {
+  try {
+    await reqDeleteUser(id)
+    pageRefresh()
+    ElMessage.success('操作成功')
+  } catch (error) {
+    // do nothing
+  }
+}
+
+// 批量删除
+const deleteIds = ref<number[]>([])
+
+function handleSelectionChange(users: UserRoleInfo[]) {
+  deleteIds.value = users.map(user => user.id)
+}
+
+async function deleteUsers() {
+  if (deleteIds.value.length === 0) {
+    ElMessage.warning('请选择要删除的用户')
+    return
+  }
+
+  try {
+    await reqDeleteUsers(deleteIds.value)
+    pageRefresh()
+    ElMessage.success('操作成功')
+  } catch (error) {
+    // do nothing
+  }
 }
 
 // 表单提交
@@ -115,15 +125,14 @@ async function onSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await reqSaveUserRole(userRoleForm)
+    pageRefresh()
     ElMessage.success('操作成功')
   } catch (error) {
-    console.log(error)
+    // do nothing
   } finally {
-    pageRefresh()
     toggleDialog.show = false
   }
 }
-
 
 // 对话框关闭时清空数据 和 错误提示样式
 function clean() {
@@ -137,18 +146,27 @@ function clean() {
   ruleFormRef.value?.clearValidate()
 }
 
+// 根据角色id列表 获取角色名称列表
+const getRoleNames = computed(() => (roleIds: string) => {
+  const ids = roleIds?.split(',').map(id => Number(id)) || []
+  const result: string[] = []
+  roleData.value?.forEach(role => {
+    if (ids.includes(role.id)) {
+      result.push(role.roleName)
+    }
+  })
+  return result.join(',')
+})
+
 onMounted(() => {
   pageRefresh()
   roleRefresh()
 })
-
-
-// const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-
 </script>
 
 <template>
   <div>
+    <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline>
         <el-form-item label="用户名：">
@@ -161,10 +179,19 @@ onMounted(() => {
     </el-card>
 
     <el-card style="margin-top: 16px;">
-      <el-button type="primary" @click="addUser">添加用户</el-button>
-      <el-button type="danger">批量删除</el-button>
+      <!-- 表格上面的按钮 -->
+      <div>
+        <el-button type="primary" @click="addUser">添加用户</el-button>
+        <el-popconfirm title="是否删除？" @confirm="deleteUsers">
+          <template #reference>
+            <el-button type="danger">批量删除</el-button>
+          </template>
+        </el-popconfirm>
+      </div>
 
-      <el-table :border="true" :data="pageData" row-key="id" style="margin-top: 16px;">
+      <!-- 表格 -->
+      <el-table :border="true" :data="pageData" row-key="id" style="margin-top: 16px;"
+                @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="用户名称" prop="username"></el-table-column>
@@ -178,12 +205,10 @@ onMounted(() => {
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button-group>
-              <el-button :disabled="row.id === useUserStore().userMenuInfo.id" :icon="Edit" type="primary"
-                         @click="updateUser(row)"></el-button>
+              <el-button :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteUser(row.id)">
                 <template #reference>
-                  <el-button :disabled="row.id === useUserStore().userMenuInfo.id" :icon="Delete"
-                             type="danger"></el-button>
+                  <el-button :icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -191,6 +216,7 @@ onMounted(() => {
         </el-table-column>
       </el-table>
 
+      <!-- 分页 -->
       <!-- TODO: jumper有bug，会出现警告信息，暂时不用 -->
       <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="sizeOption" :total="totle"
                      background layout="prev, pager, next, ->, total, sizes" style="margin-top: 16px;"
@@ -198,23 +224,26 @@ onMounted(() => {
                      @size-change="onSizeChange"/>
     </el-card>
 
+    <!-- 对话框表单 -->
     <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
       <template #footer>
-
-        <el-form ref="ruleFormRef" :model="userRoleForm" :rules="rules" label-width="80px" style="padding: 0 40px">
+        <el-form ref="ruleFormRef" :model="userRoleForm" :rules="rules" label-width="80px" style="padding: 0 20px">
           <el-form-item label="用户名" prop="username">
             <el-input v-model="userRoleForm.username" placeholder="请输入用户姓名"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input v-model="userRoleForm.password" placeholder="请输入用户密码" type="password"></el-input>
           </el-form-item>
+          <!-- 多选框组 -->
           <el-form-item label="角色列表" prop="roleIds">
             <el-space alignment="flex-start" direction="vertical">
               <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
                 全选
               </el-checkbox>
+              <!-- TODO: 不能授予用户admin角色 -->
               <el-checkbox-group v-model="userRoleForm.roleIds" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="role in roleData" :key="role.id" :label="role.roleName" :value="role.id">
+                <el-checkbox v-for="role in roleData" :key="role.id" :disabled="role.roleName === 'admin'"
+                             :label="role.roleName" :value="role.id">
                   {{ role.roleName }}
                 </el-checkbox>
               </el-checkbox-group>
@@ -227,7 +256,6 @@ onMounted(() => {
         </el-form>
       </template>
     </el-dialog>
-
   </div>
 </template>
 

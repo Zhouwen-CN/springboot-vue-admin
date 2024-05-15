@@ -31,5 +31,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @param page 分页对象
      * @return 用户分页对象
      */
-    IPage<UserRoleVo> selectUserPages(Page<UserRoleVo> page, @Param("searchName") String searchName, @Param("currentUserName") String currentUserName);
+    IPage<UserRoleVo> selectUserPages(Page<UserRoleVo> page, @Param("searchName") String searchName);
 }

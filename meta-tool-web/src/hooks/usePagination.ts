@@ -4,13 +4,13 @@ import type {Page} from '@/api/types'
 import type {AxiosRequestConfig} from 'axios'
 
 /**
- * 分页默认走 get 请求
+ * 默认走 get 请求，并且不会立即请求，而是返回函数
  * 后端请求接口格式默认一致：${baseUrl}/${size.value}/${current.value}
  * @param baseUrl 请求基础路由
  * @param sizeOption 可选的分页大小选项
- * @returns 分页对象
+ * @returns
  */
-function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [3, 5, 7, 9]) {
+function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [5, 7, 9, 11]) {
     const current = ref(1)
     const totle = ref(0)
     const size = ref(sizeOption[0])
@@ -41,12 +41,6 @@ function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [3, 5, 7,
         refresh()
     }
 
-    function $reset() {
-        current.value = 1
-        size.value = sizeOption[0]
-        totle.value = 0
-    }
-
     return {
         current,
         totle,
@@ -55,8 +49,7 @@ function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [3, 5, 7,
         data,
         refresh,
         onPageChange,
-        onSizeChange,
-        $reset
+        onSizeChange
     }
 }
 

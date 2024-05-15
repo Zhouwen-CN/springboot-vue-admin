@@ -48,20 +48,17 @@
         a.password,
         a.create_time,
         a.update_time,
-        group_concat(c.id) as role_ids
+        group_concat(b.role_id) as role_ids
         from (
         select
         *
         from t_user
-        where username != #{currentUserName}
         <if test="searchName != null and searchName.trim() != ''">
-            and username like concat('%',#{searchName},'%')
+            where username like concat('%',#{searchName},'%')
         </if>
         ) a
         left join t_user_role b
         on a.id = b.user_id
-        left join t_role c
-        on b.role_id = c.id
         group by a.id, a.username, a.password, a.create_time, a.update_time
     </select>
 

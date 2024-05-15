@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 /**
  * <p>
  * 用户表
@@ -62,14 +64,14 @@ public class UserController {
         return R.ok(list);
     }
 
-    @Operation(summary = "新增用户和角色关系")
+    @Operation(summary = "新增用户")
     @PostMapping("")
     public R<Void> addUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.addUserWithRoleIds(userRoleIdsDto);
         return R.ok();
     }
 
-    @Operation(summary = "更新用户和角色关系")
+    @Operation(summary = "更新用户")
     @PutMapping("")
     public R<Void> updateUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.updateUserWithRoleIds(userRoleIdsDto);
@@ -78,8 +80,15 @@ public class UserController {
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<Void> removeUserWithRoleIds(@PathVariable("id") @Parameter(description = "用户id") Long id) {
-        userService.removeUserWithRoleIds(id);
+    public R<Void> removeUser(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+        userService.removeUser(id);
+        return R.ok();
+    }
+
+    @Operation(summary = "批量删除用户")
+    @DeleteMapping("")
+    public R<Void> removeUsersWithRoleIds(@RequestBody Collection<Long> ids) {
+        userService.removeUsers(ids);
         return R.ok();
     }
 }

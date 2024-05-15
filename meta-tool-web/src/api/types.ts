@@ -4,6 +4,11 @@
  *    2、如果请求有顺序要求的，使用 request
  *    3、如果是分页，使用 usePagination
  *    4、其他情况，使用 useRequest
+ * 页面
+ *    1、动态路由视图组件命名规则：/{ParentName}?/{ComponentName}/index.vue
+ *        方便插件定位，只要输入index就可以定位到当前页面组件
+ *    2、如果是页面的一部分，可以放在componets文件夹下
+ *        命名规则：/{ParentName}?/{ComponentName}.vue
  */
 
 export interface ResultData<T = unknown> {

@@ -9,6 +9,8 @@ import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.UserRoleMenuVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 
+import java.util.Collection;
+
 /**
  * <p>
  * 用户表 服务类
@@ -28,18 +30,18 @@ public interface UserService extends IService<User> {
     String login(LoginDto loginDto);
 
     /**
-     * 获取用户信息，包含菜单和角色信息
+     * 获取用户信息（包含菜单和角色信息）
      *
      * @return 用户信息
      */
     UserRoleMenuVo getUserInfo();
 
     /**
-     * 获取用户分页，包含用户角色信息
+     * 获取用户分页（包含角色ids）
      *
-     * @param page       分页配置
+     * @param page       分页配置对象
      * @param searchName 搜索关键词
-     * @return 用户分页对象
+     * @return 分页结果
      */
     IPage<UserRoleVo> getUserPages(Page<UserRoleVo> page, String searchName);
 
@@ -63,5 +65,12 @@ public interface UserService extends IService<User> {
      *
      * @param id 用户id
      */
-    void removeUserWithRoleIds(Long id);
+    void removeUser(Long id);
+
+    /**
+     * 批量删除用户和角色关系
+     *
+     * @param ids 用户id列表
+     */
+    void removeUsers(Collection<Long> ids);
 }

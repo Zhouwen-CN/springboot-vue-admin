@@ -1,10 +1,6 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +30,10 @@ public class Role {
     @Schema(description = "角色名称")
     @TableField("`role_name`")
     private String roleName;
+
+    @Schema(description = "角色说明")
+    @TableField("`desc`")
+    private String desc;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

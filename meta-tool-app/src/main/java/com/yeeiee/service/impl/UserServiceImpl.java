@@ -28,6 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     private AuthenticationProvider authenticationProvider;
-
     private UserMapper userMapper;
     private MenuMapper menuMapper;
     private UserRoleService userRoleService;
@@ -81,8 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public IPage<UserRoleVo> getUserPages(Page<UserRoleVo> page, String searchName) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userMapper.selectUserPages(page, searchName, userDetails.getUsername());
+        return userMapper.selectUserPages(page, searchName);
     }
 
     @Override
@@ -109,7 +108,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateUserWithRoleIds(UserRoleIdsDto userRoleIdsDto) {
-        // 用户id
         val userId = userRoleIdsDto.getId();
 
         // 更新用户
@@ -117,7 +115,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (password == null || password.trim().length() == 0) {
             throw new DmlOperationException("更新失败，密码不能为空");
         }
-
         // 所有加密的密码都是以这个开头的
         if (!password.startsWith(BCRYPT_PREFIX)) {
             userRoleIdsDto.setPassword(bCryptPasswordEncoder.encode(password));
@@ -128,26 +125,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(userRoleIdsDto.getPassword());
         userMapper.updateById(user);
 
-        // 删除关系
+        // 获取当前ids 和 更新的ids 做差集
         val queryWrapper = new QueryWrapper<UserRole>();
         queryWrapper.eq("user_id", userId);
         val userRoleList = userRoleService.list(queryWrapper);
         val userRoleMap = userRoleList.stream().collect(Collectors.groupingBy(UserRole::getRoleId));
-        val currentRoleIdSet = userRoleMap.keySet();
-        val updateRoleIdSet = new HashSet<>(userRoleIdsDto.getRoleIds());
+        val currentSet = userRoleMap.keySet();
+        val updateSet = new HashSet<>(userRoleIdsDto.getRoleIds());
 
-        val deleteIdSet = new HashSet<>(currentRoleIdSet);
-        deleteIdSet.removeAll(updateRoleIdSet);
-        if (!deleteIdSet.isEmpty()) {
-            val deleteIds = deleteIdSet.stream().flatMap(id -> userRoleMap.get(id).stream()).map(UserRole::getId).toList();
-            userRoleService.removeBatchByIds(deleteIds);
+        // 当前 - 更新 = 删除
+        val deleteSet = new HashSet<>(currentSet);
+        deleteSet.removeAll(updateSet);
+        if (!deleteSet.isEmpty()) {
+            val deleteUserRoles = deleteSet.stream().flatMap(id -> userRoleMap.get(id).stream()).toList();
+            userRoleService.removeBatchByIds(deleteUserRoles);
         }
 
-        // 新增关系
-        val additionIdSet = new HashSet<>(updateRoleIdSet);
-        additionIdSet.removeAll(currentRoleIdSet);
-        if (!additionIdSet.isEmpty()) {
-            val additionUserRoleList = additionIdSet.stream().map(id -> {
+        // 更新 - 当前 = 新增
+        val additionSet = new HashSet<>(updateSet);
+        additionSet.removeAll(currentSet);
+        if (!additionSet.isEmpty()) {
+            val additionUserRoleList = additionSet.stream().map(id -> {
                 val userRole = new UserRole();
                 userRole.setUserId(userId);
                 userRole.setRoleId(id);
@@ -159,13 +157,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void removeUserWithRoleIds(Long id) {
+    public void removeUser(Long id) {
+        if (id == null) {
+            throw new DmlOperationException("user_id 不能为空");
+        }
         userMapper.deleteById(id);
         val queryWrapper = new QueryWrapper<UserRole>();
         queryWrapper.eq("user_id", id);
         val userRoleList = userRoleService.list(queryWrapper);
-        val userRoleIds = userRoleList.stream().map(UserRole::getId).toList();
-        userRoleService.removeBatchByIds(userRoleIds);
+        userRoleService.removeBatchByIds(userRoleList);
+    }
+
+    @Override
+    public void removeUsers(Collection<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new DmlOperationException("user_ids 不能为空");
+        }
+        userMapper.deleteBatchIds(ids);
+        val queryWrapper = new QueryWrapper<UserRole>();
+        queryWrapper.in("user_id", ids);
+        val userRoleList = userRoleService.list(queryWrapper);
+        userRoleService.removeBatchByIds(userRoleList);
     }
 
     /**

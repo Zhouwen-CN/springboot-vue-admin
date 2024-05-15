@@ -2,7 +2,6 @@ import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
 import type {Role} from '@/api/auth/role'
-import useRequest from '@/hooks/useRequest'
 
 export interface LoginForm {
     username: string
@@ -25,7 +24,7 @@ export interface Menu extends CreateAndUpdateTime {
     filePath: string
     icon: string
     pid: number
-    children: Array<Menu>
+    children: Menu[]
 }
 
 export interface UserMenuInfo {
@@ -55,7 +54,7 @@ export interface UserRoleInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetUserRolePage() {
-    return usePagination<UserRoleInfo>(`/user`)
+    return usePagination<UserRoleInfo>('/user')
 }
 
 export interface UserRoleForm {
@@ -85,13 +84,15 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
  * @param id 用户id
  * @returns
  */
-export function reqDeleteUserRole(id: number) {
-    // return request.delete(`/user/${id}`)
-    return useRequest(
-        {
-            url: `/user/${id}`,
-            method: 'delete'
-        },
-        true
-    )
+export function reqDeleteUser(id: number) {
+    return request.delete(`/user/${id}`)
+}
+
+/**
+ * 批量删除用户
+ * @param ids 用户id数组
+ * @returns
+ */
+export function reqDeleteUsers(ids: number[]) {
+    return request.delete<any, number[]>('/user', {data: ids})
 }
