@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public final class JwtTokenUtil {
     private static final String SECRET_KEY = "ApZmvgBrjutc69dCBzLKBXNi4xc%CVjAxCyAc2Q@nM^SgNQyJS2H^$dq5fsj&vu#KAR6^!*Msqs4nM#^zFhY@AXbLBnMR*uyBS4P@L3#bUhBUqUYfQDujSHj9ZXaWcK2";
-    private static final int EXPIRE = 7;
+    private static final int EXPIRE = 1;
 
     public static String generateToken(Authentication authentication) {
         String username = authentication.getName();

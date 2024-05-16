@@ -46,6 +46,7 @@ public class WebSecurityConfig {
             "/assets/**.css",
             "/assets/**.jpg",
             "/assets/**.png",
+            "/assets/**.svg",
             "/user/login",
             "/swagger-ui.html",
             "/v3/api-docs/**",
@@ -66,9 +67,10 @@ public class WebSecurityConfig {
                                 // permitAll 表示不进行拦截
                                 .permitAll()
                                 // 改为使用 RBAC
-                                // 注意：匹配上前面的，后面的就不看了
                                 .requestMatchers("/user").authenticated()
-                                .requestMatchers("/user/**", "/userRole/**", "/role/**", "/roleMenu/**", "/menu/**").hasRole("admin")
+                                // 这里的1代表admin，admin是不能被删除的
+                                // 这样做的目的是鉴权的时候可以少关联一张表
+                                .requestMatchers("/user/**", "/role/**", "/menu/**").hasRole("1")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
                                 // 已认证的请求会被自动授权

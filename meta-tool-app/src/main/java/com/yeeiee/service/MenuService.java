@@ -13,4 +13,17 @@ import com.yeeiee.entity.Menu;
  */
 public interface MenuService extends IService<Menu> {
 
+    /**
+     * 添加菜单
+     *
+     * @param menu 菜单
+     */
+    void addMenu(Menu menu);
+
+    /**
+     * 删除菜单
+     *
+     * @param id 菜单id
+     */
+    void deleteMenu(Long id);
 }

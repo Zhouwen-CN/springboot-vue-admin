@@ -1,16 +1,7 @@
-<script lang="ts" setup>
-import {ref} from 'vue';
-import IconSelect from '@/components/IconSelect.vue';
+<script lang="ts" setup></script>
 
-const value = ref('')
-
-
-</script>
 <template>
-  <div>
-    <h1>数据域管理</h1>
-    <IconSelect v-model="value"/>
-  </div>
+  <h1>这是 Field 页面</h1>
 </template>
 
 <style lang="scss" scoped></style>

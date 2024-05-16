@@ -1,6 +1,5 @@
 package com.yeeiee.security;
 
-import com.yeeiee.entity.Role;
 import com.yeeiee.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -26,16 +25,16 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        val userDto = userMapper.selectByUserName(username);
-        if (userDto == null) {
+        val userRoleVo = userMapper.selectByUserName(username);
+        if (userRoleVo == null) {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
         // 授权角色
-        val roles = userDto.getRoles().stream().map(Role::getRoleName).toArray(String[]::new);
+        val roleIds = userRoleVo.getRoleIds().split(",");
         return User.builder()
-                .username(userDto.getUsername())
-                .password(userDto.getPassword())
-                .roles(roles)
+                .username(userRoleVo.getUsername())
+                .password(userRoleVo.getPassword())
+                .roles(roleIds)
                 .build();
     }
 }

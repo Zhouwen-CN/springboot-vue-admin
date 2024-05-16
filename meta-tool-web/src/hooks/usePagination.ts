@@ -27,7 +27,7 @@ function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [5, 7, 9,
                 data.value = page.records
             })
             .catch((err) => {
-                console.error(err)
+                console.warn(err)
             })
     }
 

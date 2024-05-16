@@ -1,7 +1,6 @@
 package com.yeeiee.entity.vo;
 
 import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +21,6 @@ import java.util.List;
 public class UserRoleMenuVo {
     private Long id;
     private String username;
-    private List<Role> roles;
+    private List<Long> roleIds;
     private List<Menu> menus;
 }

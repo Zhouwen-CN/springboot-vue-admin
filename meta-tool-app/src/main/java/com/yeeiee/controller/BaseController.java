@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.val;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,16 +54,6 @@ public abstract class BaseController<S extends IService<D>, D> {
         val status = service.removeById(id);
         if (!status) {
             throw new DmlOperationException("删除失败【id】：" + id);
-        }
-        return R.ok();
-    }
-
-    @Operation(summary = "按照id批量删除")
-    @DeleteMapping("")
-    public R<Void> removeByIds(@RequestBody Collection<?> ids) {
-        val status = service.removeByIds(ids);
-        if (!status) {
-            throw new DmlOperationException("删除失败【ids】：" + ids);
         }
         return R.ok();
     }

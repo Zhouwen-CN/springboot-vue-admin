@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
 import useSettingStore from '@/stores/setting'
+import {Link} from '@element-plus/icons-vue';
 
 const userStore = useUserStore()
 const settingStore = useSettingStore()
@@ -16,7 +17,11 @@ const settingStore = useSettingStore()
           <h3 class="welcome_msg">
             Welcome {{ userStore.userMenuInfo.username }}
           </h3>
-          <p class="title_msg">{{ settingStore.title }}</p>
+          <div>
+            <el-link :href="settingStore.giteeLink" :icon="Link" class="title_msg" target="_blank" type="primary">
+              {{ settingStore.title }} Project Gitee Link
+            </el-link>
+          </div>
         </div>
       </div>
     </el-card>
@@ -51,8 +56,7 @@ const settingStore = useSettingStore()
     }
 
     .title_msg {
-      font-style: italic;
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 }

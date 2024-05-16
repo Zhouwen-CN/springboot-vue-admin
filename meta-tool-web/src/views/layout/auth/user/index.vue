@@ -11,6 +11,11 @@ import {
 } from '@/api/auth/user';
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {reqGetRoles} from '@/api/auth/role';
+import useUserStore from '@/stores/user';
+import {useRouter} from 'vue-router';
+
+const userStore = useUserStore()
+const router = useRouter()
 
 // 表单提交对象
 const userRoleForm = reactive<UserRoleForm>({
@@ -99,11 +104,9 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(users: UserRoleInfo[]) {
   deleteIds.value = users.map(user => user.id)
 }
-
 async function deleteUsers() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -125,12 +128,21 @@ async function onSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await reqSaveUserRole(userRoleForm)
-    pageRefresh()
+    toggleDialog.show = false
     ElMessage.success('操作成功')
+
+    // 如果修改的是当前用户，则退出重新登入
+    if (userRoleForm.id === userStore.userMenuInfo.id) {
+      const deleteNames = router.getRoutes().filter(r => !r.meta.require).map(r => (r.name as string))
+      deleteNames.forEach(name => router.removeRoute(name))
+      userStore.$reset()
+      router.replace('/login')
+      return
+    }
+
+    pageRefresh()
   } catch (error) {
     // do nothing
-  } finally {
-    toggleDialog.show = false
   }
 }
 
@@ -205,10 +217,11 @@ onMounted(() => {
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
+              <!-- TODO: 不能修改admin用户密码，上线后可以打开 -->
+              <el-button :disabled="row.id === 1" :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteUser(row.id)">
                 <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
+                  <el-button :disabled="row.id === 1" :icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -236,7 +249,7 @@ onMounted(() => {
           </el-form-item>
           <!-- 多选框组 -->
           <el-form-item label="角色列表" prop="roleIds">
-            <el-space alignment="flex-start" direction="vertical">
+            <el-space v-if="userRoleForm.id !== 1" alignment="stretch" direction="vertical">
               <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
                 全选
               </el-checkbox>

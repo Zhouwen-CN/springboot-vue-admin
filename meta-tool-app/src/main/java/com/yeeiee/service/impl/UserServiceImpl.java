@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.Role;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.LoginDto;
@@ -27,11 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,15 +61,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserRoleMenuVo getUserInfo() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        val userDto = userMapper.selectByUserName(userDetails.getUsername());
-        val roleIds = userDto.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
+        val userRoleVo = userMapper.selectByUserName(userDetails.getUsername());
+        val roleIds = Arrays.stream(userRoleVo.getRoleIds().split(",")).map(Long::parseLong).toList();
         val menuList = menuMapper.selectMenusByRoleIds(roleIds);
         val menuTree = convertToMenuTree(menuList);
 
         val userRoleMenuVo = new UserRoleMenuVo();
-        userRoleMenuVo.setId(userDto.getId());
-        userRoleMenuVo.setUsername(userDto.getUsername());
-        userRoleMenuVo.setRoles(userDto.getRoles());
+        userRoleMenuVo.setId(userRoleVo.getId());
+        userRoleMenuVo.setUsername(userRoleVo.getUsername());
+        userRoleMenuVo.setRoleIds(roleIds);
         userRoleMenuVo.setMenus(menuTree);
         return userRoleMenuVo;
     }
@@ -113,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新用户
         val password = userRoleIdsDto.getPassword();
         if (password == null || password.trim().length() == 0) {
-            throw new DmlOperationException("更新失败，密码不能为空");
+            throw new DmlOperationException("密码不能为空");
         }
         // 所有加密的密码都是以这个开头的
         if (!password.startsWith(BCRYPT_PREFIX)) {
@@ -158,8 +153,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUser(Long id) {
-        if (id == null) {
-            throw new DmlOperationException("user_id 不能为空");
+        // tip: 1号用户不能删除
+        if (id == 1L) {
+            throw new DmlOperationException("①号用户不能删除");
         }
         userMapper.deleteById(id);
         val queryWrapper = new QueryWrapper<UserRole>();
@@ -170,8 +166,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUsers(Collection<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            throw new DmlOperationException("user_ids 不能为空");
+        if (ids.contains(1L)) {
+            throw new DmlOperationException("①号用户不能删除");
         }
         userMapper.deleteBatchIds(ids);
         val queryWrapper = new QueryWrapper<UserRole>();

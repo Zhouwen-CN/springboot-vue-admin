@@ -33,9 +33,7 @@ function addRoutes(modules: Record<string, () => Promise<unknown>>, menus?: Menu
     const routes = getAsyncRoutes(modules, menus)
 
     routes.forEach((route) => {
-        if (!router.hasRoute(route.name as string)) {
-            router.addRoute('Layout', route)
-        }
+        router.addRoute('Layout', route)
     })
 }
 
@@ -50,8 +48,8 @@ router.beforeEach((to, from, next) => {
     NProgress.start()
     // 取消上一个页面的所有请求
     const pendingRequest = request.getPendingRequest()
-    pendingRequest.forEach((cancel) => {
-        cancel()
+    pendingRequest.forEach((cancel, path) => {
+        cancel('取消上一个页面未完成请求：' + path)
     })
     pendingRequest.clear()
 

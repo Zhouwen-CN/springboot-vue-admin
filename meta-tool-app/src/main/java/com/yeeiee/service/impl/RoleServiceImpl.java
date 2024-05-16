@@ -11,9 +11,9 @@ import com.yeeiee.entity.dto.RoleMenuIdsDto;
 import com.yeeiee.entity.vo.RoleMenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.RoleMapper;
+import com.yeeiee.mapper.UserRoleMapper;
 import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.service.RoleService;
-import com.yeeiee.service.UserRoleService;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,8 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     private RoleMapper roleMapper;
+    private UserRoleMapper userRoleMapper;
     private RoleMenuService roleMenuService;
-    private UserRoleService userRoleService;
 
     @Override
     public IPage<RoleMenuVo> getRolePages(Page<RoleMenuVo> page, String searchName) {
@@ -110,13 +110,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRole(Long id) {
-        if (id == null) {
-            throw new DmlOperationException("role_id 不能为空");
+        if (id == 1L) {
+            throw new DmlOperationException("①号角色不能删除");
         }
 
-        val userRoleList = userRoleService.list(new QueryWrapper<UserRole>().eq("role_id", id));
+        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().eq("role_id", id));
         if (!userRoleList.isEmpty()) {
-            throw new DmlOperationException("还有用户依赖，执行删除失败");
+            val userIds = userRoleList.stream().map(UserRole::getUserId).toList();
+            throw new DmlOperationException("删除失败，还有用户依赖：" + userIds);
         }
 
         roleMapper.deleteById(id);
@@ -126,13 +127,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRoles(Collection<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            throw new DmlOperationException("role_ids 不能为空");
+        if (ids.contains(1L)) {
+            throw new DmlOperationException("①号角色不能删除");
         }
 
-        val userRoleList = userRoleService.list(new QueryWrapper<UserRole>().in("role_id", ids));
+        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().in("role_id", ids));
         if (!userRoleList.isEmpty()) {
-            throw new DmlOperationException("还有用户依赖，执行删除失败");
+            val userIds = userRoleList.stream().map(UserRole::getUserId).toList();
+            throw new DmlOperationException("删除失败，还有用户依赖：" + userIds);
         }
 
         roleMapper.deleteBatchIds(ids);

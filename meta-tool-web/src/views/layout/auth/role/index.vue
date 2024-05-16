@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Delete, Edit, Search} from '@element-plus/icons-vue';
-import {nextTick, onMounted, reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {
   reqDeleteRole,
   reqDeleteRoles,
@@ -16,13 +16,13 @@ import type {Menu} from '@/api/auth/user';
 const userStore = useUserStore()
 
 // 表单
-const ruleFormRef = ref<FormInstance>();
 const roleMenuForm = reactive<RoleMenuForm>({
   id: undefined,
   roleName: '',
   desc: '',
   menuIds: []
 });
+const ruleFormRef = ref<FormInstance>();
 const rules = reactive<FormRules<typeof roleMenuForm>>({
   roleName: [
     {required: true, message: '请输入用户名', trigger: 'blur'}
@@ -65,10 +65,7 @@ function updateRole(row: RoleMenuInfo) {
   roleMenuForm.roleName = row.roleName
   roleMenuForm.desc = row.desc
   const menuIds = row.menuIds?.split(',').map(id => Number(id)) || []
-  const selectedKeys = getSelectKeys(userStore.userMenuInfo.menus, menuIds)
-  nextTick(() => {
-    menuTreeRef.value?.setCheckedKeys(selectedKeys)
-  })
+  roleMenuForm.menuIds = getSelectKeys(userStore.userMenuInfo.menus, menuIds)
 }
 
 // 删除角色
@@ -84,11 +81,9 @@ async function deleteRole(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(roles: RoleMenuInfo[]) {
   deleteIds.value = roles.map(role => role.id)
 }
-
 async function deleteRoles() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -114,10 +109,10 @@ async function onSubmit(formEl: FormInstance | undefined) {
     roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map(key => Number(key))
     await reqSaveRoleMenu(roleMenuForm)
     pageRefresh()
+    toggleDialog.show = false
+    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
-  } finally {
-    toggleDialog.show = false
   }
 }
 
@@ -188,7 +183,7 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table ref="ruleFormRef" :border="true" :data="pageData" row-key="id" style="margin-top: 16px;"
+      <el-table :border="true" :data="pageData" row-key="id" style="margin-top: 16px;"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
@@ -202,7 +197,7 @@ onMounted(() => {
               <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
                 <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
+                  <el-button :disabled="row.id === 1" :icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -221,18 +216,16 @@ onMounted(() => {
     <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
       <template #footer>
         <el-form ref="ruleFormRef" :model="roleMenuForm" :rules="rules" label-width="80px" style="padding: 0 20px">
-          <!-- TODO: 默认角色名称是不能修改的，不然会有不好的事情发生 -->
           <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="roleMenuForm.roleName" :disabled="roleMenuForm.id"
-                      placeholder="请输入角色名称"></el-input>
+            <el-input v-model="roleMenuForm.roleName" placeholder="请输入角色名称"></el-input>
           </el-form-item>
           <el-form-item label="角色说明" prop="desc">
             <el-input v-model="roleMenuForm.desc" placeholder="请输入角色说明"></el-input>
           </el-form-item>
           <!-- 树形控件 -->
-          <el-form-item>
-            <el-tree ref="menuTreeRef" :data="userStore.userMenuInfo.menus" :props="defaultProps" node-key="id"
-                     show-checkbox style="max-width: 600px"/>
+          <el-form-item label="菜单权限">
+            <el-tree v-if="roleMenuForm.id !== 1" ref="menuTreeRef" :data="userStore.userMenuInfo.menus"
+                     :default-checked-keys="roleMenuForm.menuIds" :props="defaultProps" node-key="id" show-checkbox/>
           </el-form-item>
           <el-form-item>
             <el-button @click="toggleDialog.show = false">取消</el-button>

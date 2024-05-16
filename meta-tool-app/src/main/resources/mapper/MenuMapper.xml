@@ -16,7 +16,7 @@
 
     <select id="selectMenusByRoleIds" resultMap="BaseResultMap" parameterType="collection">
         select
-        a.id, a.title, a.access_path, a.file_path, a.icon, ifnull(a.pid,0) as pid, a.create_time, a.update_time
+        a.id, a.title, a.access_path, a.file_path, a.icon, a.pid, a.create_time, a.update_time
         from t_menu a
         join (
         select
@@ -24,7 +24,6 @@
         from
         t_role_menu
         <where>
-
             <choose>
                 <when test="roleIds != null and roleIds.size() > 0">
                     role_id in
@@ -41,5 +40,6 @@
         menu_id
         ) b
         on a.id = b.menu_id
+        order by a.id
     </select>
 </mapper>

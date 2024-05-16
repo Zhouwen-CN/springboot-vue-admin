@@ -1,7 +1,6 @@
 import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
-import type {Role} from '@/api/auth/role'
 
 export interface LoginForm {
     username: string
@@ -30,7 +29,7 @@ export interface Menu extends CreateAndUpdateTime {
 export interface UserMenuInfo {
     id: number
     username: string
-    roles: Role[]
+    roleIds: number[]
     menus: Menu[]
 }
 
