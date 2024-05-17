@@ -149,7 +149,8 @@ function clean() {
           <template #default="{ row }">
             <el-button-group>
               <el-button :disabled="row.level > 1" :icon="Plus" type="primary" @click="addSubmenu(row.id)"/>
-              <el-button :icon="Edit" type="primary" @click="updateMenu(row)"/>
+              <!-- TODO: 不能修改权限菜单，上线后可以打开 -->
+              <el-button :disabled="row.id <= 4" :icon="Edit" type="primary" @click="updateMenu(row)"/>
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
                   <el-button :disabled="row.level < 1 || row.children?.length > 0 || row.id <= 4" :icon="Delete"

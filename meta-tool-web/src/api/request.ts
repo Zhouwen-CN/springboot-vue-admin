@@ -3,13 +3,15 @@ import axios, {AxiosError} from 'axios'
 import {ElMessage} from 'element-plus'
 import type {ResultData} from '@/api/types'
 import useUserStore from '@/stores/user'
+import router from '@/router'
+import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
 
 const config = {
-  baseURL: import.meta.env.VITE_APP_BASE_URL,
-  timeout: import.meta.env.VITE_APP_TIMEOUT,
-  headers: {
-    'Content-type': 'application/json;charset=utf-8'
-  }
+    baseURL: import.meta.env.VITE_APP_BASE_URL,
+    timeout: import.meta.env.VITE_APP_TIMEOUT,
+    headers: {
+        'Content-type': 'application/json;charset=utf-8'
+    }
 }
 
 class Request {
@@ -23,40 +25,40 @@ class Request {
     // 请求拦截器
     this.instance.interceptors.request.use(
         (config) => {
-          this.removePath(config)
-          this.addPath(config)
-          // set token to request header if exists
-          const userStore = useUserStore()
-          if (userStore.token) {
-            config.headers.Authorization = `Bearer ${userStore.token}`
-          }
-          // 设置请求头 config.headers
-          return config
+            this.removePath(config)
+            this.addPath(config)
+            // set token to request header if exists
+            const userStore = useUserStore()
+            if (userStore.token) {
+                config.headers.Authorization = `Bearer ${userStore.token}`
+            }
+            // 设置请求头 config.headers
+            return config
         },
         (error) => {
-          return Promise.reject(error)
+            return Promise.reject(error)
         }
     )
 
     // 响应拦截器
     this.instance.interceptors.response.use(
         (response) => {
-          const {data, config} = response
-          this.removePath(config)
-          if (data.code !== 200) {
-            this.alterMessage(data.code, data.message)
-            return Promise.reject(data.message)
-          }
-          return data
+            const {data, config} = response
+            this.removePath(config)
+            if (data.code !== 200) {
+                this.alterMessage(data.code, data.message)
+                return Promise.reject(data.message)
+            }
+            return data
         },
         (error) => {
-          if (error instanceof AxiosError) {
-            this.alterMessage(400, error.message)
-          } else if (error.response) {
-            const response = error.response
-            this.alterMessage(response.status, response.statusText)
-          }
-          return Promise.reject(error)
+            if (error instanceof AxiosError) {
+                this.alterMessage(400, error.message)
+            } else if (error.response) {
+                const response = error.response
+                this.alterMessage(response.status, response.statusText)
+            }
+            return Promise.reject(error)
         }
     )
   }
@@ -126,7 +128,11 @@ class Request {
     if (code > 200 && code < 400) {
       ElMessage.info(message)
     } else if (code >= 400 && code < 500) {
-      ElMessage.warning(message)
+        // token失效退出登入
+        if (code === 401) {
+            deleteAsyncRoutesAndExit(router, useUserStore())
+        }
+        ElMessage.warning(message)
     } else if (code >= 500) {
       ElMessage.error(message)
     }

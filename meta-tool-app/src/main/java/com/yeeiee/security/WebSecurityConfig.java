@@ -88,7 +88,7 @@ public class WebSecurityConfig {
                             ).accessDeniedHandler((HttpServletRequest request,
                                                    HttpServletResponse response,
                                                    AccessDeniedException accessDeniedException
-                            ) -> writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未授权")));
+                            ) -> writeResponse(response, R.error(HttpStatus.FORBIDDEN, "用户未授权")));
                         }
                 );
         return http.build();

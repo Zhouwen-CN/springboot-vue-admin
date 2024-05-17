@@ -197,7 +197,7 @@ onMounted(() => {
               <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
                 <template #reference>
-                  <el-button :disabled="row.id === 1" :icon="Delete" type="danger"></el-button>
+                  <el-button :icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>

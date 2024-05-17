@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <el-empty class="empty" description="No Data" image-size="300"/>
+  <el-empty :image-size="300" class="empty" description="No Data"/>
 </template>
 
 <style lang="scss" scoped>

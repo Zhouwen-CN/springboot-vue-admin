@@ -2,9 +2,8 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import request from '@/api/request'
 import useUserStore from '@/stores/user'
 import defaultRoutes from '@/router/defaultRoutes'
-import getAsyncRoutes from '@/router/asyncRoutes'
+import {getAsyncRoutes} from '@/router/asyncRoutes'
 import type {Menu, UserMenuInfo} from '@/api/auth/user'
-import {ElMessage} from 'element-plus'
 // @ts-ignore
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -25,7 +24,6 @@ function addRoutes(modules: Record<string, () => Promise<unknown>>, menus?: Menu
     if (!menus) {
         const localStorageUserInfo = localStorage.getItem('INFO')
         if (!localStorageUserInfo) {
-            ElMessage.warning('路由信息丢失，请重新登录')
             return
         }
         menus = (JSON.parse(localStorageUserInfo) as UserMenuInfo).menus

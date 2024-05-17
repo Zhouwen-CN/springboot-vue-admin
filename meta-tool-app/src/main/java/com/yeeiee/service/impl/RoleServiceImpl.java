@@ -110,14 +110,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRole(Long id) {
-        if (id == 1L) {
-            throw new DmlOperationException("①号角色不能删除");
-        }
-
         val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().eq("role_id", id));
         if (!userRoleList.isEmpty()) {
             val userIds = userRoleList.stream().map(UserRole::getUserId).toList();
-            throw new DmlOperationException("删除失败，还有用户依赖：" + userIds);
+            throw new DmlOperationException("删除失败，尚有用户依赖：" + userIds);
         }
 
         roleMapper.deleteById(id);
@@ -127,14 +123,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRoles(Collection<Long> ids) {
-        if (ids.contains(1L)) {
-            throw new DmlOperationException("①号角色不能删除");
-        }
-
         val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().in("role_id", ids));
         if (!userRoleList.isEmpty()) {
             val userIds = userRoleList.stream().map(UserRole::getUserId).toList();
-            throw new DmlOperationException("删除失败，还有用户依赖：" + userIds);
+            throw new DmlOperationException("删除失败，尚有用户依赖：" + userIds);
         }
 
         roleMapper.deleteBatchIds(ids);

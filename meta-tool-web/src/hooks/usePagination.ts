@@ -4,9 +4,9 @@ import type {Page} from '@/api/types'
 import type {AxiosRequestConfig} from 'axios'
 
 /**
- * 默认走 get 请求，并且不会立即请求，而是返回函数
- * 后端请求接口格式默认一致：${baseUrl}/${size.value}/${current.value}
- * @param baseUrl 请求基础路由
+ * 走 get 请求，并且不会立即请求
+ * 后端请求接口格式保持一致：${baseUrl}/${size.value}/${current.value}
+ * @param baseUrl 请求基础url
  * @param sizeOption 可选的分页大小选项
  * @returns
  */

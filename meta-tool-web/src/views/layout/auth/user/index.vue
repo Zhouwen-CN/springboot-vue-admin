@@ -13,6 +13,7 @@ import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
 import {reqGetRoles} from '@/api/auth/role';
 import useUserStore from '@/stores/user';
 import {useRouter} from 'vue-router';
+import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes';
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -133,10 +134,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
 
     // 如果修改的是当前用户，则退出重新登入
     if (userRoleForm.id === userStore.userMenuInfo.id) {
-      const deleteNames = router.getRoutes().filter(r => !r.meta.require).map(r => (r.name as string))
-      deleteNames.forEach(name => router.removeRoute(name))
-      userStore.$reset()
-      router.replace('/login')
+      deleteAsyncRoutesAndExit(router, userStore)
       return
     }
 

@@ -41,7 +41,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         val parentMenus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", id));
         if (!parentMenus.isEmpty()) {
             val parentMenuIds = parentMenus.stream().map(Menu::getId).toList();
-            throw new DmlOperationException("删除失败，还有子菜单依赖：" + parentMenuIds);
+            throw new DmlOperationException("删除失败，尚有子菜单依赖：" + parentMenuIds);
         }
 
         // 1-4 是权限菜单

@@ -155,7 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void removeUser(Long id) {
         // tip: 1号用户不能删除
         if (id == 1L) {
-            throw new DmlOperationException("①号用户不能删除");
+            throw new DmlOperationException("① 号用户不能删除");
         }
         userMapper.deleteById(id);
         val queryWrapper = new QueryWrapper<UserRole>();
@@ -167,7 +167,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void removeUsers(Collection<Long> ids) {
         if (ids.contains(1L)) {
-            throw new DmlOperationException("①号用户不能删除");
+            throw new DmlOperationException("① 号用户不能删除");
         }
         userMapper.deleteBatchIds(ids);
         val queryWrapper = new QueryWrapper<UserRole>();

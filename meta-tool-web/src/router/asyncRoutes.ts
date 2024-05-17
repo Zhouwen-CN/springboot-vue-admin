@@ -1,7 +1,14 @@
 import type {Menu} from '@/api/auth/user'
-import type {RouteRecordSingleViewWithChildren} from 'vue-router'
+import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
+import useUserStore from '@/stores/user'
 
-function getAsyncRoutes(
+/**
+ * 获取异步路由
+ * @param modules
+ * @param menus
+ * @returns
+ */
+export function getAsyncRoutes(
     modules: Record<string, () => Promise<unknown>>,
     menus: Menu[]
 ): RouteRecordSingleViewWithChildren[] {
@@ -27,4 +34,21 @@ function getAsyncRoutes(
     })
 }
 
-export default getAsyncRoutes
+/**
+ * 删除异步路由并退出登入
+ * @param router 路由对象
+ * @param userStore 用户状态存储对象
+ */
+export function deleteAsyncRoutesAndExit(
+    router: Router,
+    userStore: ReturnType<typeof useUserStore>
+) {
+    // 删除默认路由以外的路由
+    const deleteNames = router
+        .getRoutes()
+        .filter((r) => !r.meta.require)
+        .map((r) => r.name as string)
+    deleteNames.forEach((name) => router.removeRoute(name))
+    userStore.$reset()
+    router.replace('/login')
+}

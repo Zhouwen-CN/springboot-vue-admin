@@ -3,14 +3,14 @@ import {useRoute, useRouter} from 'vue-router'
 import useUserStore from '@/stores/user'
 import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting';
-import {computed, ref} from 'vue';
+import {computed} from 'vue';
+import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
+import {ElMessage} from 'element-plus';
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
-
-const editableTabsValue = ref('')
 
 // 刷新
 function refresh() {
@@ -30,12 +30,8 @@ function toggleFullScreen() {
 
 // 登出
 function logout() {
-  // 删除默认路由以外的路由
-  const deleteNames = router.getRoutes().filter(r => !r.meta.require).map(r => (r.name as string))
-  deleteNames.forEach(name => router.removeRoute(name))
-
-  userStore.$reset()
-  router.replace('/login')
+  deleteAsyncRoutesAndExit(router, userStore)
+  ElMessage.success('退出成功')
 }
 
 // 路由信息
