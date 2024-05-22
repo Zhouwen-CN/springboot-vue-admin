@@ -12,9 +12,13 @@ const settingStore = useSettingStore()
 <template>
   <el-container>
     <!-- 侧边栏菜单 -->
-    <el-aside class="aside" width="200px">
+    <el-aside :class="`aside aside_${settingStore.collapse ? 'collapse' : 'expand'}`">
       <el-scrollbar>
-        <h1>{{ settingStore.title }}</h1>
+        <div>
+          <h1 v-if="!settingStore.collapse">{{ settingStore.title }}</h1>
+          <img v-else alt="" src="@/assets/logo.svg" style="width: 63px"/>
+        </div>
+
         <el-menu
             :default-active="useRoute().path"
             active-text-color="#409eff"
@@ -22,15 +26,15 @@ const settingStore = useSettingStore()
             router
             text-color="#bfcbd9"
             unique-opened
+            :collapse="settingStore.collapse"
+            :collapse-transition="false"
         >
           <el-menu-item index="/home">
+            <el-icon :size="20">
+              <HomeFilled/>
+            </el-icon>
             <template #title>
-              <el-space>
-                <el-icon :size="20">
-                  <HomeFilled/>
-                </el-icon>
-                <span>首页</span>
-              </el-space>
+              <span>首页</span>
             </template>
           </el-menu-item>
           <Menu :menus="useUserStore().userMenuInfo.menus"></Menu>
@@ -75,8 +79,15 @@ const settingStore = useSettingStore()
   height: $base_header_height;
 }
 
-.aside {
+.aside_expand {
   width: $base_aside_width;
+}
+
+.aside_collapse {
+  width: $base_aside_collapse_width;
+}
+
+.aside {
   height: calc(100vh - 1px);
   background-color: $base_aside_bg_color;
 

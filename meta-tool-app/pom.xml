@@ -107,6 +107,9 @@
                     <filesets>
                         <fileset>
                             <directory>src/main/resources/static</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
                         </fileset>
                         <fileset>
                             <directory>${project.basedir}/../meta-tool-web/dist</directory>
@@ -145,5 +148,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

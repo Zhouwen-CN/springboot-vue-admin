@@ -38,19 +38,29 @@ function logout() {
 const routeInfo = computed(() => {
   return route.matched.filter((item) => item.meta.title)
 })
+
+function changeCollapse() {
+  settingStore.collapse = !settingStore.collapse
+}
 </script>
 
 <template>
   <div class="header">
-    <!-- 左侧面包屑 -->
-    <el-breadcrumb :separator-icon="ArrowRight">
-      <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
-        <el-icon>
-          <component :is="item.meta.icon"></component>
-        </el-icon>
-        <span style="margin-left: 5px">{{ item.meta.title }}</span>
-      </el-breadcrumb-item>
-    </el-breadcrumb>
+    <div class="left">
+      <!-- 展开收起按钮 -->
+      <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
+        <component :is="settingStore.collapse ? 'Expand' : 'Fold'"></component>
+      </el-icon>
+      <!-- 左侧面包屑 -->
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
+          <el-icon>
+            <component :is="item.meta.icon"></component>
+          </el-icon>
+          <span style="margin-left: 5px">{{ item.meta.title }}</span>
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
@@ -86,5 +96,10 @@ const routeInfo = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .left {
+    display: flex;
+    align-items: center;
+  }
 }
 </style>
