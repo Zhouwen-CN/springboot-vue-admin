@@ -12,6 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * <p>
  * 菜单表 服务实现类
@@ -53,5 +58,44 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         val roleMenuList = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("menu_id", id));
         roleMenuMapper.deleteBatchIds(roleMenuList);
+    }
+
+    @Override
+    public List<Menu> getMenuList(Collection<Long> ids) {
+        val menuList = menuMapper.selectMenusByRoleIds(ids);
+        return convertToMenuTree(menuList);
+    }
+
+    /**
+     * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
+     */
+    private List<Menu> convertToMenuTree(List<Menu> menuList) {
+        val menuItemMap = new HashMap<Long, Menu>(8);
+        val menuTree = new ArrayList<Menu>();
+        for (Menu menu : menuList) {
+            val id = menu.getId();
+            val pid = menu.getPid();
+
+            if (!menuItemMap.containsKey(id)) {
+                menuItemMap.put(id, new Menu().setChildren(new ArrayList<>()));
+            }
+
+            val item = menuItemMap.get(id);
+            if (item.getId() == null) {
+                Menu.mergeMenu(item, menu);
+            }
+
+            if (pid == 0) {
+                menuTree.add(item);
+            } else {
+                if (!menuItemMap.containsKey(pid)) {
+                    menuItemMap.put(pid, new Menu().setChildren(new ArrayList<>()));
+                }
+                val children = menuItemMap.get(pid).getChildren();
+                children.add(item);
+            }
+        }
+
+        return menuTree;
     }
 }

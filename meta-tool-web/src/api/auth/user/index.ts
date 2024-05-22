@@ -1,10 +1,18 @@
 import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
+import type {Menu} from '@/api/auth/menu'
 
 export interface LoginForm {
     username: string
     password: string
+}
+
+export interface UserMenuInfo {
+    username: string
+    token: string
+    roleIds: number[]
+    menus?: Menu[]
 }
 
 /**
@@ -13,32 +21,7 @@ export interface LoginForm {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-    return request.post<string, LoginForm>('/user/login', loginForm)
-}
-
-export interface Menu extends CreateAndUpdateTime {
-    id: number
-    title: string
-    accessPath: string
-    filePath: string
-    icon: string
-    pid: number
-    children: Menu[]
-}
-
-export interface UserMenuInfo {
-    id: number
-    username: string
-    roleIds: number[]
-    menus: Menu[]
-}
-
-/**
- * 获取用户信息，包括角色信息和权限菜单
- * @returns
- */
-export function reqGetUserMenuInfo() {
-    return request.get<UserMenuInfo>('/user')
+    return request.post<UserMenuInfo, LoginForm>('/user/login', loginForm)
 }
 
 export interface UserRoleInfo extends CreateAndUpdateTime {

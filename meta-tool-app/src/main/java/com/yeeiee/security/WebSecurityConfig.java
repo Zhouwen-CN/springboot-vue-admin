@@ -67,7 +67,7 @@ public class WebSecurityConfig {
                                 // permitAll 表示不进行拦截
                                 .permitAll()
                                 // 改为使用 RBAC
-                                .requestMatchers("/user").authenticated()
+                                .requestMatchers("/menu").authenticated()
                                 // 这里的1代表admin，admin是不能被删除的
                                 // 这样做的目的是鉴权的时候可以少关联一张表
                                 .requestMatchers("/user/**", "/role/**", "/menu/**").hasRole("1")

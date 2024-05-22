@@ -2,10 +2,10 @@
 import {useRoute, useRouter} from 'vue-router'
 import useUserStore from '@/stores/user'
 import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
-import useSettingStore from '@/stores/setting';
-import {computed} from 'vue';
+import useSettingStore from '@/stores/setting'
+import {computed} from 'vue'
 import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
-import {ElMessage} from 'element-plus';
+import {ElMessage} from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -36,7 +36,7 @@ function logout() {
 
 // 路由信息
 const routeInfo = computed(() => {
-  return route.matched.filter(item => item.meta.title)
+  return route.matched.filter((item) => item.meta.title)
 })
 </script>
 
@@ -48,17 +48,19 @@ const routeInfo = computed(() => {
         <el-icon>
           <component :is="item.meta.icon"></component>
         </el-icon>
-        <span style="margin-left: 5px;">{{ item.meta.title }}</span>
+        <span style="margin-left: 5px">{{ item.meta.title }}</span>
       </el-breadcrumb-item>
-
     </el-breadcrumb>
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
         <el-button :icon="Refresh" circle size="default" @click="refresh"></el-button>
         <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
-        <el-avatar shape="square" size="default"
-                   src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
+        <el-avatar
+            shape="square"
+            size="default"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+        >
         </el-avatar>
 
         <el-dropdown>

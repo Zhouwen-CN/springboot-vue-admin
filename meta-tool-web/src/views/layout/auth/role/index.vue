@@ -11,7 +11,7 @@ import {
 } from '@/api/auth/role';
 import {ElMessage, type FormInstance, type FormRules, type TreeInstance} from 'element-plus';
 import useUserStore from '@/stores/user';
-import type {Menu} from '@/api/auth/user';
+import type {Menu} from '@/api/auth/menu';
 
 const userStore = useUserStore()
 
@@ -65,7 +65,7 @@ function updateRole(row: RoleMenuInfo) {
   roleMenuForm.roleName = row.roleName
   roleMenuForm.desc = row.desc
   const menuIds = row.menuIds?.split(',').map(id => Number(id)) || []
-  roleMenuForm.menuIds = getSelectKeys(userStore.userMenuInfo.menus, menuIds)
+  roleMenuForm.menuIds = getSelectKeys(userStore.userMenuInfo.menus as Menu[], menuIds)
 }
 
 // 删除角色

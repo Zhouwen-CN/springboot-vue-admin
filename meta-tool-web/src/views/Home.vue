@@ -1,24 +1,31 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
 import useSettingStore from '@/stores/setting'
-import {Link} from '@element-plus/icons-vue';
+import {Link} from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
 const settingStore = useSettingStore()
-
 </script>
 
 <template>
   <div>
     <el-card>
       <div class="box">
-        <img alt="" class="avatar" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
+        <img
+            alt=""
+            class="avatar"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+        />
         <div class="message">
-          <h3 class="welcome_msg">
-            Welcome {{ userStore.userMenuInfo.username }}
-          </h3>
+          <h3 class="welcome_msg">Welcome {{ userStore.userMenuInfo.username }}</h3>
           <div>
-            <el-link :href="settingStore.giteeLink" :icon="Link" class="title_msg" target="_blank" type="primary">
+            <el-link
+                :href="settingStore.giteeLink"
+                :icon="Link"
+                class="title_msg"
+                target="_blank"
+                type="primary"
+            >
               {{ settingStore.title }} Project Gitee Link
             </el-link>
           </div>
@@ -36,7 +43,6 @@ const settingStore = useSettingStore()
 .box {
   display: flex;
   justify-content: start;
-
 
   .avatar {
     width: 100px;

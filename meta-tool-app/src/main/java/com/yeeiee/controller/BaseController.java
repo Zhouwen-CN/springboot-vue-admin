@@ -50,7 +50,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
-    public R<Void> removeById(@PathVariable("id") Long id) {
+    public R<String> removeById(@PathVariable("id") Long id) {
         val status = service.removeById(id);
         if (!status) {
             throw new DmlOperationException("删除失败【id】：" + id);
@@ -60,7 +60,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "新增")
     @PostMapping("")
-    public R<Void> save(@RequestBody D entity) {
+    public R<String> save(@RequestBody D entity) {
         val status = service.save(entity);
         if (!status) {
             throw new DmlOperationException("新增失败【entity】：" + entity);
@@ -70,7 +70,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "更新")
     @PutMapping("")
-    public R<Void> update(@RequestBody D entity) {
+    public R<String> update(@RequestBody D entity) {
         val status = service.updateById(entity);
         if (!status) {
             throw new DmlOperationException("更新失败【entity】：" + entity);
@@ -80,7 +80,7 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "新增或者更新")
     @PostMapping("/save")
-    public R<Void> saveOrUpdate(@RequestBody D entity) {
+    public R<String> saveOrUpdate(@RequestBody D entity) {
         val status = service.saveOrUpdate(entity);
         if (!status) {
             throw new DmlOperationException("upsert失败【entity】：" + entity);

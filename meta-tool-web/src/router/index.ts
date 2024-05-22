@@ -3,7 +3,8 @@ import request from '@/api/request'
 import useUserStore from '@/stores/user'
 import defaultRoutes from '@/router/defaultRoutes'
 import {getAsyncRoutes} from '@/router/asyncRoutes'
-import type {Menu, UserMenuInfo} from '@/api/auth/user'
+import type {UserMenuInfo} from '@/api/auth/user'
+import type {Menu} from '@/api/auth/menu'
 // @ts-ignore
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -22,7 +23,7 @@ const router = createRouter({
 // 添加路由方法
 function addRoutes(modules: Record<string, () => Promise<unknown>>, menus?: Menu[]) {
     if (!menus) {
-        const localStorageUserInfo = localStorage.getItem('INFO')
+        const localStorageUserInfo = localStorage.getItem('USER_INFO')
         if (!localStorageUserInfo) {
             return
         }
@@ -53,7 +54,8 @@ router.beforeEach((to, from, next) => {
 
     // 是否登录
     const userStore = useUserStore()
-    if (userStore.token) {
+    const token = userStore.userMenuInfo.token
+    if (token) {
         // 动态加载路由
         addRoutes(modules, userStore.userMenuInfo.menus)
 

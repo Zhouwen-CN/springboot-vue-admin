@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import useSettingStore from '@/stores/setting';
-import useUserStore from '@/stores/user';
+import useSettingStore from '@/stores/setting'
+import useUserStore from '@/stores/user'
 import {RouterView, useRoute} from 'vue-router'
 import {HomeFilled} from '@element-plus/icons-vue'
 import Menu from '@/components/layout/Menu.vue'
@@ -11,11 +11,18 @@ const settingStore = useSettingStore()
 
 <template>
   <el-container>
+    <!-- 侧边栏菜单 -->
     <el-aside class="aside" width="200px">
       <el-scrollbar>
-        <h1> {{ settingStore.title }} </h1>
-        <el-menu :default-active="useRoute().path" active-text-color="#409eff" background-color="#304156" router
-                 text-color="#bfcbd9" unique-opened>
+        <h1>{{ settingStore.title }}</h1>
+        <el-menu
+            :default-active="useRoute().path"
+            active-text-color="#409eff"
+            background-color="#304156"
+            router
+            text-color="#bfcbd9"
+            unique-opened
+        >
           <el-menu-item index="/home">
             <template #title>
               <el-space>
@@ -26,17 +33,17 @@ const settingStore = useSettingStore()
               </el-space>
             </template>
           </el-menu-item>
-
           <Menu :menus="useUserStore().userMenuInfo.menus"></Menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>
     <el-container>
+      <!-- 头部导航 -->
       <el-header class="header">
         <Header></Header>
       </el-header>
-      <el-divider style="margin: 0;"></el-divider>
-
+      <el-divider style="margin: 0"></el-divider>
+      <!-- 内容区 -->
       <el-main class="main">
         <el-scrollbar>
           <router-view v-slot="{ Component }">

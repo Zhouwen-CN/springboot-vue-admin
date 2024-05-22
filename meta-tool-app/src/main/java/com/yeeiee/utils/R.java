@@ -32,13 +32,17 @@ public final class R<T> {
 
     @Schema(title = "状态码")
     private int code;
-    
+
     @Nullable
     @Schema(title = "消息")
     private String message;
 
-    public static <T> R<T> ok() {
-        return new R<>(true, null, 200, null);
+    /**
+     * 返回ok字符串，前端可以利用字符串进行判断
+     * 比如封装useRequest的时候，data已经被取出，还要判断请求是否成功
+     */
+    public static R<String> ok() {
+        return new R<>(true, "ok", 200, null);
     }
 
     public static <T> R<T> ok(T data) {

@@ -25,16 +25,9 @@ public interface UserService extends IService<User> {
      * 用户登入
      *
      * @param loginDto 登入传输对象
-     * @return token
+     * @return user对象信息，后面会补全菜单信息
      */
-    String login(LoginDto loginDto);
-
-    /**
-     * 获取用户信息（包含菜单和角色信息）
-     *
-     * @return 用户信息
-     */
-    UserRoleMenuVo getUserInfo();
+    UserRoleMenuVo login(LoginDto loginDto);
 
     /**
      * 获取用户分页（包含角色ids）

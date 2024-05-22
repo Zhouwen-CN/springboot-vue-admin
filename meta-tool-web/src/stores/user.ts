@@ -1,34 +1,32 @@
 import type {LoginForm, UserMenuInfo} from '@/api/auth/user'
-import {reqGetUserMenuInfo, reqLogin} from '@/api/auth/user'
+import {reqLogin} from '@/api/auth/user'
+import {reqGetMenuList} from '@/api/auth/menu'
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
 
 const useUserStore = defineStore('user', () => {
-    const token = ref<string>(localStorage.getItem('TOKEN') || '')
     const userMenuInfo = ref<UserMenuInfo>(
-        JSON.parse(localStorage.getItem('INFO') || '{}') as UserMenuInfo
+        JSON.parse(localStorage.getItem('USER_INFO') || '{}') as UserMenuInfo
     )
 
     async function doLogin(loginForm: LoginForm) {
         let result = await reqLogin(loginForm)
-        token.value = result.data
-        localStorage.setItem('TOKEN', result.data)
+        userMenuInfo.value = result.data
+        localStorage.setItem('USER_INFO', JSON.stringify(userMenuInfo.value))
     }
 
     async function getUserMenuInfo() {
-        const result = await reqGetUserMenuInfo()
-        userMenuInfo.value = result.data
-        localStorage.setItem('INFO', JSON.stringify(result.data))
+        const result = await reqGetMenuList(userMenuInfo.value.roleIds)
+        userMenuInfo.value.menus = result.data
+        localStorage.setItem('USER_INFO', JSON.stringify(userMenuInfo.value))
     }
 
     function $reset() {
-        localStorage.removeItem('TOKEN')
-        localStorage.removeItem('INFO')
-        token.value = ''
+        localStorage.removeItem('USER_INFO')
         userMenuInfo.value = {} as UserMenuInfo
     }
 
-    return {token, userMenuInfo, doLogin, getUserMenuInfo, $reset}
+    return {userMenuInfo, doLogin, getUserMenuInfo, $reset}
 })
 
 export default useUserStore

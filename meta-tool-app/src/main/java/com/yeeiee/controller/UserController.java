@@ -13,15 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -40,18 +32,11 @@ import java.util.Collection;
 public class UserController {
     private UserService userService;
 
-    @Operation(summary = "获取用户信息")
-    @GetMapping("")
-    public R<UserRoleMenuVo> getUserInfo() {
-        val userDto = userService.getUserInfo();
-        return R.ok(userDto);
-    }
-
     @Operation(summary = "用户登入")
     @PostMapping("/login")
-    public R<String> login(@RequestBody LoginDto loginDto) {
-        val token = userService.login(loginDto);
-        return R.ok(token);
+    public R<UserRoleMenuVo> login(@RequestBody LoginDto loginDto) {
+        val userRoleMenuVo = userService.login(loginDto);
+        return R.ok(userRoleMenuVo);
     }
 
     @Operation(summary = "查询所有用户")
@@ -66,28 +51,28 @@ public class UserController {
 
     @Operation(summary = "新增用户")
     @PostMapping("")
-    public R<Void> addUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
+    public R<String> addUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.addUserWithRoleIds(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping("")
-    public R<Void> updateUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
+    public R<String> updateUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.updateUserWithRoleIds(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<Void> removeUser(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<String> removeUser(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.removeUser(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping("")
-    public R<Void> removeUsersWithRoleIds(@RequestBody Collection<Long> ids) {
+    public R<String> removeUsersWithRoleIds(@RequestBody Collection<Long> ids) {
         userService.removeUsers(ids);
         return R.ok();
     }

@@ -1,4 +1,4 @@
-import type {Menu} from '@/api/auth/user'
+import type {Menu} from '@/api/auth/menu'
 import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
 import useUserStore from '@/stores/user'
 
@@ -10,28 +10,28 @@ import useUserStore from '@/stores/user'
  */
 export function getAsyncRoutes(
     modules: Record<string, () => Promise<unknown>>,
-    menus: Menu[]
+    menus: Menu[] = []
 ): RouteRecordSingleViewWithChildren[] {
-    return menus.map((menu) => {
-        const route: RouteRecordSingleViewWithChildren = {
-            path: menu.accessPath,
-            name: menu.accessPath,
-            component: modules[`../views${menu.filePath}`],
-            meta: {
-                title: menu.title,
-                icon: menu.icon
-            },
-            children: []
-        }
+  return menus.map((menu) => {
+    const route: RouteRecordSingleViewWithChildren = {
+      path: menu.accessPath,
+      name: menu.accessPath,
+      component: modules[`../views${menu.filePath}`],
+      meta: {
+        title: menu.title,
+        icon: menu.icon
+      },
+      children: []
+    }
 
-        if (menu.children && menu.children.length !== 0) {
-            route.component = undefined
-            route.redirect = menu.children[0].accessPath
-            route.children = getAsyncRoutes(modules, menu.children)
-        }
+    if (menu.children && menu.children.length !== 0) {
+      route.component = undefined
+      route.redirect = menu.children[0].accessPath
+      route.children = getAsyncRoutes(modules, menu.children)
+    }
 
-        return route
-    })
+    return route
+  })
 }
 
 /**
@@ -43,12 +43,12 @@ export function deleteAsyncRoutesAndExit(
     router: Router,
     userStore: ReturnType<typeof useUserStore>
 ) {
-    // 删除默认路由以外的路由
-    const deleteNames = router
-        .getRoutes()
-        .filter((r) => !r.meta.require)
-        .map((r) => r.name as string)
-    deleteNames.forEach((name) => router.removeRoute(name))
-    userStore.$reset()
-    router.replace('/login')
+  // 删除默认路由以外的路由
+  const deleteNames = router
+      .getRoutes()
+      .filter((r) => !r.meta.require)
+      .map((r) => r.name as string)
+  deleteNames.forEach((name) => router.removeRoute(name))
+  userStore.$reset()
+  router.replace('/login')
 }

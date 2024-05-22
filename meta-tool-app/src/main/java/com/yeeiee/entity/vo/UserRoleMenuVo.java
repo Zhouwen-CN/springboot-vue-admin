@@ -19,8 +19,8 @@ import java.util.List;
 @Setter
 @ToString
 public class UserRoleMenuVo {
-    private Long id;
     private String username;
+    private String token;
     private List<Long> roleIds;
     private List<Menu> menus;
 }

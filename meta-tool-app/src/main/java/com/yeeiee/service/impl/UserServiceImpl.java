@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.LoginDto;
@@ -12,7 +11,6 @@ import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.UserRoleMenuVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.exception.DmlOperationException;
-import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
@@ -22,11 +20,11 @@ import lombok.val;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -42,35 +40,23 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     private AuthenticationProvider authenticationProvider;
     private UserMapper userMapper;
-    private MenuMapper menuMapper;
     private UserRoleService userRoleService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public static final String BCRYPT_PREFIX = "$2a$10$";
+    public static final String ROLE_PREFIX = "ROLE_";
 
     @Override
-    public String login(LoginDto loginDto) {
+    public UserRoleMenuVo login(LoginDto loginDto) {
         val authenticate = authenticationProvider.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        return JwtTokenUtil.generateToken(authenticate);
-    }
-
-    @Override
-    public UserRoleMenuVo getUserInfo() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        val userRoleVo = userMapper.selectByUserName(userDetails.getUsername());
-        val roleIds = Arrays.stream(userRoleVo.getRoleIds().split(",")).map(Long::parseLong).toList();
-        val menuList = menuMapper.selectMenusByRoleIds(roleIds);
-        val menuTree = convertToMenuTree(menuList);
-
         val userRoleMenuVo = new UserRoleMenuVo();
-        userRoleMenuVo.setId(userRoleVo.getId());
-        userRoleMenuVo.setUsername(userRoleVo.getUsername());
+        userRoleMenuVo.setUsername(authenticate.getName());
+        userRoleMenuVo.setToken(JwtTokenUtil.generateToken(authenticate));
+        val roleIds = authenticate.getAuthorities().stream().map(auth -> Long.parseLong(auth.getAuthority().replace(ROLE_PREFIX, ""))).toList();
         userRoleMenuVo.setRoleIds(roleIds);
-        userRoleMenuVo.setMenus(menuTree);
         return userRoleMenuVo;
     }
 
@@ -174,38 +160,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.in("user_id", ids);
         val userRoleList = userRoleService.list(queryWrapper);
         userRoleService.removeBatchByIds(userRoleList);
-    }
-
-    /**
-     * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
-     */
-    private List<Menu> convertToMenuTree(List<Menu> menuList) {
-        val menuItemMap = new HashMap<Long, Menu>(8);
-        val menuTree = new ArrayList<Menu>();
-        for (Menu menu : menuList) {
-            val id = menu.getId();
-            val pid = menu.getPid();
-
-            if (!menuItemMap.containsKey(id)) {
-                menuItemMap.put(id, new Menu().setChildren(new ArrayList<>()));
-            }
-
-            val item = menuItemMap.get(id);
-            if (item.getId() == null) {
-                Menu.mergeMenu(item, menu);
-            }
-
-            if (pid == 0) {
-                menuTree.add(item);
-            } else {
-                if (!menuItemMap.containsKey(pid)) {
-                    menuItemMap.put(pid, new Menu().setChildren(new ArrayList<>()));
-                }
-                val children = menuItemMap.get(pid).getChildren();
-                children.add(item);
-            }
-        }
-
-        return menuTree;
     }
 }

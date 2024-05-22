@@ -29,10 +29,10 @@ class Request {
             this.addPath(config)
             // set token to request header if exists
             const userStore = useUserStore()
-            if (userStore.token) {
-                config.headers.Authorization = `Bearer ${userStore.token}`
+            const token = userStore.userMenuInfo.token
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`
             }
-            // 设置请求头 config.headers
             return config
         },
         (error) => {

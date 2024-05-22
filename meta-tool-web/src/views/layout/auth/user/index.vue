@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {Delete, Edit, Search} from '@element-plus/icons-vue';
-import {computed, onMounted, reactive, ref} from 'vue';
+import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {computed, onMounted, reactive, ref} from 'vue'
 import {
   reqDeleteUser,
   reqDeleteUsers,
@@ -8,12 +8,12 @@ import {
   reqSaveUserRole,
   type UserRoleForm,
   type UserRoleInfo
-} from '@/api/auth/user';
-import {ElMessage, type FormInstance, type FormRules} from 'element-plus';
-import {reqGetRoles} from '@/api/auth/role';
-import useUserStore from '@/stores/user';
-import {useRouter} from 'vue-router';
-import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes';
+} from '@/api/auth/user'
+import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
+import {reqGetRoles} from '@/api/auth/role'
+import useUserStore from '@/stores/user'
+import {useRouter} from 'vue-router'
+import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -25,7 +25,7 @@ const userRoleForm = reactive<UserRoleForm>({
   password: '',
   roleIds: []
 })
-const ruleFormRef = ref<FormInstance>();
+const ruleFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof userRoleForm>>({
   username: [
     {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -56,7 +56,6 @@ const {
   onSizeChange
 } = reqGetUserRolePage()
 
-
 // 多选框相关
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
@@ -64,7 +63,7 @@ const isIndeterminate = ref(true)
 const {data: roleData, refresh: roleRefresh} = reqGetRoles()
 const handleCheckAllChange = (val: boolean) => {
   if (val) {
-    userRoleForm.roleIds = roleData.value?.map(role => role.id) || []
+    userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
   } else {
     userRoleForm.roleIds = []
   }
@@ -89,7 +88,7 @@ function updateUser(row: UserRoleInfo) {
   userRoleForm.id = row.id
   userRoleForm.username = row.username
   userRoleForm.password = row.password
-  userRoleForm.roleIds = row.roleIds?.split(',').map(id => Number(id)) || []
+  userRoleForm.roleIds = row.roleIds?.split(',').map((id) => Number(id)) || []
 }
 
 // 删除用户
@@ -106,7 +105,7 @@ async function deleteUser(id: number) {
 // 批量删除
 const deleteIds = ref<number[]>([])
 function handleSelectionChange(users: UserRoleInfo[]) {
-  deleteIds.value = users.map(user => user.id)
+  deleteIds.value = users.map((user) => user.id)
 }
 async function deleteUsers() {
   if (deleteIds.value.length === 0) {
@@ -133,7 +132,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     ElMessage.success('操作成功')
 
     // 如果修改的是当前用户，则退出重新登入
-    if (userRoleForm.id === userStore.userMenuInfo.id) {
+    if (userRoleForm.username === userStore.userMenuInfo.username) {
       deleteAsyncRoutesAndExit(router, userStore)
       return
     }
@@ -158,9 +157,9 @@ function clean() {
 
 // 根据角色id列表 获取角色名称列表
 const getRoleNames = computed(() => (roleIds: string) => {
-  const ids = roleIds?.split(',').map(id => Number(id)) || []
+  const ids = roleIds?.split(',').map((id) => Number(id)) || []
   const result: string[] = []
-  roleData.value?.forEach(role => {
+  roleData.value?.forEach((role) => {
     if (ids.includes(role.id)) {
       result.push(role.roleName)
     }
@@ -183,12 +182,15 @@ onMounted(() => {
           <el-input v-model="searchName" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })">搜索</el-button>
+          <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })"
+          >搜索
+          </el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
 
-    <el-card style="margin-top: 16px;">
+    <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
         <el-button type="primary" @click="addUser">添加用户</el-button>
@@ -200,8 +202,13 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" row-key="id" style="margin-top: 16px;"
-                @selection-change="handleSelectionChange">
+      <el-table
+          :border="true"
+          :data="pageData"
+          row-key="id"
+          style="margin-top: 16px"
+          @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="用户名称" prop="username"></el-table-column>
@@ -215,8 +222,7 @@ onMounted(() => {
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button-group>
-              <!-- TODO: 不能修改admin用户密码，上线后可以打开 -->
-              <el-button :disabled="row.id === 1" :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
+              <el-button :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteUser(row.id)">
                 <template #reference>
                   <el-button :disabled="row.id === 1" :icon="Delete" type="danger"></el-button>
@@ -229,32 +235,58 @@ onMounted(() => {
 
       <!-- 分页 -->
       <!-- TODO: jumper有bug，会出现警告信息，暂时不用 -->
-      <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="sizeOption" :total="totle"
-                     background layout="prev, pager, next, ->, total, sizes" style="margin-top: 16px;"
-                     @current-change="onPageChange"
-                     @size-change="onSizeChange"/>
+      <el-pagination
+          v-model:current-page="current"
+          v-model:page-size="size"
+          :page-sizes="sizeOption"
+          :total="totle"
+          background
+          layout="prev, pager, next, ->, total, sizes"
+          style="margin-top: 16px"
+          @current-change="onPageChange"
+          @size-change="onSizeChange"
+      />
     </el-card>
 
     <!-- 对话框表单 -->
     <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
       <template #footer>
-        <el-form ref="ruleFormRef" :model="userRoleForm" :rules="rules" label-width="80px" style="padding: 0 20px">
+        <el-form
+            ref="ruleFormRef"
+            :model="userRoleForm"
+            :rules="rules"
+            label-width="80px"
+            style="padding: 0 20px"
+        >
           <el-form-item label="用户名" prop="username">
             <el-input v-model="userRoleForm.username" placeholder="请输入用户姓名"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="userRoleForm.password" placeholder="请输入用户密码" type="password"></el-input>
+            <el-input
+                v-model="userRoleForm.password"
+                placeholder="请输入用户密码"
+                type="password"
+            ></el-input>
           </el-form-item>
           <!-- 多选框组 -->
           <el-form-item label="角色列表" prop="roleIds">
             <el-space v-if="userRoleForm.id !== 1" alignment="stretch" direction="vertical">
-              <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
+              <el-checkbox
+                  v-model="checkAll"
+                  :indeterminate="isIndeterminate"
+                  @change="handleCheckAllChange"
+              >
                 全选
               </el-checkbox>
               <!-- TODO: 不能授予用户admin角色 -->
               <el-checkbox-group v-model="userRoleForm.roleIds" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="role in roleData" :key="role.id" :disabled="role.roleName === 'admin'"
-                             :label="role.roleName" :value="role.id">
+                <el-checkbox
+                    v-for="role in roleData"
+                    :key="role.id"
+                    :disabled="role.roleName === 'admin'"
+                    :label="role.roleName"
+                    :value="role.id"
+                >
                   {{ role.roleName }}
                 </el-checkbox>
               </el-checkbox-group>
