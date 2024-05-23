@@ -10,6 +10,8 @@ import 'element-plus/dist/index.css'
 // @ts-ignore
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// 暗黑模式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 // 样式清除
 import '@/assets/css/reset.scss'
 

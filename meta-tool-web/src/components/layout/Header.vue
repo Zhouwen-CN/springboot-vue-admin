@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {useRoute, useRouter} from 'vue-router'
 import useUserStore from '@/stores/user'
-import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
+import {ArrowDown, ArrowRight, FullScreen, Moon, Refresh, Sunny} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
 import {computed} from 'vue'
 import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
@@ -39,8 +39,15 @@ const routeInfo = computed(() => {
   return route.matched.filter((item) => item.meta.title)
 })
 
+// 菜单收起/展开
 function changeCollapse() {
   settingStore.collapse = !settingStore.collapse
+}
+
+// 暗黑模式
+function changeTheme() {
+  const html = document.documentElement
+  settingStore.darkMode ? (html.className = 'dark') : (html.className = 'light')
 }
 </script>
 
@@ -64,6 +71,13 @@ function changeCollapse() {
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
+        <el-switch
+            v-model="settingStore.darkMode"
+            :active-action-icon="Moon"
+            :inactive-action-icon="Sunny"
+            size="large"
+            @change="changeTheme"
+        />
         <el-button :icon="Refresh" circle size="default" @click="refresh"></el-button>
         <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
         <el-avatar

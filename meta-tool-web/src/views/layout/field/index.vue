@@ -28,8 +28,12 @@ import {Close} from '@element-plus/icons-vue'
     text-align: center;
     border-radius: 4px;
     border: 1px solid #dcdfe6;
-    padding: 0 10px;
-    margin-right: 10px;
+    padding: 0 8px;
+    margin-right: 8px;
+
+    &:hover {
+      cursor: pointer;
+    }
 
     .scrollbar-item-icon {
       border-radius: 12px;

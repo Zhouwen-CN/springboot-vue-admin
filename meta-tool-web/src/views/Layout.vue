@@ -12,23 +12,29 @@ const settingStore = useSettingStore()
 <template>
   <el-container>
     <!-- 侧边栏菜单 -->
-    <el-aside :class="`aside aside_${settingStore.collapse ? 'collapse' : 'expand'}`">
+    <el-aside
+        :class="`aside aside_${settingStore.collapse ? 'collapse' : 'expand'}`">
       <el-scrollbar>
-        <div>
-          <h1 v-if="!settingStore.collapse">{{ settingStore.title }}</h1>
-          <img v-else alt="" src="@/assets/logo.svg" style="width: 63px"/>
+        <div class="aside_header">
+          <div v-if="!settingStore.collapse">
+            <img alt="" src="@/assets/logo.svg">
+            <h1>{{ settingStore.title }}</h1>
+          </div>
+
+          <img v-else alt="" src="@/assets/logo.svg"/>
         </div>
 
+        <!-- 好像只有这样才能改菜单 hover 的颜色 -->
         <el-menu
             :default-active="useRoute().path"
-            active-text-color="#409eff"
-            background-color="#304156"
             router
-            text-color="#bfcbd9"
             unique-opened
             :collapse="settingStore.collapse"
             :collapse-transition="false"
-        >
+            :background-color="settingStore.darkMode ? '#121212' : '#304156'"
+            active-text-color="var(--active-color)"
+            text-color="var(--text-color)"
+            style="border: 0">
           <el-menu-item index="/home">
             <el-icon :size="20">
               <HomeFilled/>
@@ -46,13 +52,13 @@ const settingStore = useSettingStore()
       <el-header class="header">
         <Header></Header>
       </el-header>
-      <el-divider style="margin: 0"></el-divider>
       <!-- 内容区 -->
       <el-main class="main">
         <el-scrollbar>
           <router-view v-slot="{ Component }">
             <transition name="fade">
-              <component :is="Component" :key="settingStore.refresh"></component>
+              <component :is="Component" :key="settingStore.refresh">
+              </component>
             </transition>
           </router-view>
         </el-scrollbar>
@@ -77,6 +83,7 @@ const settingStore = useSettingStore()
 
 .header {
   height: $base_header_height;
+  border-bottom: 0.8px solid var(--el-border-color);
 }
 
 .aside_expand {
@@ -89,13 +96,34 @@ const settingStore = useSettingStore()
 
 .aside {
   height: calc(100vh - 1px);
-  background-color: $base_aside_bg_color;
+  background-color: var(--bg-color);
+  border-right: 0.8px solid var(--el-border-color);
 
-  h1 {
-    font-size: 40px;
-    color: white;
-    padding: 20px 0 20px 0;
-    text-align: center;
+  .aside_header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > img {
+      height: 40px;
+    }
+
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & > img {
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      & > h1 {
+        font-size: 35px;
+        color: white;
+      }
+    }
   }
 }
 
