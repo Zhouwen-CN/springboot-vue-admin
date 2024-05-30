@@ -49,15 +49,15 @@ public final class R<T> {
         return new R<>(true, data, 200, null);
     }
 
-    public static <T> R<T> error(HttpStatus httpStatus) {
+    public static R<Void> error(HttpStatus httpStatus) {
         return new R<>(false, null, httpStatus.value(), httpStatus.getReasonPhrase());
     }
 
-    public static <T> R<T> error(HttpStatus httpStatus, Exception e) {
+    public static R<Void> error(HttpStatus httpStatus, Exception e) {
         return new R<>(false, null, httpStatus.value(), e.getMessage());
     }
 
-    public static <T> R<T> error(HttpStatus httpStatus, String message) {
+    public static R<Void> error(HttpStatus httpStatus, String message) {
         return new R<>(false, null, httpStatus.value(), message);
     }
 }

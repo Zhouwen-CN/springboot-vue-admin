@@ -6,6 +6,14 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * <p>
+ * 新增 & 更新 角色信息
+ * </p>
+ *
+ * @author chen
+ * @since 2024/5/14
+ */
 @Getter
 @Setter
 @ToString

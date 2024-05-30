@@ -2,6 +2,7 @@ package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.Menu;
+import com.yeeiee.entity.vo.MenuVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,5 +36,5 @@ public interface MenuService extends IService<Menu> {
      *
      * @return 菜单列表
      */
-    List<Menu> getMenuList(Collection<Long> ids);
+    List<MenuVo> getMenuList(Collection<Long> ids);
 }

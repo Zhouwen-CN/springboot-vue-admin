@@ -42,7 +42,7 @@ const toggleDialog = reactive({
 const searchName = ref('');
 const {
   current,
-  totle,
+  total,
   size,
   sizeOption,
   data: pageData,
@@ -206,7 +206,7 @@ onMounted(() => {
       </el-table>
 
       <!-- 分页 -->
-      <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="sizeOption" :total="totle"
+      <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="sizeOption" :total="total"
                      background layout="prev, pager, next, ->, total, sizes" style="margin-top: 16px;"
                      @current-change="onPageChange"
                      @size-change="onSizeChange"/>

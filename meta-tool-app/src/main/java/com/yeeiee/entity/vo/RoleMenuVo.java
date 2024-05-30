@@ -6,6 +6,14 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * <p>
+ * 角色信息，包含菜单id列表
+ * </p>
+ *
+ * @author chen
+ * @since 2024/5/14
+ */
 @Getter
 @Setter
 @ToString

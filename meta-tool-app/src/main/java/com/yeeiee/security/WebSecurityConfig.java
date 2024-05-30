@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -47,7 +48,6 @@ public class WebSecurityConfig {
             "/assets/**.jpg",
             "/assets/**.png",
             "/assets/**.svg",
-            "/user/login",
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-ui/**"
@@ -62,14 +62,14 @@ public class WebSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
-
-                        authorize.requestMatchers(WHITE_LIST)
-                                // permitAll 表示不进行拦截
-                                .permitAll()
+                        authorize
+                                // 静态资源和swagger
+                                .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
+                                // 用户登入
+                                .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
                                 // 改为使用 RBAC
-                                .requestMatchers("/menu").authenticated()
-                                // 这里的1代表admin，admin是不能被删除的
-                                // 这样做的目的是鉴权的时候可以少关联一张表
+                                .requestMatchers(HttpMethod.GET, "/menu").authenticated()
+                                // 这里的1代表admin，admin是不能被删除的，这样做的目的是鉴权的时候可以少关联一张表
                                 .requestMatchers("/user/**", "/role/**", "/menu/**").hasRole("1")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()

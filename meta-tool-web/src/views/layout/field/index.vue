@@ -27,7 +27,7 @@ import {Close} from '@element-plus/icons-vue'
     height: 30px;
     text-align: center;
     border-radius: 4px;
-    border: 1px solid #dcdfe6;
+    border: 0.8px solid var(--el-border-color);
     padding: 0 8px;
     margin-right: 8px;
 

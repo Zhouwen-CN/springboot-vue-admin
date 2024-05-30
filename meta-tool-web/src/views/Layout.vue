@@ -12,16 +12,15 @@ const settingStore = useSettingStore()
 <template>
   <el-container>
     <!-- 侧边栏菜单 -->
-    <el-aside
-        :class="`aside aside_${settingStore.collapse ? 'collapse' : 'expand'}`">
+    <el-aside class="aside" width="auto">
       <el-scrollbar>
-        <div class="aside_header">
-          <div v-if="!settingStore.collapse">
-            <img alt="" src="@/assets/logo.svg">
-            <h1>{{ settingStore.title }}</h1>
-          </div>
-
-          <img v-else alt="" src="@/assets/logo.svg"/>
+        <div :style="{ margin: settingStore.collapse ? '0' : '0 20px' }" class="aside_header">
+          <img
+              :style="{ 'margin-right': settingStore.collapse ? '0' : '10px' }"
+              alt=""
+              src="@/assets/logo.svg"
+          />
+          <h1 v-if="!settingStore.collapse">{{ settingStore.title }}</h1>
         </div>
 
         <!-- 好像只有这样才能改菜单 hover 的颜色 -->
@@ -30,11 +29,11 @@ const settingStore = useSettingStore()
             router
             unique-opened
             :collapse="settingStore.collapse"
-            :collapse-transition="false"
             :background-color="settingStore.darkMode ? '#121212' : '#304156'"
             active-text-color="var(--active-color)"
             text-color="var(--text-color)"
-            style="border: 0">
+            style="border: 0"
+        >
           <el-menu-item index="/home">
             <el-icon :size="20">
               <HomeFilled/>
@@ -57,8 +56,7 @@ const settingStore = useSettingStore()
         <el-scrollbar>
           <router-view v-slot="{ Component }">
             <transition name="fade">
-              <component :is="Component" :key="settingStore.refresh">
-              </component>
+              <component :is="Component" :key="settingStore.refresh"></component>
             </transition>
           </router-view>
         </el-scrollbar>
@@ -86,14 +84,6 @@ const settingStore = useSettingStore()
   border-bottom: 0.8px solid var(--el-border-color);
 }
 
-.aside_expand {
-  width: $base_aside_width;
-}
-
-.aside_collapse {
-  width: $base_aside_collapse_width;
-}
-
 .aside {
   height: calc(100vh - 1px);
   background-color: var(--bg-color);
@@ -104,25 +94,15 @@ const settingStore = useSettingStore()
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 20px;
 
     & > img {
       height: 40px;
     }
 
-    & > div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      & > img {
-        height: 40px;
-        margin-right: 10px;
-      }
-
-      & > h1 {
-        font-size: 35px;
-        color: white;
-      }
+    & > h1 {
+      font-size: 35px;
+      color: white;
     }
   }
 }

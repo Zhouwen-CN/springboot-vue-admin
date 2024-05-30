@@ -2,6 +2,7 @@ package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.entity.Menu;
+import com.yeeiee.entity.vo.MenuVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
@@ -23,6 +24,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param roleIds 角色id列表
      * @return 菜单列表
      */
-    List<Menu> selectMenusByRoleIds(@Param("roleIds") Collection<Long> roleIds);
+    List<MenuVo> selectMenusByRoleIds(@Param("roleIds") Collection<Long> roleIds);
 
 }

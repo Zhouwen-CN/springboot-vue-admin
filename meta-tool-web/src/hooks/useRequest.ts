@@ -12,28 +12,28 @@ function useRequest<T = unknown, D = unknown>(
     config: AxiosRequestConfig<D>,
     immediate: boolean = false
 ) {
-    const loading = ref(false)
-    const data = ref<T>()
+  const loading = ref(false)
+  const data = ref<T>()
 
-    function refresh() {
-        loading.value = true
-        request
-            .request<T, D>(config)
-            .then((res) => {
-                data.value = res.data
-            })
-            .catch((err) => {
-                console.warn(err)
-            })
-            .finally(() => {
-                loading.value = false
-            })
-    }
+  function refresh() {
+    loading.value = true
+    request
+        .request<T, D>(config)
+        .then((res) => {
+          data.value = res.data
+        })
+        .catch((err) => {
+          console.warn(err)
+        })
+        .finally(() => {
+          loading.value = false
+        })
+  }
 
-    if (immediate) {
-        refresh()
-    }
-    return {loading, data, refresh}
+  if (immediate) {
+    refresh()
+  }
+  return {loading, data, refresh}
 }
 
 export default useRequest

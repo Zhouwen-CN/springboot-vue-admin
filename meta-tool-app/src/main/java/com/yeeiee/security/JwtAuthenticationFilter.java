@@ -55,10 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDetails,
                     null,
                     userDetails.getAuthorities());
+            // 一些附加信息（远程主机地址，sessionId）
             authenticated.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             // 将 authentication 存入 ThreadLocal
-            log.info("authenticated user {}, setting security context", username);
             SecurityContextHolder.getContext().setAuthentication(authenticated);
+            log.info("authenticated user {}, setting security context", username);
         }
 
         filterChain.doFilter(request, response);

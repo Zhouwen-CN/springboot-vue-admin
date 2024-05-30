@@ -12,7 +12,7 @@ import type {AxiosRequestConfig} from 'axios'
  */
 function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [5, 7, 9, 11]) {
     const current = ref(1)
-    const totle = ref(0)
+    const total = ref(0)
     const size = ref(sizeOption[0])
     const data = ref<T[]>([]) as Ref<T[]>
 
@@ -22,7 +22,7 @@ function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [5, 7, 9,
             .then((res) => {
                 const page = res.data
                 current.value = page.current
-                totle.value = page.total
+                total.value = page.total
                 size.value = page.size
                 data.value = page.records
             })
@@ -43,7 +43,7 @@ function usePagination<T>(baseUrl: string, sizeOption: Array<number> = [5, 7, 9,
 
     return {
         current,
-        totle,
+        total,
         size,
         sizeOption,
         data,

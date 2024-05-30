@@ -20,13 +20,13 @@ import java.util.Optional;
 @Slf4j
 public final class JwtTokenUtil {
     private static final String SECRET_KEY = "ApZmvgBrjutc69dCBzLKBXNi4xc%CVjAxCyAc2Q@nM^SgNQyJS2H^$dq5fsj&vu#KAR6^!*Msqs4nM#^zFhY@AXbLBnMR*uyBS4P@L3#bUhBUqUYfQDujSHj9ZXaWcK2";
-    private static final int EXPIRE = 1;
+    private static final int EXPIRATION = 1;
 
     public static String generateToken(Authentication authentication) {
         String username = authentication.getName();
 
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE, EXPIRE);
+        instance.add(Calendar.DATE, EXPIRATION);
 
         return JWT.create()
                 .withSubject(username)
@@ -39,7 +39,6 @@ public final class JwtTokenUtil {
     public static Optional<String> getSubject(String token) {
         try {
             DecodedJWT jwt = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build().verify(token);
-
             return Optional.ofNullable(jwt.getSubject());
         } catch (Exception e) {
             // do nothing

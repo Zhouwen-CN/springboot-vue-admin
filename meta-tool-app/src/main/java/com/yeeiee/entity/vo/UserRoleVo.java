@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户权限列表（也包含角色列表）
+ * 用户信息，包含角色列表
  * </p>
  *
  * @author chen

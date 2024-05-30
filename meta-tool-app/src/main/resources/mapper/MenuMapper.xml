@@ -3,7 +3,7 @@
 <mapper namespace="com.yeeiee.mapper.MenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.Menu">
+    <resultMap id="BaseResultMap" type="com.yeeiee.entity.vo.MenuVo">
         <id column="id" property="id"/>
         <result column="access_path" property="accessPath"/>
         <result column="file_path" property="filePath"/>

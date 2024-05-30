@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.RoleMenu;
+import com.yeeiee.entity.vo.MenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.RoleMenuMapper;
@@ -61,7 +62,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<Menu> getMenuList(Collection<Long> ids) {
+    public List<MenuVo> getMenuList(Collection<Long> ids) {
         val menuList = menuMapper.selectMenusByRoleIds(ids);
         return convertToMenuTree(menuList);
     }
@@ -69,27 +70,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     /**
      * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
      */
-    private List<Menu> convertToMenuTree(List<Menu> menuList) {
-        val menuItemMap = new HashMap<Long, Menu>(8);
-        val menuTree = new ArrayList<Menu>();
-        for (Menu menu : menuList) {
+    private List<MenuVo> convertToMenuTree(List<MenuVo> menuList) {
+        val menuItemMap = new HashMap<Long, MenuVo>(8);
+        val menuTree = new ArrayList<MenuVo>();
+        for (MenuVo menu : menuList) {
             val id = menu.getId();
             val pid = menu.getPid();
 
             if (!menuItemMap.containsKey(id)) {
-                menuItemMap.put(id, new Menu().setChildren(new ArrayList<>()));
+                menuItemMap.put(id, new MenuVo().setChildren(new ArrayList<>()));
             }
 
             val item = menuItemMap.get(id);
             if (item.getId() == null) {
-                Menu.mergeMenu(item, menu);
+                MenuVo.mergeMenu(item, menu);
             }
 
             if (pid == 0) {
                 menuTree.add(item);
             } else {
                 if (!menuItemMap.containsKey(pid)) {
-                    menuItemMap.put(pid, new Menu().setChildren(new ArrayList<>()));
+                    menuItemMap.put(pid, new MenuVo().setChildren(new ArrayList<>()));
                 }
                 val children = menuItemMap.get(pid).getChildren();
                 children.add(item);

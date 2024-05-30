@@ -1,6 +1,7 @@
 package com.yeeiee.controller;
 
 import com.yeeiee.entity.Menu;
+import com.yeeiee.entity.vo.MenuVo;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,8 +51,8 @@ public class MenuController {
 
     @Operation(summary = "获取所有菜单")
     @GetMapping("")
-    public R<List<Menu>> getMenuList(@RequestParam("ids") Collection<Long> ids) {
-        List<Menu> menuList = menuService.getMenuList(ids);
+    public R<List<MenuVo>> getMenuList(@RequestParam("ids") Collection<Long> ids) {
+        List<MenuVo> menuList = menuService.getMenuList(ids);
         return R.ok(menuList);
     }
 }

@@ -47,7 +47,7 @@ const toggleDialog = reactive({
 const searchName = ref('')
 const {
   current,
-  totle,
+  total,
   size,
   sizeOption,
   data: pageData,
@@ -239,7 +239,7 @@ onMounted(() => {
           v-model:current-page="current"
           v-model:page-size="size"
           :page-sizes="sizeOption"
-          :total="totle"
+          :total="total"
           background
           layout="prev, pager, next, ->, total, sizes"
           style="margin-top: 16px"

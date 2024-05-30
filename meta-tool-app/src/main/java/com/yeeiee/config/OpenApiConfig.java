@@ -3,6 +3,7 @@ package com.yeeiee.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -20,20 +21,33 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfig {
+
+    public static final String SECURITY_SCHEME_NAME = "Bearer Authentication";
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
-                .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
+                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+                .components(new Components().addSecuritySchemes(SECURITY_SCHEME_NAME, createAPIKeyScheme()))
                 .info(new Info().title("Meta Tool")
                         .description("hive 元数据工具")
                         .version("1.0.0")
-                        .license(new License().name("Apache 2.0"))
+                        .contact(new Contact()
+                                .name("Chen")
+                                .email("597879949@qq.com")
+                                .url("https://gitee.com/Zhouwen-CN")
+                        )
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("https://www.apache.org/licenses/LICENSE-2.0")
+                        )
                 );
     }
 
     private SecurityScheme createAPIKeyScheme() {
-        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
+        return new SecurityScheme()
+                .name(SECURITY_SCHEME_NAME)
+                .type(SecurityScheme.Type.HTTP)
                 .bearerFormat("JWT")
                 .scheme("bearer");
     }
