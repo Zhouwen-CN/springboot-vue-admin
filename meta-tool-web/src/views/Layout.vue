@@ -20,7 +20,7 @@ const settingStore = useSettingStore()
               alt=""
               src="@/assets/logo.svg"
           />
-          <h1 v-if="!settingStore.collapse">{{ settingStore.title }}</h1>
+          <h1 v-show="!settingStore.collapse">{{ settingStore.title }}</h1>
         </div>
 
         <!-- 好像只有这样才能改菜单 hover 的颜色 -->

@@ -37,19 +37,19 @@ public class TransactionAdviceConfig {
         NameMatchTransactionAttributeSource transactionAttributeSource = new NameMatchTransactionAttributeSource();
 
         // read
-        transactionAttributeSource.addTransactionalMethod("query*", txAttrRequiredReadonly);
-        transactionAttributeSource.addTransactionalMethod("get*", txAttrRequiredReadonly);
         transactionAttributeSource.addTransactionalMethod("select*", txAttrRequiredReadonly);
+        transactionAttributeSource.addTransactionalMethod("get*", txAttrRequiredReadonly);
+        transactionAttributeSource.addTransactionalMethod("query*", txAttrRequiredReadonly);
         transactionAttributeSource.addTransactionalMethod("find*", txAttrRequiredReadonly);
 
         // write
-        transactionAttributeSource.addTransactionalMethod("save*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("insert*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("add*", txAttrRequired);
+        transactionAttributeSource.addTransactionalMethod("save*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("create*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("delete*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("update*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("remove*", txAttrRequired);
+        transactionAttributeSource.addTransactionalMethod("update*", txAttrRequired);
         transactionAttributeSource.addTransactionalMethod("modify*", txAttrRequired);
 
         return new TransactionInterceptor(transactionManager, transactionAttributeSource);

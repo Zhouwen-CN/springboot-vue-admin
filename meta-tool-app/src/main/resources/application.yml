@@ -1,17 +1,7 @@
 spring:
-  application:
-    name: meta-tool-app
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    #    url: jdbc:mysql://192.168.135.199:3306/meta_tool
-    url: jdbc:mysql://localhost:3306/meta_tool
-    username: root
-    #    password: 1234
-    password: 123
+  profiles:
+    active: dev
 
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # swagger 页面设置不展开
 springdoc:
   swagger-ui:

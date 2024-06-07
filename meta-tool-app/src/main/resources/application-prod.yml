@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/meta_tool
+    username: root
+    password: 123456
+
+# mybatis 控制台打印sql
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+# 日志
+logging:
+  level:
+    root: info
+    com.yeeiee.mapper: debug
+  file:
+    name: ./logs/meta_tool.log
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss
+  logback:
+    rollingpolicy:
+      total-size-cap: 500MB

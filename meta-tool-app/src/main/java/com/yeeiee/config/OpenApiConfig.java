@@ -3,7 +3,6 @@ package com.yeeiee.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -32,11 +31,6 @@ public class OpenApiConfig {
                 .info(new Info().title("Meta Tool")
                         .description("hive 元数据工具")
                         .version("1.0.0")
-                        .contact(new Contact()
-                                .name("Chen")
-                                .email("597879949@qq.com")
-                                .url("https://gitee.com/Zhouwen-CN")
-                        )
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0")

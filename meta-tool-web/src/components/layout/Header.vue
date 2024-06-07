@@ -31,6 +31,8 @@ function toggleFullScreen() {
 // 登出
 function logout() {
   deleteAsyncRoutesAndExit(router, userStore)
+  settingStore.darkMode = false
+  document.documentElement.className = 'light'
   ElMessage.success('退出成功')
 }
 
