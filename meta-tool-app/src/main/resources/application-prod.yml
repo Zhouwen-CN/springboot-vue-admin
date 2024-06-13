@@ -5,7 +5,7 @@ spring:
     username: root
     password: 123456
 
-# mybatis 控制台打印sql
+# mybatis 日志打印sql
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
@@ -22,3 +22,8 @@ logging:
   logback:
     rollingpolicy:
       total-size-cap: 500MB
+
+# 关闭 swagger
+springdoc:
+  swagger-ui:
+    enabled: false

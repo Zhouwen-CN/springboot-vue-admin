@@ -29,12 +29,16 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
         if (userRoleVo == null) {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
-        // 授权角色
-        val roleIds = userRoleVo.getRoleIds().split(",");
-        return User.builder()
+
+        val userBuilder = User.builder()
                 .username(userRoleVo.getUsername())
-                .password(userRoleVo.getPassword())
-                .roles(roleIds)
-                .build();
+                .password(userRoleVo.getPassword());
+
+        // 授权角色
+        val roleIds = userRoleVo.getRoleIds();
+        if (roleIds != null) {
+            userBuilder.roles(roleIds.split(","));
+        }
+        return userBuilder.build();
     }
 }

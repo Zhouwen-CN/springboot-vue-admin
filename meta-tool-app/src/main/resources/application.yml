@@ -2,6 +2,13 @@ spring:
   profiles:
     active: dev
 
+  # 静态资源缓存
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 86400
+
 # swagger 页面设置不展开
 springdoc:
   swagger-ui:
