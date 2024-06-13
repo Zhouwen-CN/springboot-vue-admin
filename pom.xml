@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.yeeiee</groupId>
     <artifactId>meta-tool</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -18,7 +17,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <springboot.version>3.2.0</springboot.version>
     </properties>
 
     <profiles>
@@ -44,4 +42,32 @@
             </pluginRepositories>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:git:https://gitee.com/Zhouwen-CN/meta-tool.git</connection>
+        <developerConnection>scm:git:https://gitee.com/Zhouwen-CN/meta-tool.git</developerConnection>
+        <url>https://gitee.com/Zhouwen-CN/meta-tool</url>
+    </scm>
+
+    <build>
+        <plugins>
+            <!--
+                1. mvn release:prepare
+                2. mvn release:perform -Dgoals=""
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <!-- prepare之前执行的mvn命令 -->
+                    <preparationGoals>clean</preparationGoals>
+                    <!--是否自动为子模块分配父版本。如果设置为false，将提示用户输入每个子模块的版本。-->
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!--tag标签名-->
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
