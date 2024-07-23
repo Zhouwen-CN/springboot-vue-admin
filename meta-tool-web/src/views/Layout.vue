@@ -3,8 +3,9 @@ import useSettingStore from '@/stores/setting'
 import useUserStore from '@/stores/user'
 import {RouterView, useRoute} from 'vue-router'
 import {HomeFilled} from '@element-plus/icons-vue'
-import Menu from '@/components/layout/Menu.vue'
-import Header from '@/components/layout/Header.vue'
+import Menu from '@/views/layout/components/Menu.vue'
+import Header from '@/views/layout/components/Header.vue'
+import TagView from '@/views/layout/components/TagView.vue'
 
 const settingStore = useSettingStore()
 </script>
@@ -49,8 +50,12 @@ const settingStore = useSettingStore()
     <el-container>
       <!-- 头部导航 -->
       <el-header class="header">
-        <Header></Header>
+        <div>
+          <Header></Header>
+          <TagView></TagView>
+        </div>
       </el-header>
+
       <!-- 内容区 -->
       <el-main class="main">
         <el-scrollbar>
@@ -81,6 +86,7 @@ const settingStore = useSettingStore()
 
 .header {
   height: $base_header_height;
+  padding: 0;
   border-bottom: 0.8px solid var(--el-border-color);
 }
 
@@ -90,7 +96,7 @@ const settingStore = useSettingStore()
   border-right: 0.8px solid var(--el-border-color);
 
   .aside_header {
-    height: 60px;
+    height: $base_header_height;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -77,6 +77,6 @@ const settingStore = useSettingStore()
   140px: 卡片
   3px: 不知道为什么差3个像素
   */
-  height: calc(100vh - 60px - 40px - 140px - 3px);
+  height: calc(100vh - $base_header_height - 40px - 140px - 3px);
 }
 </style>

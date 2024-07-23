@@ -52,7 +52,7 @@ function changeTheme() {
 </script>
 
 <template>
-  <div class="header">
+  <div class="container">
     <div class="left">
       <!-- 展开收起按钮 -->
       <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
@@ -106,10 +106,12 @@ function changeTheme() {
 </template>
 
 <style lang="scss" scoped>
-.header {
+.container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 0.8px solid var(--el-border-color);
 
   .left {
     display: flex;
