@@ -3,9 +3,9 @@ import useSettingStore from '@/stores/setting'
 import useUserStore from '@/stores/user'
 import {RouterView, useRoute} from 'vue-router'
 import {HomeFilled} from '@element-plus/icons-vue'
-import Menu from '@/views/layout/components/Menu.vue'
-import Header from '@/views/layout/components/Header.vue'
-import TagView from '@/views/layout/components/TagView.vue'
+import Menu from '@/components/Menu.vue'
+import Header from '@/components/Header.vue'
+import TagView from '@/components/TagView.vue'
 
 const settingStore = useSettingStore()
 </script>
@@ -43,7 +43,7 @@ const settingStore = useSettingStore()
               <span>首页</span>
             </template>
           </el-menu-item>
-          <Menu :menus="useUserStore().userMenuInfo.menus"></Menu>
+          <Menu :menus="useUserStore().menuInfo"></Menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>

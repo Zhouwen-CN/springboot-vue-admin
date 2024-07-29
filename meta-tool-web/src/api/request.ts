@@ -29,7 +29,7 @@ class Request {
             this.addPath(config)
             // set token to request header if exists
             const userStore = useUserStore()
-            const token = userStore.userMenuInfo.token
+            const token = userStore.userInfo.token
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`
             }

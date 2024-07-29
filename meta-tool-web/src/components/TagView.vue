@@ -25,9 +25,11 @@ watch(
         title: route.meta.title as string
       }
 
+      // 404不需要标签
       let isInclude = tagViewArr.value.find((item: routeObj) => {
-        return item.path === routeObj.path
+        return item.path === routeObj.path || routeObj.path === '/404'
       })
+
       if (isInclude) return
       tagViewArr.value.push(routeObj)
     },

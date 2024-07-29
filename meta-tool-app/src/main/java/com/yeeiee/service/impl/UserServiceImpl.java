@@ -8,7 +8,7 @@ import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleMenuVo;
+import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.UserMapper;
@@ -47,17 +47,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public static final String ROLE_PREFIX = "ROLE_";
 
     @Override
-    public UserRoleMenuVo login(LoginDto loginDto) {
+    public UserInfoVo login(LoginDto loginDto) {
         val authenticate = authenticationProvider.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        val userRoleMenuVo = new UserRoleMenuVo();
-        userRoleMenuVo.setUsername(authenticate.getName());
-        userRoleMenuVo.setToken(JwtTokenUtil.generateToken(authenticate));
+        val userInfoVo = new UserInfoVo();
+        userInfoVo.setUsername(authenticate.getName());
+        userInfoVo.setToken(JwtTokenUtil.generateToken(authenticate));
         val roleIds = authenticate.getAuthorities().stream().map(auth -> Long.parseLong(auth.getAuthority().replace(ROLE_PREFIX, ""))).toList();
-        userRoleMenuVo.setRoleIds(roleIds);
-        return userRoleMenuVo;
+        userInfoVo.setRoleIds(roleIds);
+        return userInfoVo;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void updateUserWithRoleIds(UserRoleIdsDto userRoleIdsDto) {
+    public void modifyUserWithRoleIds(UserRoleIdsDto userRoleIdsDto) {
         val userId = userRoleIdsDto.getId();
 
         // 更新用户

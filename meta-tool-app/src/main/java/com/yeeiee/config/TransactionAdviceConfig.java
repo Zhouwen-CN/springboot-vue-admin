@@ -25,6 +25,10 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 public class TransactionAdviceConfig {
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.yeeiee.service.impl.*.*(..))";
 
+    /**
+     * dao 层：insert delete update select
+     * service 层：add remove modify get
+     */
     @Bean
     public TransactionInterceptor transactionInterceptor(TransactionManager transactionManager) {
         DefaultTransactionAttribute txAttrRequired = new DefaultTransactionAttribute();

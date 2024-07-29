@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleMenuVo;
+import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 
 import java.util.Collection;
@@ -27,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param loginDto 登入传输对象
      * @return user对象信息，后面会补全菜单信息
      */
-    UserRoleMenuVo login(LoginDto loginDto);
+    UserInfoVo login(LoginDto loginDto);
 
     /**
      * 获取用户分页（包含角色ids）
@@ -51,7 +51,7 @@ public interface UserService extends IService<User> {
      *
      * @param userRoleIdsDto 用户和角色关系
      */
-    void updateUserWithRoleIds(UserRoleIdsDto userRoleIdsDto);
+    void modifyUserWithRoleIds(UserRoleIdsDto userRoleIdsDto);
 
     /**
      * 删除用户和角色关系

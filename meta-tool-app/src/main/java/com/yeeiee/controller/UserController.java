@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleMenuVo;
+import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.R;
@@ -34,7 +34,7 @@ public class UserController {
 
     @Operation(summary = "用户登入")
     @PostMapping("/login")
-    public R<UserRoleMenuVo> login(@RequestBody LoginDto loginDto) {
+    public R<UserInfoVo> login(@RequestBody LoginDto loginDto) {
         val userRoleMenuVo = userService.login(loginDto);
         return R.ok(userRoleMenuVo);
     }
@@ -59,7 +59,7 @@ public class UserController {
     @Operation(summary = "更新用户")
     @PutMapping("")
     public R<String> updateUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
-        userService.updateUserWithRoleIds(userRoleIdsDto);
+        userService.modifyUserWithRoleIds(userRoleIdsDto);
         return R.ok();
     }
 

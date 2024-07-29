@@ -1,32 +1,46 @@
-import type {LoginForm, UserMenuInfo} from '@/api/auth/user'
+import type {LoginForm, UserInfo} from '@/api/auth/user'
 import {reqLogin} from '@/api/auth/user'
-import {reqGetMenuList} from '@/api/auth/menu'
+import {type MenuInfo, reqGetMenuList} from '@/api/auth/menu'
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
+import {getAsyncRoutes} from '@/router/asyncRoutes'
+import router, {modules} from '@/router'
 
 const useUserStore = defineStore('user', () => {
-    const userMenuInfo = ref<UserMenuInfo>(
-        JSON.parse(localStorage.getItem('USER_INFO') || '{}') as UserMenuInfo
+    const userInfo = ref<UserInfo>(JSON.parse(localStorage.getItem('USER_INFO') || '{}') as UserInfo)
+    const menuInfo = ref<MenuInfo[]>(
+        JSON.parse(localStorage.getItem('MENU_INFO') || '[]') as MenuInfo[]
     )
 
+    // 登入
     async function doLogin(loginForm: LoginForm) {
         let result = await reqLogin(loginForm)
-        userMenuInfo.value = result.data
-        localStorage.setItem('USER_INFO', JSON.stringify(userMenuInfo.value))
+        userInfo.value = result.data
+        localStorage.setItem('USER_INFO', JSON.stringify(userInfo.value))
     }
 
-    async function getUserMenuInfo() {
-        const result = await reqGetMenuList(userMenuInfo.value.roleIds)
-        userMenuInfo.value.menus = result.data
-        localStorage.setItem('USER_INFO', JSON.stringify(userMenuInfo.value))
+    // 获取菜单信息
+    async function getMenuInfo() {
+        const result = await reqGetMenuList(userInfo.value.roleIds)
+        menuInfo.value = result.data
+        localStorage.setItem('MENU_INFO', JSON.stringify(menuInfo.value))
+
+        // 加载动态路由
+        const routes = getAsyncRoutes(modules, menuInfo.value)
+        routes.forEach((route) => {
+            router.addRoute('Layout', route)
+        })
     }
 
+    // 重置仓库
     function $reset() {
         localStorage.removeItem('USER_INFO')
-        userMenuInfo.value = {} as UserMenuInfo
+        localStorage.removeItem('MENU_INFO')
+        userInfo.value = {} as UserInfo
+        menuInfo.value = []
     }
 
-    return {userMenuInfo, doLogin, getUserMenuInfo, $reset}
+    return {userInfo, menuInfo, doLogin, getMenuInfo, $reset}
 })
 
 export default useUserStore

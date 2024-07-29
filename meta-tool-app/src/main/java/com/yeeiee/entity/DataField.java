@@ -40,6 +40,6 @@ public class DataField {
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "`update_time`", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "`update_time`", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

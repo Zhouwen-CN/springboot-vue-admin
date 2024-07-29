@@ -89,7 +89,7 @@ function changeTheme() {
 
         <el-dropdown>
           <span>
-            {{ userStore.userMenuInfo.username }}
+            {{ userStore.userInfo.username }}
             <el-icon>
               <ArrowDown/>
             </el-icon>

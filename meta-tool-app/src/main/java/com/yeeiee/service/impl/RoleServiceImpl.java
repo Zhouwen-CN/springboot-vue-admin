@@ -67,7 +67,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void updateRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto) {
+    public void modifyRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto) {
         val roleId = roleMenuIdsDto.getId();
 
         // 修改角色
@@ -109,7 +109,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void deleteRole(Long id) {
+    public void removeRole(Long id) {
         val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().eq("role_id", id));
         if (!userRoleList.isEmpty()) {
             val userIds = userRoleList.stream().map(UserRole::getUserId).toList();
@@ -122,7 +122,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void deleteRoles(Collection<Long> ids) {
+    public void removeRoles(Collection<Long> ids) {
         val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>().in("role_id", ids));
         if (!userRoleList.isEmpty()) {
             val userIds = userRoleList.stream().map(UserRole::getUserId).toList();

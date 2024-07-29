@@ -29,7 +29,7 @@ public interface MenuService extends IService<Menu> {
      *
      * @param id 菜单id
      */
-    void deleteMenu(Long id);
+    void removeMenu(Long id);
 
     /**
      * 根据角色id查询菜单

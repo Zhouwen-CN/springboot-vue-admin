@@ -61,14 +61,14 @@ public class RoleController {
     @Operation(summary = "更新角色")
     @PutMapping("")
     public R<String> updateRoleWithMenuIds(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
-        roleService.updateRoleWithMenuIds(roleMenuIdsDto);
+        roleService.modifyRoleWithMenuIds(roleMenuIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
     public R<String> deleteRole(@PathVariable("id") @Parameter(description = "角色id") Long id) {
-        roleService.deleteRole(id);
+        roleService.removeRole(id);
         return R.ok();
     }
 
@@ -76,7 +76,7 @@ public class RoleController {
     @Operation(summary = "批量删除角色")
     @DeleteMapping("")
     public R<String> deleteRoles(@RequestBody Collection<Long> ids) {
-        roleService.deleteRoles(ids);
+        roleService.removeRoles(ids);
         return R.ok();
     }
 }

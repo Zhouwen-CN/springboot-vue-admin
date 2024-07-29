@@ -1,10 +1,6 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +40,6 @@ public class RoleMenu {
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "`update_time`", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "`update_time`", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

@@ -64,7 +64,7 @@ public final class MybatisGeneratorUtil {
                             .disableSerialVersionUID()
                             .addTableFills(
                                     new Column("create_time", FieldFill.INSERT),
-                                    new Column("update_time", FieldFill.INSERT_UPDATE)
+                                    new Column("update_time", FieldFill.UPDATE)
                             );
                     //.enableFileOverride();
 

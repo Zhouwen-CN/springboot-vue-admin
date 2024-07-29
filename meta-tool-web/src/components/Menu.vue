@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import useSettingStore from '@/stores/setting'
-
-const settingStore = useSettingStore()
 defineProps(['menus'])
 defineOptions({
   name: 'Menu'

@@ -40,19 +40,19 @@ public interface RoleService extends IService<Role> {
      *
      * @param roleMenuIdsDto 角色 和 菜单ids
      */
-    void updateRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto);
+    void modifyRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto);
 
     /**
      * 根据id删除角色和菜单关系
      *
      * @param id 角色id
      */
-    void deleteRole(Long id);
+    void removeRole(Long id);
 
     /**
      * 批量删除角色
      *
      * @param ids 角色ids
      */
-    void deleteRoles(Collection<Long> ids);
+    void removeRoles(Collection<Long> ids);
 }

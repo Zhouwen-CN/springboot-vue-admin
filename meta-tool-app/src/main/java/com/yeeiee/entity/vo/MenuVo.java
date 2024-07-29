@@ -5,7 +5,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * <p>
  * 菜单列表，树形结构
@@ -26,24 +29,20 @@ public class MenuVo {
     private Long pid;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-    private List<MenuVo> children;
+    private List<MenuVo> children = new ArrayList<>();
 
-    public static void mergeMenu(MenuVo dist, MenuVo src) {
-        dist.setId(src.getId());
-        dist.setTitle(src.getTitle());
-        dist.setAccessPath(src.getAccessPath());
-        dist.setFilePath(src.getFilePath());
-        dist.setIcon(src.getIcon());
-        dist.setPid(src.getPid());
-        dist.setCreateTime(src.getCreateTime());
-        dist.setUpdateTime(src.getUpdateTime());
-        if (src.getChildren() != null) {
-            dist.getChildren().addAll(src.getChildren());
+    public static void mergeMenu(MenuVo dest, MenuVo src) {
+        if (Objects.equals(dest.getId(), src.getId())) {
+            return;
         }
-    }
-
-    public MenuVo setChildren(List<MenuVo> children) {
-        this.children = children;
-        return this;
+        dest.setId(src.getId());
+        dest.setTitle(src.getTitle());
+        dest.setAccessPath(src.getAccessPath());
+        dest.setFilePath(src.getFilePath());
+        dest.setIcon(src.getIcon());
+        dest.setPid(src.getPid());
+        dest.setCreateTime(src.getCreateTime());
+        dest.setUpdateTime(src.getUpdateTime());
+        dest.getChildren().addAll(src.getChildren());
     }
 }

@@ -45,7 +45,7 @@ public class MenuController {
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
     public R<String> deleteMenu(@PathVariable("id") @Parameter(description = "菜单id") Long id) {
-        menuService.deleteMenu(id);
+        menuService.removeMenu(id);
         return R.ok();
     }
 

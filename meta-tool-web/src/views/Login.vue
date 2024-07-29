@@ -8,7 +8,6 @@ import useUserStore from '@/stores/user'
 import useSettingStore from '@/stores/setting'
 
 const userStore = useUserStore()
-
 const router = useRouter()
 const loading = ref<boolean>(false)
 const ruleFormRef = ref<FormInstance>()
@@ -36,7 +35,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   try {
     await formEl.validate()
     await userStore.doLogin(loginForm)
-    await userStore.getUserMenuInfo()
+    await userStore.getMenuInfo()
 
     let redirect = router.currentRoute.value.query.redirect
     if (!redirect) {
@@ -85,8 +84,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
         <el-form-item>
           <el-button :loading="loading" type="primary" @click="onSubmit(ruleFormRef)"
           >登录
-          </el-button
-          >
+          </el-button>
           <el-button @click="onCancel(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>

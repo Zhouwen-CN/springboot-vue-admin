@@ -2,7 +2,7 @@
 import {Delete, Edit, Plus} from '@element-plus/icons-vue'
 import {reactive, ref} from 'vue'
 import useUserStore from '@/stores/user'
-import type {Menu} from '@/api/auth/menu'
+import type {MenuInfo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {useRouter} from 'vue-router'
@@ -68,7 +68,7 @@ function addSubmenu(pid: number) {
 }
 
 // 更新菜单
-function updateMenu(row: Menu) {
+function updateMenu(row: MenuInfo) {
   toggleDialog.show = true
   toggleDialog.title = '更新菜单'
   menuForm.id = row.id
@@ -80,10 +80,10 @@ function updateMenu(row: Menu) {
 }
 
 // 删除菜单
-async function deleteMenu(menu: Menu) {
+async function deleteMenu(menu: MenuInfo) {
   try {
     await reqDeleteMenu(menu.id)
-    await userStore.getUserMenuInfo()
+    await userStore.getMenuInfo()
     router.removeRoute(menu.accessPath)
     ElMessage.success('操作成功')
   } catch (error) {
@@ -98,7 +98,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     await formEl.validate()
     await reqSaveMenu(menuForm)
     // 重新请求表单信息
-    await userStore.getUserMenuInfo()
+    await userStore.getMenuInfo()
     toggleDialog.show = false
     ElMessage.success('操作成功')
   } catch (error) {
@@ -128,7 +128,7 @@ function clean() {
       <!-- 表格 -->
       <el-table
           :border="true"
-          :data="userStore.userMenuInfo.menus"
+          :data="userStore.menuInfo"
           default-expand-all
           row-key="id"
           style="margin-top: 16px"

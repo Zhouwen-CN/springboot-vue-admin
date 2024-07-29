@@ -132,7 +132,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     ElMessage.success('操作成功')
 
     // 如果修改的是当前用户，则退出重新登入
-    if (userRoleForm.username === userStore.userMenuInfo.username) {
+    if (userRoleForm.username === userStore.userInfo.username) {
       deleteAsyncRoutesAndExit(router, userStore)
       return
     }
@@ -164,7 +164,7 @@ const getRoleNames = computed(() => (roleIds: string) => {
       result.push(role.roleName)
     }
   })
-  return result.join(',')
+  return result.join('，')
 })
 
 onMounted(() => {
@@ -184,8 +184,7 @@ onMounted(() => {
         <el-form-item>
           <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })"
           >搜索
-          </el-button
-          >
+          </el-button>
         </el-form-item>
       </el-form>
     </el-card>

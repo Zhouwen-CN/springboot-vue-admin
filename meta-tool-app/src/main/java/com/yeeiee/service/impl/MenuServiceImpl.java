@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public void deleteMenu(Long id) {
+    public void removeMenu(Long id) {
         val parentMenus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", id));
         if (!parentMenus.isEmpty()) {
             val parentMenuIds = parentMenus.stream().map(Menu::getId).toList();
@@ -71,32 +70,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
      */
     private List<MenuVo> convertToMenuTree(List<MenuVo> menuList) {
-        val menuItemMap = new HashMap<Long, MenuVo>(8);
-        val menuTree = new ArrayList<MenuVo>();
+        val treeMap = new HashMap<Long, MenuVo>(8);
         for (MenuVo menu : menuList) {
             val id = menu.getId();
             val pid = menu.getPid();
 
-            if (!menuItemMap.containsKey(id)) {
-                menuItemMap.put(id, new MenuVo().setChildren(new ArrayList<>()));
+            // 如果节点不存在，则添加当前节点
+            if (!treeMap.containsKey(id)) {
+                treeMap.put(id, menu);
             }
 
-            val item = menuItemMap.get(id);
-            if (item.getId() == null) {
-                MenuVo.mergeMenu(item, menu);
-            }
+            // 合并节点
+            val item = treeMap.get(id);
+            MenuVo.mergeMenu(item, menu);
 
-            if (pid == 0) {
-                menuTree.add(item);
-            } else {
-                if (!menuItemMap.containsKey(pid)) {
-                    menuItemMap.put(pid, new MenuVo().setChildren(new ArrayList<>()));
-                }
-                val children = menuItemMap.get(pid).getChildren();
-                children.add(item);
+            // 父节点不存在，创建空节点
+            if (!treeMap.containsKey(pid)) {
+                treeMap.put(pid, new MenuVo());
             }
+            treeMap.get(pid).getChildren().add(item);
         }
 
-        return menuTree;
+        return treeMap.get(0L).getChildren();
     }
 }

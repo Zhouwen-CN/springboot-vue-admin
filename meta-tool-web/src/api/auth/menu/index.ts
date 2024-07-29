@@ -1,14 +1,14 @@
 import request from '@/api/request'
 import {type CreateAndUpdateTime} from '@/api/types'
 
-export interface Menu extends CreateAndUpdateTime {
-    id: number
-    title: string
-    accessPath: string
-    filePath: string
-    icon: string
-    pid: number
-    children: Menu[]
+export interface MenuInfo extends CreateAndUpdateTime {
+  id: number
+  title: string
+  accessPath: string
+  filePath: string
+  icon: string
+  pid: number
+  children: MenuInfo[]
 }
 
 /**
@@ -16,16 +16,16 @@ export interface Menu extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetMenuList(roleIds: number[]) {
-    return request.get<Menu[]>('/menu', {params: {ids: roleIds + ''}})
+  return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
 }
 
 export interface MenuForm {
-    id?: number
-    title: string
-    accessPath: string
-    filePath?: string
-    icon: string
-    pid: number
+  id?: number
+  title: string
+  accessPath: string
+  filePath?: string
+  icon: string
+  pid: number
 }
 
 /**
