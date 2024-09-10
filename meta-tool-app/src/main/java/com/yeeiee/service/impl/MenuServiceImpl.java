@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +92,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             treeMap.get(pid).getChildren().add(item);
         }
 
-        return treeMap.get(0L).getChildren();
+        // 如果用户没有角色，root则为空
+        val root = treeMap.get(0L);
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        return root.getChildren();
     }
 }
