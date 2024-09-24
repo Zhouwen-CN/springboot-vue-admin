@@ -1,0 +1,268 @@
+<script lang="ts" setup>
+import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {onMounted, reactive, ref} from 'vue'
+import {
+  reqDeleteRole,
+  reqDeleteRoles,
+  reqGetRolePage,
+  reqSaveRoleMenu,
+  type RoleMenuForm,
+  type RoleMenuInfo
+} from '@/api/auth/role'
+import {ElMessage, type FormInstance, type FormRules, type TreeInstance} from 'element-plus'
+import useUserStore from '@/stores/user'
+import type {MenuInfo} from '@/api/auth/menu'
+
+const userStore = useUserStore()
+
+// 表单
+const roleMenuForm = reactive<RoleMenuForm>({
+  id: undefined,
+  roleName: '',
+  desc: '',
+  menuIds: []
+})
+const ruleFormRef = ref<FormInstance>()
+const rules = reactive<FormRules<typeof roleMenuForm>>({
+  roleName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+  desc: [{required: true, message: '请输入密码', trigger: 'blur'}]
+})
+
+// 对话框切换
+const toggleDialog = reactive({
+  show: false,
+  title: ''
+})
+
+// 分页
+const searchName = ref('')
+const {
+  current,
+  total,
+  size,
+  sizeOption,
+  data: pageData,
+  refresh: pageRefresh,
+  onPageChange,
+  onSizeChange
+} = reqGetRolePage()
+
+// 添加角色
+function addRole() {
+  toggleDialog.show = true
+  toggleDialog.title = '添加角色'
+}
+
+// 更新角色
+function updateRole(row: RoleMenuInfo) {
+  toggleDialog.show = true
+  toggleDialog.title = '修改角色'
+  roleMenuForm.id = row.id
+  roleMenuForm.roleName = row.roleName
+  roleMenuForm.desc = row.desc
+  const menuIds = row.menuIds?.split(',').map((id) => Number(id)) || []
+  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuInfo[], menuIds)
+}
+
+// 删除角色
+async function deleteRole(id: number) {
+  try {
+    await reqDeleteRole(id)
+    pageRefresh()
+    ElMessage.success('操作成功')
+  } catch (error) {
+    // do nothing
+  }
+}
+
+// 批量删除
+const deleteIds = ref<number[]>([])
+
+function handleSelectionChange(roles: RoleMenuInfo[]) {
+  deleteIds.value = roles.map((role) => role.id)
+}
+
+async function deleteRoles() {
+  if (deleteIds.value.length === 0) {
+    ElMessage.warning('请选择要删除的用户')
+    return
+  }
+  try {
+    await reqDeleteRoles(deleteIds.value)
+    pageRefresh()
+    ElMessage.success('操作成功')
+  } catch (error) {
+    // do nothing
+  }
+}
+
+// 表单提交
+async function onSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  try {
+    await formEl.validate()
+    // 选中的 和 半选中的菜单
+    const checkedKeys = menuTreeRef.value?.getCheckedKeys() || []
+    const halfCheckedKeys = menuTreeRef.value?.getHalfCheckedKeys() || []
+    roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
+    await reqSaveRoleMenu(roleMenuForm)
+    pageRefresh()
+    toggleDialog.show = false
+    ElMessage.success('操作成功')
+  } catch (error) {
+    // do nothing
+  }
+}
+
+// 树形控件
+const menuTreeRef = ref<TreeInstance>()
+const defaultProps = {
+  children: 'children',
+  label: 'title'
+}
+
+/**
+ * 获取树形控件选中项，递归遍历菜单，剔除非叶子节点
+ * @param menus 菜单列表
+ * @param menuIds 当前需要选中的id列表（包含非叶子节点）
+ * @param selectedKeys
+ */
+function getSelectKeys(
+    menus: MenuInfo[],
+    menuIds: number[],
+    selectedKeys: number[] = []
+): number[] {
+  menus.forEach((menu) => {
+    if ((!menu.children || menu.children.length === 0) && menuIds.includes(menu.id)) {
+      selectedKeys.push(menu.id)
+    } else {
+      getSelectKeys(menu.children, menuIds, selectedKeys)
+    }
+  })
+  return selectedKeys
+}
+
+// 对话框关闭时清空数据 和 错误提示样式
+function clean() {
+  toggleDialog.title = ''
+  roleMenuForm.id = undefined
+  roleMenuForm.roleName = ''
+  roleMenuForm.desc = ''
+  roleMenuForm.menuIds = []
+  ruleFormRef.value?.clearValidate()
+  menuTreeRef.value?.setCheckedKeys([])
+}
+
+onMounted(() => {
+  pageRefresh()
+})
+</script>
+
+<template>
+  <div>
+    <!-- 顶部搜索框 -->
+    <el-card>
+      <el-form inline>
+        <el-form-item label="角色名：">
+          <el-input v-model="searchName" clearable></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })"
+          >搜索
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card style="margin-top: 16px">
+      <!-- 表格上面的按钮 -->
+      <div>
+        <el-button type="primary" @click="addRole">添加角色</el-button>
+        <el-popconfirm title="是否删除？" @confirm="deleteRoles">
+          <template #reference>
+            <el-button type="danger">批量删除</el-button>
+          </template>
+        </el-popconfirm>
+      </div>
+
+      <!-- 表格 -->
+      <el-table
+          :border="true"
+          :data="pageData"
+          row-key="id"
+          style="margin-top: 16px"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55"/>
+        <el-table-column label="ID" prop="id"></el-table-column>
+        <el-table-column label="角色名称" prop="roleName"></el-table-column>
+        <el-table-column label="说明" prop="desc"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime"></el-table-column>
+        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button-group>
+              <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
+              <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
+                <template #reference>
+                  <el-button :icon="Delete" type="danger"></el-button>
+                </template>
+              </el-popconfirm>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页 -->
+      <el-pagination
+          v-model:current-page="current"
+          v-model:page-size="size"
+          :page-sizes="sizeOption"
+          :total="total"
+          background
+          layout="prev, pager, next, ->, total, sizes"
+          style="margin-top: 16px"
+          @current-change="onPageChange"
+          @size-change="onSizeChange"
+      />
+    </el-card>
+
+    <!-- 对话框表单 -->
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+      <template #footer>
+        <el-form
+            ref="ruleFormRef"
+            :model="roleMenuForm"
+            :rules="rules"
+            label-width="80px"
+            style="padding: 0 20px"
+        >
+          <el-form-item label="角色名称" prop="roleName">
+            <el-input v-model="roleMenuForm.roleName" placeholder="请输入角色名称"></el-input>
+          </el-form-item>
+          <el-form-item label="角色说明" prop="desc">
+            <el-input v-model="roleMenuForm.desc" placeholder="请输入角色说明"></el-input>
+          </el-form-item>
+          <!-- 树形控件 -->
+          <el-form-item label="菜单权限">
+            <el-tree
+                v-if="roleMenuForm.id !== 1"
+                ref="menuTreeRef"
+                :data="userStore.menuInfo"
+                :default-checked-keys="roleMenuForm.menuIds"
+                :props="defaultProps"
+                node-key="id"
+                show-checkbox
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="toggleDialog.show = false">取消</el-button>
+            <el-button type="primary" @click="onSubmit(ruleFormRef)">确认</el-button>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<style lang="scss" scoped></style>

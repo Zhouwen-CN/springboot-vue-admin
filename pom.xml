@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.yeeiee</groupId>
-    <artifactId>meta-tool</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <artifactId>springboot-vue-admin</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>meta-tool-app</module>
-        <module>meta-tool-web</module>
+        <module>admin-backend</module>
+        <module>admin-frontend</module>
     </modules>
 
     <properties>
@@ -41,13 +42,6 @@
             </pluginRepositories>
         </profile>
     </profiles>
-
-    <scm>
-        <connection>scm:git:https://gitee.com/Zhouwen-CN/meta-tool.git</connection>
-        <developerConnection>scm:git:https://gitee.com/Zhouwen-CN/meta-tool.git</developerConnection>
-        <url>https://gitee.com/Zhouwen-CN/meta-tool</url>
-      <tag>HEAD</tag>
-  </scm>
 
     <build>
         <plugins>
