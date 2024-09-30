@@ -41,6 +41,11 @@ export function reqSaveMenu(menuForm: MenuForm) {
     }
 }
 
+/**
+ * 删除菜单
+ * @param id 菜单id
+ * @returns
+ */
 export function reqDeleteMenu(id: number) {
     return request.delete(`/menu/${id}`)
 }

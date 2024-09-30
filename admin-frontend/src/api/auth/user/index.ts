@@ -4,17 +4,21 @@ import usePagination from '@/hooks/usePagination'
 import type {Role} from '../role'
 
 export interface LoginForm {
-    username: string
-    password: string
+  username: string
+  password: string
 }
 
 type RoleList = Omit<Role, 'desc' | 'createTime' | 'updateTime'>[]
 
-export interface UserInfo {
-    id: number
-    username: string
-    token: string
-    roleList: RoleList
+export interface TokenInfo {
+  accessToken: string
+  refreshToken: string
+}
+
+export interface UserInfo extends TokenInfo {
+  id: number
+  username: string
+  roleList: RoleList
 }
 
 /**
@@ -23,14 +27,31 @@ export interface UserInfo {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-    return request.post<UserInfo, LoginForm>('/user/login', loginForm)
+  return request.post<UserInfo, LoginForm>('/user/login', loginForm)
+}
+
+/**
+ * 刷新 token
+ * @param refreshToken token
+ * @returns
+ */
+export function reqRefershToken(refreshToken: string) {
+  return request.get<TokenInfo>('/user/refresh', {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`
+    }
+  })
+}
+
+export function reqLogout(id: number) {
+  return request.get<string>(`/user/logout/${id}`)
 }
 
 export interface UserRoleInfo extends CreateAndUpdateTime {
-    id: number
-    username: string
-    password: string
-    roleIds: string
+  id: number
+  username: string
+  password: string
+  roleIds: string
 }
 
 /**
@@ -38,14 +59,14 @@ export interface UserRoleInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetUserRolePage() {
-    return usePagination<UserRoleInfo>('/user')
+  return usePagination<UserRoleInfo>('/user')
 }
 
 export interface UserRoleForm {
-    id?: number
-    username: string
-    password: string
-    roleIds: number[]
+  id?: number
+  username: string
+  password: string
+  roleIds: number[]
 }
 
 /**
@@ -54,13 +75,13 @@ export interface UserRoleForm {
  * @returns
  */
 export function reqSaveUserRole(userRoleForm: UserRoleForm) {
-    if (userRoleForm.id) {
-        // 修改
-        return request.put<any, UserRoleForm>('/user', userRoleForm)
-    } else {
-        // 新增
-        return request.post<any, UserRoleForm>('/user', userRoleForm)
-    }
+  if (userRoleForm.id) {
+    // 修改
+    return request.put<any, UserRoleForm>('/user', userRoleForm)
+  } else {
+    // 新增
+    return request.post<any, UserRoleForm>('/user', userRoleForm)
+  }
 }
 
 /**
@@ -69,7 +90,7 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
  * @returns
  */
 export function reqDeleteUser(id: number) {
-    return request.delete(`/user/${id}`)
+  return request.delete(`/user/${id}`)
 }
 
 /**
@@ -78,5 +99,5 @@ export function reqDeleteUser(id: number) {
  * @returns
  */
 export function reqDeleteUsers(ids: number[]) {
-    return request.delete<any, number[]>('/user', {data: ids})
+  return request.delete<any, number[]>('/user', {data: ids})
 }

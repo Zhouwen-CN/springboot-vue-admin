@@ -421,10 +421,10 @@ DROP TABLE IF EXISTS `t_user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `t_user`
 (
-    `id`            bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `username`      varchar(100) NOT NULL COMMENT '用户名',
-    `password`      varchar(255) NOT NULL COMMENT '密码',
-    `token_version` bigint       not null default 0,
+    `id`            bigint           NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `username`      varchar(100)     NOT NULL COMMENT '用户名',
+    `password`      varchar(255)     NOT NULL COMMENT '密码',
+    `token_version` bigint default 0 not null comment 'access和refresh共用一个version',
     `create_time`   timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`   timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),

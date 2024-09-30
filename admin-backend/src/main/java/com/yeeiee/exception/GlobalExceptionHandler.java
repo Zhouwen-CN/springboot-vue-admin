@@ -1,6 +1,5 @@
-package com.yeeiee.handler;
+package com.yeeiee.exception;
 
-import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.utils.R;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,6 +23,12 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.FORBIDDEN, "用户名或密码错误");
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public R<Void> authenticationExceptionHandler(AuthenticationException e) {
+        return R.error(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+
     @ExceptionHandler(DmlOperationException.class)
     public R<Void> dmlFailureHandler(DmlOperationException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
@@ -34,8 +39,8 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
-    @ExceptionHandler(Exception.class)
-    public R<Void> defaultHandler(Exception e) {
-        return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public R<Void> defaultHandler(Exception e) {
+//        return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
+//    }
 }

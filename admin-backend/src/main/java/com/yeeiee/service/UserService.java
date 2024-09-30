@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
+import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collection;
 
@@ -25,9 +27,23 @@ public interface UserService extends IService<User> {
      * 用户登入
      *
      * @param loginDto 登入传输对象
-     * @return user对象信息，后面会补全菜单信息
+     * @return user 对象信息
      */
-    UserInfoVo login(LoginDto loginDto);
+    UserInfoVo modifyUserWithLogin(LoginDto loginDto);
+
+    /**
+     * 刷新 token
+     * @param request 请求对象
+     * @return user 对象信息
+     */
+    TokenVo modifyUserWithRefreshToken(HttpServletRequest request);
+
+    /**
+     * 登出
+     *
+     * @param id 用户 id
+     */
+    void modifyUserWithLogout(Long id);
 
     /**
      * 获取用户分页（包含角色ids）

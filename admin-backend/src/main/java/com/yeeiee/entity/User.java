@@ -37,7 +37,7 @@ public class User {
 
     @Schema(description = "token版本")
     @TableField("`token_version`")
-    private String tokenVersion;
+    private Long tokenVersion;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

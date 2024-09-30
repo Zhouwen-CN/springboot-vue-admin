@@ -1,10 +1,10 @@
-import type {AxiosInstance, AxiosRequestConfig, Canceler, InternalAxiosRequestConfig} from 'axios'
+import type {AxiosInstance, AxiosRequestConfig} from 'axios'
 import axios, {AxiosError} from 'axios'
 import {ElMessage} from 'element-plus'
 import type {ResultData} from '@/api/types'
 import useUserStore from '@/stores/user'
 import router from '@/router'
-import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
+import {deleteAsyncRoutes} from '@/router/asyncRoutes'
 
 const config = {
     baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -16,22 +16,20 @@ const config = {
 
 class Request {
     private instance: AxiosInstance
-    private pendingRequest: Map<string, Canceler>
 
     public constructor(config: AxiosRequestConfig) {
         this.instance = axios.create(config)
-        this.pendingRequest = new Map()
 
         // 请求拦截器
         this.instance.interceptors.request.use(
             (config) => {
-                this.removePath(config)
-                this.addPath(config)
-                // set token to request header if exists
-                const userStore = useUserStore()
-                const token = userStore.userInfo.token
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`
+                // set token to request header if token not exists
+                if (!config.headers.Authorization) {
+                    const userStore = useUserStore()
+                    const token = userStore.userInfo.accessToken
+                    if (token) {
+                        config.headers.Authorization = `Bearer ${token}`
+                    }
                 }
                 return config
             },
@@ -42,12 +40,19 @@ class Request {
 
         // 响应拦截器
         this.instance.interceptors.response.use(
-            (response) => {
+            async (response) => {
                 const {data, config} = response
-                this.removePath(config)
-                if (data.code !== 200) {
-                    this.alterMessage(data.code, data.message)
-                    return Promise.reject(data.message)
+                // 如果没有权限，并且当前请求不是刷新 token 请求，则执行刷新 token
+                if (data.code === 401 && config.url !== '/user/refresh') {
+                    const userStore = useUserStore()
+                    const isSuccess = await userStore.doRefreshToken()
+                    if (isSuccess) {
+                        config.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
+                        return await this.request(config)
+                    } else {
+                        this.alterMessage(data.code, data.message)
+                        return Promise.reject(data.message)
+                    }
                 }
                 return data
             },
@@ -63,14 +68,23 @@ class Request {
         )
     }
 
-    public getPendingRequest(): Map<string, Canceler> {
-        return this.pendingRequest
-    }
-
+    /**
+     *  get 请求
+     * @param url 请求地址
+     * @param config 请求参数
+     * @returns
+     */
     public get<T>(url: string, config?: AxiosRequestConfig): Promise<ResultData<T>> {
         return this.instance.get(url, config)
     }
 
+    /**
+     *  post(新增) 请求
+     * @param url 请求地址
+     * @param data 请求体
+     * @param config 请求参数
+     * @returns
+     */
     public post<T, D = unknown>(
         url: string,
         data?: D,
@@ -79,6 +93,13 @@ class Request {
         return this.instance.post(url, data, config)
     }
 
+    /**
+     * put(更新) 请求
+     * @param url 请求地址
+     * @param data 请求体
+     * @param config 请求参数
+     * @returns
+     */
     public put<T, D = unknown>(
         url: string,
         data?: D,
@@ -87,38 +108,23 @@ class Request {
         return this.instance.put(url, data, config)
     }
 
+    /**
+     * delete 请求
+     * @param url 请求地址
+     * @param config 请求参数
+     * @returns
+     */
     public delete<T, D>(url: string, config?: AxiosRequestConfig<D>): Promise<ResultData<T>> {
         return this.instance.delete(url, config)
     }
 
+    /**
+     * 通用请求
+     * @param config 请求配置
+     * @returns
+     */
     public request<T, D>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
         return this.instance.request(config)
-    }
-
-    /**
-     * 如果请求在等待列表，则取消请求，并从列表删除
-     */
-    private removePath(config: InternalAxiosRequestConfig): void {
-        const path = `${config.method}&${config.url}`
-        if (this.pendingRequest.has(path)) {
-            const cancel = this.pendingRequest.get(path)
-            cancel?.('取消重复请求：' + path)
-            this.pendingRequest.delete(path)
-        }
-    }
-
-    /**
-     * 如果不在等待列表，则添加到列表中
-     */
-    private addPath(config: InternalAxiosRequestConfig): void {
-        const path = `${config.method}&${config.url}`
-        if (!config.cancelToken) {
-            config.cancelToken = new axios.CancelToken((cancel) => {
-                if (!this.pendingRequest.has(path)) {
-                    this.pendingRequest.set(path, cancel)
-                }
-            })
-        }
     }
 
     /**
@@ -130,7 +136,8 @@ class Request {
         } else if (code >= 400 && code < 500) {
             // token失效退出登入
             if (code === 401) {
-                deleteAsyncRoutesAndExit(router, useUserStore())
+                useUserStore().$reset()
+                deleteAsyncRoutes(router)
             }
             ElMessage.warning(message)
         } else if (code >= 500) {

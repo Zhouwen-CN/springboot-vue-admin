@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class SecurityUser implements UserDetails, CredentialsContainer {
     private final @Getter Long id;
     private final String username;
-    private final @Getter Long version;
+    private final @Getter Long tokenVersion;
     private final @Getter List<RoleVo> roleList;
     private String password;
 

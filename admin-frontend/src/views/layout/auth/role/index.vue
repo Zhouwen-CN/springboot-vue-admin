@@ -37,6 +37,7 @@ const toggleDialog = reactive({
 // 分页
 const searchName = ref('')
 const {
+  loading,
   current,
   total,
   size,
@@ -46,6 +47,16 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetRolePage()
+
+// 查询角色
+function searchRole() {
+  searchName.value = searchName.value.trim()
+  if (searchName.value === '') {
+    ElMessage.warning('请输入角色名')
+    return
+  }
+  pageRefresh({params: {searchName: searchName.value}})
+}
 
 // 添加角色
 function addRole() {
@@ -167,8 +178,8 @@ onMounted(() => {
           <el-input v-model="searchName" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })"
-          >搜索
+          <el-button :icon="Search" :loading="loading" type="primary"
+                     @click="searchRole()">搜索
           </el-button>
         </el-form-item>
       </el-form>
@@ -186,24 +197,25 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-          :border="true"
-          :data="pageData"
-          row-key="id"
-          style="margin-top: 16px"
-          @selection-change="handleSelectionChange"
-      >
+      <el-table :border="true" :data="pageData" row-key="id"
+                style="margin-top: 16px"
+                @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="角色名称" prop="roleName"></el-table-column>
+        <el-table-column label="角色名称"
+                         prop="roleName"></el-table-column>
         <el-table-column label="说明" prop="desc"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+        <el-table-column label="创建时间"
+                         prop="createTime"></el-table-column>
+        <el-table-column label="更新时间"
+                         prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
-              <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
+              <el-button :icon="Edit" type="primary"
+                         @click="updateRole(row)"></el-button>
+              <el-popconfirm title="是否删除？"
+                             @confirm="deleteRole(row.id)">
                 <template #reference>
                   <el-button :icon="Delete" type="danger"></el-button>
                 </template>
@@ -214,34 +226,31 @@ onMounted(() => {
       </el-table>
 
       <!-- 分页 -->
-      <el-pagination
-          v-model:current-page="current"
-          v-model:page-size="size"
-          :page-sizes="sizeOption"
-          :total="total"
-          background
-          layout="prev, pager, next, ->, total, sizes"
-          style="margin-top: 16px"
-          @current-change="onPageChange"
-          @size-change="onSizeChange"
-      />
+      <el-pagination v-model:current-page="current"
+                     v-model:page-size="size"
+                     :page-sizes="sizeOption" :total="total" background
+                     layout="prev, pager, next, ->, total, sizes"
+                     style="margin-top: 16px" @current-change="onPageChange"
+                     @size-change="onSizeChange"/>
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
+               width="40%" @close="clean">
       <template #footer>
         <el-form
             ref="ruleFormRef"
             :model="roleMenuForm"
             :rules="rules"
             label-width="80px"
-            style="padding: 0 20px"
-        >
+            style="padding: 0 20px">
           <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="roleMenuForm.roleName" placeholder="请输入角色名称"></el-input>
+            <el-input v-model="roleMenuForm.roleName"
+                      placeholder="请输入角色名称"></el-input>
           </el-form-item>
           <el-form-item label="角色说明" prop="desc">
-            <el-input v-model="roleMenuForm.desc" placeholder="请输入角色说明"></el-input>
+            <el-input v-model="roleMenuForm.desc"
+                      placeholder="请输入角色说明"></el-input>
           </el-form-item>
           <!-- 树形控件 -->
           <el-form-item label="菜单权限">
@@ -252,12 +261,15 @@ onMounted(() => {
                 :default-checked-keys="roleMenuForm.menuIds"
                 :props="defaultProps"
                 node-key="id"
-                show-checkbox
-            />
+                show-checkbox/>
           </el-form-item>
           <el-form-item>
-            <el-button @click="toggleDialog.show = false">取消</el-button>
-            <el-button type="primary" @click="onSubmit(ruleFormRef)">确认</el-button>
+            <el-button
+                @click="toggleDialog.show = false">取消
+            </el-button>
+            <el-button type="primary"
+                       @click="onSubmit(ruleFormRef)">确认
+            </el-button>
           </el-form-item>
         </el-form>
       </template>

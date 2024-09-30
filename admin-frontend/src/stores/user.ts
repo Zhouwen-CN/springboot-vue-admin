@@ -1,47 +1,77 @@
 import type {LoginForm, UserInfo} from '@/api/auth/user'
-import {reqLogin} from '@/api/auth/user'
+import {reqLogin, reqLogout, reqRefershToken} from '@/api/auth/user'
 import {type MenuInfo, reqGetMenuList} from '@/api/auth/menu'
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import {getAsyncRoutes} from '@/router/asyncRoutes'
+import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
 import router, {modules} from '@/router'
+import {getItem, removeItem, setItem} from '@/utils/localstorageUtil'
 
 const useUserStore = defineStore('user', () => {
-    const userInfo = ref<UserInfo>(JSON.parse(localStorage.getItem('USER_INFO') || '{}') as UserInfo)
-    const menuInfo = ref<MenuInfo[]>(
-        JSON.parse(localStorage.getItem('MENU_INFO') || '[]') as MenuInfo[]
-    )
+  const userInfo = ref<UserInfo>(getItem<UserInfo>('USER_INFO', '{}'))
+  const menuInfo = ref<MenuInfo[]>(getItem<MenuInfo[]>('MENU_INFO', '[]'))
+  let refreshTokenPromise: Promise<boolean> | null = null
 
-    // 登入
-    async function doLogin(loginForm: LoginForm) {
-        let result = await reqLogin(loginForm)
-        userInfo.value = result.data
-        localStorage.setItem('USER_INFO', JSON.stringify(userInfo.value))
+  // 登入
+  async function doLogin(loginForm: LoginForm) {
+    let result = await reqLogin(loginForm)
+    userInfo.value = result.data
+    setItem('USER_INFO', userInfo.value)
+  }
+
+  // 刷新 token
+  async function doRefreshToken() {
+    if (refreshTokenPromise) {
+      return refreshTokenPromise
     }
+    refreshTokenPromise = new Promise(async (resolve) => {
+      const result = await reqRefershToken(userInfo.value.refreshToken)
+      if (result.code === 200) {
+        const {accessToken, refreshToken} = result.data
+        userInfo.value.accessToken = accessToken
+        userInfo.value.refreshToken = refreshToken
+        setItem('USER_INFO', userInfo.value)
+        resolve(true)
+      } else {
+        resolve(false)
+      }
+    })
 
-    // 获取菜单信息
-    async function getMenuInfo() {
-        const roleIds = userInfo.value.roleList.map((role) => role.id)
-        const result = await reqGetMenuList(roleIds)
-        menuInfo.value = result.data
-        localStorage.setItem('MENU_INFO', JSON.stringify(menuInfo.value))
+    refreshTokenPromise.finally(() => {
+      refreshTokenPromise = null
+    })
+    return refreshTokenPromise
+  }
 
-        // 加载动态路由
-        const routes = getAsyncRoutes(modules, menuInfo.value)
-        routes.forEach((route) => {
-            router.addRoute('Layout', route)
-        })
-    }
+  async function doLogout() {
+    await reqLogout(userInfo.value.id)
+    $reset()
+    deleteAsyncRoutes(router)
+  }
 
-    // 重置仓库
-    function $reset() {
-        localStorage.removeItem('USER_INFO')
-        localStorage.removeItem('MENU_INFO')
-        userInfo.value = {} as UserInfo
-        menuInfo.value = []
-    }
+  // 获取菜单信息
+  async function getMenuInfo() {
+    const roleIds = userInfo.value.roleList.map((role) => role.id)
+    const result = await reqGetMenuList(roleIds)
+    menuInfo.value = result.data
+    setItem('MENU_INFO', menuInfo.value)
 
-    return {userInfo, menuInfo, doLogin, getMenuInfo, $reset}
+    // 加载动态路由
+    const routes = getAsyncRoutes(modules, menuInfo.value)
+    routes.forEach((route) => {
+      router.addRoute('Layout', route)
+    })
+  }
+
+  // 重置仓库
+  function $reset() {
+    removeItem('USER_INFO')
+    removeItem('MENU_INFO')
+    userInfo.value = {} as UserInfo
+    menuInfo.value = []
+  }
+
+  return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}
 })
 
 export default useUserStore

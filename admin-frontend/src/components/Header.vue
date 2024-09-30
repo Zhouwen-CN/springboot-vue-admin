@@ -3,18 +3,22 @@ import {useRoute, useRouter} from 'vue-router'
 import useUserStore from '@/stores/user'
 import {ArrowDown, ArrowRight, FullScreen, Moon, Refresh, Sunny} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
-import {computed} from 'vue'
-import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
+import {computed, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
+const loading = ref(false)
 
 // 刷新
 function refresh() {
+  loading.value = true
   settingStore.refresh = !settingStore.refresh
+  setTimeout(() => {
+    loading.value = false
+  }, 500)
 }
 
 // 切换全屏模式
@@ -30,7 +34,7 @@ function toggleFullScreen() {
 
 // 登出
 function logout() {
-  deleteAsyncRoutesAndExit(router, userStore)
+  userStore.doLogout()
   ElMessage.success('退出成功')
 }
 
@@ -55,12 +59,15 @@ function changeTheme() {
   <div class="container">
     <div class="left">
       <!-- 展开收起按钮 -->
-      <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
-        <component :is="settingStore.collapse ? 'Expand' : 'Fold'"></component>
+      <el-icon :size="20" style="margin-right: 10px"
+               @click="changeCollapse">
+        <component :is="settingStore.collapse ? 'Expand' : 'Fold'">
+        </component>
       </el-icon>
       <!-- 左侧面包屑 -->
       <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
+        <el-breadcrumb-item v-for="(item, index) in routeInfo"
+                            :key="index" :to="item.path">
           <el-icon>
             <component :is="item.meta.icon"></component>
           </el-icon>
@@ -76,15 +83,16 @@ function changeTheme() {
             :active-action-icon="Moon"
             :inactive-action-icon="Sunny"
             size="large"
-            @change="changeTheme"
-        />
-        <el-button :icon="Refresh" circle size="default" @click="refresh"></el-button>
-        <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
+            @change="changeTheme"/>
+        <el-button :icon="Refresh" :loading="loading" circle
+                   size="default"
+                   @click="refresh"></el-button>
+        <el-button :icon="FullScreen" circle size="default"
+                   @click="toggleFullScreen"></el-button>
         <el-avatar
             shape="square"
             size="default"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-        >
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
         </el-avatar>
 
         <el-dropdown>
@@ -96,7 +104,9 @@ function changeTheme() {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="logout">退出登入</el-dropdown-item>
+              <el-dropdown-item
+                  @click="logout">退出登入
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>

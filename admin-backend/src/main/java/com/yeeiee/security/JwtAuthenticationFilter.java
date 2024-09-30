@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -30,9 +29,6 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String HEADER_STRING = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
-
     private JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
 
     @Override
@@ -41,24 +37,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         // 从 request 获取 JWT token
-        val token = getTokenFromRequest(request);
+        val token = JwtTokenUtil.getTokenFromRequest(request);
 
-        val optional = JwtTokenUtil.getClaims(token);
+        val optional = JwtTokenUtil.parseAccessToken(token);
         // 校验 token
         if (optional.isPresent()) {
-            // 从 token 获取 username
+            // 从 token 获取 username 和 access_token_version
             val claimMap = optional.get();
             val username = claimMap.get("username").asString();
             val version = claimMap.get("version").asLong();
-            // 加载与令 token 关联的用户
-            val userDetails = jwtUserDetailServiceImpl.loadUserByUsername(username);
-            val securityUser = (SecurityUser) userDetails;
-            if (version == securityUser.getVersion() - 1) {
+            // 加载与 token 关联的用户
+            val securityUser = (SecurityUser) jwtUserDetailServiceImpl.loadUserByUsername(username);
+            if (version == securityUser.getTokenVersion() - 1) {
                 // 将用户信息存入 authentication
                 val authenticated = UsernamePasswordAuthenticationToken.authenticated(
-                        userDetails,
+                        securityUser,
                         null,
-                        userDetails.getAuthorities());
+                        securityUser.getAuthorities());
                 // 一些附加信息（远程主机地址，sessionId）
                 authenticated.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // 将 authentication 存入 ThreadLocal
@@ -68,13 +63,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String getTokenFromRequest(HttpServletRequest request) {
-        val bearerToken = request.getHeader(HEADER_STRING);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 }

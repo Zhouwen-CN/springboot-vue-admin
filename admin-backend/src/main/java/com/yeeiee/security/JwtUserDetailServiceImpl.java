@@ -33,7 +33,7 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
                 .id(userInfoVo.getId())
                 .username(userInfoVo.getUsername())
                 .password(userInfoVo.getPassword())
-                .version(userInfoVo.getVersion())
+                .tokenVersion(userInfoVo.getTokenVersion())
                 .roleList(userInfoVo.getRoleList())
                 .build();
     }

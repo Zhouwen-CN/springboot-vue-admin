@@ -65,6 +65,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
                                 // 用户登入
                                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+                                // 刷新 token
+                                .requestMatchers(HttpMethod.GET, "/user/refresh").permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu").authenticated()
                                 // 只有 admin 角色才能访问权限管理

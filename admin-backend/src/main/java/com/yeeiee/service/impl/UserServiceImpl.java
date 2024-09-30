@@ -9,14 +9,17 @@ import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
+import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.exception.AuthenticationException;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.security.SecurityUser;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -46,8 +49,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserRoleService userRoleService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
     @Override
-    public UserInfoVo login(LoginDto loginDto) {
+    public UserInfoVo modifyUserWithLogin(LoginDto loginDto) {
         val authenticate = authenticationProvider.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );
@@ -56,16 +60,63 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val userInfoVo = new UserInfoVo();
         userInfoVo.setId(securityUser.getId());
         userInfoVo.setUsername(securityUser.getUsername());
-        val accessToken = JwtTokenUtil.generateToken(securityUser.getUsername(), securityUser.getVersion());
-        userInfoVo.setToken(accessToken);
+
+        val accessToken = JwtTokenUtil.generateAccessToken(securityUser.getUsername(), securityUser.getTokenVersion());
+        userInfoVo.setAccessToken(accessToken);
+        val refreshToken = JwtTokenUtil.generateRefreshToken(securityUser.getUsername(), securityUser.getTokenVersion());
+        userInfoVo.setRefreshToken(refreshToken);
         userInfoVo.setRoleList(securityUser.getRoleList());
 
         // 更新 token version
         val updateWrapper = new UpdateWrapper<User>();
-        updateWrapper.eq("id", securityUser.getId()).set("token_version", securityUser.getVersion() + 1);
+        updateWrapper.eq("id", securityUser.getId())
+                .set("token_version", securityUser.getTokenVersion() + 1);
         userMapper.update(updateWrapper);
 
         return userInfoVo;
+    }
+
+    @Override
+    public TokenVo modifyUserWithRefreshToken(HttpServletRequest request) {
+        val token = JwtTokenUtil.getTokenFromRequest(request);
+        val optional = JwtTokenUtil.parseRefreshToken(token);
+        if (optional.isEmpty()) {
+            throw new AuthenticationException("token验证失败");
+        }
+
+        val claimMap = optional.get();
+        val username = claimMap.get("username").asString();
+        val version = claimMap.get("version").asLong();
+
+        val queryWrapper = new QueryWrapper<User>().eq("username", username);
+        val user = userMapper.selectOne(queryWrapper);
+        if (user == null || version != user.getTokenVersion() - 1) {
+            throw new AuthenticationException("token验证失败");
+        }
+
+        val tokenVo = new TokenVo();
+        val accessToken = JwtTokenUtil.generateAccessToken(user.getUsername(), user.getTokenVersion());
+        tokenVo.setAccessToken(accessToken);
+        val refreshToken = JwtTokenUtil.generateRefreshToken(user.getUsername(), user.getTokenVersion());
+        tokenVo.setRefreshToken(refreshToken);
+
+        // 更新 token version
+        val updateWrapper = new UpdateWrapper<User>();
+        updateWrapper.eq("id", user.getId())
+                .set("token_version", user.getTokenVersion() + 1);
+        userMapper.update(updateWrapper);
+        return tokenVo;
+    }
+
+    @Override
+    public void modifyUserWithLogout(Long id) {
+        val user = userMapper.selectById(id);
+        if (user != null) {
+            val updateWrapper = new UpdateWrapper<User>();
+            updateWrapper.eq("id", user.getId())
+                    .set("token_version", user.getTokenVersion() + 1);
+            userMapper.update(updateWrapper);
+        }
     }
 
     @Override

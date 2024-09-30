@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
+import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.service.UserService;
@@ -11,6 +12,7 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,22 @@ public class UserController {
     @Operation(summary = "用户登入")
     @PostMapping("/login")
     public R<UserInfoVo> login(@RequestBody LoginDto loginDto) {
-        val userRoleMenuVo = userService.login(loginDto);
-        return R.ok(userRoleMenuVo);
+        val userInfoVo = userService.modifyUserWithLogin(loginDto);
+        return R.ok(userInfoVo);
+    }
+
+    @Operation(summary = "刷新token")
+    @GetMapping("/refresh")
+    public R<TokenVo> refreshToken(HttpServletRequest request) {
+        val userInfoVo = userService.modifyUserWithRefreshToken(request);
+        return R.ok(userInfoVo);
+    }
+
+    @Operation(summary = "退出登入")
+    @GetMapping("/logout/{id}")
+    public R<String> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+        userService.modifyUserWithLogout(id);
+        return R.ok();
     }
 
     @Operation(summary = "查询所有用户")

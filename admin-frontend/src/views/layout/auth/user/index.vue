@@ -13,7 +13,7 @@ import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {reqGetRoles} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import {useRouter} from 'vue-router'
-import {deleteAsyncRoutesAndExit} from '@/router/asyncRoutes'
+import {deleteAsyncRoutes} from '@/router/asyncRoutes'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -46,6 +46,7 @@ const toggleDialog = reactive({
 // 获取分页数据
 const searchName = ref('')
 const {
+  loading,
   current,
   total,
   size,
@@ -60,7 +61,7 @@ const {
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
 // 获取角色列表
-const {data: roleData, refresh: roleRefresh} = reqGetRoles()
+const {data: roleData, run: roleRefresh} = reqGetRoles()
 const handleCheckAllChange = (val: boolean) => {
   if (val) {
     userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
@@ -73,6 +74,16 @@ const handleCheckedCitiesChange = (value: string[]) => {
   const checkedCount = value.length
   checkAll.value = checkedCount === roleData.value?.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < (roleData.value?.length as number)
+}
+
+// 查询用户
+function searchUser() {
+  searchName.value = searchName.value.trim()
+  if (searchName.value === '') {
+    ElMessage.warning('请输入用户名')
+    return
+  }
+  pageRefresh({params: {searchName: searchName.value}})
 }
 
 // 添加用户
@@ -104,7 +115,6 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(users: UserRoleInfo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
@@ -135,7 +145,8 @@ async function onSubmit(formEl: FormInstance | undefined) {
 
     // 如果修改的是当前用户，则退出重新登入
     if (userRoleForm.username === userStore.userInfo.username) {
-      deleteAsyncRoutesAndExit(router, userStore)
+      userStore.$reset()
+      deleteAsyncRoutes(router)
       return
     }
 
@@ -184,8 +195,8 @@ onMounted(() => {
           <el-input v-model="searchName" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" type="primary" @click="pageRefresh({ params: { searchName } })"
-          >搜索
+          <el-button :icon="Search" :loading="loading" type="primary"
+                     @click="searchUser()">搜索
           </el-button>
         </el-form-item>
       </el-form>
@@ -203,30 +214,32 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-          :border="true"
-          :data="pageData"
-          row-key="id"
-          style="margin-top: 16px"
-          @selection-change="handleSelectionChange"
-      >
+      <el-table :border="true" :data="pageData" row-key="id"
+                style="margin-top: 16px"
+                @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="用户名称" prop="username"></el-table-column>
+        <el-table-column label="用户名称"
+                         prop="username"></el-table-column>
         <el-table-column label="角色名称" prop="roleIds">
           <template #default="{ row }">
             {{ getRoleNames(row.roleIds) }}
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+        <el-table-column label="创建时间"
+                         prop="createTime"></el-table-column>
+        <el-table-column label="更新时间"
+                         prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
-              <el-popconfirm title="是否删除？" @confirm="deleteUser(row.id)">
+              <el-button :icon="Edit" type="primary"
+                         @click="updateUser(row)"></el-button>
+              <el-popconfirm title="是否删除？"
+                             @confirm="deleteUser(row.id)">
                 <template #reference>
-                  <el-button :disabled="row.id === 1" :icon="Delete" type="danger"></el-button>
+                  <el-button :disabled="row.id === 1" :icon="Delete"
+                             type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -236,66 +249,65 @@ onMounted(() => {
 
       <!-- 分页 -->
       <!-- TODO: jumper有bug，会出现警告信息，暂时不用 -->
-      <el-pagination
-          v-model:current-page="current"
-          v-model:page-size="size"
-          :page-sizes="sizeOption"
-          :total="total"
-          background
-          layout="prev, pager, next, ->, total, sizes"
-          style="margin-top: 16px"
-          @current-change="onPageChange"
-          @size-change="onSizeChange"
-      />
+      <el-pagination v-model:current-page="current"
+                     v-model:page-size="size"
+                     :page-sizes="sizeOption" :total="total" background
+                     layout="prev, pager, next, ->, total, sizes"
+                     style="margin-top: 16px" @current-change="onPageChange"
+                     @size-change="onSizeChange"/>
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
+               width="40%" @close="clean">
       <template #footer>
         <el-form
             ref="ruleFormRef"
             :model="userRoleForm"
             :rules="rules"
             label-width="80px"
-            style="padding: 0 20px"
-        >
+            style="padding: 0 20px">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="userRoleForm.username" placeholder="请输入用户姓名"></el-input>
+            <el-input v-model="userRoleForm.username"
+                      placeholder="请输入用户姓名"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
                 v-model="userRoleForm.password"
                 placeholder="请输入用户密码"
-                type="password"
-            ></el-input>
+                type="password"></el-input>
           </el-form-item>
           <!-- 多选框组 -->
           <el-form-item label="角色列表" prop="roleIds">
-            <el-space v-if="userRoleForm.id !== 1" alignment="stretch" direction="vertical">
+            <el-space v-if="userRoleForm.id !== 1" alignment="stretch"
+                      direction="vertical">
               <el-checkbox
                   v-model="checkAll"
                   :indeterminate="isIndeterminate"
-                  @change="handleCheckAllChange"
-              >
+                  @change="handleCheckAllChange">
                 全选
               </el-checkbox>
               <!-- TODO: 不能授予用户admin角色 -->
-              <el-checkbox-group v-model="userRoleForm.roleIds" @change="handleCheckedCitiesChange">
+              <el-checkbox-group v-model="userRoleForm.roleIds"
+                                 @change="handleCheckedCitiesChange">
                 <el-checkbox
                     v-for="role in roleData"
                     :key="role.id"
                     :disabled="role.roleName === 'admin'"
                     :label="role.roleName"
-                    :value="role.id"
-                >
+                    :value="role.id">
                   {{ role.roleName }}
                 </el-checkbox>
               </el-checkbox-group>
             </el-space>
           </el-form-item>
           <el-form-item>
-            <el-button @click="toggleDialog.show = false">取消</el-button>
-            <el-button type="primary" @click="onSubmit(ruleFormRef)">确认</el-button>
+            <el-button
+                @click="toggleDialog.show = false">取消
+            </el-button>
+            <el-button type="primary"
+                       @click="onSubmit(ruleFormRef)">确认
+            </el-button>
           </el-form-item>
         </el-form>
       </template>

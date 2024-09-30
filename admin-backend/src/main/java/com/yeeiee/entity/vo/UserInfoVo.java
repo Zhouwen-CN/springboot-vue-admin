@@ -18,14 +18,15 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserInfoVo {
+public class UserInfoVo extends TokenVo {
     private Long id;
     private String username;
     @JsonIgnore
     private String password;
     // token 版本
     @JsonIgnore
-    private Long version;
-    private String token;
+    private Long tokenVersion;
+    private String accessToken;
+    private String refreshToken;
     private List<RoleVo> roleList;
 }
