@@ -1,16 +1,20 @@
 import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
+import type {Role} from '../role'
 
 export interface LoginForm {
     username: string
     password: string
 }
 
+type RoleList = Omit<Role, 'desc' | 'createTime' | 'updateTime'>[]
+
 export interface UserInfo {
+    id: number
     username: string
     token: string
-    roleIds: number[]
+    roleList: RoleList
 }
 
 /**

@@ -21,7 +21,8 @@ const useUserStore = defineStore('user', () => {
 
     // 获取菜单信息
     async function getMenuInfo() {
-        const result = await reqGetMenuList(userInfo.value.roleIds)
+        const roleIds = userInfo.value.roleList.map((role) => role.id)
+        const result = await reqGetMenuList(roleIds)
         menuInfo.value = result.data
         localStorage.setItem('MENU_INFO', JSON.stringify(menuInfo.value))
 

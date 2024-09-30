@@ -3,7 +3,6 @@ package com.yeeiee.security;
 import com.yeeiee.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,20 +24,17 @@ public class JwtUserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        val userRoleVo = userMapper.selectByUserName(username);
-        if (userRoleVo == null) {
+        val userInfoVo = userMapper.selectByUserName(username);
+        if (userInfoVo == null) {
             throw new UsernameNotFoundException("cannot find username: " + username);
         }
 
-        val userBuilder = User.builder()
-                .username(userRoleVo.getUsername())
-                .password(userRoleVo.getPassword());
-
-        // 授权角色
-        val roleIds = userRoleVo.getRoleIds();
-        if (roleIds != null) {
-            userBuilder.roles(roleIds.split(","));
-        }
-        return userBuilder.build();
+        return SecurityUser.builder()
+                .id(userInfoVo.getId())
+                .username(userInfoVo.getUsername())
+                .password(userInfoVo.getPassword())
+                .version(userInfoVo.getVersion())
+                .roleList(userInfoVo.getRoleList())
+                .build();
     }
 }

@@ -12,20 +12,32 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+    <resultMap id="UserInfoVo" type="com.yeeiee.entity.vo.UserInfoVo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="token_version" property="version"/>
+        <collection property="roleList" ofType="com.yeeiee.entity.vo.RoleVo">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="roleName"/>
+        </collection>
+    </resultMap>
 
-    <select id="selectByUserName" resultMap="UserRoleVo">
+
+    <select id="selectByUserName" resultMap="UserInfoVo">
         select a.id,
                a.username,
                a.password,
-               a.create_time,
-               a.update_time,
-               group_concat(b.role_id) as role_ids
+               a.token_version,
+               b.role_id,
+               c.role_name
         from (select *
               from t_user
               where username = #{username}) a
                  left join t_user_role b
                            on a.id = b.user_id
-        group by a.id, a.username, a.password, a.create_time, a.update_time
+                 left join t_role c
+                           on b.role_id = c.id
     </select>
 
     <select id="selectUserPages" resultMap="UserRoleVo">

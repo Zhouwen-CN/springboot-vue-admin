@@ -13,7 +13,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role_name, create_time, update_time
+        id
+        , role_name, create_time, update_time
     </sql>
     <select id="selectRolePages" resultType="com.yeeiee.entity.vo.RoleMenuVo">
         select

@@ -35,6 +35,10 @@ public class User {
     @TableField("`password`")
     private String password;
 
+    @Schema(description = "token版本")
+    @TableField("`token_version`")
+    private String tokenVersion;
+
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)
     private LocalDateTime createTime;

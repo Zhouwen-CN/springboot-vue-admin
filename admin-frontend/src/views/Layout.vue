@@ -27,14 +27,14 @@ const settingStore = useSettingStore()
 
         <!-- 好像只有这样才能改菜单 hover 的颜色 -->
         <el-menu
-            :default-active="useRoute().path"
-            router
-            unique-opened
-            :collapse="settingStore.collapse"
             :background-color="settingStore.darkMode ? '#121212' : '#304156'"
+            :collapse="settingStore.collapse"
+            :default-active="useRoute().path"
             active-text-color="var(--active-color)"
+            router
+            style="border: 0"
             text-color="var(--text-color)"
-            style="border: 0">
+            unique-opened>
           <el-menu-item index="/home">
             <el-icon :size="20">
               <HomeFilled/>

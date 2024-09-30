@@ -43,23 +43,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 从 request 获取 JWT token
         val token = getTokenFromRequest(request);
 
-        val optional = JwtTokenUtil.getSubject(token);
+        val optional = JwtTokenUtil.getClaims(token);
         // 校验 token
         if (optional.isPresent()) {
             // 从 token 获取 username
-            val username = optional.get();
+            val claimMap = optional.get();
+            val username = claimMap.get("username").asString();
+            val version = claimMap.get("version").asLong();
             // 加载与令 token 关联的用户
             val userDetails = jwtUserDetailServiceImpl.loadUserByUsername(username);
-            // 将用户信息存入 authentication
-            val authenticated = UsernamePasswordAuthenticationToken.authenticated(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities());
-            // 一些附加信息（远程主机地址，sessionId）
-            authenticated.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            // 将 authentication 存入 ThreadLocal
-            SecurityContextHolder.getContext().setAuthentication(authenticated);
-            log.info("authenticated user {}, setting security context", username);
+            val securityUser = (SecurityUser) userDetails;
+            if (version == securityUser.getVersion() - 1) {
+                // 将用户信息存入 authentication
+                val authenticated = UsernamePasswordAuthenticationToken.authenticated(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
+                // 一些附加信息（远程主机地址，sessionId）
+                authenticated.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // 将 authentication 存入 ThreadLocal
+                SecurityContextHolder.getContext().setAuthentication(authenticated);
+                log.info("authenticated user {}, setting security context", username);
+            }
         }
 
         filterChain.doFilter(request, response);

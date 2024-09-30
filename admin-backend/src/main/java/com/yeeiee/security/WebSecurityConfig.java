@@ -35,10 +35,6 @@ import java.io.IOException;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-    private JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
-
-    private JwtAuthenticationFilter jwtAuthFilter;
-
     private static final String[] WHITE_LIST = new String[]{
             "/",
             "/index.html",
@@ -52,6 +48,8 @@ public class WebSecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
+    private JwtUserDetailServiceImpl jwtUserDetailServiceImpl;
+    private JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -67,10 +65,10 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
                                 // 用户登入
                                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
-                                // 改为使用 RBAC
+                                // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu").authenticated()
-                                // 这里的1代表admin，admin是不能被删除的，这样做的目的是鉴权的时候可以少关联一张表
-                                .requestMatchers("/user/**", "/role/**", "/menu/**").hasRole("1")
+                                // 只有 admin 角色才能访问权限管理
+                                .requestMatchers("/user/**", "/role/**", "/menu/**").hasRole("admin")
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
                                 // 已认证的请求会被自动授权

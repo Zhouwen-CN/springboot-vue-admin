@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
-import useSettingStore from '@/stores/setting'
 import {Link} from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
-const settingStore = useSettingStore()
 </script>
 
 <template>
@@ -20,9 +18,9 @@ const settingStore = useSettingStore()
             {{ userStore.userInfo.username }}</h3>
           <div>
             <el-link
-                href="https://gitee.com/Zhouwen-CN/springboot-vue-admin"
                 :icon="Link"
                 class="title_msg"
+                href="https://gitee.com/Zhouwen-CN/springboot-vue-admin"
                 target="_blank"
                 type="primary">
               Springboot-Vue-Admin Project Gitee Link

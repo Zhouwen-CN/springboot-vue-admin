@@ -1,6 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,7 @@ import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.UserMapper;
+import com.yeeiee.security.SecurityUser;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;
@@ -38,13 +40,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+    public static final String BCRYPT_PREFIX = "$2a$10$";
     private AuthenticationProvider authenticationProvider;
     private UserMapper userMapper;
     private UserRoleService userRoleService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public static final String BCRYPT_PREFIX = "$2a$10$";
-    public static final String ROLE_PREFIX = "ROLE_";
 
     @Override
     public UserInfoVo login(LoginDto loginDto) {
@@ -52,11 +52,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
+        val securityUser = (SecurityUser) authenticate.getPrincipal();
         val userInfoVo = new UserInfoVo();
-        userInfoVo.setUsername(authenticate.getName());
-        userInfoVo.setToken(JwtTokenUtil.generateToken(authenticate));
-        val roleIds = authenticate.getAuthorities().stream().map(auth -> Long.parseLong(auth.getAuthority().replace(ROLE_PREFIX, ""))).toList();
-        userInfoVo.setRoleIds(roleIds);
+        userInfoVo.setId(securityUser.getId());
+        userInfoVo.setUsername(securityUser.getUsername());
+        val accessToken = JwtTokenUtil.generateToken(securityUser.getUsername(), securityUser.getVersion());
+        userInfoVo.setToken(accessToken);
+        userInfoVo.setRoleList(securityUser.getRoleList());
+
+        // 更新 token version
+        val updateWrapper = new UpdateWrapper<User>();
+        updateWrapper.eq("id", securityUser.getId()).set("token_version", securityUser.getVersion() + 1);
+        userMapper.update(updateWrapper);
+
         return userInfoVo;
     }
 
@@ -93,7 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 更新用户
         val password = userRoleIdsDto.getPassword();
-        if (password == null || password.trim().length() == 0) {
+        if (password == null || password.trim().isEmpty()) {
             throw new DmlOperationException("密码不能为空");
         }
         // 所有加密的密码都是以这个开头的
