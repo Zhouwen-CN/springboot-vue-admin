@@ -33,16 +33,17 @@ SET
 DROP TABLE IF EXISTS `t_data_field`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_data_field`
+create table t_data_field
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name`        varchar(100) NOT NULL COMMENT '领域名称',
-    `desc`        varchar(255) DEFAULT NULL COMMENT '说明',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COMMENT='数据域表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    name   varchar(100) not null comment '领域名称',
+    `desc` varchar(255) null comment '说明',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_name
+        unique (name)
+) comment '数据域表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,16 +69,17 @@ TABLES;
 DROP TABLE IF EXISTS `t_data_range`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_data_range`
+create table t_data_range
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `range`       varchar(100) NOT NULL COMMENT '范围/周期',
-    `desc`        varchar(255) DEFAULT NULL COMMENT '说明',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_range` (`range`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数据范围表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    `range` varchar(100) not null comment '范围/周期',
+    `desc`  varchar(255) null comment '说明',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_range
+        unique (`range`)
+) comment '数据范围表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,16 +109,17 @@ TABLES;
 DROP TABLE IF EXISTS `t_data_storey`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_data_storey`
+create table t_data_storey
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `storey`      varchar(100) NOT NULL COMMENT '层名',
-    `desc`        varchar(255) DEFAULT NULL COMMENT '说明',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_storey` (`storey`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COMMENT='数仓层级表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    storey varchar(100) not null comment '层名',
+    `desc` varchar(255) null comment '说明',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_storey
+        unique (storey)
+) comment '数仓层级表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,20 +149,18 @@ TABLES;
 DROP TABLE IF EXISTS `t_menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_menu`
+create table t_menu
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `title`       varchar(100) NOT NULL COMMENT '标题',
-    `access_path` varchar(100) NOT NULL COMMENT '访问路径',
-    `file_path`   varchar(255) DEFAULT NULL COMMENT '文件路径',
-    `icon`        varchar(100) NOT NULL COMMENT '图标',
-    `pid`         bigint       NOT NULL COMMENT '一级菜单id',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 12
-  DEFAULT CHARSET = utf8mb3 COMMENT ='菜单表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    title       varchar(15) not null comment '标题',
+    access_path varchar(40) not null comment '访问路径',
+    file_path   varchar(60) null comment '文件路径',
+    icon        varchar(15) not null comment '图标',
+    pid         bigint      not null comment '一级菜单id',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
+) comment '菜单表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,18 +203,17 @@ TABLES;
 DROP TABLE IF EXISTS `t_role`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_role`
+create table t_role
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `role_name`   varchar(100) NOT NULL COMMENT '角色名称',
-    `desc`        varchar(255) NOT NULL COMMENT '角色说明',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_role_name` (`role_name`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 7
-  DEFAULT CHARSET = utf8mb3 COMMENT ='角色表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    role_name varchar(15) not null comment '角色名称',
+    `desc`    varchar(40) not null comment '角色说明',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_role_name
+        unique (role_name)
+) comment '角色表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,17 +243,15 @@ TABLES;
 DROP TABLE IF EXISTS `t_role_menu`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_role_menu`
+create table t_role_menu
 (
-    `id`      bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `role_id` bigint NOT NULL COMMENT '角色id',
-    `menu_id` bigint NOT NULL COMMENT '菜单id',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 12
-  DEFAULT CHARSET = utf8mb3 COMMENT ='用户权限关系表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    role_id     bigint not null comment '角色id',
+    menu_id     bigint not null comment '菜单id',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
+) comment '用户权限关系表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,16 +286,17 @@ TABLES;
 DROP TABLE IF EXISTS `t_root_word`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_root_word`
+create table t_root_word
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `word`        varchar(100) NOT NULL COMMENT '单词',
-    `desc`        varchar(255) DEFAULT NULL COMMENT '说明',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb3 COMMENT='词根表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    word   varchar(100) not null comment '单词',
+    `desc` varchar(255) null comment '说明',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_word
+        unique (word)
+) comment '词根表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -419,19 +418,18 @@ TABLES;
 DROP TABLE IF EXISTS `t_user`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_user`
+create table t_user
 (
-    `id`            bigint           NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `username`      varchar(100)     NOT NULL COMMENT '用户名',
-    `password`      varchar(255)     NOT NULL COMMENT '密码',
-    `token_version` bigint default 0 not null comment 'access和refresh共用一个version',
-    `create_time`   timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`   timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_username` (`username`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  DEFAULT CHARSET = utf8mb3 COMMENT ='用户表';
+    id            bigint auto_increment comment '主键'
+        primary key,
+    username      varchar(15)      not null comment '用户名',
+    password      varchar(60)      not null comment '密码',
+    token_version bigint default 0 not null comment 'access和refresh共用一个version',
+    create_time   timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time   timestamp default CURRENT_TIMESTAMP null comment '更新时间',
+    constraint uniq_username
+        unique (username)
+) comment '用户表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,17 +455,15 @@ TABLES;
 DROP TABLE IF EXISTS `t_user_role`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_user_role`
+create table t_user_role
 (
-    `id`      bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id` bigint NOT NULL COMMENT '用户id',
-    `role_id` bigint NOT NULL COMMENT '角色id',
-    `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  DEFAULT CHARSET = utf8mb3 COMMENT ='用户角色关系表';
+    id          bigint auto_increment comment '主键'
+        primary key,
+    user_id     bigint not null comment '用户id',
+    role_id     bigint not null comment '角色id',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '更新时间'
+) comment '用户角色关系表' charset = utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

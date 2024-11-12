@@ -51,10 +51,6 @@ const {
 // 查询角色
 function searchRole() {
   searchName.value = searchName.value.trim()
-  if (searchName.value === '') {
-    ElMessage.warning('请输入角色名')
-    return
-  }
   pageRefresh({params: {searchName: searchName.value}})
 }
 

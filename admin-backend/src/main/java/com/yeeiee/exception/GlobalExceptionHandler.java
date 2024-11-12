@@ -19,23 +19,23 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
-    public R<Void> badCredentialsHandler() {
+    public R<String> badCredentialsHandler() {
         return R.error(HttpStatus.FORBIDDEN, "用户名或密码错误");
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public R<Void> authenticationExceptionHandler(AuthenticationException e) {
+    public R<String> authenticationExceptionHandler(AuthenticationException e) {
         return R.error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
 
     @ExceptionHandler(DmlOperationException.class)
-    public R<Void> dmlFailureHandler(DmlOperationException e) {
+    public R<String> dmlFailureHandler(DmlOperationException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public R<Void> noResourceFoundHandler(NoResourceFoundException e) {
+    public R<String> noResourceFoundHandler(NoResourceFoundException e) {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 

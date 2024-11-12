@@ -37,27 +37,23 @@ public final class R<T> {
     @Schema(title = "消息")
     private String message;
 
-    /**
-     * 返回ok字符串，前端可以利用字符串进行判断
-     * 比如封装useRequest的时候，data已经被取出，还要判断请求是否成功
-     */
     public static R<String> ok() {
-        return new R<>(true, "ok", 200, null);
+        return new R<>(true, "success", 200, null);
     }
 
     public static <T> R<T> ok(T data) {
         return new R<>(true, data, 200, null);
     }
 
-    public static R<Void> error(HttpStatus httpStatus) {
-        return new R<>(false, null, httpStatus.value(), httpStatus.getReasonPhrase());
+    public static R<String> error(HttpStatus httpStatus) {
+        return new R<>(false, "error", httpStatus.value(), httpStatus.getReasonPhrase());
     }
 
-    public static R<Void> error(HttpStatus httpStatus, Exception e) {
-        return new R<>(false, null, httpStatus.value(), e.getMessage());
+    public static R<String> error(HttpStatus httpStatus, Exception e) {
+        return new R<>(false, "error", httpStatus.value(), e.getMessage());
     }
 
-    public static R<Void> error(HttpStatus httpStatus, String message) {
-        return new R<>(false, null, httpStatus.value(), message);
+    public static R<String> error(HttpStatus httpStatus, String message) {
+        return new R<>(false, "error", httpStatus.value(), message);
     }
 }
