@@ -1,7 +1,7 @@
 import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
-import type {Role} from '../role'
+import type {Role} from '@/api/auth/role'
 
 export interface LoginForm {
   username: string

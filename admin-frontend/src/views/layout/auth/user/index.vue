@@ -14,6 +14,7 @@ import {reqGetRoles} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import {useRouter} from 'vue-router'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
+import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -56,12 +57,16 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetUserRolePage()
+// 保存用户角色信息
+const {run: saveUserRole, loading: saveUserRoleLoading} = useRequest(reqSaveUserRole, () => {
+  ElMessage.success('操作成功')
+})
 
 // 多选框相关
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
 // 获取角色列表
-const {data: roleData, run: roleRefresh} = reqGetRoles()
+const {data: roleData, run: getRoles} = useRequest(reqGetRoles)
 const handleCheckAllChange = (val: boolean) => {
   if (val) {
     userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
@@ -135,9 +140,8 @@ async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
   try {
     await formEl.validate()
-    await reqSaveUserRole(userRoleForm)
+    await saveUserRole(userRoleForm)
     toggleDialog.show = false
-    ElMessage.success('操作成功')
 
     // 如果修改的是当前用户，则退出重新登入
     if (userRoleForm.username === userStore.userInfo.username) {
@@ -178,7 +182,7 @@ const getRoleNames = computed(() => (roleIds: string) => {
 
 onMounted(() => {
   pageRefresh()
-  roleRefresh()
+  getRoles()
 })
 </script>
 
@@ -301,7 +305,7 @@ onMounted(() => {
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button type="primary"
+            <el-button :loading="saveUserRoleLoading" type="primary"
                        @click="onSubmit(ruleFormRef)">确认
             </el-button>
           </el-form-item>

@@ -1,12 +1,11 @@
 import request from '@/api/request'
 import type {CreateAndUpdateTime} from '@/api/types'
 import usePagination from '@/hooks/usePagination'
-import useRequest from '@/hooks/useRequest'
 
 export interface Role extends CreateAndUpdateTime {
-    id: number
-    roleName: string
-    desc: string
+  id: number
+  roleName: string
+  desc: string
 }
 
 /**
@@ -14,11 +13,11 @@ export interface Role extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetRoles() {
-    return useRequest<Role[]>({url: '/role'})
+  return request.get<Role[]>('/role')
 }
 
 export interface RoleMenuInfo extends Role {
-    menuIds: string
+  menuIds: string
 }
 
 /**
@@ -26,14 +25,14 @@ export interface RoleMenuInfo extends Role {
  * @returns
  */
 export function reqGetRolePage() {
-    return usePagination<RoleMenuInfo>('/role')
+  return usePagination<RoleMenuInfo>('/role')
 }
 
 export interface RoleMenuForm {
-    id?: number
-    roleName: string
-    desc: string
-    menuIds: number[]
+  id?: number
+  roleName: string
+  desc: string
+  menuIds: number[]
 }
 
 /**
@@ -42,11 +41,11 @@ export interface RoleMenuForm {
  * @returns
  */
 export function reqSaveRoleMenu(roleMenuForm: RoleMenuForm) {
-    if (roleMenuForm.id) {
-        return request.put<any, RoleMenuForm>('/role', roleMenuForm)
-    } else {
-        return request.post<any, RoleMenuForm>('/role', roleMenuForm)
-    }
+  if (roleMenuForm.id) {
+    return request.put<any, RoleMenuForm>('/role', roleMenuForm)
+  } else {
+    return request.post<any, RoleMenuForm>('/role', roleMenuForm)
+  }
 }
 
 /**
@@ -55,7 +54,7 @@ export function reqSaveRoleMenu(roleMenuForm: RoleMenuForm) {
  * @returns
  */
 export function reqDeleteRole(id: number) {
-    return request.delete(`/role/${id}`)
+  return request.delete(`/role/${id}`)
 }
 
 /**
@@ -64,5 +63,5 @@ export function reqDeleteRole(id: number) {
  * @returns
  */
 export function reqDeleteRoles(ids: number[]) {
-    return request.delete<any, number[]>('/role', {data: ids})
+  return request.delete<any, number[]>('/role', {data: ids})
 }

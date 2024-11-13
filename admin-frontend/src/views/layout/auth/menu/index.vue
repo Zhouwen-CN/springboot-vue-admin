@@ -6,6 +6,7 @@ import type {MenuInfo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {useRouter} from 'vue-router'
+import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -54,6 +55,11 @@ const rules = reactive<FormRules<typeof menuForm>>({
   icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
 })
 
+// 保存菜单信息
+const {run: saveMenu, loading: saveMenuLoading} = useRequest(reqSaveMenu, () => {
+  ElMessage.success('操作成功')
+})
+
 // 添加主菜单
 function addMainMenu() {
   toggleDialog.show = true
@@ -96,11 +102,10 @@ async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
   try {
     await formEl.validate()
-    await reqSaveMenu(menuForm)
+    await saveMenu(menuForm)
     // 重新请求表单信息
     await userStore.getMenuInfo()
     toggleDialog.show = false
-    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
   }
@@ -123,7 +128,9 @@ function clean() {
     <!-- 表格上面的按钮 -->
     <el-card>
       <div>
-        <el-button :icon="Plus" type="primary" @click="addMainMenu">添加主菜单</el-button>
+        <el-button :icon="Plus" type="primary"
+                   @click="addMainMenu">添加主菜单
+        </el-button>
       </div>
       <!-- 表格 -->
       <el-table
@@ -131,8 +138,7 @@ function clean() {
           :data="userStore.menuInfo"
           default-expand-all
           row-key="id"
-          style="margin-top: 16px"
-      >
+          style="margin-top: 16px">
         <el-table-column label="菜单名称" prop="title">
           <template #default="{ row }">
             <el-space>
@@ -153,16 +159,15 @@ function clean() {
                   :disabled="row.level > 1"
                   :icon="Plus"
                   type="primary"
-                  @click="addSubmenu(row.id)"
-              />
-              <el-button :icon="Edit" type="primary" @click="updateMenu(row)"/>
+                  @click="addSubmenu(row.id)"/>
+              <el-button :icon="Edit" type="primary"
+                         @click="updateMenu(row)"/>
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
                   <el-button
                       :disabled="row.level < 1 || row.children?.length > 0 || row.id <= 4"
                       :icon="Delete"
-                      type="danger"
-                  />
+                      type="danger"/>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -172,31 +177,40 @@ function clean() {
     </el-card>
 
     <!-- 对话框 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
+               width="40%" @close="clean">
       <template #footer>
         <el-form
             ref="ruleFormRef"
             :model="menuForm"
             :rules="rules"
             label-width="80px"
-            style="padding: 0 20px"
-        >
+            style="padding: 0 20px">
           <el-form-item label="菜单名称" prop="title">
-            <el-input v-model="menuForm.title" placeholder="请输入菜单名称"></el-input>
+            <el-input v-model="menuForm.title"
+                      placeholder="请输入菜单名称"></el-input>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
-            <el-input v-model="menuForm.accessPath" placeholder="请输入访问路径"></el-input>
+            <el-input v-model="menuForm.accessPath"
+                      placeholder="请输入访问路径"></el-input>
           </el-form-item>
           <el-form-item label="文件路径" prop="filePath">
-            <el-input v-model="menuForm.filePath" placeholder="请输入文件路径"></el-input>
+            <el-input v-model="menuForm.filePath"
+                      placeholder="请输入文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
-            <el-input v-model="menuForm.icon" placeholder="请输入菜单图标"></el-input>
+            <el-input v-model="menuForm.icon"
+                      placeholder="请输入菜单图标"></el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button @click="toggleDialog.show = false">取消</el-button>
-            <el-button type="primary" @click="onSubmit(ruleFormRef)"> 确认</el-button>
+            <el-button
+                @click="toggleDialog.show = false">取消
+            </el-button>
+            <el-button :loading="saveMenuLoading" type="primary"
+                       @click="onSubmit(ruleFormRef)">
+              确认
+            </el-button>
           </el-form-item>
         </el-form>
       </template>

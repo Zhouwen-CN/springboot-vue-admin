@@ -12,6 +12,7 @@ import {
 import {ElMessage, type FormInstance, type FormRules, type TreeInstance} from 'element-plus'
 import useUserStore from '@/stores/user'
 import type {MenuInfo} from '@/api/auth/menu'
+import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 
@@ -47,6 +48,10 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetRolePage()
+// 保存角色菜单信息
+const {run: saveRoleMenu, loading: saveRoleMenuLoading} = useRequest(reqSaveRoleMenu, () => {
+  ElMessage.success('操作成功')
+})
 
 // 查询角色
 function searchRole() {
@@ -112,10 +117,9 @@ async function onSubmit(formEl: FormInstance | undefined) {
     const checkedKeys = menuTreeRef.value?.getCheckedKeys() || []
     const halfCheckedKeys = menuTreeRef.value?.getHalfCheckedKeys() || []
     roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
-    await reqSaveRoleMenu(roleMenuForm)
+    await saveRoleMenu(roleMenuForm)
     pageRefresh()
     toggleDialog.show = false
-    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
   }
@@ -263,7 +267,7 @@ onMounted(() => {
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button type="primary"
+            <el-button :loading="saveRoleMenuLoading" type="primary"
                        @click="onSubmit(ruleFormRef)">确认
             </el-button>
           </el-form-item>
