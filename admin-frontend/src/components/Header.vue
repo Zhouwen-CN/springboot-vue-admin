@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import {useRoute, useRouter} from 'vue-router'
+import {useRoute} from 'vue-router'
 import useUserStore from '@/stores/user'
-import {ArrowDown, ArrowRight, FullScreen, Moon, Refresh, Sunny} from '@element-plus/icons-vue'
+import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
 import {computed, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 
-const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
@@ -47,12 +46,6 @@ const routeInfo = computed(() => {
 function changeCollapse() {
   settingStore.collapse = !settingStore.collapse
 }
-
-// 暗黑模式
-function changeTheme() {
-  const html = document.documentElement
-  settingStore.darkMode ? (html.className = 'dark') : (html.className = 'light')
-}
 </script>
 
 <template>
@@ -78,12 +71,6 @@ function changeTheme() {
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
-        <el-switch
-            v-model="settingStore.darkMode"
-            :active-action-icon="Moon"
-            :inactive-action-icon="Sunny"
-            size="large"
-            @change="changeTheme"/>
         <el-button :icon="Refresh" :loading="loading" circle
                    size="default"
                    @click="refresh"></el-button>
@@ -121,7 +108,7 @@ function changeTheme() {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 0.8px solid var(--el-border-color);
+  border-bottom: 0.8px solid #F6F6F6;
 
   .left {
     display: flex;

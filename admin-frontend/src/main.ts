@@ -10,8 +10,6 @@ import 'element-plus/dist/index.css'
 // @ts-ignore
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-// 暗黑模式
-import 'element-plus/theme-chalk/dark/css-vars.css'
 // 样式清除
 import '@/assets/css/reset.scss'
 
@@ -19,27 +17,27 @@ const app = createApp(App)
 
 // 注册所有的element-plus图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+  app.component(key, component)
 }
 
 // 全局异常处理
 app.config.errorHandler = (err, instance, info) => {
-    console.error(
-        '😂Component route:',
-        instance?.$route,
-        '\n',
-        'Error message:',
-        err,
-        '\n',
-        'From:',
-        info
-    )
+  console.error(
+      '😂Component route:',
+      instance?.$route,
+      '\n',
+      'Error message:',
+      err,
+      '\n',
+      'From:',
+      info
+  )
 }
 
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus, {
-    locale: zhCn
+  locale: zhCn
 })
 
 app.mount('#app')

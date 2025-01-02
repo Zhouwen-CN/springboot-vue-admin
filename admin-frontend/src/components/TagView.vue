@@ -5,12 +5,12 @@ import {useRoute, useRouter} from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
-interface routeObj {
+interface Route {
   path: string
   title: string
 }
 
-const tagViewArr = ref(<routeObj[]>[
+const tagViewArr = ref<Route[]>([
   {
     path: '/home',
     title: '首页'
@@ -19,14 +19,14 @@ const tagViewArr = ref(<routeObj[]>[
 
 watch(
     () => route.path,
-    (_) => {
-      let routeObj = <routeObj>{
+    () => {
+      let routeObj = {
         path: route.path,
         title: route.meta.title as string
       }
 
       // 404不需要标签
-      let isInclude = tagViewArr.value.find((item: routeObj) => {
+      let isInclude = tagViewArr.value.find((item: Route) => {
         return item.path === routeObj.path || routeObj.path === '/404'
       })
 
@@ -54,18 +54,18 @@ const closeTag = (i: number, path: string) => {
 <template>
   <el-scrollbar>
     <div class="tags">
-      <template v-for="(item, i) in tagViewArr" :key="item.title">
+      <template v-for="(tag, _index) in tagViewArr"
+                :key="tag.title">
         <el-tag
-            :closable="tagViewArr.length !== 1 && i !== 0"
-            :effect="route.path === item.path ? 'dark' : 'light'"
+            :closable="_index !== 0"
+            :effect="route.path === tag.path ? 'dark' : 'light'"
             class="tagItem"
             hit
-            @click="changeTag(item.path)"
-            @close="closeTag(i, item.path)"
-        >
+            @click="changeTag(tag.path)"
+            @close="closeTag(_index, tag.path)">
           <div class="tagContent">
-            <div v-show="route.path === item.path" class="dot"></div>
-            <text>{{ item.title }}</text>
+            <span v-show="route.path === tag.path" class="dot"></span>
+            <span>{{ tag.title }}</span>
           </div>
         </el-tag>
       </template>
@@ -75,17 +75,15 @@ const closeTag = (i: number, path: string) => {
 
 <style lang="scss" scoped>
 .tags {
-  display: flex;
-  align-items: center;
   margin-top: 5px;
   padding: 0 20px;
 
-  &:hover {
-    cursor: pointer;
-  }
-
   .tagItem {
-    margin-right: 5px;
+    margin-right: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
 
     .tagContent {
       display: flex;

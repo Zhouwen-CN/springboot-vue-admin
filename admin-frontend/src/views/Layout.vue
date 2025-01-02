@@ -25,15 +25,14 @@ const settingStore = useSettingStore()
           <h1 v-show="!settingStore.collapse">SV Admin</h1>
         </div>
 
-        <!-- 好像只有这样才能改菜单 hover 的颜色 -->
         <el-menu
-            :background-color="settingStore.darkMode ? '#121212' : '#304156'"
+            active-text-color="#409eff"
             :collapse="settingStore.collapse"
             :default-active="useRoute().path"
-            active-text-color="var(--active-color)"
+            background-color="#304156"
             router
             style="border: 0"
-            text-color="var(--text-color)"
+            text-color="#bfcbd9"
             unique-opened>
           <el-menu-item index="/home">
             <el-icon :size="20">
@@ -88,13 +87,13 @@ const settingStore = useSettingStore()
 .header {
   height: $base_header_height;
   padding: 0;
-  border-bottom: 0.8px solid var(--el-border-color);
+  border-bottom: 0.8px solid #F6F6F6;
 }
 
 .aside {
   height: calc(100vh - 1px);
-  background-color: var(--bg-color);
-  border-right: 0.8px solid var(--el-border-color);
+  background-color: #304156;
+  border-right: 0.8px solid #F6F6F6;
 
   .aside_header {
     height: $base_header_height;
