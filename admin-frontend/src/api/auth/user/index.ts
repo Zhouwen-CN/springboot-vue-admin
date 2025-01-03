@@ -35,7 +35,7 @@ export function reqLogin(loginForm: LoginForm) {
  * @param refreshToken token
  * @returns
  */
-export function reqRefershToken(refreshToken: string) {
+export function reqRefreshToken(refreshToken: string) {
   return request.get<TokenInfo>('/user/refresh', {
     headers: {
       Authorization: `Bearer ${refreshToken}`

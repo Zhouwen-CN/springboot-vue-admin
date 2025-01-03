@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {Delete, Edit, Search} from '@element-plus/icons-vue'
-import {computed, onMounted, reactive, ref} from 'vue'
 import {
   reqDeleteUser,
   reqDeleteUsers,
@@ -9,10 +8,10 @@ import {
   type UserRoleForm,
   type UserRoleInfo
 } from '@/api/auth/user'
+import type {CheckboxValueType} from 'element-plus'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {reqGetRoles} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
-import {useRouter} from 'vue-router'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
 import useRequest from '@/hooks/useRequest'
 
@@ -67,7 +66,7 @@ const checkAll = ref(false)
 const isIndeterminate = ref(true)
 // 获取角色列表
 const {data: roleData, run: getRoles} = useRequest(reqGetRoles)
-const handleCheckAllChange = (val: boolean) => {
+const handleCheckAllChange = (val: CheckboxValueType) => {
   if (val) {
     userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
   } else {
@@ -75,7 +74,7 @@ const handleCheckAllChange = (val: boolean) => {
   }
   isIndeterminate.value = false
 }
-const handleCheckedCitiesChange = (value: string[]) => {
+const handleCheckedCitiesChange = (value: CheckboxValueType[]) => {
   const checkedCount = value.length
   checkAll.value = checkedCount === roleData.value?.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < (roleData.value?.length as number)
@@ -116,6 +115,7 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
+
 function handleSelectionChange(users: UserRoleInfo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
@@ -222,8 +222,8 @@ onMounted(() => {
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
         <el-table-column label="角色名称" prop="roleIds">
-          <template #default="{ row }">
-            {{ getRoleNames(row.roleIds) }}
+          <template #default="{ row }:{row:UserRoleInfo}">
+            {{ row.roleIds === '1' ? 'admin' : getRoleNames(row.roleIds) }}
           </template>
         </el-table-column>
         <el-table-column label="创建时间"
@@ -293,7 +293,6 @@ onMounted(() => {
                 <el-checkbox
                     v-for="role in roleData"
                     :key="role.id"
-                    :disabled="role.roleName === 'admin'"
                     :label="role.roleName"
                     :value="role.id">
                   {{ role.roleName }}

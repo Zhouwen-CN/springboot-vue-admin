@@ -1,6 +1,3 @@
-import {defineStore} from 'pinia'
-import {ref} from 'vue'
-
 const useSettingStore = defineStore('setting', () => {
   // 刷新
   const refresh = ref(false)

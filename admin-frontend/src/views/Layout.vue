@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import useSettingStore from '@/stores/setting'
 import useUserStore from '@/stores/user'
-import {RouterView, useRoute} from 'vue-router'
 import {HomeFilled} from '@element-plus/icons-vue'
 import Menu from '@/components/Menu.vue'
 import Header from '@/components/Header.vue'
 import TagView from '@/components/TagView.vue'
 
+const route = useRoute()
 const settingStore = useSettingStore()
 </script>
 
@@ -28,7 +28,7 @@ const settingStore = useSettingStore()
         <el-menu
             active-text-color="#409eff"
             :collapse="settingStore.collapse"
-            :default-active="useRoute().path"
+            :default-active="route.path"
             background-color="#304156"
             router
             style="border: 0"

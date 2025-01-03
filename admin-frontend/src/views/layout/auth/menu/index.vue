@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus} from '@element-plus/icons-vue'
-import {reactive, ref} from 'vue'
 import useUserStore from '@/stores/user'
 import type {MenuInfo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import {useRouter} from 'vue-router'
 import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
@@ -140,7 +138,7 @@ function clean() {
           row-key="id"
           style="margin-top: 16px">
         <el-table-column label="菜单名称" prop="title">
-          <template #default="{ row }">
+          <template #default="{ row }:{row:MenuInfo}">
             <el-space>
               <el-icon :size="20">
                 <component :is="row.icon"></component>

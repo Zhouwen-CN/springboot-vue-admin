@@ -1,8 +1,6 @@
 import type {LoginForm, UserInfo} from '@/api/auth/user'
-import {reqLogin, reqLogout, reqRefershToken} from '@/api/auth/user'
+import {reqLogin, reqLogout, reqRefreshToken} from '@/api/auth/user'
 import {type MenuInfo, reqGetMenuList} from '@/api/auth/menu'
-import {defineStore} from 'pinia'
-import {ref} from 'vue'
 import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
 import router, {modules} from '@/router'
 import {getItem, removeItem, setItem} from '@/utils/localstorageUtil'
@@ -14,7 +12,7 @@ const useUserStore = defineStore('user', () => {
 
   // 登入
   async function doLogin(loginForm: LoginForm) {
-    let result = await reqLogin(loginForm)
+    const result = await reqLogin(loginForm)
     userInfo.value = result.data
     setItem('USER_INFO', userInfo.value)
   }
@@ -24,8 +22,9 @@ const useUserStore = defineStore('user', () => {
     if (refreshTokenPromise) {
       return refreshTokenPromise
     }
+    // eslint-disable-next-line no-async-promise-executor
     refreshTokenPromise = new Promise(async (resolve) => {
-      const result = await reqRefershToken(userInfo.value.refreshToken)
+      const result = await reqRefreshToken(userInfo.value.refreshToken)
       if (result.code === 200) {
         const {accessToken, refreshToken} = result.data
         userInfo.value.accessToken = accessToken

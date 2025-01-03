@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import {reactive, ref} from 'vue'
 import {Lock, User} from '@element-plus/icons-vue'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import {useRouter} from 'vue-router'
 import type {LoginForm} from '@/api/auth/user'
 import useUserStore from '@/stores/user'
 

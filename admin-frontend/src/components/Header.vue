@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import {useRoute} from 'vue-router'
 import useUserStore from '@/stores/user'
 import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
-import {computed, ref} from 'vue'
 import {ElMessage} from 'element-plus'
 
 const route = useRoute()

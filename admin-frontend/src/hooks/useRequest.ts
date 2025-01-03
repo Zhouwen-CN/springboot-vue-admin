@@ -1,4 +1,4 @@
-import {ref, type Ref} from 'vue'
+import {type Ref} from 'vue'
 import type {ResultData} from '@/api/types'
 
 export interface UseRequestResult<T, D> {

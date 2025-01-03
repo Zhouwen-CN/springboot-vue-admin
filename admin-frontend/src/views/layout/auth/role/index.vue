@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import {Delete, Edit, Search} from '@element-plus/icons-vue'
-import {onMounted, reactive, ref} from 'vue'
 import {
   reqDeleteRole,
   reqDeleteRoles,
