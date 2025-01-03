@@ -18,7 +18,12 @@
     </sql>
     <select id="selectRolePages" resultType="com.yeeiee.entity.vo.RoleMenuVo">
         select
-        a.id, a.role_name, a.`desc`,group_concat(b.menu_id) as menu_ids, a.create_time, a.update_time
+        a.id,
+        a.role_name,
+        a.`desc`,
+        group_concat(b.menu_id) as menu_ids,
+        a.create_time,
+        a.update_time
         from (
         select
         *

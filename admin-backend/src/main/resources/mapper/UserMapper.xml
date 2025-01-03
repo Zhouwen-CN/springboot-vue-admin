@@ -25,23 +25,28 @@
 
 
     <select id="selectByUserName" resultMap="UserInfoVo">
-        select a.id,
-               a.username,
-               a.password,
-               a.token_version,
-               b.role_id,
-               c.role_name
-        from (select *
-              from t_user
-              where username = #{username}) a
-                 left join t_user_role b
-                           on a.id = b.user_id
-                 left join t_role c
-                           on b.role_id = c.id
+        select
+            a.id,
+            a.username,
+            a.password,
+            a.token_version,
+            b.role_id,
+            c.role_name
+        from (
+            select
+                *
+            from t_user
+            where username = #{username}
+        ) a
+        left join t_user_role b
+        on a.id = b.user_id
+        left join t_role c
+        on b.role_id = c.id
     </select>
 
     <select id="selectUserPages" resultMap="UserRoleVo">
-        select a.id,
+        select
+        a.id,
         a.username,
         a.password,
         a.create_time,

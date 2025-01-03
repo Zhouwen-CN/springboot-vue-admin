@@ -214,7 +214,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (ids.contains(1L)) {
             throw new DmlOperationException("① 号用户不能删除");
         }
-        userMapper.deleteBatchIds(ids);
+        userMapper.deleteByIds(ids);
         val queryWrapper = new QueryWrapper<UserRole>();
         queryWrapper.in("user_id", ids);
         val userRoleList = userRoleService.list(queryWrapper);
