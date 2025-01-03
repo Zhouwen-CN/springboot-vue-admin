@@ -32,7 +32,7 @@ const settingStore = useSettingStore()
             background-color="#304156"
             router
             style="border: 0"
-            text-color="#bfcbd9"
+            text-color="#ffffff"
             unique-opened>
           <el-menu-item index="/home">
             <el-icon :size="20">

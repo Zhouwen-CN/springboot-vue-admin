@@ -29,6 +29,7 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
     private MenuMapper menuMapper;
     private RoleMenuMapper roleMenuMapper;
 
@@ -36,15 +37,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void addMenu(Menu menu) {
         menuMapper.insert(menu);
 
+        // 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
         roleMenu.setMenuId(menu.getId());
+
         roleMenuMapper.insert(roleMenu);
     }
 
     @Override
     public void removeMenu(Long id) {
-        val parentMenus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", id));
+        val parentMenus = menuMapper.selectList(new QueryWrapper<Menu>()
+                .lambda()
+                .eq(Menu::getPid, id)
+        );
         if (!parentMenus.isEmpty()) {
             val parentMenuIds = parentMenus.stream().map(Menu::getId).toList();
             throw new DmlOperationException("删除失败，尚有子菜单依赖：" + parentMenuIds);
@@ -57,8 +63,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         menuMapper.deleteById(id);
 
-        val roleMenuList = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("menu_id", id));
-        roleMenuMapper.deleteBatchIds(roleMenuList);
+        val roleMenuList = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>()
+                .lambda()
+                .eq(RoleMenu::getMenuId, id)
+        );
+        roleMenuMapper.deleteByIds(roleMenuList);
     }
 
     @Override

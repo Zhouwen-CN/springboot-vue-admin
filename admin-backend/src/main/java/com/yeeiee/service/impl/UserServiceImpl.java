@@ -15,8 +15,8 @@ import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.exception.AuthenticationException;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.UserMapper;
+import com.yeeiee.mapper.UserRoleMapper;
 import com.yeeiee.security.SecurityUser;
-import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -46,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public static final String BCRYPT_PREFIX = "$2a$10$";
     private AuthenticationProvider authenticationProvider;
     private UserMapper userMapper;
-    private UserRoleService userRoleService;
+    private UserRoleMapper userRoleMapper;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -68,11 +69,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfoVo.setRoleList(securityUser.getRoleList());
 
         // 更新 token version
-        val updateWrapper = new UpdateWrapper<User>();
-        updateWrapper.eq("id", securityUser.getId())
-                .set("token_version", securityUser.getTokenVersion() + 1);
-        userMapper.update(updateWrapper);
-
+        userMapper.update(new UpdateWrapper<User>()
+                .lambda()
+                .set(User::getTokenVersion, securityUser.getTokenVersion() + 1)
+                .eq(User::getId, securityUser.getId())
+        );
         return userInfoVo;
     }
 
@@ -88,8 +89,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val username = claimMap.get("username").asString();
         val version = claimMap.get("version").asLong();
 
-        val queryWrapper = new QueryWrapper<User>().eq("username", username);
-        val user = userMapper.selectOne(queryWrapper);
+        val user = userMapper.selectOne(new QueryWrapper<User>()
+                .lambda()
+                .eq(User::getUsername, username)
+        );
         if (user == null || version != user.getTokenVersion() - 1) {
             throw new AuthenticationException("token验证失败");
         }
@@ -101,10 +104,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         tokenVo.setRefreshToken(refreshToken);
 
         // 更新 token version
-        val updateWrapper = new UpdateWrapper<User>();
-        updateWrapper.eq("id", user.getId())
-                .set("token_version", user.getTokenVersion() + 1);
-        userMapper.update(updateWrapper);
+        userMapper.update(new UpdateWrapper<User>()
+                .lambda()
+                .set(User::getTokenVersion, user.getTokenVersion() + 1)
+                .eq(User::getId, user.getId())
+        );
         return tokenVo;
     }
 
@@ -112,10 +116,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void modifyUserWithLogout(Long id) {
         val user = userMapper.selectById(id);
         if (user != null) {
-            val updateWrapper = new UpdateWrapper<User>();
-            updateWrapper.eq("id", user.getId())
-                    .set("token_version", user.getTokenVersion() + 1);
-            userMapper.update(updateWrapper);
+            userMapper.update(new UpdateWrapper<User>()
+                    .lambda()
+                    .set(User::getTokenVersion, user.getTokenVersion() + 1)
+                    .eq(User::getId, user.getId())
+            );
         }
     }
 
@@ -129,7 +134,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val user = new User();
         user.setUsername(userRoleIdsDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(userRoleIdsDto.getPassword()));
-        val exists = userMapper.exists(new QueryWrapper<User>().eq("username", user.getUsername()));
+        val exists = userMapper.exists(new QueryWrapper<User>()
+                .lambda()
+                .eq(User::getUsername, user.getUsername())
+        );
         if (exists) {
             throw new DmlOperationException("用户名已经存在");
         }
@@ -142,7 +150,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 userRole.setRoleId(roleId);
                 return userRole;
             }).toList();
-            userRoleService.saveBatch(userRoleList);
+            userRoleMapper.insert(userRoleList);
         }
     }
 
@@ -152,7 +160,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 更新用户
         val password = userRoleIdsDto.getPassword();
-        if (password == null || password.trim().isEmpty()) {
+        if (!StringUtils.hasText(password)) {
             throw new DmlOperationException("密码不能为空");
         }
         // 所有加密的密码都是以这个开头的
@@ -166,9 +174,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userMapper.updateById(user);
 
         // 获取当前ids 和 更新的ids 做差集
-        val queryWrapper = new QueryWrapper<UserRole>();
-        queryWrapper.eq("user_id", userId);
-        val userRoleList = userRoleService.list(queryWrapper);
+        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>()
+                .lambda()
+                .eq(UserRole::getUserId, userId)
+        );
         val userRoleMap = userRoleList.stream().collect(Collectors.groupingBy(UserRole::getRoleId));
         val currentSet = userRoleMap.keySet();
         val updateSet = new HashSet<>(userRoleIdsDto.getRoleIds());
@@ -178,7 +187,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         deleteSet.removeAll(updateSet);
         if (!deleteSet.isEmpty()) {
             val deleteUserRoles = deleteSet.stream().flatMap(id -> userRoleMap.get(id).stream()).toList();
-            userRoleService.removeBatchByIds(deleteUserRoles);
+            userRoleMapper.deleteByIds(deleteUserRoles);
         }
 
         // 更新 - 当前 = 新增
@@ -192,7 +201,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 return userRole;
             }).toList();
 
-            userRoleService.saveBatch(additionUserRoleList);
+            userRoleMapper.insert(additionUserRoleList);
         }
     }
 
@@ -203,10 +212,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DmlOperationException("① 号用户不能删除");
         }
         userMapper.deleteById(id);
-        val queryWrapper = new QueryWrapper<UserRole>();
-        queryWrapper.eq("user_id", id);
-        val userRoleList = userRoleService.list(queryWrapper);
-        userRoleService.removeBatchByIds(userRoleList);
+        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>()
+                .lambda()
+                .eq(UserRole::getUserId, id)
+        );
+        userRoleMapper.deleteByIds(userRoleList);
     }
 
     @Override
@@ -215,9 +225,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DmlOperationException("① 号用户不能删除");
         }
         userMapper.deleteByIds(ids);
-        val queryWrapper = new QueryWrapper<UserRole>();
-        queryWrapper.in("user_id", ids);
-        val userRoleList = userRoleService.list(queryWrapper);
-        userRoleService.removeBatchByIds(userRoleList);
+        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>()
+                .lambda()
+                .in(UserRole::getUserId, ids)
+        );
+        userRoleMapper.deleteByIds(userRoleList);
     }
 }
