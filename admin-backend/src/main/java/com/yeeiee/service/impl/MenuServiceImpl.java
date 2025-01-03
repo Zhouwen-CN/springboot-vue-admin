@@ -9,13 +9,12 @@ import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.mapper.RoleMenuMapper;
 import com.yeeiee.service.MenuService;
+import com.yeeiee.utils.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -73,40 +72,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<MenuVo> getMenuList(Collection<Long> ids) {
         val menuList = menuMapper.selectMenusByRoleIds(ids);
-        return convertToMenuTree(menuList);
-    }
-
-    /**
-     * 将menus列表转换成树形结构，递归sql性能不太好，使用代码处理
-     */
-    private List<MenuVo> convertToMenuTree(List<MenuVo> menuList) {
-        val treeMap = new HashMap<Long, MenuVo>(8);
-        for (MenuVo menu : menuList) {
-            val id = menu.getId();
-            val pid = menu.getPid();
-
-            // 如果节点不存在，则添加当前节点
-            if (!treeMap.containsKey(id)) {
-                treeMap.put(id, menu);
-            }
-
-            // 合并节点
-            val item = treeMap.get(id);
-            MenuVo.mergeMenu(item, menu);
-
-            // 父节点不存在，创建空节点
-            if (!treeMap.containsKey(pid)) {
-                treeMap.put(pid, new MenuVo());
-            }
-            treeMap.get(pid).getChildren().add(item);
-        }
-
-        // 如果用户没有角色，root则为空
-        val root = treeMap.get(0L);
-        if (root == null) {
-            return new ArrayList<>();
-        }
-
-        return root.getChildren();
+        return CollectionUtil.makeTree(menuList,
+                MenuVo::getId,
+                MenuVo::getPid,
+                MenuVo::getChildren,
+                MenuVo::setChildren,
+                (id) -> id == 0L);
     }
 }
