@@ -18,6 +18,7 @@ import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.mapper.UserRoleMapper;
 import com.yeeiee.security.SecurityUser;
 import com.yeeiee.service.UserService;
+import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -173,35 +172,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(userRoleIdsDto.getPassword());
         userMapper.updateById(user);
 
-        // 获取当前ids 和 更新的ids 做差集
-        val userRoleList = userRoleMapper.selectList(new QueryWrapper<UserRole>()
+        // 获取当前 ids 和 更新的 ids 做差集
+        val userRoles = userRoleMapper.selectList(new QueryWrapper<UserRole>()
                 .lambda()
                 .eq(UserRole::getUserId, userId)
         );
-        val userRoleMap = userRoleList.stream().collect(Collectors.groupingBy(UserRole::getRoleId));
-        val currentSet = userRoleMap.keySet();
-        val updateSet = new HashSet<>(userRoleIdsDto.getRoleIds());
+
+        val currentRoleIds = userRoles.stream().map(UserRole::getRoleId).toList();
+        val updateRoleIds = userRoleIdsDto.getRoleIds();
+        val pair = CollectionUtil.differenceSet(currentRoleIds, updateRoleIds);
 
         // 当前 - 更新 = 删除
-        val deleteSet = new HashSet<>(currentSet);
-        deleteSet.removeAll(updateSet);
+        val deleteSet = pair.getLeft();
         if (!deleteSet.isEmpty()) {
-            val deleteUserRoles = deleteSet.stream().flatMap(id -> userRoleMap.get(id).stream()).toList();
+            val deleteUserRoles = userRoles.stream().filter(item -> deleteSet.contains(item.getRoleId())).toList();
             userRoleMapper.deleteByIds(deleteUserRoles);
         }
 
         // 更新 - 当前 = 新增
-        val additionSet = new HashSet<>(updateSet);
-        additionSet.removeAll(currentSet);
-        if (!additionSet.isEmpty()) {
-            val additionUserRoleList = additionSet.stream().map(id -> {
+        val insertSet = pair.getRight();
+        if (!insertSet.isEmpty()) {
+            val insertUserRoles = insertSet.stream().map(id -> {
                 val userRole = new UserRole();
                 userRole.setUserId(userId);
                 userRole.setRoleId(id);
                 return userRole;
             }).toList();
-
-            userRoleMapper.insert(additionUserRoleList);
+            userRoleMapper.insert(insertUserRoles);
         }
     }
 

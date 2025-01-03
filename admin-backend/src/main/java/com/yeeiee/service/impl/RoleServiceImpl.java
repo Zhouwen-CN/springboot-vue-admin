@@ -14,13 +14,12 @@ import com.yeeiee.mapper.RoleMapper;
 import com.yeeiee.mapper.RoleMenuMapper;
 import com.yeeiee.mapper.UserRoleMapper;
 import com.yeeiee.service.RoleService;
+import com.yeeiee.utils.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -79,35 +78,36 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setDesc(roleMenuIdsDto.getDesc());
         roleMapper.updateById(role);
 
-        // 获取当前ids 和 更新的ids 做差集
-        val roleMenuList = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>()
+        // 获取当前 ids 和 更新的 ids 做差集
+        val roleMenus = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>()
                 .lambda()
                 .eq(RoleMenu::getRoleId, roleId)
         );
-        val roleMenuMap = roleMenuList.stream().collect(Collectors.groupingBy(RoleMenu::getMenuId));
-        val currentSet = roleMenuMap.keySet();
-        val updateSet = new HashSet<>(roleMenuIdsDto.getMenuIds());
+
+        val currentMenuIds = roleMenus.stream()
+                .map(RoleMenu::getMenuId)
+                .toList();
+        val updateMenuIds = roleMenuIdsDto.getMenuIds();
+        val pair = CollectionUtil.differenceSet(currentMenuIds, updateMenuIds);
 
         // 当前 - 更新 = 删除
-        val deleteSet = new HashSet<>(currentSet);
-        deleteSet.removeAll(updateSet);
+        val deleteSet = pair.getLeft();
         if (!deleteSet.isEmpty()) {
-            val deleteRoleMenus = deleteSet.stream().flatMap(id -> roleMenuMap.get(id).stream()).toList();
+            val deleteRoleMenus = roleMenus.stream().filter(item -> deleteSet.contains(item.getMenuId())).toList();
             roleMenuMapper.deleteByIds(deleteRoleMenus);
         }
 
         // 更新 - 当前 = 新增
-        val additionSet = new HashSet<>(updateSet);
-        additionSet.removeAll(currentSet);
-        if (!additionSet.isEmpty()) {
-            val additionList = additionSet.stream().map(id -> {
+        val insertSet = pair.getRight();
+        if (!insertSet.isEmpty()) {
+            val insertRoleMenus = insertSet.stream().map(id -> {
                 val roleMenu = new RoleMenu();
                 roleMenu.setRoleId(roleId);
                 roleMenu.setMenuId(id);
                 return roleMenu;
             }).toList();
 
-            roleMenuMapper.insert(additionList);
+            roleMenuMapper.insert(insertRoleMenus);
         }
     }
 

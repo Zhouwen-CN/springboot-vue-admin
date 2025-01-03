@@ -1,10 +1,12 @@
 package com.yeeiee.utils;
 
 import lombok.val;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -60,5 +62,24 @@ public final class CollectionUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * @param l1  当前列表
+     * @param l2  更新列表
+     * @param <T> 列表项类型
+     * @return left：需要删除的列表，right：需要新增的列表
+     */
+    public static <T> Pair<HashSet<T>, HashSet<T>> differenceSet(List<T> l1, List<T> l2) {
+        val s1 = new HashSet<>(l1);
+        val s2 = new HashSet<>(l2);
+
+        s1.removeAll(s2);
+
+        val s3 = new HashSet<>(l1);
+
+        s2.removeAll(s3);
+
+        return Pair.of(s1, s2);
     }
 }
