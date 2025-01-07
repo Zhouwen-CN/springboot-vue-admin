@@ -9,9 +9,12 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.yeeiee.controller.BaseController;
 import lombok.val;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.ClassPathResource;
 
 import java.sql.Types;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * <p>
@@ -24,10 +27,17 @@ import java.util.Collections;
 public final class MybatisGeneratorUtil {
 
     public static void generator(String... tableName) {
-        val url = "jdbc:mysql://localhost:3306/springboot_vue_admin";
-        val username = "root";
-        val password = "123";
-        val projectPath = System.getProperty("user.dir") + "\\admin-backend";
+        val factoryBean = new YamlPropertiesFactoryBean();
+        val resource = new ClassPathResource("application-dev.yml");
+        factoryBean.setResources(resource);
+
+        Properties properties = factoryBean.getObject();
+        assert properties != null;
+        val url = properties.getProperty("spring.datasource.url");
+        val username = properties.getProperty("spring.datasource.username");
+        val password = properties.getProperty("spring.datasource.password");
+
+        val projectPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "admin-backend";
 
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> builder.author("chen")
@@ -65,8 +75,8 @@ public final class MybatisGeneratorUtil {
                             .addTableFills(
                                     new Column("create_time", FieldFill.INSERT),
                                     new Column("update_time", FieldFill.UPDATE)
-                            );
-                    //.enableFileOverride();
+                            )
+                            .enableFileOverride();
 
                     builder.controllerBuilder()
                             .template("/templates/controller.java")
@@ -75,13 +85,13 @@ public final class MybatisGeneratorUtil {
                             .enableFileOverride();
 
                     builder.serviceBuilder()
-                            .formatServiceFileName("%sService");
-                    //.enableFileOverride();
+                            .formatServiceFileName("%sService")
+                            .enableFileOverride();
 
                     builder.mapperBuilder()
                             .enableBaseResultMap()
-                            .enableBaseColumnList();
-                    //.enableFileOverride();
+                            .enableBaseColumnList()
+                            .enableFileOverride();
 
                 })
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
@@ -90,6 +100,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_data_field", "t_data_range", "t_data_storey", "t_menu", "t_role", "t_role_menu", "t_root_word", "t_user", "t_user_role");
+        generator("t_login_log", "t_operation_log", "t_error_log");
     }
 }
