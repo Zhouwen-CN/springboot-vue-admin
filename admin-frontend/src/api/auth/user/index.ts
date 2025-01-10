@@ -51,7 +51,7 @@ export interface UserRoleInfo extends CreateAndUpdateTime {
   id: number
   username: string
   password: string
-  roleIds: string
+  roleList: RoleList
 }
 
 /**

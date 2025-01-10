@@ -7,9 +7,12 @@
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
-        <result column="role_ids" property="roleIds"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <collection property="roleList" ofType="com.yeeiee.entity.vo.RoleVo">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="roleName"/>
+        </collection>
     </resultMap>
 
     <resultMap id="UserInfoVo" type="com.yeeiee.entity.vo.UserInfoVo">
@@ -51,7 +54,8 @@
         a.password,
         a.create_time,
         a.update_time,
-        group_concat(b.role_id) as role_ids
+        b.role_id,
+        c.role_name
         from (
         select
         *
@@ -62,7 +66,8 @@
         ) a
         left join t_user_role b
         on a.id = b.user_id
-        group by a.id, a.username, a.password, a.create_time, a.update_time
+        left join t_role c
+        on b.role_id = c.id
     </select>
 
 </mapper>

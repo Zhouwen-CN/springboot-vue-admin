@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -21,7 +22,7 @@ public class UserRoleVo {
     private Long id;
     private String username;
     private String password;
-    private String roleIds;
+    private List<RoleVo> roleList;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

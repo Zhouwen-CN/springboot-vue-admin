@@ -99,7 +99,7 @@ function updateUser(row: UserRoleInfo) {
   userRoleForm.id = row.id
   userRoleForm.username = row.username
   userRoleForm.password = row.password
-  userRoleForm.roleIds = row.roleIds?.split(',').map((id) => Number(id)) || []
+  userRoleForm.roleIds = row.roleList.map(role => role.id)
 }
 
 // 删除用户
@@ -168,18 +168,6 @@ function clean() {
   ruleFormRef.value?.clearValidate()
 }
 
-// 根据角色id列表 获取角色名称列表
-const getRoleNames = computed(() => (roleIds: string) => {
-  const ids = roleIds?.split(',').map((id) => Number(id)) || []
-  const result: string[] = []
-  roleData.value?.forEach((role) => {
-    if (ids.includes(role.id)) {
-      result.push(role.roleName)
-    }
-  })
-  return result.join('，')
-})
-
 onMounted(() => {
   pageRefresh()
   getRoles()
@@ -222,8 +210,8 @@ onMounted(() => {
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
         <el-table-column label="角色名称" prop="roleIds">
-          <template #default="{ row }:{row:UserRoleInfo}">
-            {{ row.roleIds === '1' ? 'admin' : getRoleNames(row.roleIds) }}
+          <template #default="{ row }: { row: UserRoleInfo }">
+            {{ row.roleList.map(role => role.roleName).join(',') }}
           </template>
         </el-table-column>
         <el-table-column label="创建时间"
