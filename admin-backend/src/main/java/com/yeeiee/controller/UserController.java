@@ -15,7 +15,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -37,21 +45,21 @@ public class UserController {
     @Operation(summary = "用户登入")
     @PostMapping("/login")
     public R<UserInfoVo> login(@RequestBody LoginDto loginDto) {
-        val userInfoVo = userService.modifyUserWithLogin(loginDto);
+        val userInfoVo = userService.modifyUserAndLogin(loginDto);
         return R.ok(userInfoVo);
     }
 
     @Operation(summary = "刷新token")
     @GetMapping("/refresh")
     public R<TokenVo> refreshToken(HttpServletRequest request) {
-        val userInfoVo = userService.modifyUserWithRefreshToken(request);
+        val userInfoVo = userService.modifyUserAndRefreshToken(request);
         return R.ok(userInfoVo);
     }
 
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
     public R<String> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
-        userService.modifyUserWithLogout(id);
+        userService.modifyUserAndLogout(id);
         return R.ok();
     }
 
@@ -74,21 +82,21 @@ public class UserController {
 
     @Operation(summary = "更新用户")
     @PutMapping("")
-    public R<String> updateUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
+    public R<String> modifyUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.modifyUserWithRoleIds(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<String> removeUser(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<String> removeUserById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.removeUser(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping("")
-    public R<String> removeUsersWithRoleIds(@RequestBody Collection<Long> ids) {
+    public R<String> removeUserByIds(@RequestBody Collection<Long> ids) {
         userService.removeUsers(ids);
         return R.ok();
     }

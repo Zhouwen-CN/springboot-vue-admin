@@ -45,23 +45,11 @@ public final class R<T> {
         return new R<>(true, data, 200, null);
     }
 
-    public static R<String> error(HttpStatus httpStatus) {
-        return new R<>(false, "error", httpStatus.value(), httpStatus.getReasonPhrase());
-    }
-
     public static R<String> error(HttpStatus httpStatus, Exception e) {
         return new R<>(false, "error", httpStatus.value(), e.getMessage());
     }
 
     public static R<String> error(HttpStatus httpStatus, String message) {
         return new R<>(false, "error", httpStatus.value(), message);
-    }
-
-    public static R<String> check(boolean isSuccess, HttpStatus httpStatus) {
-        if (isSuccess) {
-            return R.ok();
-        }
-
-        return R.error(httpStatus);
     }
 }

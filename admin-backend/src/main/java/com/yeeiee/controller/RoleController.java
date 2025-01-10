@@ -53,7 +53,7 @@ public class RoleController {
         return R.ok(list);
     }
 
-    @Operation(summary = "获取角色分页")
+    @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
     public R<IPage<RoleMenuVo>> getRolePages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
@@ -71,14 +71,14 @@ public class RoleController {
 
     @Operation(summary = "更新角色")
     @PutMapping("")
-    public R<String> updateRoleWithMenuIds(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
+    public R<String> modifyRoleWithMenuIds(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
         roleService.modifyRoleWithMenuIds(roleMenuIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
-    public R<String> deleteRole(@PathVariable("id") @Parameter(description = "角色id") Long id) {
+    public R<String> removeRoleById(@PathVariable("id") @Parameter(description = "角色id") Long id) {
         roleService.removeRole(id);
         return R.ok();
     }
@@ -86,7 +86,7 @@ public class RoleController {
 
     @Operation(summary = "批量删除角色")
     @DeleteMapping("")
-    public R<String> deleteRoles(@RequestBody Collection<Long> ids) {
+    public R<String> removeRoleByIds(@RequestBody Collection<Long> ids) {
         roleService.removeRoles(ids);
         return R.ok();
     }

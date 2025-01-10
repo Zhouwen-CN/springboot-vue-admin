@@ -29,21 +29,22 @@ public interface UserService extends IService<User> {
      * @param loginDto 登入传输对象
      * @return user 对象信息
      */
-    UserInfoVo modifyUserWithLogin(LoginDto loginDto);
+    UserInfoVo modifyUserAndLogin(LoginDto loginDto);
 
     /**
      * 刷新 token
+     *
      * @param request 请求对象
      * @return user 对象信息
      */
-    TokenVo modifyUserWithRefreshToken(HttpServletRequest request);
+    TokenVo modifyUserAndRefreshToken(HttpServletRequest request);
 
     /**
      * 登出
      *
      * @param id 用户 id
      */
-    void modifyUserWithLogout(Long id);
+    void modifyUserAndLogout(Long id);
 
     /**
      * 获取用户分页（包含角色ids）

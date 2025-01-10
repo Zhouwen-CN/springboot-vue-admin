@@ -6,7 +6,6 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.val;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +30,10 @@ public abstract class BaseController<S extends IService<D>, D> {
         this.service = service;
     }
 
-    @Operation(summary = "分页查询")
+    @Operation(summary = "查询分页")
     @GetMapping("/{size}/{current}")
-    public R<Page<D>> page(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                           @PathVariable("current") @Parameter(description = "当前页面") Integer current) {
+    public R<Page<D>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                              @PathVariable("current") @Parameter(description = "当前页面") Integer current) {
         val page = service.page(new Page<>(current, size));
         return R.ok(page);
     }
@@ -56,24 +55,21 @@ public abstract class BaseController<S extends IService<D>, D> {
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
     public R<String> removeById(@PathVariable("id") Long id) {
-        return R.check(service.removeById(id), HttpStatus.BAD_REQUEST);
+        service.removeById(id);
+        return R.ok();
     }
 
     @Operation(summary = "新增")
     @PostMapping("")
-    public R<String> save(@RequestBody D entity) {
-        return R.check(service.save(entity), HttpStatus.BAD_REQUEST);
+    public R<String> add(@RequestBody D entity) {
+        service.save(entity);
+        return R.ok();
     }
 
     @Operation(summary = "更新")
     @PutMapping("")
-    public R<String> update(@RequestBody D entity) {
-        return R.check(service.updateById(entity), HttpStatus.BAD_REQUEST);
-    }
-
-    @Operation(summary = "新增或者更新")
-    @PostMapping("/save")
-    public R<String> saveOrUpdate(@RequestBody D entity) {
-        return R.check(service.saveOrUpdate(entity), HttpStatus.BAD_REQUEST);
+    public R<String> modify(@RequestBody D entity) {
+        service.updateById(entity);
+        return R.ok();
     }
 }

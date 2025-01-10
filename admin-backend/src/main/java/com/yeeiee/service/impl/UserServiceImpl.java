@@ -51,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
-    public UserInfoVo modifyUserWithLogin(LoginDto loginDto) {
+    public UserInfoVo modifyUserAndLogin(LoginDto loginDto) {
         val authenticate = authenticationProvider.authenticate(
                 UsernamePasswordAuthenticationToken.unauthenticated(loginDto.getUsername(), loginDto.getPassword())
         );
@@ -77,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public TokenVo modifyUserWithRefreshToken(HttpServletRequest request) {
+    public TokenVo modifyUserAndRefreshToken(HttpServletRequest request) {
         val token = JwtTokenUtil.getTokenFromRequest(request);
         val optional = JwtTokenUtil.parseRefreshToken(token);
         if (optional.isEmpty()) {
@@ -112,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void modifyUserWithLogout(Long id) {
+    public void modifyUserAndLogout(Long id) {
         val user = userMapper.selectById(id);
         if (user != null) {
             userMapper.update(new UpdateWrapper<User>()
