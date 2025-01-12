@@ -2,14 +2,18 @@ package com.yeeiee.utils;
 
 import com.yeeiee.security.SecurityUser;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class CommonUtil {
     /**
@@ -18,12 +22,7 @@ public final class CommonUtil {
      * @return request
      */
     public static HttpServletRequest getHttpServletRequest() {
-
-        val requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes == null) {
-            return null;
-        }
-
+        val requestAttributes = Objects.requireNonNull(RequestContextHolder.getRequestAttributes());
         return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
@@ -33,8 +32,15 @@ public final class CommonUtil {
      * @return user
      */
     public static SecurityUser getSecurityUser() {
-        val authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (SecurityUser) authentication.getPrincipal();
+        val principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof SecurityUser) {
+            return (SecurityUser) principal;
+        }
+
+        return SecurityUser.builder()
+                .username("未知用户")
+                .build();
     }
 
     /**
@@ -87,5 +93,19 @@ public final class CommonUtil {
         }
 
         return request.getRemoteAddr();
+    }
+
+    /**
+     * 写出响应
+     *
+     * @param response 响应对象
+     * @param result   响应体
+     * @param <T>      实体类型
+     * @throws IOException io 异常
+     */
+    public static <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
+        val resultAsJson = JsonUtil.toJsonString(result);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().println(resultAsJson);
     }
 }

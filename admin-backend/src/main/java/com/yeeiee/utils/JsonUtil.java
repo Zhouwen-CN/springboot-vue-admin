@@ -14,4 +14,9 @@ public final class JsonUtil {
     public static String toJsonString(Object value) {
         return objectMapper.writeValueAsString(value);
     }
+
+    @SneakyThrows
+    public static <T> T parse(String json, Class<T> clazz) {
+        return objectMapper.readValue(json, clazz);
+    }
 }

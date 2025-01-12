@@ -12,11 +12,14 @@ import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.enumeration.LoginOperationEnum;
+import com.yeeiee.enumeration.StateEnum;
 import com.yeeiee.exception.AuthenticationException;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.mapper.UserRoleMapper;
 import com.yeeiee.security.SecurityUser;
+import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.JwtTokenUtil;
@@ -48,6 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
     private UserRoleMapper userRoleMapper;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private LoginLogService loginLogService;
 
 
     @Override
@@ -73,6 +77,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set(User::getTokenVersion, securityUser.getTokenVersion() + 1)
                 .eq(User::getId, securityUser.getId())
         );
+
+        // 写入登入日志
+        loginLogService.saveLoginLog(LoginOperationEnum.LOGIN, StateEnum.SUCCESS);
+
         return userInfoVo;
     }
 

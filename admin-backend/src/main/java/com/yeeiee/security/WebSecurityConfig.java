@@ -1,6 +1,6 @@
 package com.yeeiee.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,13 +15,10 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.io.IOException;
 
 /**
  * <p>
@@ -54,12 +51,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .cors(AbstractHttpConfigurer::disable)
+        // 关闭一些不需要的
+        http.formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .requestCache(AbstractHttpConfigurer::disable)
+                .anonymous(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize ->
+                .cors(AbstractHttpConfigurer::disable);
+
+        http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源和swagger
                                 .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
@@ -83,12 +85,12 @@ public class WebSecurityConfig {
                             exception.authenticationEntryPoint((HttpServletRequest request,
                                                                 HttpServletResponse response,
                                                                 AuthenticationException authException
-                                    ) -> writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未认证"))
+                                    ) -> CommonUtil.writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未认证"))
                                     // 未授权处理
                             ).accessDeniedHandler((HttpServletRequest request,
                                                    HttpServletResponse response,
                                                    AccessDeniedException accessDeniedException
-                            ) -> writeResponse(response, R.error(HttpStatus.FORBIDDEN, "用户未授权")));
+                            ) -> CommonUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, "用户未授权")));
                         }
                 );
         return http.build();
@@ -106,10 +108,11 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    private <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
-        val objectMapper = new ObjectMapper();
-        val resultAsJson = objectMapper.writeValueAsString(result);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().println(resultAsJson);
-    }
+    /*
+        删除角色标识前缀 ROLE_
+     */
+   /* @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults("");
+    }*/
 }

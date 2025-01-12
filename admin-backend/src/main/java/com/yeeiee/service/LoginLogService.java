@@ -2,6 +2,8 @@ package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.LoginLog;
+import com.yeeiee.enumeration.LoginOperationEnum;
+import com.yeeiee.enumeration.StateEnum;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.yeeiee.entity.LoginLog;
  */
 public interface LoginLogService extends IService<LoginLog> {
 
+    void saveLoginLog(LoginOperationEnum loginOperationEnum, StateEnum stateEnum);
 }

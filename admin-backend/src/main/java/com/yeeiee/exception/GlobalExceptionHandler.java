@@ -27,7 +27,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    ErrorLogService errorLogService;
+    private ErrorLogService errorLogService;
 
     @ExceptionHandler(BadCredentialsException.class)
     public R<String> badCredentialsHandler() {
@@ -57,19 +57,17 @@ public class GlobalExceptionHandler {
 
     private void saveErrorLog(Exception e) {
         val request = CommonUtil.getHttpServletRequest();
-        if (request != null) {
-            val securityUser = CommonUtil.getSecurityUser();
-            val errorLog = new ErrorLog();
-            errorLog.setUsername(securityUser.getUsername());
-            errorLog.setUrl(request.getRequestURI());
-            errorLog.setMethod(request.getMethod());
-            val parameterMap = CommonUtil.getParameterMap(request);
-            errorLog.setParams(JsonUtil.toJsonString(parameterMap));
-            errorLog.setIp(CommonUtil.getIpAddr(request));
-            errorLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-            errorLog.setErrorMsg(ExceptionUtils.getStackTrace(e));
+        val securityUser = CommonUtil.getSecurityUser();
+        val errorLog = new ErrorLog();
+        errorLog.setUsername(securityUser.getUsername());
+        errorLog.setUrl(request.getRequestURI());
+        errorLog.setMethod(request.getMethod());
+        val parameterMap = CommonUtil.getParameterMap(request);
+        errorLog.setParams(JsonUtil.toJsonString(parameterMap));
+        errorLog.setIp(CommonUtil.getIpAddr(request));
+        errorLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+        errorLog.setErrorMsg(ExceptionUtils.getStackTrace(e));
 
-            errorLogService.save(errorLog);
-        }
+        errorLogService.save(errorLog);
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserInfoVo extends TokenVo {
+public class UserInfoVo {
     private Long id;
     private String username;
     @JsonIgnore

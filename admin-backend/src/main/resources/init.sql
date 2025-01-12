@@ -500,29 +500,29 @@ create table t_operation_log
     `id`        bigint primary key auto_increment comment '主键',
     `username`  varchar(15)  not null comment '用户名',
     `operation` enum('新增','修改','删除','') not null comment '操作',
-    url         varchar(100) not null comment '请求地址',
-    method      enum('GET','PUT','POST','DELETE') not null comment '请求方式',
-    params      varchar(255) default null comment '请求参数',
-    time        int          not null comment '请求耗时',
-    status      enum('成功','失败') not null comment '操作状态',
-    ip          varchar(32)  not null comment 'ip地址',
-    user_agent  varchar(255) not null comment '用户代理',
-    create_time timestamp    default CURRENT_TIMESTAMP null comment '创建时间',
+    `url`         varchar(100) not null comment '请求地址',
+    `method`      enum('GET','PUT','POST','DELETE') not null comment '请求方式',
+    `params`      varchar(255) default null comment '请求参数',
+    `time`        int          not null comment '请求耗时',
+    `status`      enum('成功','失败') not null comment '操作状态',
+    `ip`          varchar(32)  not null comment 'ip地址',
+    `user_agent`  varchar(255) not null comment '用户代理',
+    `create_time` timestamp    default CURRENT_TIMESTAMP null comment '创建时间',
     key         idx_create_time(`create_time` desc)
 ) comment '操作日志表';
 
 drop table if exists t_error_log;
 create table t_error_log
 (
-    id          bigint primary key auto_increment,
-    username    varchar(15)  not null comment '用户名',
-    url         varchar(100) not null comment '请求地址',
-    method      enum('GET','PUT','POST','DELETE') not null comment '请求方式',
-    params      varchar(255) default null comment '请求参数',
-    ip          varchar(32)  not null comment 'ip地址',
-    user_agent  varchar(255) not null comment '用户代理',
-    error_msg   text         not null comment '错误信息',
-    create_time timestamp    default CURRENT_TIMESTAMP null comment '创建时间',
+    `id`          bigint primary key auto_increment,
+    `username`    varchar(15)  not null comment '用户名',
+    `url`         varchar(100) not null comment '请求地址',
+    `method`      enum('GET','PUT','POST','DELETE') not null comment '请求方式',
+    `params`      varchar(255) default null comment '请求参数',
+    `ip`          varchar(32)  not null comment 'ip地址',
+    `user_agent`  varchar(255) not null comment '用户代理',
+    `error_msg`   text         not null comment '错误信息',
+    `create_time` timestamp    default CURRENT_TIMESTAMP null comment '创建时间',
     key         idx_create_time(`create_time` desc)
 ) comment '错误日志表';
 
