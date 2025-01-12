@@ -27,7 +27,7 @@ export interface UserInfo extends TokenInfo {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-  return request.post<UserInfo, LoginForm>('/user/login', loginForm)
+  return request.post<UserInfo, LoginForm>('/login/user', loginForm)
 }
 
 /**

@@ -1,14 +1,14 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.RoleMenu;
 import com.yeeiee.entity.vo.MenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
-import com.yeeiee.mapper.RoleMenuMapper;
 import com.yeeiee.service.MenuService;
+import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.utils.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -28,45 +28,42 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
-
+    private RoleMenuService roleMenuService;
     private MenuMapper menuMapper;
-    private RoleMenuMapper roleMenuMapper;
 
     @Override
     public void addMenu(Menu menu) {
-        menuMapper.insert(menu);
+        this.save(menu);
 
         // 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
         roleMenu.setMenuId(menu.getId());
 
-        roleMenuMapper.insert(roleMenu);
+        roleMenuService.save(roleMenu);
     }
 
     @Override
     public void removeMenu(Long id) {
-        val parentMenus = menuMapper.selectList(new QueryWrapper<Menu>()
-                .lambda()
+        val parentMenus = this.lambdaQuery()
                 .eq(Menu::getPid, id)
-        );
+                .list();
+
         if (!parentMenus.isEmpty()) {
             val parentMenuIds = parentMenus.stream().map(Menu::getId).toList();
             throw new DmlOperationException("删除失败，尚有子菜单依赖：" + parentMenuIds);
         }
 
-        // 1-4 是权限菜单
+        // todo: 1-4 是权限菜单
         if (id <= 4) {
             throw new DmlOperationException("删除失败，权限菜单不能删除");
         }
 
-        menuMapper.deleteById(id);
+        this.removeById(id);
 
-        val roleMenuList = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>()
-                .lambda()
+        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>()
                 .eq(RoleMenu::getMenuId, id)
         );
-        roleMenuMapper.deleteByIds(roleMenuList);
     }
 
     @Override

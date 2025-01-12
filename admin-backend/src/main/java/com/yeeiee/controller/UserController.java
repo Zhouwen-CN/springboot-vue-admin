@@ -2,10 +2,8 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.TokenVo;
-import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.R;
@@ -15,15 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -42,24 +32,17 @@ import java.util.Collection;
 public class UserController {
     private UserService userService;
 
-    @Operation(summary = "用户登入")
-    @PostMapping("/login")
-    public R<UserInfoVo> login(@RequestBody LoginDto loginDto) {
-        val userInfoVo = userService.modifyUserAndLogin(loginDto);
-        return R.ok(userInfoVo);
-    }
-
     @Operation(summary = "刷新token")
     @GetMapping("/refresh")
     public R<TokenVo> refreshToken(HttpServletRequest request) {
-        val userInfoVo = userService.modifyUserAndRefreshToken(request);
-        return R.ok(userInfoVo);
+        val tokenVo = userService.refreshToken(request);
+        return R.ok(tokenVo);
     }
 
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
     public R<String> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
-        userService.modifyUserAndLogout(id);
+        userService.logout(id);
         return R.ok();
     }
 
@@ -76,28 +59,28 @@ public class UserController {
     @Operation(summary = "新增用户")
     @PostMapping("")
     public R<String> addUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
-        userService.addUserWithRoleIds(userRoleIdsDto);
+        userService.addUser(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping("")
     public R<String> modifyUserWithRoleIds(@RequestBody UserRoleIdsDto userRoleIdsDto) {
-        userService.modifyUserWithRoleIds(userRoleIdsDto);
+        userService.modifyUser(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
     public R<String> removeUserById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
-        userService.removeUser(id);
+        userService.removeUserById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping("")
     public R<String> removeUserByIds(@RequestBody Collection<Long> ids) {
-        userService.removeUsers(ids);
+        userService.removeUserByIds(ids);
         return R.ok();
     }
 }

@@ -1,10 +1,9 @@
 package com.yeeiee.utils;
 
-import com.yeeiee.security.SecurityUser;
+import com.yeeiee.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,16 +30,17 @@ public final class CommonUtil {
      *
      * @return user
      */
-    public static SecurityUser getSecurityUser() {
+    public static User getSecurityUser() {
         val principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof SecurityUser) {
-            return (SecurityUser) principal;
+        if (principal instanceof User) {
+            return (User) principal;
         }
 
-        return SecurityUser.builder()
-                .username("未知用户")
-                .build();
+        val user = new User();
+        user.setUsername("未知用户");
+
+        return user;
     }
 
     /**
@@ -105,7 +105,7 @@ public final class CommonUtil {
      */
     public static <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
         val resultAsJson = JsonUtil.toJsonString(result);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().println(resultAsJson);
     }
 }

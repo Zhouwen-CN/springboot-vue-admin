@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.Role;
 import com.yeeiee.entity.dto.RoleMenuIdsDto;
 import com.yeeiee.entity.vo.RoleMenuVo;
+import com.yeeiee.entity.vo.RoleVo;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -33,26 +35,29 @@ public interface RoleService extends IService<Role> {
      *
      * @param roleMenuIdsDto 角色 和 菜单ids
      */
-    void addRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto);
+    void addRole(RoleMenuIdsDto roleMenuIdsDto);
 
     /**
      * 修改角色 和 菜单ids
      *
      * @param roleMenuIdsDto 角色 和 菜单ids
      */
-    void modifyRoleWithMenuIds(RoleMenuIdsDto roleMenuIdsDto);
+    void modifyRole(RoleMenuIdsDto roleMenuIdsDto);
 
     /**
      * 根据id删除角色和菜单关系
      *
      * @param id 角色id
      */
-    void removeRole(Long id);
+    void removeRoleById(Long id);
 
     /**
      * 批量删除角色
      *
      * @param ids 角色ids
      */
-    void removeRoles(Collection<Long> ids);
+    void removeRoleByIds(Collection<Long> ids);
+
+
+    List<RoleVo> getRoleListByUserId(Long userId);
 }

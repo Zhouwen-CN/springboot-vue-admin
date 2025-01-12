@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
-import com.yeeiee.entity.dto.LoginDto;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.TokenVo;
-import com.yeeiee.entity.vo.UserInfoVo;
 import com.yeeiee.entity.vo.UserRoleVo;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,27 +22,19 @@ import java.util.Collection;
 public interface UserService extends IService<User> {
 
     /**
-     * 用户登入
-     *
-     * @param loginDto 登入传输对象
-     * @return user 对象信息
-     */
-    UserInfoVo modifyUserAndLogin(LoginDto loginDto);
-
-    /**
      * 刷新 token
      *
      * @param request 请求对象
      * @return user 对象信息
      */
-    TokenVo modifyUserAndRefreshToken(HttpServletRequest request);
+    TokenVo refreshToken(HttpServletRequest request);
 
     /**
      * 登出
      *
      * @param id 用户 id
      */
-    void modifyUserAndLogout(Long id);
+    void logout(Long id);
 
     /**
      * 获取用户分页（包含角色ids）
@@ -61,26 +51,26 @@ public interface UserService extends IService<User> {
      *
      * @param userRoleIdsDto 用户和角色关系
      */
-    void addUserWithRoleIds(UserRoleIdsDto userRoleIdsDto);
+    void addUser(UserRoleIdsDto userRoleIdsDto);
 
     /**
      * 更新用户和角色关系
      *
      * @param userRoleIdsDto 用户和角色关系
      */
-    void modifyUserWithRoleIds(UserRoleIdsDto userRoleIdsDto);
+    void modifyUser(UserRoleIdsDto userRoleIdsDto);
 
     /**
      * 删除用户和角色关系
      *
      * @param id 用户id
      */
-    void removeUser(Long id);
+    void removeUserById(Long id);
 
     /**
      * 批量删除用户和角色关系
      *
      * @param ids 用户id列表
      */
-    void removeUsers(Collection<Long> ids);
+    void removeUserByIds(Collection<Long> ids);
 }

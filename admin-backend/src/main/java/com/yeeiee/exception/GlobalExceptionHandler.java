@@ -10,7 +10,6 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -29,18 +28,13 @@ public class GlobalExceptionHandler {
 
     private ErrorLogService errorLogService;
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public R<String> badCredentialsHandler() {
-        return R.error(HttpStatus.FORBIDDEN, "用户名或密码错误");
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public R<String> authenticationExceptionHandler(AuthenticationException e) {
-        return R.error(HttpStatus.UNAUTHORIZED, e.getMessage());
-    }
-
     @ExceptionHandler(DmlOperationException.class)
     public R<String> dmlFailureHandler(DmlOperationException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler(ParseTokenException.class)
+    public R<String> parseTokenException(ParseTokenException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
@@ -57,9 +51,9 @@ public class GlobalExceptionHandler {
 
     private void saveErrorLog(Exception e) {
         val request = CommonUtil.getHttpServletRequest();
-        val securityUser = CommonUtil.getSecurityUser();
+        val user = CommonUtil.getSecurityUser();
         val errorLog = new ErrorLog();
-        errorLog.setUsername(securityUser.getUsername());
+        errorLog.setUsername(user.getUsername());
         errorLog.setUrl(request.getRequestURI());
         errorLog.setMethod(request.getMethod());
         val parameterMap = CommonUtil.getParameterMap(request);

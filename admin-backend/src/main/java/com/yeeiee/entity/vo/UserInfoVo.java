@@ -1,6 +1,5 @@
 package com.yeeiee.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,11 +8,11 @@ import java.util.List;
 
 /**
  * <p>
- * 用户信息，包含 角色列表 和 菜单列表
+ * 登入成功返回对象
  * </p>
  *
  * @author chen
- * @since 2024/5/13
+ * @since 2025/11/12
  */
 @Getter
 @Setter
@@ -21,11 +20,6 @@ import java.util.List;
 public class UserInfoVo {
     private Long id;
     private String username;
-    @JsonIgnore
-    private String password;
-    // token 版本
-    @JsonIgnore
-    private Long tokenVersion;
     private String accessToken;
     private String refreshToken;
     private List<RoleVo> roleList;

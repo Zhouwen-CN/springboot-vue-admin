@@ -76,25 +76,29 @@ public final class MybatisGeneratorUtil {
                                     new Column("create_time", FieldFill.INSERT),
                                     new Column("update_time", FieldFill.UPDATE)
                             )
-                            .enableFileOverride();
+                    // .enableFileOverride()
+                    ;
 
                     builder.controllerBuilder()
                             .template("/templates/controller.java")
                             .superClass(BaseController.class)
                             .enableRestStyle()
-                            .enableFileOverride();
+                    // .enableFileOverride()
+                    ;
 
                     builder.serviceBuilder()
                             .formatServiceFileName("%sService")
-                            .enableFileOverride();
+                    // .enableFileOverride()
+                    ;
 
                     builder.mapperBuilder()
                             .enableBaseResultMap()
                             .enableBaseColumnList()
-                            .enableFileOverride();
+                    // .enableFileOverride()
+                    ;
 
                 })
-                // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+                // 使用Freemarker模板引擎，默认的是Velocity模板引擎
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
     }

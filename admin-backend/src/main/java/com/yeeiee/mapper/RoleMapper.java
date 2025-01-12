@@ -5,6 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.Role;
 import com.yeeiee.entity.vo.RoleMenuVo;
+import com.yeeiee.entity.vo.RoleVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +21,6 @@ import com.yeeiee.entity.vo.RoleMenuVo;
 public interface RoleMapper extends BaseMapper<Role> {
 
     IPage<RoleMenuVo> selectRolePages(Page<RoleMenuVo> page, String searchName);
+
+    List<RoleVo> selectRoleListByUserId(@Param("userId") Long userId);
 }

@@ -1,5 +1,6 @@
 package com.yeeiee.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
@@ -15,8 +16,8 @@ public final class JsonUtil {
         return objectMapper.writeValueAsString(value);
     }
 
-    @SneakyThrows
-    public static <T> T parse(String json, Class<T> clazz) {
+
+    public static <T> T parse(String json, Class<T> clazz) throws JsonProcessingException {
         return objectMapper.readValue(json, clazz);
     }
 }

@@ -54,11 +54,11 @@ public final class JwtTokenUtil {
     private static Optional<Map<String, Claim>> parseToken(String token, String secretKey) {
         try {
             val jwt = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token);
-            return Optional.ofNullable(jwt.getClaims());
+            return Optional.of(jwt.getClaims());
         } catch (Exception e) {
-            // do nothing
+            // do noting
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     public static Optional<Map<String, Claim>> parseAccessToken(String token) {
