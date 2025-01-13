@@ -31,15 +31,13 @@ public final class CommonUtil {
      * @return user
      */
     public static User getSecurityUser() {
-        val principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof User) {
-            return (User) principal;
+        val authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();
         }
 
         val user = new User();
         user.setUsername("未知用户");
-
         return user;
     }
 

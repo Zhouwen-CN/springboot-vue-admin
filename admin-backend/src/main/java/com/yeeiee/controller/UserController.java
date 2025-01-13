@@ -13,7 +13,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -32,6 +40,15 @@ import java.util.Collection;
 public class UserController {
     private UserService userService;
 
+    @Operation(summary = "查询用户分页")
+    @GetMapping("/{size}/{current}")
+    public R<IPage<UserRoleVo>> getUserPages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+        val list = userService.getUserPages(new Page<>(current, size), searchName);
+        return R.ok(list);
+    }
+
     @Operation(summary = "刷新token")
     @GetMapping("/refresh")
     public R<TokenVo> refreshToken(HttpServletRequest request) {
@@ -41,19 +58,9 @@ public class UserController {
 
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
-    public R<String> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<String> logout(@PathVariable("id") Long id) {
         userService.logout(id);
         return R.ok();
-    }
-
-    @Operation(summary = "查询所有用户")
-    @GetMapping("/{size}/{current}")
-    public R<IPage<UserRoleVo>> getUserPages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-
-        val list = userService.getUserPages(new Page<>(current, size), searchName);
-        return R.ok(list);
     }
 
     @Operation(summary = "新增用户")
@@ -72,7 +79,7 @@ public class UserController {
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<String> removeUserById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<String> removeUserById(@PathVariable("id") Long id) {
         userService.removeUserById(id);
         return R.ok();
     }

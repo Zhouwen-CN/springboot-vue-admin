@@ -1,4 +1,4 @@
-package com.yeeiee.config;
+package com.yeeiee.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
@@ -22,7 +22,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
  */
 @Aspect
 @Component
-public class TransactionAdviceConfig {
+public class TransactionAdviceAspect {
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.yeeiee.service.impl.*.*(..))";
 
     /**

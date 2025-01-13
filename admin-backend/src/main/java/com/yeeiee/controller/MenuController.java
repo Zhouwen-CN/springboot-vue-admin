@@ -5,7 +5,6 @@ import com.yeeiee.entity.vo.MenuVo;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -37,7 +36,7 @@ import java.util.List;
 public class MenuController {
     private MenuService menuService;
 
-    @Operation(summary = "查询所有菜单")
+    @Operation(summary = "查询菜单列表")
     @GetMapping("")
     public R<List<MenuVo>> getMenuList(@RequestParam("ids") Collection<Long> ids) {
         val menuList = menuService.getMenuList(ids);
@@ -60,7 +59,7 @@ public class MenuController {
 
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
-    public R<String> removeMenuById(@PathVariable("id") @Parameter(description = "菜单id") Long id) {
+    public R<String> removeMenuById(@PathVariable("id") Long id) {
         menuService.removeMenu(id);
         return R.ok();
     }

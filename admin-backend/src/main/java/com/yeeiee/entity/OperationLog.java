@@ -1,6 +1,10 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +53,7 @@ public class OperationLog {
 
     @Schema(description = "请求耗时")
     @TableField("`time`")
-    private Integer time;
+    private Long time;
 
     @Schema(description = "操作状态")
     @TableField("`status`")

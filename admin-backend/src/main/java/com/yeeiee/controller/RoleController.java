@@ -12,7 +12,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,25 +40,25 @@ import java.util.List;
 public class RoleController {
     private RoleService roleService;
 
-    /**
-     * 默认不会查询出admin角色
-     */
-    @Operation(summary = "查询所有角色")
-    @GetMapping("")
-    public R<List<Role>> getRoleList() {
-        // 不能给别的用户 admin 角色
-        val list = roleService.lambdaQuery()
-                .ne(Role::getRoleName, "admin")
-                .list();
-        return R.ok(list);
-    }
-
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
     public R<IPage<RoleMenuVo>> getRolePages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
         val list = roleService.getRolePages(new Page<>(current, size), searchName);
+        return R.ok(list);
+    }
+
+    /**
+     * 默认不会查询出admin角色
+     */
+    @Operation(summary = "查询角色列表")
+    @GetMapping("")
+    public R<List<Role>> getRoleList() {
+        // 不能给别的用户 admin 角色
+        val list = roleService.lambdaQuery()
+                .ne(Role::getRoleName, "admin")
+                .list();
         return R.ok(list);
     }
 
@@ -70,7 +78,7 @@ public class RoleController {
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
-    public R<String> removeRoleById(@PathVariable("id") @Parameter(description = "角色id") Long id) {
+    public R<String> removeRoleById(@PathVariable("id") Long id) {
         roleService.removeRoleById(id);
         return R.ok();
     }

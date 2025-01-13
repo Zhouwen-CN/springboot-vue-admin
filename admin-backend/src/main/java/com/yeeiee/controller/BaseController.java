@@ -38,7 +38,7 @@ public abstract class BaseController<S extends IService<D>, D> {
         return R.ok(page);
     }
 
-    @Operation(summary = "查询所有")
+    @Operation(summary = "查询列表")
     @GetMapping("")
     public R<List<D>> getList() {
         val list = service.list();
