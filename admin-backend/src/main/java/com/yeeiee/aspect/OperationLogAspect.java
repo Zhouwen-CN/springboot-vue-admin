@@ -10,9 +10,14 @@ import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
 
 /**
  * {@code @Author:} chen
@@ -67,14 +72,43 @@ public class OperationLogAspect {
         operationLog.setIp(CommonUtil.getIpAddr(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
 
-        Object[] args = pjp.getArgs();
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        val targetClass = pjp.getTarget().getClass();
+
+
         try {
-            String params = JsonUtil.toJsonString(args[0]);
+            Method method = targetClass.getDeclaredMethod(signature.getName(), signature.getParameterTypes());
+            String params = this.getParameter(method, pjp.getArgs());
             operationLog.setParams(params);
         } catch (Exception e) {
             // Do nothing
         }
 
         operationLogService.save(operationLog);
+    }
+
+
+    /**
+     * 如果是 RequestBody 参数，则直接返回<br/>
+     * 如果是 其他参数，则封装成map
+     *
+     * @param method 请求方法
+     * @param args   请求参数
+     * @return 请求参数
+     */
+    private String getParameter(Method method, Object[] args) {
+        val parameters = method.getParameters();
+        val requestParamMap = new HashMap<String, Object>();
+        for (int i = 0; i < parameters.length; i++) {
+            RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
+            String key = parameters[i].getName();
+            if (requestBody != null) {
+                return JsonUtil.toJsonString(args[i]);
+            } else {
+                requestParamMap.put(key, args[i]);
+            }
+        }
+
+        return JsonUtil.toJsonString(requestParamMap);
     }
 }
