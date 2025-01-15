@@ -10,14 +10,11 @@ export interface LoginForm {
 
 type RoleList = Omit<Role, 'desc' | 'createTime' | 'updateTime'>[]
 
-export interface TokenInfo {
-  accessToken: string
-  refreshToken: string
-}
-
-export interface UserInfo extends TokenInfo {
+export interface UserInfo {
   id: number
   username: string
+  accessToken: string
+  refreshToken: string
   roleList: RoleList
 }
 
@@ -36,7 +33,7 @@ export function reqLogin(loginForm: LoginForm) {
  * @returns
  */
 export function reqRefreshToken(refreshToken: string) {
-  return request.get<TokenInfo>('/user/refresh', {
+  return request.get<UserInfo>('/user/refresh', {
     headers: {
       Authorization: `Bearer ${refreshToken}`
     }

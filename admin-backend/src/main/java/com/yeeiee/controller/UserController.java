@@ -3,8 +3,8 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,9 +51,9 @@ public class UserController {
 
     @Operation(summary = "刷新token")
     @GetMapping("/refresh")
-    public R<TokenVo> refreshToken(HttpServletRequest request) {
-        val tokenVo = userService.refreshToken(request);
-        return R.ok(tokenVo);
+    public R<UserVo> refreshToken(HttpServletRequest request) {
+        val userVo = userService.refreshToken(request);
+        return R.ok(userVo);
     }
 
     @Operation(summary = "退出登入")

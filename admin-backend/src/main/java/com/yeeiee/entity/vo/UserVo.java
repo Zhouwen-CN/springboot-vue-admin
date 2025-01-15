@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserInfoVo {
+public class UserVo {
     private Long id;
     private String username;
     private String accessToken;

@@ -38,14 +38,16 @@
     </select>
 
     <select id="selectRoleListByUserId" resultType="com.yeeiee.entity.vo.RoleVo">
-        select b.id,
-               b.role_name
-        from (select *
-              from t_user_role
-              where user_id = #{userId}) a
-                 left join t_role b
-                           on a.role_id = b.id
-
+        select
+            b.id as id,
+            b.role_name as roleName
+        from (
+            select *
+            from t_user_role
+            where user_id = #{userId}
+        ) a
+        left join t_role b
+        on a.role_id = b.id
     </select>
 
 </mapper>

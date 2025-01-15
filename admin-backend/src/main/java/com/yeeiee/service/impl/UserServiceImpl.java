@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.exception.ParseTokenException;
 import com.yeeiee.mapper.UserMapper;
@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         todo: 需不需要直接返回 String
     */
     @Override
-    public TokenVo refreshToken(HttpServletRequest request) {
+    public UserVo refreshToken(HttpServletRequest request) {
         val refreshToken = JwtTokenUtil.getTokenFromRequest(request);
         val optional = JwtTokenUtil.parseRefreshToken(refreshToken);
 
@@ -55,23 +55,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         val claimMap = optional.get();
         val username = claimMap.get("username").asString();
+        val roleNames = claimMap.get("roleNames").asList(String.class);
+        val version = claimMap.get("version").asLong();
 
-        val user = this.lambdaQuery()
-                .eq(User::getUsername, username)
-                .one();
+        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, version);
 
-        val tokenVo = new TokenVo();
-        val accessToken = JwtTokenUtil.generateAccessToken(user.getUsername(), user.getTokenVersion());
-        tokenVo.setAccessToken(accessToken);
-        tokenVo.setRefreshToken(refreshToken);
+        val userVo = new UserVo();
+        userVo.setUsername(username);
+        userVo.setAccessToken(accessToken);
+        userVo.setRefreshToken(refreshToken);
 
         // 更新 token version
         this.lambdaUpdate()
-                .set(User::getTokenVersion, user.getTokenVersion() + 1)
-                .eq(User::getId, user.getId())
+                .set(User::getTokenVersion, version + 1)
+                .eq(User::getUsername, username)
                 .update();
 
-        return tokenVo;
+        return userVo;
     }
 
     /*

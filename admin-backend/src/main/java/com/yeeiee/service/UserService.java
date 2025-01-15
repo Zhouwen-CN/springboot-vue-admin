@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.TokenVo;
 import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.entity.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collection;
@@ -27,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param request 请求对象
      * @return user 对象信息
      */
-    TokenVo refreshToken(HttpServletRequest request);
+    UserVo refreshToken(HttpServletRequest request);
 
     /**
      * 登出

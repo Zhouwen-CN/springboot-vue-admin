@@ -8,6 +8,7 @@ import lombok.val;
 import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,9 +30,10 @@ public final class JwtTokenUtil {
     private static final int ACCESS_EXPIRATION_HOUR = 1;
     private static final int REFRESH_EXPIRATION_DAY = 7;
 
-    private static String generateToken(String username, Long version, Calendar calendar, String secretKey) {
+    private static String generateToken(String username, List<String> roleNames, Long version, Calendar calendar, String secretKey) {
         return JWT.create()
                 .withClaim("username", username)
+                .withClaim("roleNames", roleNames)
                 .withClaim("version", version)
                 // 指定令牌过期时间
                 .withExpiresAt(calendar.getTime())
@@ -39,16 +41,16 @@ public final class JwtTokenUtil {
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
-    public static String generateAccessToken(String username, Long version) {
+    public static String generateAccessToken(String username, List<String> roleNames, Long version) {
         val instance = Calendar.getInstance();
         instance.add(Calendar.HOUR, ACCESS_EXPIRATION_HOUR);
-        return generateToken(username, version, instance, ACCESS_SECRET_KEY);
+        return generateToken(username, roleNames, version, instance, ACCESS_SECRET_KEY);
     }
 
-    public static String generateRefreshToken(String username, Long version) {
+    public static String generateRefreshToken(String username, List<String> roleNames, Long version) {
         val instance = Calendar.getInstance();
         instance.add(Calendar.DATE, REFRESH_EXPIRATION_DAY);
-        return generateToken(username, version, instance, REFRESH_SECRET_KEY);
+        return generateToken(username, roleNames, version, instance, REFRESH_SECRET_KEY);
     }
 
     private static Optional<Map<String, Claim>> parseToken(String token, String secretKey) {

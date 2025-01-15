@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * 用户信息，包含角色列表
+ * 用户信息，包含角色列表，查询用户分页
  * </p>
  *
  * @author chen
