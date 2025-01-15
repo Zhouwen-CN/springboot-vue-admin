@@ -10,7 +10,7 @@ maven 会把前端打包好的文件，放到后端项目的 static 文件夹下
 
 这是使得项目同时具有了 `部署方便` 和 `单页面应用` 优势
 
-初始化数据库文件放在了这里：`admin-backend\src\main\resources\init.sql`
+初始化数据库文件放在了这里：`admin-backend\src\main\resources\db`
 
 目前已经实现用户管理，角色管理，菜单管理，动态权限菜单
 

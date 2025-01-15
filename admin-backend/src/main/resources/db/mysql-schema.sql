@@ -1,4 +1,5 @@
-SET MODE=MySQL;
+create database if not exists springboot_vue_admin;
+use springboot_vue_admin;
 
 DROP TABLE IF EXISTS `t_user`;
 create table t_user
@@ -71,7 +72,7 @@ create table t_login_log
     `ip`          varchar(32)  not null comment 'ip地址',
     `user_agent`  varchar(255) not null comment '用户代理',
     `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    constraint idx_create_time index (`create_time` desc)
+    index idx_create_time(`create_time` desc)
 ) comment '登录日志表';
 
 
@@ -89,7 +90,7 @@ create table t_operation_log
     `ip`          varchar(32)  not null comment 'ip地址',
     `user_agent`  varchar(255) not null comment '用户代理',
     `create_time` timestamp    default CURRENT_TIMESTAMP comment '创建时间',
-    constraint idx_create_time index (`create_time` desc)
+    index idx_create_time (`create_time` desc)
 ) comment '操作日志表';
 
 
@@ -105,5 +106,5 @@ create table t_error_log
     `user_agent`  varchar(255) not null comment '用户代理',
     `error_msg`   text         not null comment '错误信息',
     `create_time` timestamp    default CURRENT_TIMESTAMP comment '创建时间',
-    constraint idx_create_time index (`create_time` desc)
+    index idx_create_time (`create_time` desc)
 ) comment '错误日志表';
