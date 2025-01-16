@@ -5,7 +5,7 @@ import com.yeeiee.entity.User;
 import com.yeeiee.entity.vo.RoleVo;
 import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.StateEnum;
+import com.yeeiee.enumeration.StatusEnum;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
@@ -68,7 +68,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         val loginLog = new LoginLog();
         loginLog.setUsername(user.getUsername());
         loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
-        loginLog.setStatus(StateEnum.SUCCESS.getState());
+        loginLog.setStatus(StatusEnum.SUCCESS.getStatus());
         loginLog.setIp(CommonUtil.getIpAddr(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLogService.save(loginLog);

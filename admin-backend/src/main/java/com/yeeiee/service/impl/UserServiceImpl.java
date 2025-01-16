@@ -4,22 +4,28 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yeeiee.entity.LoginLog;
 import com.yeeiee.entity.User;
 import com.yeeiee.entity.UserRole;
 import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.entity.vo.UserVo;
+import com.yeeiee.enumeration.LoginOperationEnum;
+import com.yeeiee.enumeration.StatusEnum;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.security.WebSecurityConfig;
+import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CollectionUtil;
+import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -39,11 +45,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public static final String BCRYPT_PREFIX = "$2a$10$";
     private UserRoleService userRoleService;
     private UserMapper userMapper;
+    private LoginLogService loginLogService;
 
 
-    /*
-        todo: 需不需要直接返回 String
-    */
     @Override
     public UserVo refreshToken(HttpServletRequest request) {
         var refreshToken = JwtTokenUtil.getTokenFromRequest(request);
@@ -88,18 +92,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userVo;
     }
 
-    /*
-        todo: 不查出来，直接 update from table set version = version + 1，是不是更好
-     */
     @Override
     public void logout(Long id) {
         val user = this.getById(id);
+
+        // 更新token version
         if (user != null) {
             this.lambdaUpdate()
                     .set(User::getTokenVersion, user.getTokenVersion() + 1)
                     .eq(User::getId, user.getId())
                     .update();
+
+            // 退出登入日志
+            val request = CommonUtil.getHttpServletRequest();
+            val loginLog = new LoginLog();
+            loginLog.setUsername(user.getUsername());
+            loginLog.setOperation(LoginOperationEnum.LOGOUT.getOperation());
+            loginLog.setStatus(StatusEnum.SUCCESS.getStatus());
+            loginLog.setIp(CommonUtil.getIpAddr(request));
+            loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+            loginLogService.save(loginLog);
         }
+
+
     }
 
     @Override

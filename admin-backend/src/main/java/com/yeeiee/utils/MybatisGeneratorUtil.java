@@ -2,6 +2,7 @@ package com.yeeiee.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
@@ -26,16 +27,22 @@ import java.util.Properties;
  */
 public final class MybatisGeneratorUtil {
 
-    public static void generator(String... tableName) {
+    private static String decrypt(String data, String key) {
+        data = data.replace("mpw:", "");
+        key = key.replace("--mpw.key=", "");
+        return AES.decrypt(data, key);
+    }
+
+    public static void generator(String key, String... tableName) {
         val factoryBean = new YamlPropertiesFactoryBean();
         val resource = new ClassPathResource("application-dev.yml");
         factoryBean.setResources(resource);
 
         Properties properties = factoryBean.getObject();
         assert properties != null;
-        val url = properties.getProperty("spring.datasource.url");
-        val username = properties.getProperty("spring.datasource.username");
-        val password = properties.getProperty("spring.datasource.password");
+        val url = decrypt(properties.getProperty("spring.datasource.url"), key);
+        val username = decrypt(properties.getProperty("spring.datasource.username"), key);
+        val password = decrypt(properties.getProperty("spring.datasource.password"), key);
 
         val projectPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "admin-backend";
 
@@ -87,11 +94,15 @@ public final class MybatisGeneratorUtil {
                     ;
 
                     builder.serviceBuilder()
+                            .serviceTemplate("/templates/service.java.ftl")
+                            .serviceImplTemplate("/templates/serviceImpl.java.ftl")
                             .formatServiceFileName("%sService")
                     // .enableFileOverride()
                     ;
 
                     builder.mapperBuilder()
+                            .mapperTemplate("/templates/mapper.java.ftl")
+                            .mapperXmlTemplate("/templates/mapper.xml.ftl")
                             .enableBaseResultMap()
                             .enableBaseColumnList()
                     // .enableFileOverride()
@@ -104,6 +115,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator("t_login_log", "t_operation_log", "t_error_log");
+        generator(args[0], "t_login_log", "t_operation_log", "t_error_log");
     }
 }

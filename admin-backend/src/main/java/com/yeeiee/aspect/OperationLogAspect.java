@@ -1,7 +1,7 @@
 package com.yeeiee.aspect;
 
 import com.yeeiee.entity.OperationLog;
-import com.yeeiee.enumeration.StateEnum;
+import com.yeeiee.enumeration.StatusEnum;
 import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
@@ -39,13 +39,13 @@ public class OperationLogAspect {
 
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, StateEnum.SUCCESS, time);
+            saveOperationLog(pjp, operation, StatusEnum.SUCCESS, time);
 
             return result;
         } catch (Throwable e) {
 
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, StateEnum.FIELD, time);
+            saveOperationLog(pjp, operation, StatusEnum.FIELD, time);
             throw e;
         }
     }
@@ -53,12 +53,12 @@ public class OperationLogAspect {
     /**
      * 保存操作日志
      *
-     * @param pjp       连接点
-     * @param operation 操作注解，使用 swagger 自带的
-     * @param stateEnum 状态
-     * @param time      耗时
+     * @param pjp        连接点
+     * @param operation  操作注解，使用 swagger 自带的
+     * @param statusEnum 状态
+     * @param time       耗时
      */
-    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StateEnum stateEnum, long time) {
+    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StatusEnum statusEnum, long time) {
         val httpServletRequest = CommonUtil.getHttpServletRequest();
         val user = CommonUtil.getSecurityUser();
 
@@ -68,7 +68,7 @@ public class OperationLogAspect {
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(httpServletRequest.getMethod());
         operationLog.setTime(time);
-        operationLog.setStatus(stateEnum.getState());
+        operationLog.setStatus(statusEnum.getStatus());
         operationLog.setIp(CommonUtil.getIpAddr(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
 
