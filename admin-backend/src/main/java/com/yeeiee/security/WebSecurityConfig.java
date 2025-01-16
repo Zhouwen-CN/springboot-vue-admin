@@ -111,7 +111,7 @@ public class WebSecurityConfig {
                                 // 刷新 token
                                 .requestMatchers(HttpMethod.GET, "/user/refresh").permitAll()
                                 // 获取用户所属的菜单列表
-                                .requestMatchers(HttpMethod.GET, "/menu").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理
                                 .requestMatchers("/user/**", "/role/**", "/menu/**").hasAuthority("admin")
                                 // 对所有的请求开启权限保护
