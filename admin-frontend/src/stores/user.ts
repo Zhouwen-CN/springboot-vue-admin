@@ -24,14 +24,19 @@ const useUserStore = defineStore('user', () => {
     }
     // eslint-disable-next-line no-async-promise-executor
     refreshTokenPromise = new Promise(async (resolve) => {
-      const result = await reqRefreshToken(userInfo.value.refreshToken)
-      if (result.code === 200) {
-        const {accessToken, refreshToken} = result.data
-        userInfo.value.accessToken = accessToken
-        userInfo.value.refreshToken = refreshToken
-        setItem('USER_INFO', userInfo.value)
-        resolve(true)
-      } else {
+      try {
+        // 状态码!=200，拦截器会返回一个失败的promise
+        const result = await reqRefreshToken(userInfo.value.refreshToken)
+        if (result.code === 200) {
+          const {accessToken, refreshToken} = result.data
+          userInfo.value.accessToken = accessToken
+          userInfo.value.refreshToken = refreshToken
+          setItem('USER_INFO', userInfo.value)
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      } catch (error) {
         resolve(false)
       }
     })

@@ -10,7 +10,7 @@ import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.exception.DmlOperationException;
-import com.yeeiee.exception.ParseTokenException;
+import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.security.WebSecurityConfig;
 import com.yeeiee.service.UserRoleService;
@@ -46,28 +46,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     */
     @Override
     public UserVo refreshToken(HttpServletRequest request) {
-        val refreshToken = JwtTokenUtil.getTokenFromRequest(request);
+        var refreshToken = JwtTokenUtil.getTokenFromRequest(request);
         val optional = JwtTokenUtil.parseRefreshToken(refreshToken);
 
         if (optional.isEmpty()) {
-            throw new ParseTokenException("token解析失败");
+            throw new VerifyTokenException("token解析失败");
         }
 
+        // 封装返回对象
         val claimMap = optional.get();
         val username = claimMap.get("username").asString();
-        val roleNames = claimMap.get("roleNames").asList(String.class);
         val version = claimMap.get("version").asLong();
 
-        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, version);
+
+        val user = this.lambdaQuery()
+                .eq(User::getUsername, username)
+                .one();
+
+        // 检查 token version
+        if (user == null || version != user.getTokenVersion() - 1) {
+            throw new VerifyTokenException("token校验失败");
+        }
+
+
+        val roleNames = claimMap.get("roleNames").asList(String.class);
+        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, user.getTokenVersion());
+        refreshToken = JwtTokenUtil.generateRefreshToken(username, roleNames, user.getTokenVersion());
 
         val userVo = new UserVo();
+        userVo.setId(user.getId());
         userVo.setUsername(username);
         userVo.setAccessToken(accessToken);
         userVo.setRefreshToken(refreshToken);
 
         // 更新 token version
         this.lambdaUpdate()
-                .set(User::getTokenVersion, version + 1)
+                .set(User::getTokenVersion, user.getTokenVersion() + 1)
                 .eq(User::getUsername, username)
                 .update();
 

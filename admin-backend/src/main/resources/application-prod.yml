@@ -9,7 +9,7 @@ spring:
     resources:
       cache:
         cachecontrol:
-          max-age: 86400
+          max-age: 1d
 
 # mybatis 日志打印sql
 mybatis-plus:
@@ -22,7 +22,7 @@ logging:
     root: info
     com.yeeiee.mapper: debug
   file:
-    name: ./logs/springboot3-vue3-admin.log
+    name: ./logs/springboot-vue-admin.log
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss
   logback:

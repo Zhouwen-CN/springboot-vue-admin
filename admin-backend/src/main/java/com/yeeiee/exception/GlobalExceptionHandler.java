@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
-    @ExceptionHandler(ParseTokenException.class)
-    public R<String> parseTokenException(ParseTokenException e) {
+    @ExceptionHandler(VerifyTokenException.class)
+    public R<String> verifyTokenException(VerifyTokenException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 

@@ -120,7 +120,7 @@ public class WebSecurityConfig {
                                 .authenticated()
                 )
                 // 在账号密码认证之前，先进行jwt校验
-                .addFilterBefore(new JwtAuthenticationFilter(userService, roleService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

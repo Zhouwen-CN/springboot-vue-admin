@@ -1,7 +1,6 @@
 package com.yeeiee.security.jwt;
 
 import com.yeeiee.entity.User;
-import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.FilterChain;
@@ -23,11 +22,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private UserService userService;
 
-    private RoleService roleService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.debug("Try to get and parse the token");
+        log.debug("Try to get and parse the access token");
         // 从 request 获取 JWT token
         val token = JwtTokenUtil.getTokenFromRequest(request);
 
