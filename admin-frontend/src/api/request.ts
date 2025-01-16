@@ -7,11 +7,11 @@ import router from '@/router'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
 
 const config = {
-  baseURL: import.meta.env.VITE_APP_BASE_URL,
-  timeout: import.meta.env.VITE_APP_TIMEOUT,
-  headers: {
-    'Content-type': 'application/json;charset=utf-8'
-  }
+    baseURL: import.meta.env.VITE_APP_BASE_URL,
+    timeout: import.meta.env.VITE_APP_TIMEOUT,
+    headers: {
+        'Content-type': 'application/json;charset=utf-8'
+    }
 }
 
 class Request {
@@ -23,53 +23,55 @@ class Request {
     // 请求拦截器
     this.instance.interceptors.request.use(
         (config) => {
-          // set token to request header if token not exists
-          if (!config.headers.Authorization) {
-            const userStore = useUserStore()
-            const token = userStore.userInfo.accessToken
-            if (token) {
-              config.headers.Authorization = `Bearer ${token}`
+            // set token to request header if token not exists
+            if (!config.headers.Authorization) {
+                const userStore = useUserStore()
+                const token = userStore.userInfo.accessToken
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`
+                }
             }
-          }
-          return config
+            return config
         },
         (error) => {
-          return Promise.reject(error)
+            return Promise.reject(error)
         }
     )
 
     // 响应拦截器
     this.instance.interceptors.response.use(
         async (response) => {
-          const {data, config} = response
-          // 如果没有权限，并且当前请求不是刷新 token 请求，则执行刷新 token
-          if (data.code === 401 && config.url !== '/user/refresh') {
-            const userStore = useUserStore()
-            const isSuccess = await userStore.doRefreshToken()
-            if (isSuccess) {
-              config.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
-              return await this.request(config)
-            } else {
-              this.alterMessage(data.code, data.message)
-              return Promise.reject(data.message)
-            }
-          }
+            const {data, config} = response
 
-          // 请求错误处理
-          if (data.code !== 200) {
-            this.alterMessage(data.code, data.message)
-            return Promise.reject(data.message)
-          }
-          return data
+            // 如果没有权限，并且当前请求不是刷新 token 请求，则执行刷新 token
+            if (data.code === 401 && config.url !== '/user/refresh') {
+                const userStore = useUserStore()
+                const isSuccess = await userStore.doRefreshToken()
+                if (isSuccess) {
+                    config.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
+                    return await this.request(config)
+                } else {
+                    this.alterMessage(data.code, data.message)
+                    return Promise.reject(data.message)
+                }
+            }
+
+            // 请求错误处理
+            if (data.code !== 200) {
+                this.alterMessage(data.code, data.message)
+                return Promise.reject(data.message)
+            }
+
+            return data
         },
         (error) => {
-          if (error instanceof AxiosError) {
-            this.alterMessage(400, error.message)
-          } else if (error.response) {
-            const response = error.response
-            this.alterMessage(response.status, response.statusText)
-          }
-          return Promise.reject(error)
+            if (error instanceof AxiosError) {
+                this.alterMessage(400, error.message)
+            } else if (error.response) {
+                const response = error.response
+                this.alterMessage(response.status, response.statusText)
+            }
+            return Promise.reject(error)
         }
     )
   }
