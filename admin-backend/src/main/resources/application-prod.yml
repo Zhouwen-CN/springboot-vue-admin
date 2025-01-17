@@ -30,6 +30,6 @@ logging:
       total-size-cap: 500MB
 
 # 关闭 swagger
-springdoc:
-  swagger-ui:
-    enabled: false
+#springdoc:
+#  swagger-ui:
+#    enabled: false

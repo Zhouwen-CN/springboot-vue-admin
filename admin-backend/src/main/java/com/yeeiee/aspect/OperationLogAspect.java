@@ -14,6 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.Method;
@@ -64,7 +65,17 @@ public class OperationLogAspect {
 
         val operationLog = new OperationLog();
         operationLog.setUsername(user.getUsername());
-        operationLog.setOperation(operation.summary());
+
+        val summary = operation.summary();
+        if (StringUtils.hasText(summary)) {
+            operationLog.setOperation(summary);
+        } else {
+            val requestURI = httpServletRequest.getRequestURI();
+            if (requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
+                operationLog.setOperation("swagger文档");
+            }
+        }
+
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(httpServletRequest.getMethod());
         operationLog.setTime(time);

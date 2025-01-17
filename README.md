@@ -44,3 +44,9 @@ maven 会把前端打包好的文件，放到后端项目的 static 文件夹下
 ## tip
 
 运行打包需要本地拥有 pnpm 环境，否则前端无法打包（个人比较喜欢用 pnpm）
+
+idea打开最好右键排除掉一些不需要索引的文件夹
+
+- admin-backend/src/main/resources/static
+- admin-frontend/dist
+- admin-frontend/node_modules

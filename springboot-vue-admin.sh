@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -eu
-app_name='meta-tool-app'
+app_name='springboot-vue-admin'
 
 function start_app(){
     nohup java -jar ${app_name}*.jar > /dev/null 2>&1 &

@@ -18,6 +18,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -51,7 +52,8 @@ public class WebSecurityConfig {
             "/assets/**.png",
             "/assets/**.svg",
             "/swagger-ui.html",
-            "/v3/api-docs/**",
+            "/v3/api-docs",
+            "/v3/api-docs/swagger-config",
             "/swagger-ui/**"
     };
 
@@ -104,6 +106,9 @@ public class WebSecurityConfig {
     @Order
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
+        // 允许 iframe 网页嵌入（swagger）
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+
         http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源和swagger
