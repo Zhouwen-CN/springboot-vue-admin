@@ -18,6 +18,10 @@ maven 会把前端打包好的文件，放到后端项目的 static 文件夹下
 - 角色管理
 - 菜单管理
 
+开发者工具
+
+- 接口文档
+
 日志管理
 
 - 登入日志
@@ -49,4 +53,3 @@ idea打开最好右键排除掉一些不需要索引的文件夹
 
 - admin-backend/src/main/resources/static
 - admin-frontend/dist
-- admin-frontend/node_modules

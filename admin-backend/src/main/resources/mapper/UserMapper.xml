@@ -16,7 +16,7 @@
     </resultMap>
 
     <select id="selectUserPages" resultMap="UserRoleVo">
-        select
+        select /*+ UseLimitPushDown */
         a.id,
         a.username,
         a.password,

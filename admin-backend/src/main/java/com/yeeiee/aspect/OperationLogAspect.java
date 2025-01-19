@@ -14,7 +14,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.Method;
@@ -61,21 +60,17 @@ public class OperationLogAspect {
      */
     private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StatusEnum statusEnum, long time) {
         val httpServletRequest = CommonUtil.getHttpServletRequest();
-        val user = CommonUtil.getSecurityUser();
+        val requestURI = httpServletRequest.getRequestURI();
 
-        val operationLog = new OperationLog();
-        operationLog.setUsername(user.getUsername());
-
-        val summary = operation.summary();
-        if (StringUtils.hasText(summary)) {
-            operationLog.setOperation(summary);
-        } else {
-            val requestURI = httpServletRequest.getRequestURI();
-            if (requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
-                operationLog.setOperation("swagger文档");
-            }
+        // 日志查询、swagger等不记录日志
+        if (requestURI.startsWith("/log") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
+            return;
         }
 
+        val user = CommonUtil.getSecurityUser();
+        val operationLog = new OperationLog();
+        operationLog.setUsername(user.getUsername());
+        operationLog.setOperation(operation.summary());
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(httpServletRequest.getMethod());
         operationLog.setTime(time);

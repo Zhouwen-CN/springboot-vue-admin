@@ -2,7 +2,10 @@ spring:
   profiles:
     active: dev
 
-# swagger 页面设置不展开
+
 springdoc:
   swagger-ui:
-    doc-expansion: none
+    # 页面设置不展开
+    # doc-expansion: none
+    # 关闭 swagger-ui，前端已经整合
+    enabled: false

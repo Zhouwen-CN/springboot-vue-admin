@@ -51,10 +51,11 @@ public class WebSecurityConfig {
             "/assets/**.jpg",
             "/assets/**.png",
             "/assets/**.svg",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/v3/api-docs/swagger-config",
-            "/swagger-ui/**"
+            // swagger-ui，静态资源
+            // "/swagger-ui.html",
+            // "/v3/api-docs",
+            // "/v3/api-docs/swagger-config",
+            // "/swagger-ui/**"
     };
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {

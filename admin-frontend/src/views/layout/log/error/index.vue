@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {type ErrorLog, reqGetErrorLogPage} from '@/api/log'
+import {ElMessage} from 'element-plus'
 
 const drawer = ref(false)
 const errorMsg = ref('')
@@ -17,6 +18,11 @@ const {
 function openErrorMessage(row: ErrorLog) {
   drawer.value = true
   errorMsg.value = row.errorMsg
+}
+
+async function copyErrorMassage(errorMsg: string) {
+  await navigator.clipboard.writeText(errorMsg)
+  ElMessage.success('复制成功')
 }
 
 
@@ -44,9 +50,12 @@ onMounted(() => {
                        prop="createTime"></el-table-column>
       <el-table-column label="错误信息">
         <template #default="{ row }">
-          <el-button type="primary"
-                     @click="openErrorMessage(row)">查看异常信息
-          </el-button>
+          <el-button-group class="ml-4">
+            <el-button icon="View" type="primary"
+                       @click="openErrorMessage(row)"/>
+            <el-button icon="DocumentCopy" type="primary"
+                       @click="copyErrorMassage(row.errorMsg)"/>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -60,9 +69,9 @@ onMounted(() => {
                    @size-change="onSizeChange"/>
 
     <!-- 抽屉（关闭时清除错误信息） -->
-    <el-drawer v-model="drawer" :with-header="false" size="40%"
+    <el-drawer v-model="drawer" :with-header="false" size="45%"
                @closed="errorMsg = ''">
-      {{ errorMsg }}
+      <div style="white-space: pre-wrap;">{{ errorMsg }}</div>
     </el-drawer>
   </el-card>
 </template>

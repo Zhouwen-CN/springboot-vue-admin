@@ -23,6 +23,9 @@ importers:
       pinia:
         specifier: ^2.1.7
         version: 2.1.7(typescript@5.4.5)(vue@3.4.25(typescript@5.4.5))
+      swagger-ui-dist:
+        specifier: 5.13.0
+        version: 5.13.0
       vue:
         specifier: ^3.4.21
         version: 3.4.25(typescript@5.4.5)
@@ -1680,6 +1683,9 @@ packages:
 
   svg-tags@1.0.0:
     resolution: { integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA== }
+
+  swagger-ui-dist@5.13.0:
+    resolution: { integrity: sha512-uaWhh6j18IIs5tOX0arvIBnVINAzpTXaQXkr7qAk8zoupegJVg0UU/5+S/FgsgVCnzVsJ9d7QLjIxkswEeTg0Q== }
 
   synckit@0.8.8:
     resolution: { integrity: sha512-HwOKAP7Wc5aRGYdKH+dw0PRRpbO841v2DENBtjnR5HFWoiNByAl7vrx3p0G/rCyYXQsrxqtX48TImFtPcIHSpQ== }
@@ -3499,6 +3505,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: { }
 
   svg-tags@1.0.0: { }
+
+  swagger-ui-dist@5.13.0: { }
 
   synckit@0.8.8:
     dependencies:
