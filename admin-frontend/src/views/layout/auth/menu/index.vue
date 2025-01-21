@@ -138,7 +138,7 @@ function clean() {
           row-key="id"
           style="margin-top: 16px">
         <el-table-column label="菜单名称" prop="title">
-          <template #default="{ row }:{row:MenuInfo}">
+          <template #default="{ row }: { row: MenuInfo }">
             <el-space>
               <el-icon :size="20">
                 <component :is="row.icon"></component>
@@ -151,19 +151,17 @@ function clean() {
         <el-table-column label="文件路径" prop="filePath"/>
         <el-table-column label="更新时间" prop="updateTime"/>
         <el-table-column label="操作">
-          <template #default="{ row }">
+          <template #default="{ row }: { row: MenuInfo }">
             <el-button-group>
-              <el-button
-                  :disabled="row.level > 1"
-                  :icon="Plus"
-                  type="primary"
-                  @click="addSubmenu(row.id)"/>
+              <el-button :icon="Plus"
+                         type="primary"
+                         @click="addSubmenu(row.id)"/>
               <el-button :icon="Edit" type="primary"
                          @click="updateMenu(row)"/>
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
                   <el-button
-                      :disabled="row.level < 1 || row.children?.length > 0 || row.id <= 4"
+                      :disabled="row.children?.length > 0"
                       :icon="Delete"
                       type="danger"/>
                 </template>

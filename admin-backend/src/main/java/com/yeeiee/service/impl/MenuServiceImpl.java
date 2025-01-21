@@ -54,9 +54,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new DmlOperationException("删除失败，尚有子菜单依赖：" + parentMenuIds);
         }
 
-        // todo: 1-4 是权限菜单
-        if (id <= 4) {
-            throw new DmlOperationException("删除失败，权限菜单不能删除");
+        // todo: 演示项目禁止删除功能菜单
+        if (id <= 13) {
+            throw new DmlOperationException("删除失败，演示项目不能删除功能菜单");
         }
 
         this.removeById(id);

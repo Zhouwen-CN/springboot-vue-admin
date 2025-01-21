@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +21,6 @@ import java.time.LocalDateTime;
  * @since 2024-04-27
  */
 @Configuration
-@MapperScan("com.yeeiee.mapper")
 public class MybatisPlusConfig implements MetaObjectHandler {
 
     /**

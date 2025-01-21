@@ -14,6 +14,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.Method;
@@ -58,12 +59,15 @@ public class OperationLogAspect {
      * @param statusEnum 状态
      * @param time       耗时
      */
-    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StatusEnum statusEnum, long time) {
+    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StatusEnum statusEnum, long time) throws NoSuchMethodException {
         val httpServletRequest = CommonUtil.getHttpServletRequest();
-        val requestURI = httpServletRequest.getRequestURI();
+        val targetClass = pjp.getTarget().getClass();
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        Method method = targetClass.getDeclaredMethod(signature.getName(), signature.getParameterTypes());
 
-        // 日志查询、swagger等不记录日志
-        if (requestURI.startsWith("/log") || requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
+        // 查询接口不记录日志
+        val getMapping = method.getAnnotation(GetMapping.class);
+        if (getMapping != null) {
             return;
         }
 
@@ -73,22 +77,12 @@ public class OperationLogAspect {
         operationLog.setOperation(operation.summary());
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(httpServletRequest.getMethod());
+        String params = this.getParameter(method, pjp.getArgs());
+        operationLog.setParams(params);
         operationLog.setTime(time);
         operationLog.setStatus(statusEnum.getStatus());
         operationLog.setIp(CommonUtil.getIpAddr(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
-
-        MethodSignature signature = (MethodSignature) pjp.getSignature();
-        val targetClass = pjp.getTarget().getClass();
-
-
-        try {
-            Method method = targetClass.getDeclaredMethod(signature.getName(), signature.getParameterTypes());
-            String params = this.getParameter(method, pjp.getArgs());
-            operationLog.setParams(params);
-        } catch (Exception e) {
-            // Do nothing
-        }
 
         operationLogService.save(operationLog);
     }

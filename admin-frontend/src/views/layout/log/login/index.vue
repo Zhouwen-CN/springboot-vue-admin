@@ -49,7 +49,7 @@ onMounted(() => {
               placeholder="请选择"
               style="width: 120px">
             <el-option :value="1" label="登入"/>
-            <el-option :value="0" label="登出"/>
+            <el-option :value="0" label="退出"/>
           </el-select>
         </el-form-item>
         <el-form-item label="状态：">

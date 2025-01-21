@@ -49,7 +49,7 @@ onMounted(() => {
       <el-table-column label="创建时间"
                        prop="createTime"></el-table-column>
       <el-table-column label="错误信息">
-        <template #default="{ row }">
+        <template #default="{ row }: { row: ErrorLog } ">
           <el-button-group class="ml-4">
             <el-button icon="View" type="primary"
                        @click="openErrorMessage(row)"/>
