@@ -88,11 +88,9 @@ async function deleteRole(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(roles: RoleMenuInfo[]) {
   deleteIds.value = roles.map((role) => role.id)
 }
-
 async function deleteRoles() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -229,8 +227,9 @@ onMounted(() => {
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
                      layout="prev, pager, next, ->, total, sizes"
-                     style="margin-top: 16px" @current-change="onPageChange"
-                     @size-change="onSizeChange"/>
+                     style="margin-top: 16px"
+                     @current-change="(val) => onPageChange(val, { params: { searchName: searchName } })"
+                     @size-change="(val) => onSizeChange(val, { params: { searchName: searchName } })"/>
     </el-card>
 
     <!-- 对话框表单 -->

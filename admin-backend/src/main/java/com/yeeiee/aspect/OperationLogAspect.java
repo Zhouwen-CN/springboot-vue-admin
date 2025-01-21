@@ -6,12 +6,12 @@ import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +27,9 @@ import java.util.HashMap;
  */
 @Aspect
 @Component
+@AllArgsConstructor
 public class OperationLogAspect {
 
-    @Autowired
     private OperationLogService operationLogService;
 
     @Around("@annotation(operation)")
@@ -37,14 +37,12 @@ public class OperationLogAspect {
         long beginTime = System.currentTimeMillis();
 
         try {
-
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operation, StatusEnum.SUCCESS, time);
 
             return result;
         } catch (Throwable e) {
-
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operation, StatusEnum.FIELD, time);
             throw e;

@@ -88,8 +88,9 @@ onMounted(() => {
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
                      layout="prev, pager, next, ->, total, sizes"
-                     style="margin-top: 16px" @current-change="onPageChange"
-                     @size-change="onSizeChange"/>
+                     style="margin-top: 16px"
+                     @current-change="(val) => onPageChange(val, { params: searchForm })"
+                     @size-change="(val) => onSizeChange(val, { params: searchForm })"/>
     </el-card>
   </div>
 </template>

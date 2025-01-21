@@ -241,8 +241,9 @@ onMounted(() => {
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
                      layout="prev, pager, next, ->, total, sizes"
-                     style="margin-top: 16px" @current-change="onPageChange"
-                     @size-change="onSizeChange"/>
+                     style="margin-top: 16px"
+                     @current-change="(val) => onPageChange(val, { params: { searchName: searchName } })"
+                     @size-change="(val) => onSizeChange(val, { params: { searchName: searchName } })"/>
     </el-card>
 
     <!-- 对话框表单 -->
