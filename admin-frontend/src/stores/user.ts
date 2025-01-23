@@ -47,6 +47,7 @@ const useUserStore = defineStore('user', () => {
     return refreshTokenPromise
   }
 
+  // 登出
   async function doLogout() {
     await reqLogout(userInfo.value.id)
     $reset()

@@ -4,7 +4,7 @@
  *    2、如果是分页，使用 usePagination
  *    3、如果需要按钮 loading，使用 useRequest 包装 request
  * 页面
- *    动态路由视图组件命名规则：/views/layout/${ComponentName}/index.vue
+ *    动态路由视图组件命名规则：/views/${ComponentName}/index.vue
  *    方便插件定位，只要输入index就可以定位到当前页面组件
  */
 

@@ -37,10 +37,10 @@ const validateAccessPath = (rule: any, value: any, callback: any) => {
   }
 }
 const validateFilePath = (rule: any, value: any, callback: any) => {
-  if (!value || value.startsWith('/layout/')) {
+  if (!value || value.startsWith('/')) {
     callback()
   } else {
-    callback(new Error('文件路径须以 /layout/ 开头'))
+    callback(new Error('文件路径须以 / 开头'))
   }
 }
 const rules = reactive<FormRules<typeof menuForm>>({

@@ -9,7 +9,7 @@ import 'nprogress/nprogress.css'
 NProgress.configure({showSpinner: false})
 
 // 加载所有动态模块
-const modules = import.meta.glob('../views/layout/**/*.vue')
+const modules = import.meta.glob('../views/**/*.vue')
 
 // 基础路由配置
 const router = createRouter({

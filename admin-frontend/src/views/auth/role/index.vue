@@ -88,9 +88,11 @@ async function deleteRole(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
+
 function handleSelectionChange(roles: RoleMenuInfo[]) {
   deleteIds.value = roles.map((role) => role.id)
 }
+
 async function deleteRoles() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
