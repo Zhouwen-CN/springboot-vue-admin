@@ -44,6 +44,25 @@ export default defineConfig(({mode}) => {
           rewrite: (path) => path.replace(regExp, '')
         }
       }
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('/node_modules/')) {
+              if (id.includes('element-plus')) {
+                return 'element-plus'
+              }
+              if (id.includes('swagger-ui-dist')) {
+                return 'swagger-ui-dist'
+              }
+              return 'vendor'
+            }
+
+            return 'index'
+          }
+        }
+      }
     }
   }
 })
