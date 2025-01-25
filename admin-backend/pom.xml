@@ -146,6 +146,9 @@
                                     <directory>${project.basedir}/../admin-frontend/dist</directory>
                                     <includes>
                                         <include>assets/</include>
+                                        <include>js/</include>
+                                        <include>css/</include>
+                                        <include>images/</include>
                                         <include>favicon.ico</include>
                                         <include>index.html</include>
                                     </includes>

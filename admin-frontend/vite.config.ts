@@ -48,13 +48,25 @@ export default defineConfig(({mode}) => {
     build: {
       rollupOptions: {
         output: {
+          entryFileNames: 'js/[name]-[hash].js',
+          chunkFileNames: 'js/[name]-[hash].js',
+          assetFileNames(chunkInfo) {
+            if (chunkInfo.name?.endsWith('.css')) {
+              return 'css/[name]-[hash].css'
+            }
+            const imagesExt = ['.png', '.jpg', '.jpeg', '.gif', '.svg']
+            if (imagesExt.some((ext) => chunkInfo.name?.endsWith(ext))) {
+              return 'images/[name]-[hash].[ext]'
+            }
+            return 'assets/[name]-[hash].[ext]'
+          },
           manualChunks(id) {
             if (id.includes('/node_modules/')) {
               if (id.includes('element-plus')) {
-                return 'element-plus'
+                return 'element'
               }
               if (id.includes('swagger-ui-dist')) {
-                return 'swagger-ui-dist'
+                return 'swagger'
               }
               return 'vendor'
             }
