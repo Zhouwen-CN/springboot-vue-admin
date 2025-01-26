@@ -5,7 +5,7 @@ import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
 import com.yeeiee.utils.R;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
@@ -22,11 +22,11 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * @author chen
  * @since 2024-04-27
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ErrorLogService errorLogService;
+    private final ErrorLogService errorLogService;
 
     @ExceptionHandler(DmlOperationException.class)
     public R<String> dmlFailureHandler(DmlOperationException e) {

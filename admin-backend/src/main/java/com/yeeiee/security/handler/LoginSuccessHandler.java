@@ -15,11 +15,12 @@ import com.yeeiee.utils.R;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -27,14 +28,13 @@ import java.io.IOException;
  * 登入失败处理
  */
 
-@AllArgsConstructor
+@Component
+@RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private UserService userService;
-
-    private RoleService roleService;
-
-    private LoginLogService loginLogService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final LoginLogService loginLogService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

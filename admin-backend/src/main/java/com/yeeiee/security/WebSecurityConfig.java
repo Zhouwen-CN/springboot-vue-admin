@@ -7,10 +7,7 @@ import com.yeeiee.security.handler.LoginSuccessHandler;
 import com.yeeiee.security.jwt.JwtAuthenticationFilter;
 import com.yeeiee.security.user.UserAuthenticationProcessingFilter;
 import com.yeeiee.security.user.UserAuthenticationProvider;
-import com.yeeiee.service.LoginLogService;
-import com.yeeiee.service.RoleService;
-import com.yeeiee.service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +15,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -32,15 +27,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  * @author chen
  * @since 2024/5/7
  */
-// @EnableWebSecurity(debug = true)
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-
-    public static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    private UserService userService;
-    private RoleService roleService;
-    private LoginLogService loginLogService;
+    private final UserAuthenticationProvider userAuthenticationProvider;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String[] WHITE_LIST = new String[]{
             "/",
@@ -91,9 +84,9 @@ public class WebSecurityConfig {
         // 用户名密码登入
         val userAuthenticationFilter = new UserAuthenticationProcessingFilter(
                 new AntPathRequestMatcher("/login/user", HttpMethod.POST.name()),
-                new UserAuthenticationProvider(userService, bCryptPasswordEncoder),
-                new LoginSuccessHandler(userService, roleService, loginLogService),
-                new LoginFailureHandler(loginLogService)
+                userAuthenticationProvider,
+                loginSuccessHandler,
+                loginFailureHandler
         );
         http.addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -106,9 +99,6 @@ public class WebSecurityConfig {
     @Order
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
-        // 允许 iframe 网页嵌入（swagger）
-        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
-
         http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源和swagger
@@ -125,7 +115,7 @@ public class WebSecurityConfig {
                                 .authenticated()
                 )
                 // 在账号密码认证之前，先进行jwt校验
-                .addFilterBefore(new JwtAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

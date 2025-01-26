@@ -10,7 +10,7 @@ import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.utils.CollectionUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +25,11 @@ import java.util.List;
  * @author chen
  * @since 2024-05-09
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
-    private RoleMenuService roleMenuService;
-    private MenuMapper menuMapper;
+    private final RoleMenuService roleMenuService;
+    private final MenuMapper menuMapper;
 
     @Override
     public void addMenu(Menu menu) {

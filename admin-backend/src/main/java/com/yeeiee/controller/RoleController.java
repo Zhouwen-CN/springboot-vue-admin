@@ -10,7 +10,7 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +33,12 @@ import java.util.List;
  * @author chen
  * @since 2024-05-11
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/role")
 @Tag(name = "角色表 控制器")
 public class RoleController {
-    private RoleService roleService;
+    private final RoleService roleService;
 
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")

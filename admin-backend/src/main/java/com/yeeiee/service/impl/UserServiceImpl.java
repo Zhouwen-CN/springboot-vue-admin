@@ -15,7 +15,6 @@ import com.yeeiee.enumeration.StatusEnum;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.mapper.UserMapper;
-import com.yeeiee.security.WebSecurityConfig;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
@@ -23,9 +22,10 @@ import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -39,13 +39,14 @@ import java.util.Collection;
  * @author chen
  * @since 2024-05-09
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     public static final String BCRYPT_PREFIX = "$2a$10$";
-    private UserRoleService userRoleService;
-    private UserMapper userMapper;
-    private LoginLogService loginLogService;
+    private final UserRoleService userRoleService;
+    private final UserMapper userMapper;
+    private final LoginLogService loginLogService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Override
@@ -137,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         val user = new User();
         user.setUsername(username);
-        user.setPassword(WebSecurityConfig.bCryptPasswordEncoder.encode(password));
+        user.setPassword(bCryptPasswordEncoder.encode(password));
 
         this.save(user);
 
@@ -166,7 +167,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 所有加密的密码都是以这个开头的
         if (!password.startsWith(BCRYPT_PREFIX)) {
-            userRoleIdsDto.setPassword(WebSecurityConfig.bCryptPasswordEncoder.encode(password));
+            userRoleIdsDto.setPassword(bCryptPasswordEncoder.encode(password));
         }
         val user = new User();
         user.setId(userRoleIdsDto.getId());

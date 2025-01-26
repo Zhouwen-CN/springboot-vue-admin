@@ -14,7 +14,7 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +34,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/log")
 @Tag(name = "日志表 控制器")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LogController {
 
-    private LoginLogService loginLogService;
-    private OperationLogService operationLogService;
-    private ErrorLogService errorLogService;
+    private final LoginLogService loginLogService;
+    private final OperationLogService operationLogService;
+    private final ErrorLogService errorLogService;
 
     @Operation(summary = "登入日志分页")
     @GetMapping("/login/{size}/{current}")

@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +33,12 @@ import java.util.Collection;
  * @author chen
  * @since 2024-05-11
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 @Tag(name = "用户表 控制器")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")

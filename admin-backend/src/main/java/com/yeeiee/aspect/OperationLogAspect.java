@@ -6,7 +6,7 @@ import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,10 +27,10 @@ import java.util.HashMap;
  */
 @Aspect
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OperationLogAspect {
 
-    private OperationLogService operationLogService;
+    private final OperationLogService operationLogService;
 
     @Around("@annotation(operation)")
     public Object around(ProceedingJoinPoint pjp, Operation operation) throws Throwable {

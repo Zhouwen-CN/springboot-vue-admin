@@ -6,7 +6,7 @@ import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +29,12 @@ import java.util.List;
  * @author chen
  * @since 2024-05-11
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/menu")
 @Tag(name = "菜单表 控制器")
 public class MenuController {
-    private MenuService menuService;
+    private final MenuService menuService;
 
     @Operation(summary = "查询菜单列表")
     @GetMapping("")

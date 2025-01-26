@@ -17,7 +17,7 @@ import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.utils.CollectionUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +32,13 @@ import java.util.List;
  * @author chen
  * @since 2024-05-09
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
-    private UserRoleService userRoleService;
-    private RoleMenuService roleMenuService;
-    private RoleMapper roleMapper;
+    private final UserRoleService userRoleService;
+    private final RoleMenuService roleMenuService;
+    private final RoleMapper roleMapper;
 
     @Override
     public IPage<RoleMenuVo> getRolePages(Page<RoleMenuVo> page, String searchName) {
