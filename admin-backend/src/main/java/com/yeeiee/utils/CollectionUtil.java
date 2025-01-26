@@ -12,6 +12,14 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * <p>
+ * 集合工具类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-03
+ */
 public final class CollectionUtil {
     /**
      * 转树形结构，空间换时间，也可以使用递归

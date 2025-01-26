@@ -1,19 +1,27 @@
 package com.yeeiee.enumeration;
 
-public enum StatusEnum {
+/**
+ * <p>
+ * 操作状态枚举类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
+public enum OperationStatusEnum {
     SUCCESS(1, "成功"),
     FIELD(0, "失败");
 
     private final String status;
     private final Integer code;
 
-    StatusEnum(int code, String status) {
+    OperationStatusEnum(int code, String status) {
         this.status = status;
         this.code = code;
     }
 
     public static String getStatus(Integer code) {
-        for (StatusEnum value : values()) {
+        for (OperationStatusEnum value : values()) {
             if (value.code.equals(code)) {
                 return value.status;
             }

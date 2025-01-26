@@ -5,7 +5,7 @@ import com.yeeiee.entity.User;
 import com.yeeiee.entity.vo.RoleVo;
 import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.StatusEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
@@ -25,9 +25,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
+ * <p>
  * 登入失败处理
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
-
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -68,7 +72,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         val loginLog = new LoginLog();
         loginLog.setUsername(user.getUsername());
         loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
-        loginLog.setStatus(StatusEnum.SUCCESS.getStatus());
+        loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
         loginLog.setIp(CommonUtil.getIpAddr(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLogService.save(loginLog);

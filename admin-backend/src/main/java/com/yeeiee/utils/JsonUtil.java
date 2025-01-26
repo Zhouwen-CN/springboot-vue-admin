@@ -4,6 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
+/**
+ * <p>
+ * json工具类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-03
+ */
 public final class JsonUtil {
     public static final ObjectMapper objectMapper;
 

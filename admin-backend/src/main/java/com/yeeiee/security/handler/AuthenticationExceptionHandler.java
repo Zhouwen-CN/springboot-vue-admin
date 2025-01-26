@@ -12,7 +12,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 
 /**
+ * <p>
  * 未认证异常处理
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
 public class AuthenticationExceptionHandler implements AuthenticationEntryPoint {
     @Override

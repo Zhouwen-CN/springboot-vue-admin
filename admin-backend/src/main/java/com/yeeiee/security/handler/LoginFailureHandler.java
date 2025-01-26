@@ -2,7 +2,7 @@ package com.yeeiee.security.handler;
 
 import com.yeeiee.entity.LoginLog;
 import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.StatusEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.utils.CommonUtil;
@@ -21,7 +21,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
+ * <p>
  * 登入成功处理
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
 @Component
 @RequiredArgsConstructor
@@ -42,7 +47,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         val loginLog = new LoginLog();
         loginLog.setUsername(username);
         loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
-        loginLog.setStatus(StatusEnum.FIELD.getStatus());
+        loginLog.setStatus(OperationStatusEnum.FIELD.getStatus());
         loginLog.setIp(CommonUtil.getIpAddr(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLogService.save(loginLog);

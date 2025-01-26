@@ -21,6 +21,14 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+/**
+ * <p>
+ * 用户名密码认证过滤器
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
 @Slf4j
 public class UserAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 

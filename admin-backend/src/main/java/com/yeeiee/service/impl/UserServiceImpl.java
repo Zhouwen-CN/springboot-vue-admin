@@ -11,7 +11,7 @@ import com.yeeiee.entity.dto.UserRoleIdsDto;
 import com.yeeiee.entity.vo.UserRoleVo;
 import com.yeeiee.entity.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.StatusEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.mapper.UserMapper;
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             val loginLog = new LoginLog();
             loginLog.setUsername(user.getUsername());
             loginLog.setOperation(LoginOperationEnum.LOGOUT.getOperation());
-            loginLog.setStatus(StatusEnum.SUCCESS.getStatus());
+            loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
             loginLog.setIp(CommonUtil.getIpAddr(request));
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
             loginLogService.save(loginLog);

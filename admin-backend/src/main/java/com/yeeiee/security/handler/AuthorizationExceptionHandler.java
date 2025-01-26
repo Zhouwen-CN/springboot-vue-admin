@@ -12,7 +12,12 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import java.io.IOException;
 
 /**
+ * <p>
  * 未授权异常处理
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
 public class AuthorizationExceptionHandler implements AccessDeniedHandler {
     @Override

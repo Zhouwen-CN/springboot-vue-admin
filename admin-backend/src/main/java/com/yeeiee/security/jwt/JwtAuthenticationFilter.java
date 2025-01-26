@@ -17,6 +17,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * <p>
+ * jwt认证过滤器
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

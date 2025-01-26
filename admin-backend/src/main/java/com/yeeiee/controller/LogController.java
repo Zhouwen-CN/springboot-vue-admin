@@ -6,7 +6,7 @@ import com.yeeiee.entity.ErrorLog;
 import com.yeeiee.entity.LoginLog;
 import com.yeeiee.entity.OperationLog;
 import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.StatusEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.OperationLogService;
@@ -61,7 +61,7 @@ public class LogController {
         }
 
         if (status != null) {
-            lambdaQueryWrapper.eq(LoginLog::getStatus, StatusEnum.getStatus(status));
+            lambdaQueryWrapper.eq(LoginLog::getStatus, OperationStatusEnum.getStatus(status));
         }
         val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime));
         return R.ok(page);
@@ -82,7 +82,7 @@ public class LogController {
         }
 
         if (status != null) {
-            lambdaQueryWrapper.eq(OperationLog::getStatus, StatusEnum.getStatus(status));
+            lambdaQueryWrapper.eq(OperationLog::getStatus, OperationStatusEnum.getStatus(status));
         }
 
         val page = operationLogService.page(new Page<>(current, size), lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime));

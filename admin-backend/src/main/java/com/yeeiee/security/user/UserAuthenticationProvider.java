@@ -12,6 +12,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>
+ * 用户名密码认证提供者
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

@@ -1,5 +1,13 @@
 package com.yeeiee.enumeration;
 
+/**
+ * <p>
+ * 登入操作枚举类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
 public enum LoginOperationEnum {
     LOGIN(1, "登入"),
     LOGOUT(0, "退出");

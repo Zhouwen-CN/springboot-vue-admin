@@ -1,7 +1,7 @@
 package com.yeeiee.aspect;
 
 import com.yeeiee.entity.OperationLog;
-import com.yeeiee.enumeration.StatusEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
@@ -21,9 +21,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
- * {@code @Author:} chen
- * {@code @Date:} 2025/1/13
- * {@code @Desc:}
+ * <p>
+ * 操作日志切面类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
 @Aspect
 @Component
@@ -39,12 +42,12 @@ public class OperationLogAspect {
         try {
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, StatusEnum.SUCCESS, time);
+            saveOperationLog(pjp, operation, OperationStatusEnum.SUCCESS, time);
 
             return result;
         } catch (Throwable e) {
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, StatusEnum.FIELD, time);
+            saveOperationLog(pjp, operation, OperationStatusEnum.FIELD, time);
             throw e;
         }
     }
@@ -52,12 +55,12 @@ public class OperationLogAspect {
     /**
      * 保存操作日志
      *
-     * @param pjp        连接点
-     * @param operation  操作注解，使用 swagger 自带的
-     * @param statusEnum 状态
-     * @param time       耗时
+     * @param pjp                 连接点
+     * @param operation           操作注解，使用 swagger 自带的
+     * @param operationStatusEnum 状态
+     * @param time                耗时
      */
-    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, StatusEnum statusEnum, long time) throws NoSuchMethodException {
+    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, OperationStatusEnum operationStatusEnum, long time) throws NoSuchMethodException {
         val httpServletRequest = CommonUtil.getHttpServletRequest();
         val targetClass = pjp.getTarget().getClass();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
@@ -78,7 +81,7 @@ public class OperationLogAspect {
         String params = this.getParameter(method, pjp.getArgs());
         operationLog.setParams(params);
         operationLog.setTime(time);
-        operationLog.setStatus(statusEnum.getStatus());
+        operationLog.setStatus(operationStatusEnum.getStatus());
         operationLog.setIp(CommonUtil.getIpAddr(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
 

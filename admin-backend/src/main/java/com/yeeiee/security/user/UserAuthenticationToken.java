@@ -7,7 +7,12 @@ import lombok.ToString;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 /**
- * 所有的 token，登入成功状态 Principal 需要始终返回 User 对象
+ * <p>
+ * 用户名密码认证实体
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
  */
 @Getter
 @Setter

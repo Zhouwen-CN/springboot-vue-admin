@@ -14,6 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * <p>
+ * 通用工具类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-03
+ */
 public final class CommonUtil {
     /**
      * 从线程变量中获取 request 对象

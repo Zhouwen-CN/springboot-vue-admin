@@ -9,6 +9,14 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+/**
+ * <p>
+ * jwt认证实体
+ * </p>
+ *
+ * @author chen
+ * @since 2025-01-13
+ */
 @Getter
 @Setter
 @ToString
