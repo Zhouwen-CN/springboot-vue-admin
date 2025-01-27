@@ -2,47 +2,57 @@ import {type Ref} from 'vue'
 import type {ResultData} from '@/api/types'
 
 export interface UseRequestResult<T, D> {
-  loading: Ref<boolean>
-  data: Ref<T | undefined>
-  run: (formData?: D) => Promise<void>
+    loading: Ref<boolean>
+    data: Ref<T | undefined>
+    onSuccess: (callback: (data: T) => void) => void
+    onError: (callback: (err: unknown) => void) => void
+    run: (formData?: D) => Promise<void>
 }
 
 /**
  * 请求 hook
  * @param service 请求方法
- * @param onSuccess 成功回调
- * @param onError 错误回调
  * @returns
  */
 function useRequest<T = unknown, D = unknown>(
-    service: (...args: any) => Promise<ResultData<T>>,
-    onSuccess?: (data: T) => void,
-    onError?: (err: unknown) => void
+    service: (...args: any) => Promise<ResultData<T>>
 ): UseRequestResult<T, D> {
-  const loading = ref(false)
-  const data = ref<T>()
+    const loading = ref(false)
+    const data = ref<T>()
+    let onSuccess: ((data: T) => void) | null = null
+    let onError: ((err: unknown) => void) | null = null
 
-  async function run(...args: any) {
-    try {
-      loading.value = true
-      const res = await service(...args)
-      if (onSuccess) {
-        onSuccess(res.data)
-      } else {
-        data.value = res.data
-      }
-    } catch (err) {
-      if (onError) {
-        onError(err)
-      } else {
-        console.warn(err)
-      }
-    } finally {
-      loading.value = false
+    async function run(...args: any) {
+        try {
+            loading.value = true
+            const res = await service(...args)
+            if (onSuccess) {
+                onSuccess(res.data)
+            } else {
+                data.value = res.data
+            }
+        } catch (err) {
+            if (onError) {
+                onError(err)
+            } else {
+                console.warn(err)
+            }
+        } finally {
+            loading.value = false
+        }
     }
-  }
 
-  return {loading, data, run}
+    return {
+        loading,
+        data,
+        run,
+        onSuccess: (callback: (data: T) => void) => {
+            onSuccess = callback
+        },
+        onError: (callback: (err: unknown) => void) => {
+            onError = callback
+        }
+    }
 }
 
 export default useRequest

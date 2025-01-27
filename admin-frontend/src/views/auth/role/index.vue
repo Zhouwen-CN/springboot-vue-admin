@@ -48,7 +48,8 @@ const {
   onSizeChange
 } = reqGetRolePage()
 // 保存角色菜单信息
-const {run: saveRoleMenu, loading: saveRoleMenuLoading} = useRequest(reqSaveRoleMenu, () => {
+const {run: saveRoleMenu, loading: saveRoleMenuLoading, onSuccess} = useRequest(reqSaveRoleMenu)
+onSuccess(() => {
   ElMessage.success('操作成功')
 })
 
@@ -172,13 +173,13 @@ onMounted(() => {
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline>
+      <el-form inline @submit.prevent="searchRole()">
         <el-form-item label="角色名：">
           <el-input v-model="searchName" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="loading" type="primary"
-                     @click="searchRole()">搜索
+                     native-type="submit">搜索
           </el-button>
         </el-form-item>
       </el-form>
@@ -243,7 +244,8 @@ onMounted(() => {
             :model="roleMenuForm"
             :rules="rules"
             label-width="80px"
-            style="padding: 0 20px">
+            style="padding: 0 20px"
+            @submit.prevent="onSubmit(ruleFormRef)">
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="roleMenuForm.roleName"
                       placeholder="请输入角色名称"></el-input>
@@ -268,7 +270,7 @@ onMounted(() => {
                 @click="toggleDialog.show = false">取消
             </el-button>
             <el-button :loading="saveRoleMenuLoading" type="primary"
-                       @click="onSubmit(ruleFormRef)">确认
+                       native-type="submit">确认
             </el-button>
           </el-form-item>
         </el-form>

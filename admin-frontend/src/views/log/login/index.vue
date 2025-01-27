@@ -13,12 +13,13 @@ const {
   size,
   sizeOption,
   data,
+  loading,
   refresh,
   onPageChange,
   onSizeChange
 } = reqGetLoginLogPage()
 
-function searchFunction() {
+function onSubmit() {
   refresh({
     params: {
       ...searchForm
@@ -35,7 +36,8 @@ onMounted(() => {
   <div>
     <el-card>
       <!-- 表单 -->
-      <el-form :model="searchForm" inline>
+      <el-form :model="searchForm" inline
+               @submit.prevent="onSubmit()">
         <el-form-item label="用户名：">
           <el-input v-model="searchForm.username"
                     clearable
@@ -63,7 +65,8 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="searchFunction()">
+          <el-button :loading="loading" native-type="submit"
+                     type="primary">
             查询
           </el-button>
         </el-form-item>

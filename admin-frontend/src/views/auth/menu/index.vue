@@ -54,7 +54,8 @@ const rules = reactive<FormRules<typeof menuForm>>({
 })
 
 // 保存菜单信息
-const {run: saveMenu, loading: saveMenuLoading} = useRequest(reqSaveMenu, () => {
+const {run: saveMenu, loading: saveMenuLoading, onSuccess} = useRequest(reqSaveMenu)
+onSuccess(() => {
   ElMessage.success('操作成功')
 })
 
@@ -181,7 +182,8 @@ function clean() {
             :model="menuForm"
             :rules="rules"
             label-width="80px"
-            style="padding: 0 20px">
+            style="padding: 0 20px"
+            @submit.prevent="onSubmit(ruleFormRef)">
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title"
                       placeholder="请输入菜单名称"></el-input>
@@ -204,7 +206,7 @@ function clean() {
                 @click="toggleDialog.show = false">取消
             </el-button>
             <el-button :loading="saveMenuLoading" type="primary"
-                       @click="onSubmit(ruleFormRef)">
+                       native-type="submit">
               确认
             </el-button>
           </el-form-item>
