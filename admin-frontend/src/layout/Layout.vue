@@ -5,9 +5,13 @@ import {HomeFilled} from '@element-plus/icons-vue'
 import Menu from '@/layout/components/Menu.vue'
 import Header from '@/layout/components/Header.vue'
 import TagView from '@/layout/components/TagView.vue'
+import useTagViewStore from '@/stores/tagView'
 
 const route = useRoute()
 const settingStore = useSettingStore()
+
+const cachedViews = computed(() => useTagViewStore().cachedViews)
+
 </script>
 
 <template>
@@ -58,11 +62,14 @@ const settingStore = useSettingStore()
       <!-- 内容区 -->
       <el-main class="main">
         <el-scrollbar>
-          <router-view v-slot="{ Component }">
-            <transition name="fade">
-              <component :is="Component" :key="settingStore.refresh">
-              </component>
-            </transition>
+          <router-view>
+            <template #default="{ Component, route }">
+              <transition name="fade">
+                <keep-alive :include="cachedViews" :max="5">
+                  <component :is="Component" :key="route.path"/>
+                </keep-alive>
+              </transition>
+            </template>
           </router-view>
         </el-scrollbar>
       </el-main>

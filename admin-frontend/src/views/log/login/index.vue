@@ -80,7 +80,8 @@ onMounted(() => {
                          prop="username"></el-table-column>
         <el-table-column label="操作类型"
                          prop="operation"></el-table-column>
-        <el-table-column label="操作状态" prop="status"></el-table-column>
+        <el-table-column label="操作状态" min-width="40px"
+                         prop="status"></el-table-column>
         <el-table-column label="ip地址" prop="ip"></el-table-column>
         <el-table-column
             label="用户代理"

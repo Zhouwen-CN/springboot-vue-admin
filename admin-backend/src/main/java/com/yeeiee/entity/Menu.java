@@ -1,6 +1,10 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,13 +18,13 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-01-27
  */
 @Getter
 @Setter
 @ToString
 @TableName("`t_menu`")
-@Schema(name = "Menu", description = "二级菜单表")
+@Schema(name = "Menu", description = "菜单表")
 public class Menu {
 
     @Schema(description = "主键")
@@ -30,6 +34,10 @@ public class Menu {
     @Schema(description = "标题")
     @TableField("`title`")
     private String title;
+
+    @Schema(description = "组件名称&路由名称")
+    @TableField("`name`")
+    private String name;
 
     @Schema(description = "访问路径")
     @TableField("`access_path`")
@@ -43,7 +51,11 @@ public class Menu {
     @TableField("`icon`")
     private String icon;
 
-    @Schema(description = "一级菜单id")
+    @Schema(description = "是否缓存")
+    @TableField("`is_keep_alive`")
+    private Boolean keepAlive;
+
+    @Schema(description = "父级菜单id")
     @TableField("`pid`")
     private Long pid;
 

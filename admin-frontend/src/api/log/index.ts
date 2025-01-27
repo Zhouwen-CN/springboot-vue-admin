@@ -11,7 +11,7 @@ export interface LoginLog {
 }
 
 export function reqGetLoginLogPage() {
-  return usePagination<LoginLog>('/log/login')
+  return usePagination<LoginLog>('/log/login', [5, 7, 9, 11], 11)
 }
 
 export interface OperationLog {
@@ -28,7 +28,7 @@ export interface OperationLog {
 }
 
 export function reqGetOperationLogPage() {
-  return usePagination<OperationLog>('/log/ops')
+  return usePagination<OperationLog>('/log/ops', [5, 7, 9, 11], 11)
 }
 
 export interface ErrorLog {
@@ -44,5 +44,5 @@ export interface ErrorLog {
 }
 
 export function reqGetErrorLogPage() {
-  return usePagination<ErrorLog>('/log/error')
+  return usePagination<ErrorLog>('/log/error', [5, 7, 9, 11], 11)
 }

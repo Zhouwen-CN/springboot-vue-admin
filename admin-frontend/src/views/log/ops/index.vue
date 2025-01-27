@@ -47,8 +47,7 @@ onMounted(() => {
           <el-select
               v-model="searchForm.status"
               clearable
-              placeholder="请选择"
-              style="width: 120px">
+              placeholder="请选择" style="width: 120px">
             <el-option :value="1" label="成功"/>
             <el-option :value="0" label="失败"/>
           </el-select>
@@ -70,7 +69,8 @@ onMounted(() => {
         <el-table-column label="操作类型"
                          prop="operation"></el-table-column>
         <el-table-column label="请求地址" prop="url"></el-table-column>
-        <el-table-column label="请求方式" prop="method"></el-table-column>
+        <el-table-column label="请求方式"
+                         prop="method"></el-table-column>
         <el-table-column label="请求参数" prop="params"
                          show-overflow-tooltip></el-table-column>
         <el-table-column label="请求耗时">
@@ -78,7 +78,8 @@ onMounted(() => {
             {{ row.time }} ms
           </template>
         </el-table-column>
-        <el-table-column label="操作状态" prop="status"></el-table-column>
+        <el-table-column label="操作状态" min-width="40px"
+                         prop="status"></el-table-column>
         <el-table-column label="ip地址" prop="ip"></el-table-column>
         <el-table-column label="用户代理" prop="userAgent"
                          show-overflow-tooltip></el-table-column>

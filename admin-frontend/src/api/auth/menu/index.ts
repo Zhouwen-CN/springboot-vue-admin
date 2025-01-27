@@ -2,13 +2,15 @@ import request from '@/api/request'
 import {type CreateAndUpdateTime} from '@/api/types'
 
 export interface MenuInfo extends CreateAndUpdateTime {
-    id: number
-    title: string
-    accessPath: string
-    filePath: string
-    icon: string
-    pid: number
-    children: MenuInfo[]
+  id: number
+  title: string
+  name: string
+  accessPath: string
+  filePath: string
+  icon: string
+  keepAlive: boolean
+  pid: number
+  children: MenuInfo[]
 }
 
 /**
@@ -16,16 +18,18 @@ export interface MenuInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetMenuList(roleIds: number[]) {
-    return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
+  return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
 }
 
 export interface MenuForm {
-    id?: number
-    title: string
-    accessPath: string
-    filePath?: string
-    icon: string
-    pid: number
+  id?: number
+  title: string
+  name: string
+  accessPath: string
+  filePath?: string
+  icon: string
+  keepAlive: boolean
+  pid: number
 }
 
 /**
@@ -34,11 +38,11 @@ export interface MenuForm {
  * @returns
  */
 export function reqSaveMenu(menuForm: MenuForm) {
-    if (menuForm.id) {
-        return request.put<any, MenuForm>('/menu', menuForm)
-    } else {
-        return request.post<any, MenuForm>('/menu', menuForm)
-    }
+  if (menuForm.id) {
+    return request.put<any, MenuForm>('/menu', menuForm)
+  } else {
+    return request.post<any, MenuForm>('/menu', menuForm)
+  }
 }
 
 /**
@@ -47,5 +51,5 @@ export function reqSaveMenu(menuForm: MenuForm) {
  * @returns
  */
 export function reqDeleteMenu(id: number) {
-    return request.delete(`/menu/${id}`)
+  return request.delete(`/menu/${id}`)
 }

@@ -2,6 +2,20 @@ import type {MenuInfo} from '@/api/auth/menu'
 import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
 
 /**
+ * 给组件注册 name 属性值
+ * @param componentName 组件名称
+ * @param component 组件
+ * @returns
+ */
+function registerComponentName(componentName: string, component: () => Promise<unknown>) {
+  return async () => {
+    const res: any = await component()
+    res.default.name = componentName
+    return res
+  }
+}
+
+/**
  * 获取并封装异步路由
  * @param modules
  * @param menus
@@ -14,11 +28,12 @@ export function getAsyncRoutes(
   return menus.map((menu) => {
     const route: RouteRecordSingleViewWithChildren = {
       path: menu.accessPath,
-      name: menu.accessPath,
-      component: modules[`../views${menu.filePath}`],
+      name: menu.name,
+      component: registerComponentName(menu.name, modules[`../views${menu.filePath}`]),
       meta: {
         title: menu.title,
-        icon: menu.icon
+        icon: menu.icon,
+        KeepAlive: menu.keepAlive
       },
       children: []
     }

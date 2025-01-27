@@ -19,9 +19,11 @@ const toggleDialog = reactive({
 const menuForm = reactive<MenuForm>({
   id: undefined,
   title: '',
+  name: '',
   accessPath: '',
   filePath: undefined,
   icon: '',
+  keepAlive: false,
   pid: 0
 })
 const ruleFormRef = ref<FormInstance>()
@@ -43,11 +45,20 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
     callback(new Error('文件路径须以 / 开头'))
   }
 }
+
+const validateName = (rule: any, value: any, callback: any) => {
+  if (/^[a-z]+(-[a-z0-9]+)*$/.test(value)) {
+    callback()
+  } else {
+    callback(new Error('组件名称须是 kebab-case 命名，最好是将访问路径改为 kebab-case 的形式'))
+  }
+}
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     {required: true, message: '请输入菜单名称', trigger: 'blur'},
     {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
   ],
+  name: [{validator: validateName, trigger: 'blur'}],
   accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
   filePath: [{validator: validateFilePath, trigger: 'blur'}],
   icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
@@ -78,9 +89,11 @@ function updateMenu(row: MenuInfo) {
   toggleDialog.title = '更新菜单'
   menuForm.id = row.id
   menuForm.title = row.title
+  menuForm.name = row.name
   menuForm.accessPath = row.accessPath
   menuForm.filePath = row.filePath
   menuForm.icon = row.icon
+  menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
 }
 
@@ -114,10 +127,12 @@ async function onSubmit(formEl: FormInstance | undefined) {
 function clean() {
   toggleDialog.title = ''
   menuForm.id = undefined
+  menuForm.name = ''
   menuForm.title = ''
   menuForm.accessPath = ''
   menuForm.filePath = undefined
   menuForm.icon = ''
+  menuForm.keepAlive = false
   menuForm.pid = 0
   ruleFormRef.value?.clearValidate()
 }
@@ -148,8 +163,20 @@ function clean() {
             </el-space>
           </template>
         </el-table-column>
+        <el-table-column label="组件名称" prop="name"/>
         <el-table-column label="访问路径" prop="accessPath"/>
         <el-table-column label="文件路径" prop="filePath"/>
+        <el-table-column align="center" label="是否缓存" min-width="30px"
+                         prop="keepAlive">
+          <template #default="{ row }: { row: MenuInfo }">
+            <el-switch
+                v-model="row.keepAlive"
+                active-icon="Check"
+                disabled
+                inactive-icon="Close"
+                inline-prompt/>
+          </template>
+        </el-table-column>
         <el-table-column label="更新时间" prop="updateTime"/>
         <el-table-column label="操作">
           <template #default="{ row }: { row: MenuInfo }">
@@ -188,6 +215,10 @@ function clean() {
             <el-input v-model="menuForm.title"
                       placeholder="请输入菜单名称"></el-input>
           </el-form-item>
+          <el-form-item label="组件名称" prop="name">
+            <el-input v-model="menuForm.name"
+                      placeholder="请输入组件名称"></el-input>
+          </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath"
                       placeholder="请输入访问路径"></el-input>
@@ -199,6 +230,13 @@ function clean() {
           <el-form-item label="菜单图标" prop="icon">
             <el-input v-model="menuForm.icon"
                       placeholder="请输入菜单图标"></el-input>
+          </el-form-item>
+          <el-form-item label="是否缓存" prop="keepAlive">
+            <el-switch
+                v-model="menuForm.keepAlive"
+                active-icon="Check"
+                inactive-icon="Close"
+                inline-prompt/>
           </el-form-item>
 
           <el-form-item>

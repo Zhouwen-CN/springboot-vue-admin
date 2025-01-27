@@ -20,16 +20,18 @@ export interface PaginationResult<T> {
  * 后端请求接口格式保持一致：${baseUrl}/${size.value}/${current.value}
  * @param baseUrl 请求基础url
  * @param sizeOption 可选的分页大小选项
+ * @param initSize 初始化页面条数
  * @returns
  */
 function usePagination<T>(
     baseUrl: string,
-    sizeOption: Array<number> = [5, 7, 9, 11]
+    sizeOption: Array<number> = [5, 7, 9, 11],
+    initSize: number = sizeOption[0]
 ): PaginationResult<T> {
   const loading = ref(false)
   const current = ref(1)
   const total = ref(0)
-  const size = ref(sizeOption[0])
+  const size = ref(initSize)
   const data = ref<T[]>([]) as Ref<T[]>
 
   function refresh(config?: AxiosRequestConfig) {

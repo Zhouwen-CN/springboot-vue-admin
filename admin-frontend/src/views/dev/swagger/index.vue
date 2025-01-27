@@ -6,7 +6,6 @@ import request from '@/api/request'
 onMounted(async () => {
 
   const data = await request.get('/v3/api-docs')
-
   SwaggerUIBundle({
     spec: data,
     // url: "http://127.0.0.1:8080/v3/api-docs",

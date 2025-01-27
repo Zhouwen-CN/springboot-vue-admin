@@ -83,7 +83,7 @@ public final class MybatisGeneratorUtil {
                                     new Column("create_time", FieldFill.INSERT),
                                     new Column("update_time", FieldFill.UPDATE)
                             )
-                    // .enableFileOverride()
+                            .enableFileOverride()
                     ;
 
                     builder.controllerBuilder()
@@ -94,18 +94,18 @@ public final class MybatisGeneratorUtil {
                     ;
 
                     builder.serviceBuilder()
-                            .serviceTemplate("/templates/service.java.ftl")
-                            .serviceImplTemplate("/templates/serviceImpl.java.ftl")
+                            .serviceTemplate("/templates/service.java")
+                            .serviceImplTemplate("/templates/serviceImpl.java")
                             .formatServiceFileName("%sService")
                     // .enableFileOverride()
                     ;
 
                     builder.mapperBuilder()
-                            .mapperTemplate("/templates/mapper.java.ftl")
-                            .mapperXmlTemplate("/templates/mapper.xml.ftl")
+                            .mapperTemplate("/templates/mapper.java")
+                            .mapperXmlTemplate("/templates/mapper.xml")
                             .enableBaseResultMap()
                             .enableBaseColumnList()
-                    // .enableFileOverride()
+                            .enableFileOverride()
                     ;
 
                 })
@@ -115,6 +115,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_login_log", "t_operation_log", "t_error_log");
+        generator(args[0], "t_menu");
     }
 }
