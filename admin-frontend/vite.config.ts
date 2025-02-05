@@ -59,20 +59,21 @@ export default defineConfig(({mode}) => {
               return 'images/[name]-[hash].[ext]'
             }
             return 'assets/[name]-[hash].[ext]'
-          },
-          manualChunks(id) {
-            if (id.includes('/node_modules/')) {
-              if (id.includes('element-plus')) {
-                return 'element'
-              }
-              if (id.includes('swagger-ui-dist')) {
-                return 'swagger'
-              }
-              return 'vendor'
-            }
-
-            return 'index'
           }
+          // 虽然小文件会变少，但是可能会影响路由懒加载，暂时先不用
+          // manualChunks(id) {
+          //   if (id.includes('/node_modules/')) {
+          //     if (id.includes('element-plus')) {
+          //       return 'element'
+          //     }
+          //     if (id.includes('swagger-ui-dist')) {
+          //       return 'swagger'
+          //     }
+          //     return 'vendor'
+          //   }
+
+          //   return 'index'
+          // }
         }
       }
     }

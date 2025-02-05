@@ -8,10 +8,17 @@ import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
  * @returns
  */
 function registerComponentName(componentName: string, component: () => Promise<unknown>) {
-  return async () => {
-    const res: any = await component()
-    res.default.name = componentName
-    return res
+  return () => {
+    return new Promise((resolve, reject) => {
+      component()
+          .then((res: any) => {
+            res.default.name = componentName
+            resolve(res)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+    })
   }
 }
 
@@ -26,10 +33,15 @@ export function getAsyncRoutes(
     menus: MenuInfo[]
 ): RouteRecordSingleViewWithChildren[] {
   return menus.map((menu) => {
+    let component = modules[`../views${menu.filePath}`]
+    if (component) {
+      component = registerComponentName(menu.name, component)
+    }
+
     const route: RouteRecordSingleViewWithChildren = {
       path: menu.accessPath,
       name: menu.name,
-      component: registerComponentName(menu.name, modules[`../views${menu.filePath}`]),
+      component,
       meta: {
         title: menu.title,
         icon: menu.icon,
