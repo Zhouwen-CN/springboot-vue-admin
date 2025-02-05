@@ -94,13 +94,13 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
 .header {
   height: $base_header_height;
   padding: 0;
-  border-bottom: 0.8px solid #F6F6F6;
+  border-bottom: 0.8px solid var(--el-border-color);
 }
 
 .aside {
-  height: calc(100vh - 1px);
+  height: 100vh;
   background-color: #304156;
-  border-right: 0.8px solid #F6F6F6;
+  border-right: 0.8px solid var(--el-border-color);
 
   .aside_header {
     height: $base_header_height;
@@ -121,8 +121,7 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
 }
 
 .main {
-  /* -1为了防止出现滚动条 */
-  height: calc(100vh - $base_header_height - 1px);
+  height: calc(100vh - $base_header_height);
   overflow: auto;
 }
 </style>

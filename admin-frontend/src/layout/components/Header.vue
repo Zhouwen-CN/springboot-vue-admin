@@ -102,11 +102,12 @@ function changeCollapse() {
 
 <style lang="scss" scoped>
 .container {
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  border-bottom: 0.8px solid #F6F6F6;
+  border-bottom: 0.8px solid var(--el-border-color);
 
   .left {
     display: flex;

@@ -5,6 +5,7 @@ import {initAsyncRoutes} from '@/router/asyncRoutes'
 // @ts-ignore
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import useTagViewStore, {type TagView} from '@/stores/tagView'
 
 NProgress.configure({showSpinner: false})
 
@@ -24,7 +25,7 @@ const router = createRouter({
 initAsyncRoutes(router, modules)
 
 // 前置路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   NProgress.start()
 
   // 是否登录
@@ -47,7 +48,26 @@ router.beforeEach((to, from, next) => {
 })
 
 // 后置路由守卫
-router.afterEach(() => {
+router.afterEach((to) => {
+  // 添加路由到状态
+  const tagViewStore = useTagViewStore()
+  const tagView: TagView = {
+    path: to.path,
+    fullPath: to.fullPath,
+    name: to.name as string,
+    title: to.meta.title as string,
+    affix: to.meta?.affix as boolean,
+    keepAlive: to.meta?.keepAlive as boolean
+  }
+  tagViewStore.addView(tagView)
+
+  // 设置 title
+  if (to.meta.title) {
+    document.title = `SV Admin | ${to.meta.title}`
+  } else {
+    document.title = 'SV Admin'
+  }
+
   NProgress.done()
 })
 

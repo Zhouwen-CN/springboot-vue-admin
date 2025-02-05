@@ -4,6 +4,7 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
+    // 需要引入自动导入插件生成的类型声明文件
     "auto-imports.d.ts",
     "components.d.ts"
   ],

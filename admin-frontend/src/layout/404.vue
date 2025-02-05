@@ -7,6 +7,6 @@
 <style lang="scss" scoped>
 .empty {
   width: 100%;
-  height: calc(100vh - $base_header_height - 40px - 1px);
+  height: calc(100vh - $base_header_height - 40px);
 }
 </style>

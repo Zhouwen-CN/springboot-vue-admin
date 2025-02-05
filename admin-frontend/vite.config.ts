@@ -15,10 +15,12 @@ export default defineConfig(({mode}) => {
     plugins: [
       vue(),
       VueDevTools(),
+      // 自动导入，会生成 auto-imports.d.ts 文件
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
         resolvers: [ElementPlusResolver()]
       }),
+      // element-ui 自动导入，会生成 components.d.ts 文件
       Components({
         resolvers: [ElementPlusResolver()]
       })

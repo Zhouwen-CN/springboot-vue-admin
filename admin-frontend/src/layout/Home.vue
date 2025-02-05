@@ -15,7 +15,8 @@ const userStore = useUserStore()
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
         <div class="message">
           <h3 class="welcome_msg">Welcome
-            {{ userStore.userInfo.username }}</h3>
+            {{ userStore.userInfo.username }}
+          </h3>
           <div>
             <el-link
                 :icon="Link"
@@ -72,8 +73,8 @@ const userStore = useUserStore()
   60px: 顶部导航
   40px: main padding
   140px: 卡片
-  3px: 不知道为什么差3个像素，可能是border
+  2px: 不知道是什么
   */
-  height: calc(100vh - $base_header_height - 40px - 140px - 3px);
+  height: calc(100vh - $base_header_height - 40px - 140px - 2px);
 }
 </style>

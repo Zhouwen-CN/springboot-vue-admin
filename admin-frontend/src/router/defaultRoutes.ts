@@ -5,7 +5,6 @@ const defaultRoutes = [
     component: () => import('@/layout/Layout.vue'),
     redirect: '/home',
     meta: {
-      title: '首页',
       icon: 'HomeFilled',
       require: true
     },
@@ -15,7 +14,9 @@ const defaultRoutes = [
         name: 'Home',
         component: () => import('@/layout/Home.vue'),
         meta: {
-          require: true
+          title: '首页',
+          require: true,
+          affix: true
         }
       },
       {
@@ -23,6 +24,7 @@ const defaultRoutes = [
         name: '404',
         component: () => import('@/layout/404.vue'),
         meta: {
+          title: '404',
           require: true
         }
       }
@@ -33,6 +35,7 @@ const defaultRoutes = [
     name: 'Login',
     component: () => import('@/layout/Login.vue'),
     meta: {
+      title: '登入',
       require: true
     }
   },

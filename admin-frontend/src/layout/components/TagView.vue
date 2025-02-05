@@ -1,88 +1,190 @@
 <script lang="ts" setup>
+import useTagViewStore, {type TagView} from '@/stores/tagView'
+import {ArrowLeft, ArrowRight} from '@element-plus/icons-vue'
+import {ElScrollbar} from 'element-plus'
+
 const router = useRouter()
 const route = useRoute()
+const tagViewStore = useTagViewStore()
 
-interface Route {
-  path: string
-  title: string
+// el 滚动组件
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+// 当前滚动的距离
+let currentScrollLeft = 0
+
+// 触发滚动事件时，更新当前滚动的距离
+function scrollhandle({scrollLeft}: { scrollLeft: number }) {
+  currentScrollLeft = scrollLeft
 }
 
-const tagViewArr = ref<Route[]>([
-  {
-    path: '/home',
-    title: '首页'
-  }
-])
+// 左右滚动
+function scrollTo(direction: "left" | "right", step: number = 200) {
+  let scrollLeft = 0
 
-watch(
-    () => route.path,
-    () => {
-      let routeObj = {
+  if (!scrollbarRef.value) {
+    return
+  }
+
+  const scrollWrapRef = scrollbarRef.value.wrapRef
+  if (!scrollWrapRef) {
+    return
+  }
+
+  const scrollWidth = scrollWrapRef.scrollWidth
+  const clientWidth = scrollWrapRef.clientWidth
+
+  // 最后剩余可滚动的宽度
+  const scrollableDistance = scrollWidth - clientWidth - currentScrollLeft
+
+  // 没有滚动条
+  if (clientWidth >= scrollWidth) return
+  if (direction === "left") {
+    scrollLeft = Math.max(0, currentScrollLeft - step)
+  } else {
+    scrollLeft = Math.min(currentScrollLeft + step, currentScrollLeft + scrollableDistance)
+  }
+  scrollbarRef.value!.setScrollLeft(scrollLeft)
+}
+
+
+// 切换 tag view
+const changeTagView = (tagView: TagView) => {
+  router.push(tagView.path)
+}
+// 关闭 tag view
+const closeTagView = (tagView: TagView) => {
+  tagViewStore.removeView(tagView)
+
+  // 如果全部关闭了，则从首页重定向到home
+  if (tagView.path === route.path) {
+    const visitedViews = tagViewStore.visitedViews
+    if (visitedViews.length === 0) {
+      router.push("/")
+    } else {
+      const path = visitedViews[visitedViews.length - 1].path
+      router.push(path)
+    }
+  }
+}
+
+// 初始化 tag view，找出所有 affix 的路由
+function initTagView() {
+  router.getRoutes().forEach((route) => {
+    if (route.meta.affix) {
+
+      const tagView: TagView = {
         path: route.path,
-        title: route.meta.title as string
+        fullPath: route.path,
+        name: route.name as string,
+        title: route.meta.title as string,
+        affix: route.meta?.affix as boolean,
+        keepAlive: route.meta?.keepAlive as boolean
       }
 
-      // 404不需要标签
-      let isInclude = tagViewArr.value.find((item: Route) => {
-        return item.path === routeObj.path || routeObj.path === '/404'
-      })
-
-      if (isInclude) return
-      tagViewArr.value.push(routeObj)
-    },
-    {immediate: true}
-)
-
-// 切换tag
-const changeTag = (path: string) => {
-  router.push({path})
+      tagViewStore.addView(tagView)
+    }
+  })
 }
-// 关闭tag
-const closeTag = (i: number, path: string) => {
-  if (path === route.path) {
-    tagViewArr.value.splice(i, 1)
-    router.push(tagViewArr.value[tagViewArr.value.length - 1].path)
-  } else {
-    tagViewArr.value.splice(i, 1)
-  }
-}
+
+onMounted(() => {
+  initTagView()
+})
 </script>
 
 <template>
-  <el-scrollbar>
-    <div class="tags">
-      <template v-for="(tag, _index) in tagViewArr"
-                :key="tag.title">
+  <div class="scroll-container">
+
+    <el-icon class="arrow left" @click="scrollTo('left')">
+      <ArrowLeft/>
+    </el-icon>
+
+    <el-scrollbar ref="scrollbarRef" @scroll="scrollhandle">
+      <template v-for="tagView in tagViewStore.visitedViews"
+                :key="tagView.title">
         <el-tag
-            :closable="_index !== 0"
-            :effect="route.path === tag.path ? 'dark' : 'light'"
-            class="tagItem"
-            hit
-            @click="changeTag(tag.path)"
-            @close="closeTag(_index, tag.path)">
-          <div class="tagContent">
-            <span v-show="route.path === tag.path" class="dot"></span>
-            <span>{{ tag.title }}</span>
+            :class="{ active: route.path === tagView.path }"
+            :closable="!tagView.affix"
+            class="tag-view-item"
+            disable-transitions
+            @click="changeTagView(tagView)"
+            @close="closeTagView(tagView)">
+          <div class="tag-view-content">
+            <span v-show="route.path === tagView.path"
+                  class="dot"></span>
+            <span>{{ tagView.title }}</span>
           </div>
         </el-tag>
       </template>
-    </div>
-  </el-scrollbar>
+    </el-scrollbar>
+
+    <el-icon class="arrow right" @click="scrollTo('right')">
+      <ArrowRight/>
+    </el-icon>
+  </div>
+
 </template>
 
 <style lang="scss" scoped>
-.tags {
-  margin-top: 5px;
+.scroll-container {
+  height: 40px;
   padding: 0 20px;
 
-  .tagItem {
-    margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .arrow {
+    font-size: 20px;
+    cursor: pointer;
+
+    &.left {
+      margin-right: 8px;
+    }
+
+    &.right {
+      margin-left: 8px;
+    }
+  }
+
+
+  .tag-view-item {
+    margin-top: 6px;
+    margin-right: 8px;
+    font-size: 14px;
+    height: 28px;
+    color: var(--el-text-color-primary);
+    background-color: var(--el-bg-color);
+    border-color: var(--el-border-color);
+
+    :deep(.el-icon) {
+      border-radius: 50%;
+      color: var(--el-text-color-primary);
+
+      &:hover {
+        background-color: #00000030;
+        color: #ffffff;
+      }
+    }
+
+    &.active {
+      background-color: var(--el-color-primary);
+      color: #ffffff;
+      border-color: var(--el-color-primary);
+
+      :deep(.el-icon) {
+        color: #ffffff;
+      }
+    }
 
     &:hover {
       cursor: pointer;
     }
 
-    .tagContent {
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    .tag-view-content {
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -95,6 +197,11 @@ const closeTag = (i: number, path: string) => {
         margin-right: 5px;
       }
     }
+  }
+
+  .el-scrollbar {
+    flex: 1;
+    white-space: nowrap;
   }
 }
 </style>

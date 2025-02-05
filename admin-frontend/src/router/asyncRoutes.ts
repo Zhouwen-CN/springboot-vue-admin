@@ -45,7 +45,7 @@ export function getAsyncRoutes(
       meta: {
         title: menu.title,
         icon: menu.icon,
-        KeepAlive: menu.keepAlive
+        keepAlive: menu.keepAlive
       },
       children: []
     }
