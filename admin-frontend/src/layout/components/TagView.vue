@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import useTagViewStore, {type TagView} from '@/stores/tagView'
-import {ArrowLeft, ArrowRight} from '@element-plus/icons-vue'
+import {ArrowLeft, ArrowRight, Back, Close, Minus, Refresh, Right, Sort} from '@element-plus/icons-vue'
 import {ElScrollbar} from 'element-plus'
 
 const router = useRouter()
@@ -15,6 +15,7 @@ let currentScrollLeft = 0
 // 触发滚动事件时，更新当前滚动的距离
 function scrollhandle({scrollLeft}: { scrollLeft: number }) {
   currentScrollLeft = scrollLeft
+  closeTagMenu()
 }
 
 // 左右滚动
@@ -45,7 +46,6 @@ function scrollTo(direction: "left" | "right", step: number = 200) {
   }
   scrollbarRef.value!.setScrollLeft(scrollLeft)
 }
-
 
 // 切换 tag view
 const changeTagView = (tagView: TagView) => {
@@ -86,6 +86,63 @@ function initTagView() {
   })
 }
 
+
+const tagMenuVisible = ref(false)
+const left = ref(0)
+const top = ref(0)
+const selectedTag = ref<TagView>({
+  path: '',
+  fullPath: '',
+  name: '',
+  title: '',
+  affix: false,
+  keepAlive: false,
+})
+
+function closeTagMenu() {
+  tagMenuVisible.value = false
+}
+
+watch(tagMenuVisible, (value) => {
+  if (value) {
+    document.body.addEventListener("click", closeTagMenu)
+  } else {
+    document.body.removeEventListener("click", closeTagMenu)
+  }
+})
+
+const instance = getCurrentInstance()!
+
+function openTagMenu(tagView: TagView, e: MouseEvent) {
+  // 右键菜单宽度
+  const tagMenuWidth = 100
+  // 面包屑的高度
+  const headerHeight = 40
+
+  // 当前组件左侧距离窗口左侧的距离
+  const offsetLeft = instance.proxy?.$el.getBoundingClientRect().left
+
+  // 当前组件的宽度
+  const offsetWidth = instance.proxy?.$el.offsetWidth
+
+  // 最大 left 值
+  const maxLeft = offsetWidth - tagMenuWidth
+
+  // 当前组件左侧到鼠标点击的距离
+  const l = e.clientX - offsetLeft
+
+  if (l > maxLeft) {
+    left.value = maxLeft
+  } else {
+    left.value = l
+  }
+
+  top.value = e.clientY - headerHeight
+
+  tagMenuVisible.value = true
+  selectedTag.value = tagView
+}
+
 onMounted(() => {
   initTagView()
 })
@@ -107,7 +164,8 @@ onMounted(() => {
             class="tag-view-item"
             disable-transitions
             @click="changeTagView(tagView)"
-            @close="closeTagView(tagView)">
+            @close="closeTagView(tagView)"
+            @contextmenu.prevent="openTagMenu(tagView, $event)">
           <div class="tag-view-content">
             <span v-show="route.path === tagView.path"
                   class="dot"></span>
@@ -120,6 +178,48 @@ onMounted(() => {
     <el-icon class="arrow right" @click="scrollTo('right')">
       <ArrowRight/>
     </el-icon>
+
+    <!-- tag标签操作菜单 -->
+    <ul v-show="tagMenuVisible"
+        :style="{ left: left + 'px', top: top + 'px' }"
+        class="tag-menu">
+      <li>
+        <el-icon>
+          <Refresh/>
+        </el-icon>
+        刷新
+      </li>
+      <li>
+        <el-icon>
+          <Close/>
+        </el-icon>
+        关闭
+      </li>
+      <li>
+        <el-icon>
+          <Sort/>
+        </el-icon>
+        关闭其它
+      </li>
+      <li>
+        <el-icon>
+          <Back/>
+        </el-icon>
+        关闭左侧
+      </li>
+      <li>
+        <el-icon>
+          <Right/>
+        </el-icon>
+        关闭右侧
+      </li>
+      <li>
+        <el-icon>
+          <Minus/>
+        </el-icon>
+        关闭所有
+      </li>
+    </ul>
   </div>
 
 </template>
@@ -128,6 +228,7 @@ onMounted(() => {
 .scroll-container {
   height: 40px;
   padding: 0 20px;
+  position: relative;
 
   display: flex;
   justify-content: space-between;
@@ -202,6 +303,25 @@ onMounted(() => {
   .el-scrollbar {
     flex: 1;
     white-space: nowrap;
+
+  }
+
+  .tag-menu {
+    position: absolute;
+    z-index: 99;
+    font-size: 12px;
+    background: var(--el-bg-color-overlay);
+    border-radius: 4px;
+    box-shadow: var(--el-box-shadow-light);
+
+    li {
+      padding: 8px 16px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--el-fill-color-light);
+      }
+    }
   }
 }
 </style>

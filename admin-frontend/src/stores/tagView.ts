@@ -38,12 +38,26 @@ const useTagViewStore = defineStore('tagView', () => {
     }
   }
 
-  // 删除页面（不应该删除缓存，删除缓存应该在刷新页面的时候）
+  // 删除页面
   function removeView(view: TagView) {
-    const index = visitedViews.value.findIndex((v) => v.path === view.path)
-    if (index !== -1) {
-      visitedViews.value.splice(index, 1)
+    removeVisitedView(view)
+    removeCachedView(view)
+  }
+
+  // 删除访问页面
+  function removeVisitedView(view: TagView) {
+    for (const [i, v] of visitedViews.value.entries()) {
+      if (v.path === view.path) {
+        visitedViews.value.splice(i, 1)
+        break
+      }
     }
+  }
+
+  // 删除缓存页面
+  function removeCachedView(view: TagView) {
+    const index = cachedViews.value.indexOf(view.name)
+    index > -1 && cachedViews.value.splice(index, 1)
   }
 
   return {cachedViews, visitedViews, addView, removeView}
