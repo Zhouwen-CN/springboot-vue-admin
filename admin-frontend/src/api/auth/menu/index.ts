@@ -30,6 +30,7 @@ export interface MenuForm {
   icon: string
   keepAlive: boolean
   pid: number
+  hasChildren?: boolean
 }
 
 /**
@@ -38,6 +39,7 @@ export interface MenuForm {
  * @returns
  */
 export function reqSaveMenu(menuForm: MenuForm) {
+  delete menuForm.hasChildren
   if (menuForm.id) {
     return request.put<any, MenuForm>('/menu', menuForm)
   } else {

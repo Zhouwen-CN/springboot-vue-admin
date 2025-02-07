@@ -2,6 +2,7 @@ package com.yeeiee.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
 
 /**
@@ -17,6 +18,9 @@ public final class JsonUtil {
 
     static {
         objectMapper = new ObjectMapper();
+        // 使用 JavaTimeModule 支持 Java 8 时间类型
+        objectMapper.registerModule(new JavaTimeModule());
+
     }
 
     @SneakyThrows

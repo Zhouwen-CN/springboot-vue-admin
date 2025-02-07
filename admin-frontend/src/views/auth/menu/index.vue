@@ -24,7 +24,8 @@ const menuForm = reactive<MenuForm>({
   filePath: undefined,
   icon: '',
   keepAlive: false,
-  pid: 0
+  pid: 0,
+  hasChildren: false
 })
 const ruleFormRef = ref<FormInstance>()
 const validateAccessPath = (rule: any, value: any, callback: any) => {
@@ -95,6 +96,7 @@ function updateMenu(row: MenuInfo) {
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
+  menuForm.hasChildren = row.children.length > 0
 }
 
 // 删除菜单
@@ -134,6 +136,7 @@ function clean() {
   menuForm.icon = ''
   menuForm.keepAlive = false
   menuForm.pid = 0
+  menuForm.hasChildren = false
   ruleFormRef.value?.clearValidate()
 }
 </script>
@@ -189,7 +192,7 @@ function clean() {
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
                   <el-button
-                      :disabled="row.children?.length > 0"
+                      :disabled="row.children.length > 0"
                       :icon="Delete"
                       type="danger"/>
                 </template>
@@ -223,9 +226,12 @@ function clean() {
             <el-input v-model="menuForm.accessPath"
                       placeholder="请输入访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径" prop="filePath">
-            <el-input v-model="menuForm.filePath"
-                      placeholder="请输入文件路径"></el-input>
+          <el-form-item label="文件路径"
+                        prop="filePath">
+            <el-input
+                v-model="menuForm.filePath"
+                :disabled="menuForm.hasChildren || menuForm.pid === 0"
+                placeholder="请输入文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-input v-model="menuForm.icon"
@@ -233,6 +239,7 @@ function clean() {
           </el-form-item>
           <el-form-item label="是否缓存" prop="keepAlive">
             <el-switch
+                :disabled="menuForm.hasChildren || menuForm.pid === 0"
                 v-model="menuForm.keepAlive"
                 active-icon="Check"
                 inactive-icon="Close"
