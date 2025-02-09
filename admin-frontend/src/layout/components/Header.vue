@@ -1,22 +1,13 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
-import {ArrowDown, ArrowRight, FullScreen, Refresh} from '@element-plus/icons-vue'
+import {ArrowDown, ArrowRight, FullScreen} from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
 import {ElMessage} from 'element-plus'
 
 const route = useRoute()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
-const loading = ref(false)
 
-// 刷新
-function refresh() {
-  loading.value = true
-  settingStore.refresh = !settingStore.refresh
-  setTimeout(() => {
-    loading.value = false
-  }, 500)
-}
 
 // 切换全屏模式
 function toggleFullScreen() {
@@ -69,9 +60,6 @@ function changeCollapse() {
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
-        <el-button :icon="Refresh" :loading="loading" circle
-                   size="default"
-                   @click="refresh"></el-button>
         <el-button :icon="FullScreen" circle size="default"
                    @click="toggleFullScreen"></el-button>
         <el-avatar

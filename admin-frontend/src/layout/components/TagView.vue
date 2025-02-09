@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import useTagViewStore, {type TagView} from '@/stores/tagView'
+import useTagViewStore, {type CloseOption, type TagView} from '@/stores/tagView'
 import {ArrowLeft, ArrowRight, Back, Close, Minus, Refresh, Right, Sort} from '@element-plus/icons-vue'
 import {ElScrollbar} from 'element-plus'
 
@@ -11,13 +11,11 @@ const tagViewStore = useTagViewStore()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 // 当前滚动的距离
 let currentScrollLeft = 0
-
 // 触发滚动事件时，更新当前滚动的距离
-function scrollhandle({scrollLeft}: { scrollLeft: number }) {
+function scrollHandler({scrollLeft}: { scrollLeft: number }) {
   currentScrollLeft = scrollLeft
   closeTagMenu()
 }
-
 // 左右滚动
 function scrollTo(direction: "left" | "right", step: number = 200) {
   let scrollLeft = 0
@@ -34,11 +32,12 @@ function scrollTo(direction: "left" | "right", step: number = 200) {
   const scrollWidth = scrollWrapRef.scrollWidth
   const clientWidth = scrollWrapRef.clientWidth
 
+  // 没有滚动条
+  if (clientWidth >= scrollWidth) return
+
   // 最后剩余可滚动的宽度
   const scrollableDistance = scrollWidth - clientWidth - currentScrollLeft
 
-  // 没有滚动条
-  if (clientWidth >= scrollWidth) return
   if (direction === "left") {
     scrollLeft = Math.max(0, currentScrollLeft - step)
   } else {
@@ -47,35 +46,15 @@ function scrollTo(direction: "left" | "right", step: number = 200) {
   scrollbarRef.value!.setScrollLeft(scrollLeft)
 }
 
-// 切换 tag view
-const changeTagView = (tagView: TagView) => {
-  router.push(tagView.path)
-}
-// 关闭 tag view
-const closeTagView = (tagView: TagView) => {
-  tagViewStore.removeView(tagView)
-
-  // 如果全部关闭了，则从首页重定向到home
-  if (tagView.path === route.path) {
-    const visitedViews = tagViewStore.visitedViews
-    if (visitedViews.length === 0) {
-      router.push("/")
-    } else {
-      const path = visitedViews[visitedViews.length - 1].path
-      router.push(path)
-    }
-  }
-}
-
-// 初始化 tag view，找出所有 affix 的路由
+// 初始化 tagView，找出所有 affix 的路由
 function initTagView() {
   router.getRoutes().forEach((route) => {
     if (route.meta.affix) {
-
       const tagView: TagView = {
         path: route.path,
         fullPath: route.path,
         name: route.name as string,
+        query: undefined,
         title: route.meta.title as string,
         affix: route.meta?.affix as boolean,
         keepAlive: route.meta?.keepAlive as boolean
@@ -86,19 +65,45 @@ function initTagView() {
   })
 }
 
+// 切换 tagView
+function changeTagView(tagView: TagView) {
+  router.push({path: tagView.path, query: tagView.query})
+}
+
+// 关闭 tagView
+function closeTagView(_index: number, closeOption: CloseOption) {
+  const isDeleteActive = tagViewStore.removeView(_index, closeOption, route.path)
+
+  // 是否删除了 active tagView
+  if (isDeleteActive) {
+    const visitedViews = tagViewStore.visitedViews
+    if (visitedViews.length === 0) {
+      router.push("/")
+    } else {
+      const path = visitedViews[visitedViews.length - 1].path
+      router.push(path)
+    }
+  }
+}
+
+// 刷新 tagView
+function refreshTagView(_index: number) {
+  const tagView = tagViewStore.visitedViews[_index]
+  tagViewStore.removeCacheView(tagView)
+  nextTick(() => {
+    router.replace("/redirect" + tagView.path)
+  })
+}
+
 
 const tagMenuVisible = ref(false)
 const left = ref(0)
 const top = ref(0)
-const selectedTag = ref<TagView>({
-  path: '',
-  fullPath: '',
-  name: '',
-  title: '',
-  affix: false,
-  keepAlive: false,
-})
+const selectedIndex = ref(-1)
+// 获取当前组件
+const instance = getCurrentInstance()!
 
+// 关闭 tagView 右键菜单
 function closeTagMenu() {
   tagMenuVisible.value = false
 }
@@ -111,9 +116,8 @@ watch(tagMenuVisible, (value) => {
   }
 })
 
-const instance = getCurrentInstance()!
-
-function openTagMenu(tagView: TagView, e: MouseEvent) {
+// 打开 tagView 右键菜单
+function openTagMenu(_index: number, e: MouseEvent) {
   // 右键菜单宽度
   const tagMenuWidth = 100
   // 面包屑的高度
@@ -140,7 +144,27 @@ function openTagMenu(tagView: TagView, e: MouseEvent) {
   top.value = e.clientY - headerHeight
 
   tagMenuVisible.value = true
-  selectedTag.value = tagView
+  selectedIndex.value = _index
+}
+
+// 是否是固定标签
+function isAffix() {
+  try {
+    return tagViewStore.visitedViews[selectedIndex.value].affix
+  } catch (e) {
+    return false
+  }
+}
+
+// 是否是第一个标签
+function isFirstTagView() {
+  return selectedIndex.value === 0 ||
+      selectedIndex.value === tagViewStore.visitedViews.findIndex(v => !v.affix)
+}
+
+// 是否是最后一个标签
+function isLastTagView() {
+  return selectedIndex.value === tagViewStore.visitedViews.length - 1
 }
 
 onMounted(() => {
@@ -155,8 +179,8 @@ onMounted(() => {
       <ArrowLeft/>
     </el-icon>
 
-    <el-scrollbar ref="scrollbarRef" @scroll="scrollhandle">
-      <template v-for="tagView in tagViewStore.visitedViews"
+    <el-scrollbar ref="scrollbarRef" @scroll="scrollHandler">
+      <template v-for="(tagView, _index) in tagViewStore.visitedViews"
                 :key="tagView.title">
         <el-tag
             :class="{ active: route.path === tagView.path }"
@@ -164,8 +188,8 @@ onMounted(() => {
             class="tag-view-item"
             disable-transitions
             @click="changeTagView(tagView)"
-            @close="closeTagView(tagView)"
-            @contextmenu.prevent="openTagMenu(tagView, $event)">
+            @close="closeTagView(_index, 'selected')"
+            @contextmenu.prevent="openTagMenu(_index, $event)">
           <div class="tag-view-content">
             <span v-show="route.path === tagView.path"
                   class="dot"></span>
@@ -183,37 +207,40 @@ onMounted(() => {
     <ul v-show="tagMenuVisible"
         :style="{ left: left + 'px', top: top + 'px' }"
         class="tag-menu">
-      <li>
+      <li @click="refreshTagView(selectedIndex)">
         <el-icon>
           <Refresh/>
         </el-icon>
         刷新
       </li>
-      <li>
+      <li v-if="!isAffix()"
+          @click="closeTagView(selectedIndex, 'selected')">
         <el-icon>
           <Close/>
         </el-icon>
         关闭
       </li>
-      <li>
-        <el-icon>
-          <Sort/>
-        </el-icon>
-        关闭其它
-      </li>
-      <li>
+      <li v-if="!isFirstTagView()"
+          @click="closeTagView(selectedIndex, 'left')">
         <el-icon>
           <Back/>
         </el-icon>
         关闭左侧
       </li>
-      <li>
+      <li v-if="!isLastTagView()"
+          @click="closeTagView(selectedIndex, 'right')">
         <el-icon>
           <Right/>
         </el-icon>
         关闭右侧
       </li>
-      <li>
+      <li @click="closeTagView(selectedIndex, 'other')">
+        <el-icon>
+          <Sort/>
+        </el-icon>
+        关闭其它
+      </li>
+      <li @click="closeTagView(selectedIndex, 'all')">
         <el-icon>
           <Minus/>
         </el-icon>

@@ -50,16 +50,19 @@ router.beforeEach((to, _, next) => {
 // 后置路由守卫
 router.afterEach((to) => {
   // 添加路由到状态
-  const tagViewStore = useTagViewStore()
-  const tagView: TagView = {
-    path: to.path,
-    fullPath: to.fullPath,
-    name: to.name as string,
-    title: to.meta.title as string,
-    affix: to.meta?.affix as boolean,
-    keepAlive: to.meta?.keepAlive as boolean
+  if (!to.meta.hidden) {
+    const tagViewStore = useTagViewStore()
+    const tagView: TagView = {
+      path: to.path,
+      fullPath: to.fullPath,
+      name: to.name as string,
+      query: to.query,
+      title: to.meta.title as string,
+      affix: to.meta?.affix as boolean,
+      keepAlive: to.meta?.keepAlive as boolean
+    }
+    tagViewStore.addView(tagView)
   }
-  tagViewStore.addView(tagView)
 
   // 设置 title
   if (to.meta.title) {

@@ -5,7 +5,6 @@ const defaultRoutes = [
     component: () => import('@/layout/Layout.vue'),
     redirect: '/home',
     meta: {
-      icon: 'HomeFilled',
       require: true
     },
     children: [
@@ -14,6 +13,7 @@ const defaultRoutes = [
         name: 'Home',
         component: () => import('@/layout/Home.vue'),
         meta: {
+          icon: 'HomeFilled',
           title: '首页',
           require: true,
           affix: true
@@ -27,6 +27,16 @@ const defaultRoutes = [
           title: '404',
           require: true
         }
+      },
+      {
+        path: '/redirect/:path(.*)',
+        name: 'Redirect',
+        meta: {
+          title: '重定向',
+          require: true,
+          hidden: true
+        },
+        component: () => import('@/layout/Redirect.vue')
       }
     ]
   },
