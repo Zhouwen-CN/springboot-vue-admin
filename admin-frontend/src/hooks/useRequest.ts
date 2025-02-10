@@ -1,12 +1,12 @@
 import {type Ref} from 'vue'
-import type {ResultData} from '@/api/types'
+import type {ResultData} from '@/utils/requestTypes'
 
 export interface UseRequestResult<T> {
-  loading: Ref<boolean>
-  data: Ref<T | undefined>
-  onSuccess: (callback: (data: T) => void) => void
-  onError: (callback: (err: unknown) => void) => void
-  run: (...args: any) => Promise<void>
+    loading: Ref<boolean>
+    data: Ref<T | undefined>
+    onSuccess: (callback: (data: T) => void) => void
+    onError: (callback: (err: unknown) => void) => void
+    run: (...args: any) => Promise<void>
 }
 
 /**

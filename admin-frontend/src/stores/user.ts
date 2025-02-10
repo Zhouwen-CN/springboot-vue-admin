@@ -4,16 +4,17 @@ import {type MenuInfo, reqGetMenuList} from '@/api/auth/menu'
 import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
 import router, {modules} from '@/router'
 import {getItem, removeItem, setItem} from '@/utils/localstorageUtil'
+import useTagViewStore from '@/stores/tagView'
 
 const useUserStore = defineStore('user', () => {
-  const userInfo = ref<UserInfo>(getItem<UserInfo>('USER_INFO', '{}'))
-  const menuInfo = ref<MenuInfo[]>(getItem<MenuInfo[]>('MENU_INFO', '[]'))
-  let refreshTokenPromise: Promise<boolean> | null = null
+    const userInfo = ref<UserInfo>(getItem<UserInfo>('USER_INFO', '{}'))
+    const menuInfo = ref<MenuInfo[]>(getItem<MenuInfo[]>('MENU_INFO', '[]'))
+    let refreshTokenPromise: Promise<boolean> | null = null
 
-  // 登入
-  async function doLogin(loginForm: LoginForm) {
-    const result = await reqLogin(loginForm)
-    userInfo.value = result.data
+    // 登入
+    async function doLogin(loginForm: LoginForm) {
+        const result = await reqLogin(loginForm)
+        userInfo.value = result.data
     setItem('USER_INFO', userInfo.value)
   }
 
@@ -28,7 +29,7 @@ const useUserStore = defineStore('user', () => {
         // 状态码!=200，拦截器会返回一个失败的promise
         const result = await reqRefreshToken(userInfo.value.refreshToken)
         if (result.code === 200) {
-          const {accessToken, refreshToken} = result.data
+            const {accessToken, refreshToken} = result.data
           userInfo.value.accessToken = accessToken
           userInfo.value.refreshToken = refreshToken
           setItem('USER_INFO', userInfo.value)
@@ -51,7 +52,8 @@ const useUserStore = defineStore('user', () => {
   async function doLogout() {
     await reqLogout(userInfo.value.id)
     $reset()
-    deleteAsyncRoutes(router)
+      deleteAsyncRoutes(router)
+      useTagViewStore().$reset()
   }
 
   // 获取菜单信息
@@ -76,7 +78,7 @@ const useUserStore = defineStore('user', () => {
     menuInfo.value = []
   }
 
-  return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}
+    return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}
 })
 
 export default useUserStore

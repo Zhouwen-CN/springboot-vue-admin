@@ -65,7 +65,7 @@ function changeCollapse() {
         <el-avatar
             shape="square"
             size="default"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
+            :src="settingStore.avatarUrl">
         </el-avatar>
 
         <el-dropdown>

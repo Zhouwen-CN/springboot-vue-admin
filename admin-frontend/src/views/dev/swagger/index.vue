@@ -1,7 +1,7 @@
 <script setup>
 import 'swagger-ui-dist/swagger-ui.css'
 import {SwaggerUIBundle, SwaggerUIStandalonePreset} from "swagger-ui-dist"
-import request from '@/api/request'
+import request from '@/utils/request'
 
 onMounted(async () => {
 

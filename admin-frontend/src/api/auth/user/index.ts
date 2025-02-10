@@ -1,11 +1,11 @@
-import request from '@/api/request'
-import type {CreateAndUpdateTime} from '@/api/types'
+import request from '@/utils/request'
+import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 import type {Role} from '@/api/auth/role'
 
 export interface LoginForm {
-  username: string
-  password: string
+    username: string
+    password: string
 }
 
 type RoleList = Omit<Role, 'desc' | 'createTime' | 'updateTime'>[]
@@ -96,5 +96,5 @@ export function reqDeleteUser(id: number) {
  * @returns
  */
 export function reqDeleteUsers(ids: number[]) {
-  return request.delete<any, number[]>('/user', {data: ids})
+    return request.delete<any, number[]>('/user', {data: ids})
 }

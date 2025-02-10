@@ -24,8 +24,10 @@ const defaultRoutes = [
         name: '404',
         component: () => import('@/layout/404.vue'),
         meta: {
-          title: '404',
-          require: true
+            icon: 'WarningFilled',
+            title: '404',
+            require: true,
+            hidden: true
         }
       },
       {
@@ -45,8 +47,9 @@ const defaultRoutes = [
     name: 'Login',
     component: () => import('@/layout/Login.vue'),
     meta: {
-      title: '登入',
-      require: true
+        title: '登入',
+        require: true,
+        hidden: true
     }
   },
   {

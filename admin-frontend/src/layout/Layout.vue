@@ -22,12 +22,14 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
       <el-scrollbar>
         <div
             :style="{ margin: settingStore.collapse ? '0' : '0 20px' }"
-            class="aside_header">
+            class="aside-header">
           <img
               :style="{ 'margin-right': settingStore.collapse ? '0' : '10px' }"
               alt=""
               src="@/assets/logo.svg"/>
-          <h1 v-show="!settingStore.collapse">SV Admin</h1>
+          <h1 v-show="!settingStore.collapse">
+            {{ settingStore.appShortName }}
+          </h1>
         </div>
 
         <el-menu
@@ -103,7 +105,7 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
   background-color: #304156;
   border-right: 0.8px solid var(--el-border-color);
 
-  .aside_header {
+  .aside-header {
     height: $base_header_height;
     display: flex;
     align-items: center;

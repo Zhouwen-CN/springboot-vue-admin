@@ -76,16 +76,22 @@ const useTagViewStore = defineStore('tagView', () => {
       removeCacheView(v)
     }
 
-    return isDeletedActive
+      return isDeletedActive
   }
 
-  // 删除缓存页面
-  function removeCacheView(tagView: TagView) {
-    const index = cachedViews.value.indexOf(tagView.name)
-    index > -1 && cachedViews.value.splice(index, 1)
-  }
+    // 删除缓存页面
+    function removeCacheView(tagView: TagView) {
+        const index = cachedViews.value.indexOf(tagView.name)
+        index > -1 && cachedViews.value.splice(index, 1)
+    }
 
-  return {cachedViews, visitedViews, addView, removeView, removeCacheView}
+    // 重置仓库
+    function $reset() {
+        cachedViews.value = []
+        visitedViews.value = []
+    }
+
+    return {cachedViews, visitedViews, addView, removeView, removeCacheView, $reset}
 })
 
 export default useTagViewStore

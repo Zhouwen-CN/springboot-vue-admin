@@ -1,17 +1,17 @@
 import {type Ref} from 'vue'
-import request from '@/api/request'
-import type {Page} from '@/api/types'
+import request from '@/utils/request'
+import type {Page} from '@/utils/requestTypes'
 import type {AxiosRequestConfig} from 'axios'
 
 export interface PaginationResult<T> {
-  loading: Ref<boolean>
-  current: Ref<number>
-  total: Ref<number>
-  size: Ref<number>
-  sizeOption: Array<number>
-  data: Ref<T[]>
-  refresh: (config?: AxiosRequestConfig) => void
-  onPageChange: (pageNumber: number, config?: AxiosRequestConfig) => void
+    loading: Ref<boolean>
+    current: Ref<number>
+    total: Ref<number>
+    size: Ref<number>
+    sizeOption: Array<number>
+    data: Ref<T[]>
+    refresh: (config?: AxiosRequestConfig) => void
+    onPageChange: (pageNumber: number, config?: AxiosRequestConfig) => void
   onSizeChange: (pageSize: number, config?: AxiosRequestConfig) => void
 }
 
@@ -35,22 +35,22 @@ function usePagination<T>(
   const data = ref<T[]>([]) as Ref<T[]>
 
   function refresh(config?: AxiosRequestConfig) {
-    loading.value = true
-    request
-        .get<Page<T>>(`${baseUrl}/${size.value}/${current.value}`, config)
-        .then((res) => {
-          const page = res.data
-          current.value = page.current
-          total.value = page.total
-          size.value = page.size
-          data.value = page.records
-        })
-        .catch((err) => {
-          console.warn(err)
-        })
-        .finally(() => {
-          loading.value = false
-        })
+      loading.value = true
+      request
+          .get<Page<T>>(`${baseUrl}/${size.value}/${current.value}`, config)
+          .then((res) => {
+              const page = res.data
+              current.value = page.current
+              total.value = page.total
+              size.value = page.size
+              data.value = page.records
+          })
+          .catch((err) => {
+              console.warn(err)
+          })
+          .finally(() => {
+              loading.value = false
+          })
   }
 
   function onPageChange(pageNumber: number, config?: AxiosRequestConfig) {

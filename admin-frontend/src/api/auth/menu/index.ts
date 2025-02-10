@@ -1,15 +1,15 @@
-import request from '@/api/request'
-import {type CreateAndUpdateTime} from '@/api/types'
+import request from '@/utils/request'
+import {type CreateAndUpdateTime} from '@/utils/requestTypes'
 
 export interface MenuInfo extends CreateAndUpdateTime {
-  id: number
-  title: string
-  name: string
-  accessPath: string
-  filePath: string
-  icon: string
-  keepAlive: boolean
-  pid: number
+    id: number
+    title: string
+    name: string
+    accessPath: string
+    filePath: string
+    icon: string
+    keepAlive: boolean
+    pid: number
   children: MenuInfo[]
 }
 
@@ -18,7 +18,7 @@ export interface MenuInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetMenuList(roleIds: number[]) {
-  return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
+    return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
 }
 
 export interface MenuForm {

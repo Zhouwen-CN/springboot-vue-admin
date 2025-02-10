@@ -22,5 +22,13 @@ interface ImportMetaEnv {
     readonly VITE_APP_SERVER: string
     // axios超时时间
     readonly VITE_APP_TIMEOUT: number
+    // 项目名称
+    readonly VITE_APP_NAME: string
+    // 项目简称
+    readonly VITE_APP_SHORT_NAME: string
+    // 项目地址
+    readonly VITE_APP_GITEE_LINK: string
+    // 头像地址
+    readonly VITE_APP_AVATAR_URL: string
     // 更多环境变量...
 }

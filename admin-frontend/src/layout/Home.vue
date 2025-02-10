@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
 import {Link} from '@element-plus/icons-vue'
+import useSettingStore from '@/stores/setting'
 
 const userStore = useUserStore()
+const settingStore = useSettingStore()
 </script>
 
 <template>
@@ -14,14 +16,14 @@ const userStore = useUserStore()
             class="avatar"
             src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
         <div class="message">
-          <h3 class="welcome_msg">Welcome
+          <h3 class="welcome-msg">Welcome
             {{ userStore.userInfo.username }}
           </h3>
           <div>
             <el-link
                 :icon="Link"
-                class="title_msg"
-                href="https://gitee.com/Zhouwen-CN/springboot-vue-admin"
+                :href="settingStore.giteeLink"
+                class="gitee-link"
                 target="_blank"
                 type="primary">
               Springboot-Vue-Admin Project Gitee Link
@@ -31,7 +33,7 @@ const userStore = useUserStore()
       </div>
     </el-card>
 
-    <div class="welcome_img">
+    <div class="welcome-img">
       <img alt="" src="@/assets/images/welcome.svg" width="400px"/>
     </div>
   </div>
@@ -54,18 +56,18 @@ const userStore = useUserStore()
     justify-content: space-around;
     margin-left: 30px;
 
-    .welcome_msg {
+    .welcome-msg {
       font-size: 30px;
       font-weight: 700;
     }
 
-    .title_msg {
+    .gitee-link {
       font-size: 16px;
     }
   }
 }
 
-.welcome_img {
+.welcome-img {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -3,9 +3,11 @@ import {Lock, User} from '@element-plus/icons-vue'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import type {LoginForm} from '@/api/auth/user'
 import useUserStore from '@/stores/user'
+import useSettingStore from '@/stores/setting'
 
-const userStore = useUserStore()
 const router = useRouter()
+const userStore = useUserStore()
+const settingStore = useSettingStore()
 const loading = ref<boolean>(false)
 const ruleFormRef = ref<FormInstance>()
 const loginForm = reactive<LoginForm>({
@@ -61,7 +63,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
       <el-form ref="ruleFormRef" :model="loginForm" :rules="rules"
                @submit.prevent="onSubmit(ruleFormRef)"
                class="form" size="large">
-        <h1>Sringboot Vue Admin</h1>
+        <h1>{{ settingStore.appName }}</h1>
         <el-form-item prop="username">
           <el-input
               v-model="loginForm.username"
