@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeeiee.mapper.RoleMapper">
+    <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.vo.RoleMenuVo">
@@ -16,24 +17,23 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , role_name, create_time, update_time
+        id, role_name, create_time, update_time
     </sql>
     <select id="selectRolePages" resultMap="BaseResultMap">
         select /*+ UseLimitPushDown */
-        a.id,
-        a.role_name,
-        a.`desc`,
-        a.create_time,
-        a.update_time,
-        b.menu_id
+            a.id,
+            a.role_name,
+            a.`desc`,
+            a.create_time,
+            a.update_time,
+            b.menu_id
         from (
-        select
-        *
-        from t_role
-        <if test="searchName != null and searchName.trim() != ''">
-            where t_role.role_name like concat('%',#{searchName},'%')
-        </if>
+            select
+                *
+            from t_role
+            <if test="searchName != null and searchName.trim() != ''">
+                where t_role.role_name like concat('%',#{searchName},'%')
+            </if>
         ) a
         left join t_role_menu b
         on a.id=b.role_id
@@ -44,12 +44,12 @@
             b.id as id,
             b.role_name as roleName
         from (
-            select *
+            select
+                *
             from t_user_role
             where user_id = #{userId}
         ) a
         left join t_role b
         on a.role_id = b.id
     </select>
-
 </mapper>

@@ -50,6 +50,7 @@ public final class MybatisGeneratorUtil {
                 .globalConfig(builder -> builder.author("chen")
                         .enableSpringdoc()
                         .outputDir(projectPath + "/src/main/java")
+                        .disableOpenDir()
                 )
                 .dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
                     int typeCode = metaInfo.getJdbcType().TYPE_CODE;
@@ -90,14 +91,14 @@ public final class MybatisGeneratorUtil {
                             .template("/templates/controller.java")
                             .superClass(BaseController.class)
                             .enableRestStyle()
-                    // .enableFileOverride()
+                            .enableFileOverride()
                     ;
 
                     builder.serviceBuilder()
                             .serviceTemplate("/templates/service.java")
                             .serviceImplTemplate("/templates/serviceImpl.java")
                             .formatServiceFileName("%sService")
-                    // .enableFileOverride()
+                            .enableFileOverride()
                     ;
 
                     builder.mapperBuilder()
@@ -115,6 +116,6 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_menu");
+        generator(args[0], "t_test");
     }
 }

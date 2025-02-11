@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeeiee.mapper.UserMapper">
+    <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
     <resultMap id="UserRoleVo" type="com.yeeiee.entity.vo.UserRoleVo">
@@ -17,20 +18,20 @@
 
     <select id="selectUserPages" resultMap="UserRoleVo">
         select /*+ UseLimitPushDown */
-        a.id,
-        a.username,
-        a.password,
-        a.create_time,
-        a.update_time,
-        b.role_id,
-        c.role_name
+            a.id,
+            a.username,
+            a.password,
+            a.create_time,
+            a.update_time,
+            b.role_id,
+            c.role_name
         from (
-        select
-        *
-        from t_user
-        <if test="searchName != null and searchName.trim() != ''">
-            where username like concat('%',#{searchName},'%')
-        </if>
+            select
+                *
+            from t_user
+            <if test="searchName != null and searchName.trim() != ''">
+                where username like concat('%',#{searchName},'%')
+            </if>
         ) a
         left join t_user_role b
         on a.id = b.user_id

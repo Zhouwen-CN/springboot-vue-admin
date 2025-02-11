@@ -23,7 +23,6 @@ export function reqGetMenuList(roleIds: number[]) {
 export interface MenuForm {
   id?: number
   title: string
-  name: string
   accessPath: string
   filePath?: string
   icon: string

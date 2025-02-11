@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yeeiee.mapper.MenuMapper">
+    <!--@formatter:off-->
 
-        <!-- 通用查询映射结果 -->
+    <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.vo.MenuVo">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
@@ -17,39 +18,39 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-            id, title, access_path, file_path, icon, is_keep_alive, pid, create_time, update_time
-        </sql>
+        id, title, access_path, file_path, icon, is_keep_alive, pid, create_time, update_time
+    </sql>
 
     <select id="selectMenusByRoleIds" resultMap="BaseResultMap" parameterType="collection">
         select
-        a.id,
-        a.title,
-        a.access_path,
-        a.file_path,
-        a.icon,
-        a.is_keep_alive,
-        a.pid,
-        a.create_time,
-        a.update_time
+            a.id,
+            a.title,
+            a.access_path,
+            a.file_path,
+            a.icon,
+            a.is_keep_alive,
+            a.pid,
+            a.create_time,
+            a.update_time
         from t_menu a
         join (
-        select
-        menu_id
-        from t_role_menu
-        <where>
-            <choose>
-                <when test="roleIds != null and roleIds.size() > 0">
-                    role_id in
-                    <foreach collection="roleIds" item="item" open="(" separator="," close=")">
-                        #{item}
-                    </foreach>
-                </when>
-                <otherwise>
-                    1!=1
-                </otherwise>
-            </choose>
-        </where>
-        group by menu_id
+            select
+                menu_id
+            from t_role_menu
+            <where>
+                <choose>
+                    <when test="roleIds != null and roleIds.size() > 0">
+                        role_id in
+                        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                        1!=1
+                    </otherwise>
+                </choose>
+            </where>
+            group by menu_id
         ) b
         on a.id = b.menu_id
         order by a.id
