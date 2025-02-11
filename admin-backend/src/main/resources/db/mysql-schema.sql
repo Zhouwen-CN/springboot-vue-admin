@@ -53,7 +53,6 @@ create table t_menu
 (
     id          bigint primary key auto_increment comment '主键',
     title       varchar(15) not null comment '标题',
-    name        varchar(15) not null comment '组件名称&路由名称',
     access_path varchar(40) not null comment '访问路径',
     file_path   varchar(60) null comment '文件路径',
     icon        varchar(15) not null comment '图标',

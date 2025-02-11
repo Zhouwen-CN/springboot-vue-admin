@@ -21,7 +21,6 @@ import java.util.List;
 public class MenuVo {
     private Long id;
     private String title;
-    private String name;
     private String accessPath;
     private String filePath;
     private String icon;

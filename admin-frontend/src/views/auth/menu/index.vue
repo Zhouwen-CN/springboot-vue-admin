@@ -19,7 +19,6 @@ const toggleDialog = reactive({
 const menuForm = reactive<MenuForm>({
   id: undefined,
   title: '',
-  name: '',
   accessPath: '',
   filePath: undefined,
   icon: '',
@@ -47,19 +46,11 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
   }
 }
 
-const validateName = (rule: any, value: any, callback: any) => {
-  if (/^[a-z]+(-[a-z0-9]+)*$/.test(value)) {
-    callback()
-  } else {
-    callback(new Error('组件名称须是 kebab-case 命名，最好是将访问路径改为 kebab-case 的形式'))
-  }
-}
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     {required: true, message: '请输入菜单名称', trigger: 'blur'},
     {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
   ],
-  name: [{validator: validateName, trigger: 'blur'}],
   accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
   filePath: [{validator: validateFilePath, trigger: 'blur'}],
   icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
@@ -90,7 +81,6 @@ function updateMenu(row: MenuInfo) {
   toggleDialog.title = '更新菜单'
   menuForm.id = row.id
   menuForm.title = row.title
-  menuForm.name = row.name
   menuForm.accessPath = row.accessPath
   menuForm.filePath = row.filePath
   menuForm.icon = row.icon
@@ -129,7 +119,6 @@ async function onSubmit(formEl: FormInstance | undefined) {
 function clean() {
   toggleDialog.title = ''
   menuForm.id = undefined
-  menuForm.name = ''
   menuForm.title = ''
   menuForm.accessPath = ''
   menuForm.filePath = undefined
@@ -166,7 +155,6 @@ function clean() {
             </el-space>
           </template>
         </el-table-column>
-        <el-table-column label="组件名称" prop="name"/>
         <el-table-column label="访问路径" prop="accessPath"/>
         <el-table-column label="文件路径" prop="filePath"/>
         <el-table-column align="center" label="是否缓存" min-width="30px"
@@ -217,10 +205,6 @@ function clean() {
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title"
                       placeholder="请输入菜单名称"></el-input>
-          </el-form-item>
-          <el-form-item label="组件名称" prop="name">
-            <el-input v-model="menuForm.name"
-                      placeholder="请输入组件名称"></el-input>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath"

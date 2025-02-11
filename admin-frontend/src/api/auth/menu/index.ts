@@ -4,13 +4,12 @@ import {type CreateAndUpdateTime} from '@/utils/requestTypes'
 export interface MenuInfo extends CreateAndUpdateTime {
     id: number
     title: string
-    name: string
     accessPath: string
     filePath: string
     icon: string
     keepAlive: boolean
     pid: number
-  children: MenuInfo[]
+    children: MenuInfo[]
 }
 
 /**

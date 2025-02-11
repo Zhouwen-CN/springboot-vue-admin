@@ -3,7 +3,7 @@ import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
 
 /**
  * 给组件注册 name 属性值
- * @param componentName 组件名称
+ * @param componentName 组件名称 & 路由名称
  * @param component 组件
  * @returns
  */
@@ -33,14 +33,15 @@ export function getAsyncRoutes(
     menus: MenuInfo[]
 ): RouteRecordSingleViewWithChildren[] {
   return menus.map((menu) => {
+    const componentName = 'sv' + menu.accessPath.replaceAll('/', '-')
     let component = modules[`../views${menu.filePath}`]
     if (component) {
-      component = registerComponentName(menu.name, component)
+      component = registerComponentName(componentName, component)
     }
 
     const route: RouteRecordSingleViewWithChildren = {
       path: menu.accessPath,
-      name: menu.name,
+      name: componentName,
       component,
       meta: {
         title: menu.title,
@@ -89,6 +90,6 @@ export function initAsyncRoutes(router: Router, modules: Record<string, () => Pr
   const menus = JSON.parse(localStorageUserInfo) as MenuInfo[]
   const routes = getAsyncRoutes(modules, menus)
   routes.forEach((route) => {
-    router.addRoute('Layout', route)
+    router.addRoute('sv-layout', route)
   })
 }
