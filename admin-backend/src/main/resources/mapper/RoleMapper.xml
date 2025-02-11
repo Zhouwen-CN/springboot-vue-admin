@@ -9,6 +9,9 @@
         <result column="desc" property="desc"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <collection column="menu_id" property="menuIds" ofType="java.lang.Long">
+            <id column="menu_id" property="menuIds"/>
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -16,14 +19,14 @@
         id
         , role_name, create_time, update_time
     </sql>
-    <select id="selectRolePages" resultType="com.yeeiee.entity.vo.RoleMenuVo">
-        select
+    <select id="selectRolePages" resultMap="BaseResultMap">
+        select /*+ UseLimitPushDown */
         a.id,
         a.role_name,
         a.`desc`,
-        group_concat(b.menu_id) as menu_ids,
         a.create_time,
-        a.update_time
+        a.update_time,
+        b.menu_id
         from (
         select
         *
@@ -34,7 +37,6 @@
         ) a
         left join t_role_menu b
         on a.id=b.role_id
-        group by a.id, a.role_name, a.`desc`, a.create_time, a.update_time
     </select>
 
     <select id="selectRoleListByUserId" resultType="com.yeeiee.entity.vo.RoleVo">

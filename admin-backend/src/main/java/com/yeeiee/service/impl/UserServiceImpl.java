@@ -30,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -42,12 +44,11 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    public static final String BCRYPT_PREFIX = "$2a$10$";
     private final UserRoleService userRoleService;
     private final UserMapper userMapper;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    public static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2([ayb])?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
     @Override
     public UserVo refreshToken(HttpServletRequest request) {
@@ -114,8 +115,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
             loginLogService.save(loginLog);
         }
-
-
     }
 
     @Override
@@ -153,9 +152,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
-    /*
-        todo: 直接判断 password.startsWith 是不是不太合适
-     */
     @Override
     public void modifyUser(UserRoleIdsDto userRoleIdsDto) {
         val userId = userRoleIdsDto.getId();
@@ -165,10 +161,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!StringUtils.hasText(password)) {
             throw new DmlOperationException("密码不能为空");
         }
-        // 所有加密的密码都是以这个开头的
-        if (!password.startsWith(BCRYPT_PREFIX)) {
+
+        // 如果不符合加密模式，则进行加密
+        Matcher matcher = BCRYPT_PATTERN.matcher(password);
+        if (!matcher.matches()) {
             userRoleIdsDto.setPassword(bCryptPasswordEncoder.encode(password));
         }
+
         val user = new User();
         user.setId(userRoleIdsDto.getId());
         user.setUsername(userRoleIdsDto.getUsername());

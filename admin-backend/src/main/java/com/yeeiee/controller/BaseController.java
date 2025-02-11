@@ -6,12 +6,7 @@ import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,7 +34,7 @@ public abstract class BaseController<S extends IService<D>, D> {
     }
 
     @Operation(summary = "查询列表")
-    @GetMapping("")
+    @GetMapping
     public R<List<D>> getList() {
         val list = service.list();
         return R.ok(list);
@@ -60,14 +55,14 @@ public abstract class BaseController<S extends IService<D>, D> {
     }
 
     @Operation(summary = "新增")
-    @PostMapping("")
+    @PostMapping
     public R<String> add(@RequestBody D entity) {
         service.save(entity);
         return R.ok();
     }
 
     @Operation(summary = "更新")
-    @PutMapping("")
+    @PutMapping
     public R<String> modify(@RequestBody D entity) {
         service.updateById(entity);
         return R.ok();

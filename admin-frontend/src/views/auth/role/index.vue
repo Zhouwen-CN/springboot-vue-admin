@@ -72,7 +72,7 @@ function updateRole(row: RoleMenuInfo) {
   roleMenuForm.id = row.id
   roleMenuForm.roleName = row.roleName
   roleMenuForm.desc = row.desc
-  const menuIds = row.menuIds?.split(',').map((id) => Number(id)) || []
+  const menuIds = row.menuIds
   roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuInfo[], menuIds)
 }
 

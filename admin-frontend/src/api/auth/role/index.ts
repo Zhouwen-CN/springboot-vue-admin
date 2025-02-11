@@ -3,9 +3,9 @@ import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
 export interface Role extends CreateAndUpdateTime {
-    id: number
-    roleName: string
-    desc: string
+  id: number
+  roleName: string
+  desc: string
 }
 
 /**
@@ -17,7 +17,7 @@ export function reqGetRoles() {
 }
 
 export interface RoleMenuInfo extends Role {
-  menuIds: string
+  menuIds: number[]
 }
 
 /**
@@ -63,5 +63,5 @@ export function reqDeleteRole(id: number) {
  * @returns
  */
 export function reqDeleteRoles(ids: number[]) {
-    return request.delete<any, number[]>('/role', {data: ids})
+  return request.delete<any, number[]>('/role', {data: ids})
 }

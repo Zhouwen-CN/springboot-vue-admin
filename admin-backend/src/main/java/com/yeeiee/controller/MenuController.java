@@ -8,15 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,21 +29,21 @@ public class MenuController {
     private final MenuService menuService;
 
     @Operation(summary = "查询菜单列表")
-    @GetMapping("")
+    @GetMapping
     public R<List<MenuVo>> getMenuList(@RequestParam("ids") Collection<Long> ids) {
         val menuList = menuService.getMenuList(ids);
         return R.ok(menuList);
     }
 
     @Operation(summary = "新增菜单")
-    @PostMapping("")
+    @PostMapping
     public R<String> addMenu(@RequestBody Menu menu) {
         menuService.addMenu(menu);
         return R.ok();
     }
 
     @Operation(summary = "更新菜单")
-    @PutMapping("")
+    @PutMapping
     public R<String> modifyMenu(@RequestBody Menu menu) {
         menuService.updateById(menu);
         return R.ok();

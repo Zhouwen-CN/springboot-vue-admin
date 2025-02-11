@@ -12,15 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,24 +45,23 @@ public class RoleController {
      * 默认不会查询出admin角色
      */
     @Operation(summary = "查询角色列表")
-    @GetMapping("")
+    @GetMapping
     public R<List<Role>> getRoleList() {
-        // 不能给别的用户 admin 角色
         val list = roleService.lambdaQuery()
-                .ne(Role::getRoleName, "admin")
+                .ne(Role::getId, 1L)
                 .list();
         return R.ok(list);
     }
 
     @Operation(summary = "新增角色")
-    @PostMapping("")
+    @PostMapping
     public R<String> addRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
         roleService.addRole(roleMenuIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
-    @PutMapping("")
+    @PutMapping
     public R<String> modifyRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
         roleService.modifyRole(roleMenuIdsDto);
         return R.ok();
@@ -85,7 +76,7 @@ public class RoleController {
 
 
     @Operation(summary = "批量删除角色")
-    @DeleteMapping("")
+    @DeleteMapping
     public R<String> removeRoleByIds(@RequestBody Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
