@@ -24,14 +24,12 @@ import java.time.LocalDateTime;
 public class MybatisPlusConfig implements MetaObjectHandler {
 
     /**
-     * 添加分页插件
+     * mybatis plus插件
+     * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         val interceptor = new MybatisPlusInterceptor();
-
-        // 防全表更新与删除插件：插件默认拦截没有指定条件的 update 和 delete 语句
-        interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
 
         val paginationInnerInterceptor = new PaginationInnerInterceptor();
         // 数据库类型，如果有多数据源可以不配具体类型 否则都建议配上具体的DbType
@@ -40,10 +38,13 @@ public class MybatisPlusConfig implements MetaObjectHandler {
         paginationInnerInterceptor.setDialect(new MySqlPaginationDialect());
         // 溢出总页数后是否进行处理
         paginationInnerInterceptor.setOverflow(true);
-        // 单页分页条数限制，不会报错，会修正成 size=100
-        paginationInnerInterceptor.setMaxLimit(100L);
+        // 单页分页条数限制，不会报错，会修正成 size=20
+        paginationInnerInterceptor.setMaxLimit(20L);
         // 如果配置多个插件,切记分页最后添加
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
+
+        // 防全表更新与删除插件：插件默认拦截没有指定条件的 update 和 delete 语句
+        interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         return interceptor;
     }
 

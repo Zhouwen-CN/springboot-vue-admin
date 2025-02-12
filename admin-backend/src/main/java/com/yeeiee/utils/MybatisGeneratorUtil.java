@@ -33,6 +33,27 @@ public final class MybatisGeneratorUtil {
         return AES.decrypt(data, key);
     }
 
+    /*
+
+
+        1. 基本配置
+        author: chen
+        basePackage: com.yeeiee
+        ignoreTablePrefix: t_
+        ignoreFiledPrefix:
+        enableSpringdoc || enableSwagger
+        outputDir: D:\work\idea\springboot-vue-admin\admin-backend
+
+        dataSource：数据源
+
+        2. 建立连接获取表名称：穿梭框？
+        tableNames:[]
+
+        3. 生成代码预览
+
+        4. 确认生成代码
+
+     */
     public static void generator(String key, String... tableName) {
         val factoryBean = new YamlPropertiesFactoryBean();
         val resource = new ClassPathResource("application-dev.yml");
@@ -117,5 +138,21 @@ public final class MybatisGeneratorUtil {
 
     public static void main(String[] args) {
         generator(args[0], "t_test");
+        // val key = args[0];
+        // val factoryBean = new YamlPropertiesFactoryBean();
+        // val resource = new ClassPathResource("application-dev.yml");
+        // factoryBean.setResources(resource);
+        //
+        // Properties properties = factoryBean.getObject();
+        // assert properties != null;
+        // val url = decrypt(properties.getProperty("spring.datasource.url"), key);
+        // val username = decrypt(properties.getProperty("spring.datasource.username"), key);
+        // val password = decrypt(properties.getProperty("spring.datasource.password"), key);
+        // val dataSourceConfig = new DataSourceConfig.Builder(url, username, password).build();
+        //
+        // dataSourceConfig.getDatabaseQueryClass()
+        //
+        // val autoGenerator = new AutoGenerator(dataSourceConfig);
+
     }
 }

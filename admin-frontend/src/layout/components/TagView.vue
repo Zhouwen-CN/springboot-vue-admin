@@ -11,6 +11,7 @@ const tagViewStore = useTagViewStore()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 // 当前滚动的距离
 let currentScrollLeft = 0
+
 // 触发滚动事件时，更新当前滚动的距离
 function scrollHandler({scrollLeft}: { scrollLeft: number }) {
   currentScrollLeft = scrollLeft
@@ -189,7 +190,8 @@ onMounted(() => {
             disable-transitions
             @click="changeTagView(tagView)"
             @close="closeTagView(_index, 'selected')"
-            @contextmenu.prevent="openTagMenu(_index, $event)">
+            @contextmenu.prevent="openTagMenu(_index, $event)"
+            @click.middle="closeTagView(_index, 'selected')">
           <div class="tag-view-content">
             <span v-show="route.path === tagView.path"
                   class="dot"></span>

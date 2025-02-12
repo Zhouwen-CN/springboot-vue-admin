@@ -14,7 +14,7 @@ const settingStore = useSettingStore()
         <img
             alt=""
             class="avatar"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+            :src="settingStore.avatarUrl"/>
         <div class="message">
           <h3 class="welcome-msg">Welcome
             {{ userStore.userInfo.username }}
