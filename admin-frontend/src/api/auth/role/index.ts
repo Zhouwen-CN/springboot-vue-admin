@@ -2,9 +2,12 @@ import request from '@/utils/request'
 import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
-export interface Role extends CreateAndUpdateTime {
+interface RoleCompact {
   id: number
   roleName: string
+}
+
+export interface Role extends RoleCompact, CreateAndUpdateTime {
   desc: string
 }
 
@@ -13,7 +16,7 @@ export interface Role extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetRoles() {
-  return request.get<Role[]>('/role')
+  return request.get<RoleCompact[]>('/role')
 }
 
 export interface RoleMenuInfo extends Role {

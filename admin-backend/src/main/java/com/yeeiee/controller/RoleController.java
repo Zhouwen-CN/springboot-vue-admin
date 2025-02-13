@@ -2,9 +2,9 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.Role;
 import com.yeeiee.entity.dto.RoleMenuIdsDto;
 import com.yeeiee.entity.vo.RoleMenuVo;
+import com.yeeiee.entity.vo.RoleVo;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,11 +46,8 @@ public class RoleController {
      */
     @Operation(summary = "查询角色列表")
     @GetMapping
-    public R<List<Role>> getRoleList() {
-        val list = roleService.lambdaQuery()
-                .ne(Role::getId, 1L)
-                .list();
-        return R.ok(list);
+    public R<List<RoleVo>> getRoleList() {
+        return R.ok(roleService.getRoleVoList());
     }
 
     @Operation(summary = "新增角色")

@@ -52,4 +52,11 @@
         left join t_role b
         on a.role_id = b.id
     </select>
+
+    <select id="selectRoleVoList" resultType="com.yeeiee.entity.vo.RoleVo">
+        select
+            id,
+            role_name as roleName
+        from t_role
+    </select>
 </mapper>

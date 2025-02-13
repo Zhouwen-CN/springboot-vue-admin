@@ -64,3 +64,13 @@ VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, '2024-05-06 13:46:48', '
         '2025-01-15 00:00:00'),
        (13, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 0, 10, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00');
+
+
+delete from `t_dict_type`;
+insert into t_dict_type(id, name, type) values(1,'登入操作','login_operation');
+insert into t_dict_type(id, name, type) values(2,'操作状态','ops_status');
+
+
+delete from `t_dict_data`;
+insert into t_dict_data(id, type_id, dict_key, dict_value) values(1,1,1,'登入'),(2,1,0,'退出');
+insert into t_dict_data(id, type_id, dict_key, dict_value) values(3,2,1,'成功'),(4,2,0,'失败');

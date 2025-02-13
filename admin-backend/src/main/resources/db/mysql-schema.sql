@@ -109,3 +109,26 @@ create table t_error_log
     `create_time` timestamp    default CURRENT_TIMESTAMP comment '创建时间',
     index idx_create_time (`create_time` desc)
 ) comment '错误日志表';
+
+
+create table t_dict_type(
+  id bigint primary key auto_increment comment '主键',
+  name varchar(50) not null comment '字典名称',
+  type varchar(50) not null comment '字典类型',
+  is_enable tinyint(1) default 1 comment '是否启用',
+  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
+  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  constraint uniq_type unique (type)
+) comment '字典类型表';
+
+
+create table t_dict_data(
+  id bigint primary key auto_increment comment '主键',
+  type_id bigint not null comment '字典类型id',
+  dict_key varchar(50) not null comment '字典键',
+  dict_value varchar(50) not null comment '字典值',
+  dict_sort int default 0 comment '字典排序',
+  is_enable tinyint(1) default 1 comment '是否启用',
+  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
+  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
+) comment '字典数据表';
