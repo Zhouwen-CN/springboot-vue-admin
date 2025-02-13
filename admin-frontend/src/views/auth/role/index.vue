@@ -257,7 +257,6 @@ onMounted(() => {
           <!-- 树形控件 -->
           <el-form-item label="菜单权限">
             <el-tree
-                v-if="roleMenuForm.id !== 1"
                 ref="menuTreeRef"
                 :data="userStore.menuInfo"
                 :default-checked-keys="roleMenuForm.menuIds"
