@@ -4,12 +4,12 @@ use springboot_vue_admin;
 DROP TABLE IF EXISTS `t_user`;
 create table t_user
 (
-    id            bigint primary key auto_increment comment '主键',
-    username      varchar(15)      not null comment '用户名',
-    password      varchar(60)      not null comment '密码',
-    token_version bigint default 0 not null comment 'token版本',
-    create_time   timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    update_time   timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    `id`            bigint primary key auto_increment comment '主键',
+    `username`      varchar(15)      not null comment '用户名',
+    `password`      varchar(60)      not null comment '密码',
+    `token_version` bigint default 0 not null comment 'token版本',
+    `create_time`   timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time`   timestamp default CURRENT_TIMESTAMP comment '更新时间',
     constraint uniq_username unique (username)
 ) comment '用户表';
 
@@ -17,22 +17,22 @@ create table t_user
 DROP TABLE IF EXISTS `t_user_role`;
 create table t_user_role
 (
-    id          bigint primary key auto_increment comment '主键',
-    user_id     bigint not null comment '用户id',
-    role_id     bigint not null comment '角色id',
-    create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `id`          bigint primary key auto_increment comment '主键',
+    `user_id`     bigint not null comment '用户id',
+    `role_id`     bigint not null comment '角色id',
+    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment '用户角色关系表';
 
 
 DROP TABLE IF EXISTS `t_role`;
 create table t_role
 (
-    id          bigint primary key auto_increment comment '主键',
-    role_name varchar(15) not null comment '角色名称',
+    `id`          bigint primary key auto_increment comment '主键',
+    `role_name` varchar(15) not null comment '角色名称',
     `desc`    varchar(40) not null comment '角色说明',
-    create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
     constraint uniq_role_name unique (role_name)
 ) comment '角色表';
 
@@ -40,26 +40,26 @@ create table t_role
 DROP TABLE IF EXISTS `t_role_menu`;
 create table t_role_menu
 (
-    id          bigint primary key auto_increment comment '主键',
-    role_id     bigint not null comment '角色id',
-    menu_id     bigint not null comment '菜单id',
-    create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `id`          bigint primary key auto_increment comment '主键',
+    `role_id`     bigint not null comment '角色id',
+    `menu_id`     bigint not null comment '菜单id',
+    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment '用户菜单关系表';
 
 
 DROP TABLE IF EXISTS `t_menu`;
 create table t_menu
 (
-    id          bigint primary key auto_increment comment '主键',
-    title       varchar(15) not null comment '标题',
-    access_path varchar(40) not null comment '访问路径',
-    file_path   varchar(60) null comment '文件路径',
-    icon        varchar(15) not null comment '图标',
-    is_keep_alive tinyint(1) default 0 null comment '是否缓存',
-    pid         bigint      not null comment '父级菜单id',
-    create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `id`          bigint primary key auto_increment comment '主键',
+    `title`       varchar(15) not null comment '标题',
+    `access_path` varchar(40) not null comment '访问路径',
+    `file_path`   varchar(60) null comment '文件路径',
+    `icon`        varchar(15) not null comment '图标',
+    `pid`         bigint      not null comment '父级菜单id',
+    `is_keep_alive` tinyint(1) default 0 null comment '是否缓存',
+    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment '菜单表';
 
 
@@ -112,23 +112,23 @@ create table t_error_log
 
 
 create table t_dict_type(
-  id bigint primary key auto_increment comment '主键',
-  type varchar(50) not null comment '字典类型',
-  name varchar(50) not null comment '字典名称',
-  is_enable tinyint(1) default 1 comment '是否启用',
-  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  `id` bigint primary key auto_increment comment '主键',
+  `type` varchar(50) not null comment '字典类型',
+  `name` varchar(50) not null comment '字典名称',
+  `is_enable` tinyint(1) default 1 comment '是否启用',
+  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
   constraint uniq_type unique (type)
 ) comment '字典类型表';
 
 
 create table t_dict_data(
-  id bigint primary key auto_increment comment '主键',
-  type_id bigint not null comment '字典类型id',
-  dict_key varchar(50) not null comment '字典键',
-  dict_value varchar(50) not null comment '字典值',
-  dict_sort int default 0 comment '字典排序',
-  is_enable tinyint(1) default 1 comment '是否启用',
-  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
+  `id` bigint primary key auto_increment comment '主键',
+  `type_id` bigint not null comment '字典类型id',
+  `label` varchar(50) not null comment '字典键',
+  `value` int not null comment '字典值',
+  `sort` int default 0 comment '字典排序',
+  `is_enable` tinyint(1) default 1 comment '是否启用',
+  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment '字典数据表';

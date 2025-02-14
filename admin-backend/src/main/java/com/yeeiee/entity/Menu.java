@@ -1,10 +1,6 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,13 +43,13 @@ public class Menu {
     @TableField("`icon`")
     private String icon;
 
-    @Schema(description = "是否缓存")
-    @TableField("`is_keep_alive`")
-    private Boolean keepAlive;
-
     @Schema(description = "父级菜单id")
     @TableField("`pid`")
     private Long pid;
+
+    @Schema(description = "是否缓存")
+    @TableField("`is_keep_alive`")
+    private Boolean keepAlive;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

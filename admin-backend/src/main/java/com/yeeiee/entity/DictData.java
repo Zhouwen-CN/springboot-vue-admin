@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-02-13
+ * @since 2025-02-14
  */
 @Getter
 @Setter
@@ -32,16 +32,16 @@ public class DictData {
     private Long typeId;
 
     @Schema(description = "字典键")
-    @TableField("`dict_key`")
-    private String dictKey;
+    @TableField("`label`")
+    private String label;
 
     @Schema(description = "字典值")
-    @TableField("`dict_value`")
-    private String dictValue;
+    @TableField("`value`")
+    private Integer value;
 
     @Schema(description = "字典排序")
-    @TableField("`dict_sort`")
-    private Integer dictSort;
+    @TableField("`sort`")
+    private Integer sort;
 
     @Schema(description = "是否启用")
     @TableField("`is_enable`")

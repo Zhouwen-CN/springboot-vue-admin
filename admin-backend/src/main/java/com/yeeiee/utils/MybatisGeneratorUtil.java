@@ -112,14 +112,14 @@ public final class MybatisGeneratorUtil {
                             .template("/templates/controller.java")
                             .superClass(BaseController.class)
                             .enableRestStyle()
-                            .enableFileOverride()
+//                            .enableFileOverride()
                     ;
 
                     builder.serviceBuilder()
                             .serviceTemplate("/templates/service.java")
                             .serviceImplTemplate("/templates/serviceImpl.java")
                             .formatServiceFileName("%sService")
-                            .enableFileOverride()
+//                            .enableFileOverride()
                     ;
 
                     builder.mapperBuilder()
@@ -137,7 +137,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_dict_type", "t_dict_data");
+        generator(args[0], "t_dict_data");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

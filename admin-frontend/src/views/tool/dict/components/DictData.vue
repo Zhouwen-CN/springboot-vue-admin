@@ -1,0 +1,250 @@
+<script lang="ts" setup>
+import {
+  type DictData,
+  type DictDataForm,
+  reqGetDictDataPageByTypeId,
+  reqRemoveDictDataByIds,
+  reqSaveDictData
+} from '@/api/tool/dict'
+import useRequest from '@/hooks/useRequest'
+import {Search} from '@element-plus/icons-vue'
+import {type FormInstance, type FormRules} from 'element-plus'
+
+const props = defineProps({
+  typeId: {
+    type: Number,
+    required: true
+  }
+})
+
+watch(() => props.typeId, () => {
+  searchLabel.value = ''
+  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+})
+
+// 搜索关键字
+const searchLabel = ref('')
+// 字典数据表单
+const dictDataForm = reactive<DictDataForm>({
+  id: undefined,
+  typeId: props.typeId,
+  label: '',
+  value: 0,
+  sort: 0,
+  enable: true
+})
+// 字典数据弹窗
+const toggleDialog = reactive({
+  show: false,
+  title: ''
+})
+
+// 分页
+const {
+  loading,
+  current,
+  total,
+  size,
+  sizeOption,
+  data: dictDataPage,
+  refresh: dictDataPageRefresh,
+  onPageChange,
+  onSizeChange
+} = reqGetDictDataPageByTypeId()
+
+// 新增或修改字典数据
+const {run: saveDictData, loading: saveDictDataLoading, onSuccess: saveDictDataOnSuccess} = useRequest(reqSaveDictData)
+saveDictDataOnSuccess(() => {
+  ElMessage.success('操作成功')
+})
+
+// 查询字典数据
+function searchByLabel() {
+  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+}
+
+// 批量删除字典数据
+const removeBatchDictDataIds = ref<number[]>([])
+function handleSelectionChange(dictDatas: DictData[]) {
+  removeBatchDictDataIds.value = dictDatas.map((dictData) => dictData.id)
+}
+async function removeBatchDictData() {
+  try {
+    await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
+    dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+    ElMessage.success('操作成功')
+  } catch (e) {
+    // do noting
+  }
+}
+
+// 添加字典数据按钮
+function addDictData() {
+  toggleDialog.show = true
+  toggleDialog.title = '新增字典数据'
+}
+
+// 更新字典数据按钮
+function modifyDictData(row: DictData) {
+  toggleDialog.show = true
+  toggleDialog.title = '更新字典数据'
+  dictDataForm.id = row.id
+  dictDataForm.typeId = row.typeId
+  dictDataForm.label = row.label
+  dictDataForm.value = row.value
+  dictDataForm.sort = row.sort
+  dictDataForm.enable = row.enable
+
+}
+
+// 表单校验
+const dictDataFormRef = ref<FormInstance>()
+const rules = reactive<FormRules<typeof dictDataForm>>({
+  label: [{required: true, message: '请输入标签键', trigger: 'blur'}],
+  value: [{required: true, message: '请输入标签值', trigger: 'blur'}],
+  sort: [{required: true, message: '请输入排序值', trigger: 'blur'}]
+})
+
+// 表单提交
+async function dictDataFormSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  try {
+    await formEl.validate()
+    await saveDictData(dictDataForm)
+    dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+    toggleDialog.show = false
+  } catch (error) {
+    // do nothing
+  }
+}
+
+// 清除弹窗数据
+function dictDataDialogClean() {
+  dictDataForm.id = undefined
+  dictDataForm.typeId = props.typeId
+  dictDataForm.label = ''
+  dictDataForm.value = 0
+  dictDataForm.sort = 0
+  dictDataForm.enable = true
+  dictDataFormRef.value?.clearValidate()
+}
+
+onMounted(() => {
+  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+})
+</script>
+
+<template>
+  <div>
+    <!-- 顶部搜索框 -->
+    <el-card>
+      <el-form inline @submit.prevent="searchByLabel()">
+        <el-form-item label="标签键：">
+          <el-input v-model="searchLabel" clearable></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button :icon="Search" :loading="loading"
+                     native-type="submit"
+                     type="primary">搜索
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card style="margin-top: 16px">
+      <!-- 表格上面的按钮 -->
+      <div>
+        <el-button type="primary"
+                   @click="addDictData">添加字典数据
+        </el-button>
+        <el-popconfirm title="是否删除？" @confirm="removeBatchDictData">
+          <template #reference>
+            <el-button type="danger">批量删除</el-button>
+          </template>
+        </el-popconfirm>
+      </div>
+
+      <!-- 表格 -->
+      <el-table :border="true" :data="dictDataPage" row-key="id"
+                style="margin-top: 16px"
+                @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55"/>
+        <el-table-column label="ID" min-width="40px"
+                         prop="id"></el-table-column>
+        <el-table-column label="标签键" min-width="40px" prop="label">
+        </el-table-column>
+        <el-table-column label="标签值" min-width="40px"
+                         prop="value"></el-table-column>
+        <el-table-column label="排序" min-width="40px"
+                         prop="sort"></el-table-column>
+        <el-table-column align="center" label="是否启用" min-width="40px"
+                         prop="enable">
+          <template #default="{ row }: { row: DictData } ">
+            <el-switch v-model="row.enable" :disabled="true">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="更新时间" prop="updateTime"
+                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作" min-width="40px">
+          <template #default="{ row }: { row: DictData }">
+            <el-button size="small" type="primary"
+                       @click="modifyDictData(row)">编辑
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页 -->
+      <el-pagination v-model:current-page="current"
+                     v-model:page-size="size"
+                     :page-sizes="sizeOption" :total="total" background
+                     layout="prev, pager, next, ->, total, sizes"
+                     style="margin-top: 16px"
+                     @current-change="(val) => onPageChange(val, { params: { typeId: props.typeId, label: searchLabel } })"
+                     @size-change="(val) => onSizeChange(val, { params: { typeId: props.typeId, label: searchLabel } })"/>
+    </el-card>
+
+    <!-- 对话框表单 -->
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
+               width="40%" @close="dictDataDialogClean">
+      <template #footer>
+        <el-form
+            ref="dictDataFormRef"
+            :model="dictDataForm"
+            :rules="rules"
+            label-width="80px"
+            style="padding: 0 20px"
+            @submit.prevent="dictDataFormSubmit(dictDataFormRef)">
+          <el-form-item label="标签键" prop="label">
+            <el-input v-model="dictDataForm.label"
+                      placeholder="请输入标签键"></el-input>
+          </el-form-item>
+          <el-form-item label="标签值" prop="value">
+            <el-input v-model="dictDataForm.value" type="number"
+                      placeholder="请输入标签键"></el-input>
+          </el-form-item>
+          <el-form-item label="排序" prop="sort">
+            <el-input v-model="dictDataForm.sort"
+                      type="number"></el-input>
+          </el-form-item>
+          <el-form-item label="是否启用" prop="enable">
+            <el-switch v-model="dictDataForm.enable">
+            </el-switch>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+                @click="toggleDialog.show = false">取消
+            </el-button>
+            <el-button :loading="saveDictDataLoading"
+                       native-type="submit"
+                       type="primary">确认
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<style lang="scss" scoped></style>

@@ -22,11 +22,6 @@ const roleMenuForm = reactive<RoleMenuForm>({
   desc: '',
   menuIds: []
 })
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules<typeof roleMenuForm>>({
-  roleName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-  desc: [{required: true, message: '请输入密码', trigger: 'blur'}]
-})
 
 // 对话框切换
 const toggleDialog = reactive({
@@ -47,7 +42,8 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetRolePage()
-// 保存角色菜单信息
+
+// 保存或更新角色菜单信息
 const {run: saveRoleMenu, loading: saveRoleMenuLoading, onSuccess} = useRequest(reqSaveRoleMenu)
 onSuccess(() => {
   ElMessage.success('操作成功')
@@ -105,6 +101,13 @@ async function deleteRoles() {
     // do nothing
   }
 }
+
+// 表单校验
+const ruleFormRef = ref<FormInstance>()
+const rules = reactive<FormRules<typeof roleMenuForm>>({
+  roleName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+  desc: [{required: true, message: '请输入密码', trigger: 'blur'}]
+})
 
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {

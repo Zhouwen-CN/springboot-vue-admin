@@ -69,7 +69,7 @@ onMounted(() => {
                    @size-change="onSizeChange"/>
 
     <!-- 抽屉（关闭时清除错误信息） -->
-    <el-drawer v-model="drawer" :with-header="false" size="45%"
+    <el-drawer v-model="drawer" :with-header="false" size="50%"
                @closed="errorMsg = ''">
       <div style="white-space: pre-wrap;">{{ errorMsg }}</div>
     </el-drawer>

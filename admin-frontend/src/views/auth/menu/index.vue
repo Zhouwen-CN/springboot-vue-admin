@@ -157,7 +157,7 @@ function clean() {
         </el-table-column>
         <el-table-column label="访问路径" prop="accessPath"/>
         <el-table-column label="文件路径" prop="filePath"/>
-        <el-table-column align="center" label="是否缓存" min-width="30px"
+        <el-table-column align="center" label="是否缓存" min-width="40px"
                          prop="keepAlive">
           <template #default="{ row }: { row: MenuInfo }">
             <el-switch

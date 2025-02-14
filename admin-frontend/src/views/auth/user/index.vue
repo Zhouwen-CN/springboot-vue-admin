@@ -25,17 +25,6 @@ const userRoleForm = reactive<UserRoleForm>({
   password: '',
   roleIds: []
 })
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules<typeof userRoleForm>>({
-  username: [
-    {required: true, message: '请输入用户名', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
-  ],
-  password: [
-    {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 5, message: '长度应大于5位', trigger: 'blur'}
-  ]
-})
 
 // 对话框切换
 const toggleDialog = reactive({
@@ -56,7 +45,8 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetUserRolePage()
-// 保存用户角色信息
+
+// 保存或更新用户角色信息
 const {run: saveUserRole, loading: saveUserRoleLoading, onSuccess} = useRequest(reqSaveUserRole)
 onSuccess(() => {
   ElMessage.success('操作成功')
@@ -133,6 +123,19 @@ async function deleteUsers() {
     // do nothing
   }
 }
+
+// 表单校验
+const ruleFormRef = ref<FormInstance>()
+const rules = reactive<FormRules<typeof userRoleForm>>({
+  username: [
+    {required: true, message: '请输入用户名', trigger: 'blur'},
+    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+  ],
+  password: [
+    {required: true, message: '请输入密码', trigger: 'blur'},
+    {min: 5, message: '长度应大于5位', trigger: 'blur'}
+  ]
+})
 
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {

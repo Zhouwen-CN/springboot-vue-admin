@@ -7,9 +7,9 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.entity.DictData">
         <id column="id" property="id" />
         <result column="type_id" property="typeId" />
-        <result column="dict_key" property="dictKey" />
-        <result column="dict_value" property="dictValue" />
-        <result column="dict_sort" property="dictSort" />
+        <result column="label" property="label" />
+        <result column="value" property="value" />
+        <result column="sort" property="sort" />
         <result column="is_enable" property="enable" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -17,7 +17,31 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type_id, dict_key, dict_value, dict_sort, is_enable, create_time, update_time
+        id, type_id, label, value, sort, is_enable, create_time, update_time
     </sql>
+
+    <select id="selectListByType" resultType="com.yeeiee.entity.vo.DictDataVo">
+        select
+            b.label,
+            b.`value`
+        from (
+            select
+                id
+            from t_dict_type
+            where type=#{type}
+            and is_enable
+         ) a
+         join (
+            select
+                type_id,
+                label,
+                `value`,
+                `sort`
+            from t_dict_data
+            where is_enable
+        ) b
+        on a.id=b.type_id
+        order by b.`sort`
+    </select>
 
 </mapper>

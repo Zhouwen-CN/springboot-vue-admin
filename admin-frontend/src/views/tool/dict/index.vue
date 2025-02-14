@@ -7,16 +7,15 @@ import {
   reqRemoveDictTypeById,
   reqRemoveDictTypeByIds,
   reqSaveDictType
-} from '@/api/dev/dict'
+} from '@/api/tool/dict'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import useRequest from '@/hooks/useRequest'
+import DictData from './components/DictData.vue'
 
-// 字典类型查询关键字
-const dictTypeKeyword = ref('')
-// 字典类型批量删除
-const removeBatchDictTypeIds = ref<number[]>([])
-// 字典类型弹窗
-const dictTypeToggleDialog = reactive({
+// 搜索关键字
+const keyword = ref('')
+// 弹窗切换
+const toggleDialog = reactive({
   show: false,
   title: ''
 })
@@ -27,12 +26,8 @@ const dictTypeForm = reactive<DictTypeForm>({
   type: '',
   enable: true
 })
-const dictTypeFormRef = ref<FormInstance>()
-const rules = reactive<FormRules<typeof dictTypeForm>>({
-  name: [{required: true, message: '请输入字典类型', trigger: 'blur'}],
-  type: [{required: true, message: '请输入字典名称', trigger: 'blur'}]
-})
 
+// 分页
 const {
   loading,
   current,
@@ -45,28 +40,23 @@ const {
   onSizeChange
 } = reqGetDictTypePage()
 
-const {run: saveDictType, loading: saveDictTypeLoading, onSuccess: saveDictTypeOnSuccess} = useRequest(reqSaveDictType)
-saveDictTypeOnSuccess(() => {
+// 新增或修改字典类型
+const {run: saveDictType, loading: saveDictTypeLoading, onSuccess} = useRequest(reqSaveDictType)
+onSuccess(() => {
   ElMessage.success('操作成功')
 })
 
 // 查询字典类型
-function searchDictType() {
-  dictTypeKeyword.value = dictTypeKeyword.value.trim()
-  dictTypePageRefresh({params: {keyword: dictTypeKeyword.value}})
-}
-
-// 新增字典类型
-function addDictType() {
-  dictTypeToggleDialog.show = true
-  dictTypeToggleDialog.title = '新增字典类型'
+function searchByKeyword() {
+  keyword.value = keyword.value.trim()
+  dictTypePageRefresh({params: {keyword: keyword.value}})
 }
 
 // 删除字典类型
-async function deleteDictType(id: number) {
+async function removeDictType(id: number) {
   try {
     await reqRemoveDictTypeById(id)
-    dictTypePageRefresh({params: {keyword: dictTypeKeyword.value}})
+    dictTypePageRefresh({params: {keyword: keyword.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do nothing
@@ -74,33 +64,59 @@ async function deleteDictType(id: number) {
 }
 
 // 批量删除字典类型
+const removeBatchDictTypeIds = ref<number[]>([])
 function handleSelectionChange(dictTypes: DictType[]) {
   removeBatchDictTypeIds.value = dictTypes.map((dictType) => dictType.id)
 }
-
 async function removeBatchDictType() {
   try {
     await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
-    dictTypePageRefresh({params: {keyword: dictTypeKeyword.value}})
+    dictTypePageRefresh({params: {keyword: keyword.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do noting
   }
 }
 
-// 更新字典类型
-function updateDictType(row: DictType) {
-  dictTypeToggleDialog.show = true
-  dictTypeToggleDialog.title = '更新字典类型'
+// 新增字典类型按钮
+function addDictType() {
+  toggleDialog.show = true
+  toggleDialog.title = '新增字典类型'
+}
+
+// 更新字典类型按钮
+function modifyDictType(row: DictType) {
+  toggleDialog.show = true
+  toggleDialog.title = '更新字典类型'
   dictTypeForm.id = row.id
   dictTypeForm.type = row.type
   dictTypeForm.name = row.name
   dictTypeForm.enable = row.enable
 }
 
+// 表单校验
+const dictTypeFormRef = ref<FormInstance>()
+const rules = reactive<FormRules<typeof dictTypeForm>>({
+  name: [{required: true, message: '请输入字典类型', trigger: 'blur'}],
+  type: [{required: true, message: '请输入字典名称', trigger: 'blur'}]
+})
+
+// 表单提交
+async function onSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  try {
+    await formEl.validate()
+    await saveDictType(dictTypeForm)
+    dictTypePageRefresh({params: {keyword: keyword.value}})
+    toggleDialog.show = false
+  } catch (error) {
+    // do nothing
+  }
+}
+
 // 表单清空
-function dictTypeDialogClean() {
-  dictTypeToggleDialog.title = ''
+function dialogClean() {
+  toggleDialog.title = ''
   dictTypeForm.id = undefined
   dictTypeForm.type = ''
   dictTypeForm.name = ''
@@ -108,21 +124,18 @@ function dictTypeDialogClean() {
   dictTypeFormRef.value?.clearValidate()
 }
 
-// 表单提交
-async function dictTypeFormSubmit(formEl: FormInstance | undefined) {
-  if (!formEl) return
-  try {
-    await formEl.validate()
-    await saveDictType(dictTypeForm)
-    dictTypePageRefresh({params: {keyword: dictTypeKeyword.value}})
-    dictTypeToggleDialog.show = false
-  } catch (error) {
-    console.log('表单验证失败')
-  }
+// 抽屉显示隐藏
+const drawerVisible = ref(false)
+// 选择的字典类型id
+const selectedTypeId = ref(0)
+// 打开抽屉
+function openDrawer(typeId: number) {
+  drawerVisible.value = true
+  selectedTypeId.value = typeId
 }
 
 onMounted(() => {
-  dictTypePageRefresh({params: {keyword: dictTypeKeyword.value}})
+  dictTypePageRefresh({params: {keyword: keyword.value}})
 })
 </script>
 
@@ -130,9 +143,9 @@ onMounted(() => {
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchDictType()">
+      <el-form inline @submit.prevent="searchByKeyword()">
         <el-form-item label="关键字：">
-          <el-input v-model="dictTypeKeyword" clearable></el-input>
+          <el-input v-model="keyword" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="loading"
@@ -162,9 +175,14 @@ onMounted(() => {
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="字典类型" prop="type"></el-table-column>
+        <el-table-column label="字典类型" prop="type">
+          <template #default="{ row }: { row: DictType } ">
+            <span class="dict-type"
+                  @click="openDrawer(row.id)">{{ row.type }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="字典名称" prop="name"></el-table-column>
-        <el-table-column align="center" label="是否启用" min-width="30px"
+        <el-table-column align="center" label="是否启用" min-width="40px"
                          prop="enable">
           <template #default="{ row }: { row: DictType } ">
             <el-switch v-model="row.enable" :disabled="true">
@@ -179,9 +197,9 @@ onMounted(() => {
           <template #default="{ row }: { row: DictType } ">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
-                         @click="updateDictType(row)"></el-button>
+                         @click="modifyDictType(row)"></el-button>
               <el-popconfirm title="是否删除？"
-                             @confirm="deleteDictType(row.id)">
+                             @confirm="removeDictType(row.id)">
                 <template #reference>
                   <el-button :icon="Delete" type="danger"></el-button>
                 </template>
@@ -197,14 +215,13 @@ onMounted(() => {
                      :page-sizes="sizeOption" :total="total" background
                      layout="prev, pager, next, ->, total, sizes"
                      style="margin-top: 16px"
-                     @current-change="(val) => onPageChange(val, { params: { keyword: dictTypeKeyword } })"
-                     @size-change="(val) => onSizeChange(val, { params: { keyword: dictTypeKeyword } })"/>
+                     @current-change="(val) => onPageChange(val, { params: { keyword: keyword } })"
+                     @size-change="(val) => onSizeChange(val, { params: { keyword: keyword } })"/>
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="dictTypeToggleDialog.show"
-               :title="dictTypeToggleDialog.title" width="40%"
-               @close="dictTypeDialogClean">
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
+               width="40%" @close="dialogClean">
       <template #footer>
         <el-form
             ref="dictTypeFormRef"
@@ -212,7 +229,7 @@ onMounted(() => {
             :rules="rules"
             label-width="80px"
             style="padding: 0 20px"
-            @submit.prevent="dictTypeFormSubmit(dictTypeFormRef)">
+            @submit.prevent="onSubmit(dictTypeFormRef)">
           <el-form-item label="字典类型" prop="type">
             <el-input v-model="dictTypeForm.type"
                       placeholder="请输入字典类型"></el-input>
@@ -227,7 +244,7 @@ onMounted(() => {
           </el-form-item>
           <el-form-item>
             <el-button
-                @click="dictTypeToggleDialog.show = false">取消
+                @click="toggleDialog.show = false">取消
             </el-button>
             <el-button :loading="saveDictTypeLoading"
                        native-type="submit"
@@ -237,7 +254,17 @@ onMounted(() => {
         </el-form>
       </template>
     </el-dialog>
+
+    <!-- 抽屉 -->
+    <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
+      <dict-data :typeId="selectedTypeId"></dict-data>
+    </el-drawer>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dict-type {
+  color: var(--el-color-primary);
+  cursor: pointer;
+}
+</style>

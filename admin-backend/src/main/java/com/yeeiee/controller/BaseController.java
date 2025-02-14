@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.val;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ import java.util.List;
  * @author chen
  * @since 2024-04-27
  */
-public abstract class BaseController<S extends IService<D>, D> {
+public abstract class BaseController<I extends Serializable, D, S extends IService<D>> {
     protected S service;
 
     public BaseController(S service) {
@@ -42,15 +44,22 @@ public abstract class BaseController<S extends IService<D>, D> {
 
     @Operation(summary = "按照id查询")
     @GetMapping("/{id}")
-    public R<D> getById(@PathVariable("id") Long id) {
+    public R<D> getById(@PathVariable("id") I id) {
         val one = service.getById(id);
         return R.ok(one);
     }
 
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
-    public R<String> removeById(@PathVariable("id") Long id) {
+    public R<String> removeById(@PathVariable("id") I id) {
         service.removeById(id);
+        return R.ok();
+    }
+
+    @Operation(summary = "批量删除")
+    @DeleteMapping
+    public R<String> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<I> ids) {
+        service.removeByIds(ids);
         return R.ok();
     }
 

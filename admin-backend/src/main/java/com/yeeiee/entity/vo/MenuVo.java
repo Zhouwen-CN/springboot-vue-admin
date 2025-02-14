@@ -24,8 +24,8 @@ public class MenuVo {
     private String accessPath;
     private String filePath;
     private String icon;
-    private Boolean keepAlive;
     private Long pid;
+    private Boolean keepAlive;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private List<MenuVo> children;

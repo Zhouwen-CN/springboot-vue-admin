@@ -42,30 +42,30 @@ VALUES (1, 1, 1, '2024-05-06 13:47:16', '2024-05-06 13:47:16'),
 delete from `t_menu`;
 INSERT INTO `t_menu`
 VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, '2024-05-06 13:46:48', '2024-05-16 04:04:36'),
-       (2, '用户管理', '/auth/user', '/auth/user/index.vue', 'User', 0, 1, '2024-05-06 13:46:48',
+       (2, '用户管理', '/auth/user', '/auth/user/index.vue', 'User', 1, 0, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
-       (3, '角色管理', '/auth/role', '/auth/role/index.vue', 'Avatar', 0, 1, '2024-05-06 13:46:48',
+       (3, '角色管理', '/auth/role', '/auth/role/index.vue', 'Avatar', 1, 0, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
-       (4, '菜单管理', '/auth/menu', '/auth/menu/index.vue', 'Grid', 0, 1, '2024-05-06 13:46:48',
+       (4, '菜单管理', '/auth/menu', '/auth/menu/index.vue', 'Grid', 1, 0, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
        (5, '菜单测试', '/test', NULL, 'Location', 0, 0, '2024-05-13 00:50:29', '2024-05-13 00:50:29'),
-       (6, '菜单测试-sub1', '/test/sub1', '/test/sub1.vue', 'Location', 0, 5, '2024-05-13 00:50:29',
+       (6, '菜单测试-sub1', '/test/sub1', '/test/sub1.vue', 'Location', 5, 0, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29'),
-       (7, '菜单测试-sub2', '/test/sub2', '/test/sub2.vue', 'HomeFilled', 0, 5, '2024-05-13 00:50:29',
+       (7, '菜单测试-sub2', '/test/sub2', '/test/sub2.vue', 'HomeFilled', 5, 0, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29'),
        (8, '系统工具', '/tool', NULL, 'Tools', 0, 0, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (9, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 1, 8, '2025-01-17 00:00:00',
+       (9, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 8, 1, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (10, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 0, 8, '2025-01-17 00:00:00',
+       (10, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 8, 0, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
        (11, '日志管理', '/log', NULL, 'Management', 0, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (12, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 0, 11, '2025-01-15 00:00:00',
+       (12, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 11, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (13, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 0, 11, '2025-01-15 00:00:00',
+       (13, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 11, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (14, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 0, 11, '2025-01-15 00:00:00',
+       (14, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 11, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00');
 
 
@@ -74,5 +74,5 @@ insert into t_dict_type(id, type, name) values(1,'login_operation','登入操作
 insert into t_dict_type(id, type, name) values(2,'ops_status','操作状态');
 
 delete from `t_dict_data`;
-insert into t_dict_data(id, type_id, dict_key, dict_value) values(1,1,1,'登入'),(2,1,0,'退出');
-insert into t_dict_data(id, type_id, dict_key, dict_value) values(3,2,1,'成功'),(4,2,0,'失败');
+insert into t_dict_data(id, type_id, label, value) values(1,1,'登入',1),(2,1,'退出',0);
+insert into t_dict_data(id, type_id, label, value) values(3,2,'成功',1),(4,2,'失败',0);

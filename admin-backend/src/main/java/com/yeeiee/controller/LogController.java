@@ -59,6 +59,7 @@ public class LogController {
         if (status != null) {
             lambdaQueryWrapper.eq(LoginLog::getStatus, OperationStatusEnum.getStatus(status));
         }
+
         val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime));
         return R.ok(page);
     }
@@ -71,6 +72,7 @@ public class LogController {
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
+
         val lambdaQueryWrapper = new LambdaQueryWrapper<OperationLog>();
 
         if (StringUtils.hasText(username)) {
