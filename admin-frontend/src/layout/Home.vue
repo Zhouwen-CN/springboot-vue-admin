@@ -26,7 +26,7 @@ const settingStore = useSettingStore()
                 class="gitee-link"
                 target="_blank"
                 type="primary">
-              Springboot-Vue-Admin Project Gitee Link
+              {{ settingStore.appName }} Project Gitee Link
             </el-link>
           </div>
         </div>

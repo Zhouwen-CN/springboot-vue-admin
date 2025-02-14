@@ -269,8 +269,8 @@ onMounted(() => {
                 type="password"></el-input>
           </el-form-item>
           <!-- 多选框组 -->
-          <el-form-item label="角色列表" prop="roleIds">
-            <el-space v-if="userRoleForm.id !== 1" alignment="stretch"
+          <el-form-item v-if="userRoleForm.id !== 1" label="角色列表" prop="roleIds">
+            <el-space alignment="stretch"
                       direction="vertical">
               <el-checkbox
                   v-model="checkAll"
