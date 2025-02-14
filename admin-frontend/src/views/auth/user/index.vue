@@ -107,7 +107,7 @@ function updateUser(row: UserRoleInfo) {
 async function deleteUser(id: number) {
   try {
     await reqDeleteUser(id)
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
     ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
@@ -116,11 +116,9 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(users: UserRoleInfo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
-
 async function deleteUsers() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -129,7 +127,7 @@ async function deleteUsers() {
 
   try {
     await reqDeleteUsers(deleteIds.value)
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
     ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
@@ -151,7 +149,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
       return
     }
 
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
   } catch (error) {
     // do nothing
   }
@@ -170,7 +168,7 @@ function clean() {
 }
 
 onMounted(() => {
-  pageRefresh()
+  pageRefresh({params: {searchName: searchName.value}})
   getRoles()
 })
 </script>
@@ -269,7 +267,8 @@ onMounted(() => {
                 type="password"></el-input>
           </el-form-item>
           <!-- 多选框组 -->
-          <el-form-item v-if="userRoleForm.id !== 1" label="角色列表" prop="roleIds">
+          <el-form-item v-if="userRoleForm.id !== 1" label="角色列表"
+                        prop="roleIds">
             <el-space alignment="stretch"
                       direction="vertical">
               <el-checkbox

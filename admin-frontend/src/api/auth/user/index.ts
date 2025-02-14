@@ -96,5 +96,5 @@ export function reqDeleteUser(id: number) {
  * @returns
  */
 export function reqDeleteUsers(ids: number[]) {
-    return request.delete<any, number[]>('/user', {data: ids})
+    return request.delete<any, number[]>('/user', {params: {ids: ids + ''}})
 }

@@ -35,7 +35,8 @@ VALUES (1, 1, 1, '2024-05-06 13:47:16', '2024-05-06 13:47:16'),
        (10, 1, 10, '2025-01-15 00:00:00', '2025-01-15 00:00:00'),
        (11, 1, 11, '2025-01-15 00:00:00', '2025-01-15 00:00:00'),
        (12, 1, 12, '2025-01-15 00:00:00', '2025-01-15 00:00:00'),
-       (13, 1, 13, '2025-01-15 00:00:00', '2025-01-15 00:00:00');
+       (13, 1, 13, '2025-01-15 00:00:00', '2025-01-15 00:00:00'),
+       (14, 1, 14, '2025-01-15 00:00:00', '2025-01-15 00:00:00');
 
 
 delete from `t_menu`;
@@ -52,24 +53,25 @@ VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, '2024-05-06 13:46:48', '
         '2024-05-13 00:50:29'),
        (7, '菜单测试-sub2', '/test/sub2', '/test/sub2.vue', 'HomeFilled', 0, 5, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29'),
-        (8, '开发者工具', '/dev', NULL, 'Tools', 0, 0, '2025-01-17 00:00:00',
+       (8, '系统工具', '/tool', NULL, 'Tools', 0, 0, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (9, '接口文档', '/dev/swagger', '/dev/swagger/index.vue', 'Document', 1, 8, '2025-01-17 00:00:00',
+       (9, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 1, 8, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-        (10, '日志管理', '/log', NULL, 'Management', 0, 0, '2025-01-15 00:00:00',
+       (10, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 0, 8, '2025-01-17 00:00:00',
+        '2025-01-17 00:00:00'),
+       (11, '日志管理', '/log', NULL, 'Management', 0, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (11, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 0, 10, '2025-01-15 00:00:00',
+       (12, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 0, 11, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (12, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 0, 10, '2025-01-15 00:00:00',
+       (13, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 0, 11, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (13, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 0, 10, '2025-01-15 00:00:00',
+       (14, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 0, 11, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00');
 
 
 delete from `t_dict_type`;
-insert into t_dict_type(id, name, type) values(1,'登入操作','login_operation');
-insert into t_dict_type(id, name, type) values(2,'操作状态','ops_status');
-
+insert into t_dict_type(id, type, name) values(1,'login_operation','登入操作');
+insert into t_dict_type(id, type, name) values(2,'ops_status','操作状态');
 
 delete from `t_dict_data`;
 insert into t_dict_data(id, type_id, dict_key, dict_value) values(1,1,1,'登入'),(2,1,0,'退出');

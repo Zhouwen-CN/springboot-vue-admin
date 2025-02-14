@@ -113,8 +113,8 @@ create table t_error_log
 
 create table t_dict_type(
   id bigint primary key auto_increment comment '主键',
-  name varchar(50) not null comment '字典名称',
   type varchar(50) not null comment '字典类型',
+  name varchar(50) not null comment '字典名称',
   is_enable tinyint(1) default 1 comment '是否启用',
   create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
   update_time timestamp default CURRENT_TIMESTAMP comment '更新时间',

@@ -66,5 +66,5 @@ export function reqDeleteRole(id: number) {
  * @returns
  */
 export function reqDeleteRoles(ids: number[]) {
-  return request.delete<any, number[]>('/role', {data: ids})
+    return request.delete<any, number[]>('/role', {params: {ids: ids + ''}})
 }

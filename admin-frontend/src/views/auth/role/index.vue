@@ -80,7 +80,7 @@ function updateRole(row: RoleMenuInfo) {
 async function deleteRole(id: number) {
   try {
     await reqDeleteRole(id)
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
     ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
@@ -89,11 +89,9 @@ async function deleteRole(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(roles: RoleMenuInfo[]) {
   deleteIds.value = roles.map((role) => role.id)
 }
-
 async function deleteRoles() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -101,7 +99,7 @@ async function deleteRoles() {
   }
   try {
     await reqDeleteRoles(deleteIds.value)
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
     ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
@@ -118,7 +116,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     const halfCheckedKeys = menuTreeRef.value?.getHalfCheckedKeys() || []
     roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
     await saveRoleMenu(roleMenuForm)
-    pageRefresh()
+    pageRefresh({params: {searchName: searchName.value}})
     toggleDialog.show = false
   } catch (error) {
     // do nothing
@@ -165,7 +163,7 @@ function clean() {
 }
 
 onMounted(() => {
-  pageRefresh()
+  pageRefresh({params: {searchName: searchName.value}})
 })
 </script>
 

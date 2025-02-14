@@ -1,7 +1,9 @@
 package com.yeeiee.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.DictType;
+import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictTypeService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +12,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 /**
  * <p>
@@ -32,19 +44,52 @@ public class DictTypeController {
     @GetMapping("/{size}/{current}")
     public R<Page<DictType>> getTypePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                          @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                         @RequestParam("name") @Parameter(description = "字典名称") String name,
-                                         @RequestParam("type") @Parameter(description = "字典类型") String type) {
-        val lambdaQuery = dictTypeService.lambdaQuery();
+                                         @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
+        val lambdaQueryWrapper = new LambdaQueryWrapper<DictType>();
 
-        if (StringUtils.hasText(name)) {
-            lambdaQuery.like(DictType::getName, name);
+        if (StringUtils.hasText(keyword)) {
+            lambdaQueryWrapper.like(DictType::getName, keyword)
+                    .or()
+                    .like(DictType::getType, keyword);
         }
 
-        if (StringUtils.hasText(type)) {
-            lambdaQuery.like(DictType::getType, type);
-        }
-
-        val page = dictTypeService.page(new Page<>(current, size));
+        val page = dictTypeService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(page);
+    }
+
+    @Operation(summary = "新增字典类型")
+    @PostMapping
+    public R<String> addDictType(@RequestBody DictType dictType) {
+        val exists = dictTypeService.lambdaQuery()
+                .eq(DictType::getType, dictType.getType())
+                .exists();
+
+        if (exists) {
+            throw new DmlOperationException("编码已存在");
+        }
+        dictTypeService.save(dictType);
+        return R.ok();
+    }
+
+    @Operation(summary = "更新字典类型")
+    @PutMapping
+    public R<String> modifyDictType(@RequestBody DictType dictType) {
+        dictTypeService.updateById(dictType);
+        return R.ok();
+    }
+
+    @Operation(summary = "删除字典类型")
+    @DeleteMapping("/{id}")
+    public R<String> removeDictTypeById(@PathVariable("id") Long id) {
+        dictTypeService.removeById(id);
+
+        return R.ok();
+    }
+
+    @Operation(summary = "批量删除字典类型")
+    @DeleteMapping
+    public R<String> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Long[] ids) {
+        dictTypeService.removeByIds(Arrays.asList(ids));
+        return R.ok();
     }
 }

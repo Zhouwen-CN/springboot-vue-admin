@@ -13,7 +13,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -78,7 +86,7 @@ public class UserController {
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping
-    public R<String> removeUserByIds(@RequestBody Collection<Long> ids) {
+    public R<String> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }
