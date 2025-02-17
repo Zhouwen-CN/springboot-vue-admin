@@ -69,3 +69,12 @@ export function reqSaveDictData(dictDataForm: DictDataForm) {
 export function reqRemoveDictDataByIds(id: number[]) {
   return request.delete<string, number[]>('/dict/data', {params: {ids: id + ''}})
 }
+
+// 根据字典类型查询字典列表
+export type DictDataVo = Pick<DictData, 'label' | 'value'>
+
+export function reqGetDictDataListByTypeId(type: string) {
+  return request.get<DictDataVo[]>('/dict/data', {
+    params: {type}
+  })
+}
