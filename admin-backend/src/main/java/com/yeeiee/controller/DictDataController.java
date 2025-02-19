@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.entity.DictData;
 import com.yeeiee.entity.vo.DictDataVo;
+import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,7 +69,7 @@ public class DictDataController {
                 .exists();
 
         if (exists) {
-            throw new RuntimeException("字典数据标签键已存在");
+            throw new DmlOperationException("标签键已存在");
         }
 
         dictDataService.save(dictData);
@@ -81,6 +90,7 @@ public class DictDataController {
         return R.ok();
     }
 
+    // todo: 后续考虑添加缓存
     @Operation(summary = "根据类型查询字典列表")
     @GetMapping
     public R<List<DictDataVo>> getDataByType(@RequestParam("type") @Parameter(description = "字典类型") String type) {

@@ -124,14 +124,12 @@ function dialogClean() {
   dictTypeFormRef.value?.clearValidate()
 }
 
-// 抽屉显示隐藏
-const drawerVisible = ref(false)
-// 选择的字典类型id
-const selectedTypeId = ref(0)
+// 字典数据弹窗
+const dictData = ref<InstanceType<typeof DictData>>()
+
 // 打开抽屉
 function openDrawer(typeId: number) {
-  drawerVisible.value = true
-  selectedTypeId.value = typeId
+  dictData.value?.showDrawer(typeId)
 }
 
 onMounted(() => {
@@ -176,7 +174,7 @@ onMounted(() => {
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="字典类型" prop="type">
-          <template #default="{ row }: { row: DictType } ">
+          <template #default="{ row }: { row: DictType }">
             <span class="dict-type"
                   @click="openDrawer(row.id)">{{ row.type }}</span>
           </template>
@@ -184,7 +182,7 @@ onMounted(() => {
         <el-table-column label="字典名称" prop="name"></el-table-column>
         <el-table-column align="center" label="是否启用" min-width="40px"
                          prop="enable">
-          <template #default="{ row }: { row: DictType } ">
+          <template #default="{ row }: { row: DictType }">
             <el-switch v-model="row.enable" :disabled="true">
             </el-switch>
           </template>
@@ -194,7 +192,7 @@ onMounted(() => {
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: DictType } ">
+          <template #default="{ row }: { row: DictType }">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="modifyDictType(row)"></el-button>
@@ -256,9 +254,7 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 抽屉 -->
-    <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
-      <dict-data :typeId="selectedTypeId"></dict-data>
-    </el-drawer>
+    <dict-data ref="dictData"></dict-data>
   </div>
 </template>
 

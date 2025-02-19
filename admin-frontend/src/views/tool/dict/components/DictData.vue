@@ -10,24 +10,16 @@ import useRequest from '@/hooks/useRequest'
 import {Search} from '@element-plus/icons-vue'
 import {type FormInstance, type FormRules} from 'element-plus'
 
-const props = defineProps({
-  typeId: {
-    type: Number,
-    required: true
-  }
-})
-
-watch(() => props.typeId, () => {
-  searchLabel.value = ''
-  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
-})
-
 // 搜索关键字
 const searchLabel = ref('')
+// 抽屉可见
+const drawerVisible = ref(false)
+// 类型id
+const typeId = ref<number>(-1)
 // 字典数据表单
 const dictDataForm = reactive<DictDataForm>({
   id: undefined,
-  typeId: props.typeId,
+  typeId: -1,
   label: '',
   value: 0,
   sort: 0,
@@ -60,7 +52,7 @@ saveDictDataOnSuccess(() => {
 
 // 查询字典数据
 function searchByLabel() {
-  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+  dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
 }
 
 // 批量删除字典数据
@@ -71,7 +63,7 @@ function handleSelectionChange(dictDatas: DictData[]) {
 async function removeBatchDictData() {
   try {
     await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
-    dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+    dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do noting
@@ -111,7 +103,7 @@ async function dictDataFormSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await saveDictData(dictDataForm)
-    dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+    dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
     toggleDialog.show = false
   } catch (error) {
     // do nothing
@@ -121,7 +113,7 @@ async function dictDataFormSubmit(formEl: FormInstance | undefined) {
 // 清除弹窗数据
 function dictDataDialogClean() {
   dictDataForm.id = undefined
-  dictDataForm.typeId = props.typeId
+  dictDataForm.typeId = typeId.value
   dictDataForm.label = ''
   dictDataForm.value = 0
   dictDataForm.sort = 0
@@ -129,13 +121,22 @@ function dictDataDialogClean() {
   dictDataFormRef.value?.clearValidate()
 }
 
-onMounted(() => {
-  dictDataPageRefresh({params: {typeId: props.typeId, label: searchLabel.value}})
+// 打开抽屉
+function showDrawer(id: number) {
+  typeId.value = id
+  dictDataForm.typeId = id
+  drawerVisible.value = true
+  searchLabel.value = ''
+  dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
+}
+
+defineExpose({
+  showDrawer
 })
 </script>
 
 <template>
-  <div>
+  <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline @submit.prevent="searchByLabel()">
@@ -179,7 +180,7 @@ onMounted(() => {
                          prop="sort"></el-table-column>
         <el-table-column align="center" label="是否启用" min-width="40px"
                          prop="enable">
-          <template #default="{ row }: { row: DictData } ">
+          <template #default="{ row }: { row: DictData }">
             <el-switch v-model="row.enable" :disabled="true">
             </el-switch>
           </template>
@@ -201,8 +202,8 @@ onMounted(() => {
                      :page-sizes="sizeOption" :total="total" background
                      layout="prev, pager, next, ->, total, sizes"
                      style="margin-top: 16px"
-                     @current-change="(val) => onPageChange(val, { params: { typeId: props.typeId, label: searchLabel } })"
-                     @size-change="(val) => onSizeChange(val, { params: { typeId: props.typeId, label: searchLabel } })"/>
+                     @current-change="(val) => onPageChange(val, { params: { typeId: typeId, label: searchLabel } })"
+                     @size-change="(val) => onSizeChange(val, { params: { typeId: typeId, label: searchLabel } })"/>
     </el-card>
 
     <!-- 对话框表单 -->
@@ -244,7 +245,7 @@ onMounted(() => {
         </el-form>
       </template>
     </el-dialog>
-  </div>
+  </el-drawer>
 </template>
 
 <style lang="scss" scoped></style>
