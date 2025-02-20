@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import {reqGetLoginLogPage} from '@/api/log'
 
+// 表单数据
 const searchForm = reactive({
   username: '',
   operation: undefined,
   status: undefined
 })
 
+// 分页
 const {
   current,
   total,
@@ -19,6 +21,7 @@ const {
   onSizeChange
 } = reqGetLoginLogPage()
 
+// 表单查询
 function onSubmit() {
   refresh({
     params: {

@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import {type OperationLog, reqGetOperationLogPage} from '@/api/log'
 
+// 表单数据
 const searchForm = reactive({
   username: '',
   status: undefined,
 })
 
+// 分页
 const {
   current,
   total,
@@ -18,6 +20,7 @@ const {
   onSizeChange
 } = reqGetOperationLogPage()
 
+// 表单提交
 function onSubmit() {
   refresh({
     params: {
@@ -74,7 +77,7 @@ onMounted(() => {
         <el-table-column label="请求参数" prop="params"
                          show-overflow-tooltip></el-table-column>
         <el-table-column label="请求耗时">
-          <template #default="{ row } : { row: OperationLog } ">
+          <template #default="{ row }: { row: OperationLog }">
             {{ row.time }} ms
           </template>
         </el-table-column>

@@ -133,7 +133,7 @@ function openDrawer(typeId: number) {
 }
 
 onMounted(() => {
-  dictTypePageRefresh({params: {keyword: keyword.value}})
+  dictTypePageRefresh()
 })
 </script>
 

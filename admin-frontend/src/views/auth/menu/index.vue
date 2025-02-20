@@ -15,7 +15,7 @@ const toggleDialog = reactive({
   title: ''
 })
 
-// 表单
+// 表单数据
 const menuForm = reactive<MenuForm>({
   id: undefined,
   title: '',
@@ -26,6 +26,8 @@ const menuForm = reactive<MenuForm>({
   pid: 0,
   hasChildren: false
 })
+
+// 表单校验
 const ruleFormRef = ref<FormInstance>()
 const validateAccessPath = (rule: any, value: any, callback: any) => {
   if (value.trim() === '') {
@@ -45,7 +47,6 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
     callback(new Error('文件路径须以 / 开头'))
   }
 }
-
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     {required: true, message: '请输入菜单名称', trigger: 'blur'},

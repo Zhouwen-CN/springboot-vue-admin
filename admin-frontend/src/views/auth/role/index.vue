@@ -15,7 +15,7 @@ import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 
-// 表单
+// 表单数据
 const roleMenuForm = reactive<RoleMenuForm>({
   id: undefined,
   roleName: '',
@@ -166,7 +166,7 @@ function clean() {
 }
 
 onMounted(() => {
-  pageRefresh({params: {searchName: searchName.value}})
+  pageRefresh()
 })
 </script>
 
@@ -211,7 +211,7 @@ onMounted(() => {
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: RoleMenuInfo } ">
+          <template #default="{ row }: { row: RoleMenuInfo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="updateRole(row)"></el-button>

@@ -2,29 +2,46 @@
 import {type ErrorLog, reqGetErrorLogPage} from '@/api/log'
 import {ElMessage} from 'element-plus'
 
-const drawer = ref(false)
+// 抽屉可见性
+const drawerVisible = ref(false)
+// 查询用户名
+const searchName = ref('')
+// 错误信息
 const errorMsg = ref('')
+
+// 分页
 const {
   current,
   total,
   size,
   sizeOption,
   data,
+  loading,
   refresh,
   onPageChange,
   onSizeChange
 } = reqGetErrorLogPage()
 
+// 打开抽屉
 function openErrorMessage(row: ErrorLog) {
-  drawer.value = true
+  drawerVisible.value = true
   errorMsg.value = row.errorMsg
 }
 
+// 表单提交
+function onSubmit() {
+  refresh({
+    params: {
+      username: searchName.value
+    }
+  })
+}
+
+// 复制错误信息到剪切板
 async function copyErrorMassage(errorMsg: string) {
   await navigator.clipboard.writeText(errorMsg)
   ElMessage.success('复制成功')
 }
-
 
 onMounted(() => {
   refresh()
@@ -33,6 +50,24 @@ onMounted(() => {
 
 <template>
   <el-card>
+    <!-- 表单 -->
+    <el-form inline @submit.prevent="onSubmit()">
+      <el-form-item label="用户名：">
+        <el-input v-model="searchName"
+                  clearable
+                  placeholder="用户名">
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button :loading="loading" native-type="submit"
+                   type="primary">
+          查询
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
+
+  <el-card style="margin-top: 16px;">
     <!-- 表格 -->
     <el-table :data="data" border row-key="id" stripe>
       <el-table-column label="用户名称"
@@ -49,7 +84,7 @@ onMounted(() => {
       <el-table-column label="创建时间"
                        prop="createTime"></el-table-column>
       <el-table-column label="错误信息">
-        <template #default="{ row }: { row: ErrorLog } ">
+        <template #default="{ row }: { row: ErrorLog }">
           <el-button-group class="ml-4">
             <el-button icon="View" type="primary"
                        @click="openErrorMessage(row)"/>
@@ -69,7 +104,7 @@ onMounted(() => {
                    @size-change="onSizeChange"/>
 
     <!-- 抽屉（关闭时清除错误信息） -->
-    <el-drawer v-model="drawer" :with-header="false" size="50%"
+    <el-drawer v-model="drawerVisible" :with-header="false" size="50%"
                @closed="errorMsg = ''">
       <div style="white-space: pre-wrap;">{{ errorMsg }}</div>
     </el-drawer>

@@ -17,7 +17,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -46,16 +50,14 @@ public class LogController {
             @RequestParam(required = false, name = "operation") @Parameter(description = "操作类型") Integer operation,
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
-        val lambdaQueryWrapper = new LambdaQueryWrapper<LoginLog>();
 
+        val lambdaQueryWrapper = new LambdaQueryWrapper<LoginLog>();
         if (StringUtils.hasText(username)) {
             lambdaQueryWrapper.like(LoginLog::getUsername, username);
         }
-
         if (operation != null) {
             lambdaQueryWrapper.eq(LoginLog::getOperation, LoginOperationEnum.getOperation(operation));
         }
-
         if (status != null) {
             lambdaQueryWrapper.eq(LoginLog::getStatus, OperationStatusEnum.getStatus(status));
         }
@@ -74,11 +76,9 @@ public class LogController {
     ) {
 
         val lambdaQueryWrapper = new LambdaQueryWrapper<OperationLog>();
-
         if (StringUtils.hasText(username)) {
             lambdaQueryWrapper.like(OperationLog::getUsername, username);
         }
-
         if (status != null) {
             lambdaQueryWrapper.eq(OperationLog::getStatus, OperationStatusEnum.getStatus(status));
         }
@@ -91,9 +91,14 @@ public class LogController {
     @GetMapping("/error/{size}/{current}")
     public R<Page<ErrorLog>> errorLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
-            @PathVariable("current") @Parameter(description = "当前页面") Integer current
+            @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+            @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username
     ) {
+
         val lambdaQueryWrapper = new LambdaQueryWrapper<ErrorLog>();
+        if (StringUtils.hasText(username)) {
+            lambdaQueryWrapper.like(ErrorLog::getUsername, username);
+        }
         lambdaQueryWrapper.orderByDesc(ErrorLog::getCreateTime);
 
         val page = errorLogService.page(new Page<>(current, size), lambdaQueryWrapper);

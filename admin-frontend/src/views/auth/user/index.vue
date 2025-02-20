@@ -18,7 +18,7 @@ import useRequest from '@/hooks/useRequest'
 const userStore = useUserStore()
 const router = useRouter()
 
-// 表单提交对象
+// 表单数据
 const userRoleForm = reactive<UserRoleForm>({
   id: undefined,
   username: '',
@@ -171,7 +171,7 @@ function clean() {
 }
 
 onMounted(() => {
-  pageRefresh({params: {searchName: searchName.value}})
+  pageRefresh()
   getRoles()
 })
 </script>
