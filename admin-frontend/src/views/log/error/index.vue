@@ -37,9 +37,27 @@ function onSubmit() {
   })
 }
 
+// 惰性函数
+const copyText = (function () {
+  if (navigator.clipboard) {
+    return (text: string) => {
+      navigator.clipboard.writeText(text)
+    }
+  } else {
+    return (text: string) => {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+  }
+})()
+
 // 复制错误信息到剪切板
 async function copyErrorMassage(errorMsg: string) {
-  await navigator.clipboard.writeText(errorMsg)
+  copyText(errorMsg)
   ElMessage.success('复制成功')
 }
 
@@ -49,66 +67,69 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-card>
-    <!-- 表单 -->
-    <el-form inline @submit.prevent="onSubmit()">
-      <el-form-item label="用户名：">
-        <el-input v-model="searchName"
-                  clearable
-                  placeholder="用户名">
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button :loading="loading" native-type="submit"
-                   type="primary">
-          查询
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </el-card>
+  <div>
+    <el-card>
+      <!-- 表单 -->
+      <el-form inline @submit.prevent="onSubmit()">
+        <el-form-item label="用户名：">
+          <el-input v-model="searchName"
+                    clearable
+                    placeholder="用户名">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" native-type="submit"
+                     type="primary">
+            查询
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
-  <el-card style="margin-top: 16px;">
-    <!-- 表格 -->
-    <el-table :data="data" border row-key="id" stripe>
-      <el-table-column label="用户名称"
-                       prop="username"></el-table-column>
-      <el-table-column label="请求地址" prop="url"></el-table-column>
-      <el-table-column label="请求方式" prop="method"></el-table-column>
-      <el-table-column label="请求参数" prop="params"></el-table-column>
-      <el-table-column label="ip地址" prop="ip"></el-table-column>
-      <el-table-column
-          label="用户代理"
-          prop="userAgent"
-          show-overflow-tooltip></el-table-column>
+    <el-card style="margin-top: 16px;">
+      <!-- 表格 -->
+      <el-table :data="data" border row-key="id" stripe>
+        <el-table-column label="用户名称"
+                         prop="username"></el-table-column>
+        <el-table-column label="请求地址" prop="url"></el-table-column>
+        <el-table-column label="请求方式" prop="method"></el-table-column>
+        <el-table-column label="请求参数" prop="params"></el-table-column>
+        <el-table-column label="ip地址" prop="ip"></el-table-column>
+        <el-table-column
+            label="用户代理"
+            prop="userAgent"
+            show-overflow-tooltip></el-table-column>
 
-      <el-table-column label="创建时间"
-                       prop="createTime"></el-table-column>
-      <el-table-column label="错误信息">
-        <template #default="{ row }: { row: ErrorLog }">
-          <el-button-group class="ml-4">
-            <el-button icon="View" type="primary"
-                       @click="openErrorMessage(row)"/>
-            <el-button icon="DocumentCopy" type="primary"
-                       @click="copyErrorMassage(row.errorMsg)"/>
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column label="创建时间"
+                         prop="createTime"></el-table-column>
+        <el-table-column label="错误信息">
+          <template #default="{ row }: { row: ErrorLog }">
+            <el-button-group class="ml-4">
+              <el-button icon="View" type="primary"
+                         @click="openErrorMessage(row)"/>
+              <el-button icon="DocumentCopy" type="primary"
+                         @click="copyErrorMassage(row.errorMsg)"/>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 分页 -->
-    <el-pagination v-model:current-page="current"
-                   v-model:page-size="size"
-                   :page-sizes="sizeOption" :total="total" background
-                   layout="prev, pager, next, ->, total, sizes"
-                   style="margin-top: 16px" @current-change="onPageChange"
-                   @size-change="onSizeChange"/>
+      <!-- 分页 -->
+      <el-pagination v-model:current-page="current"
+                     v-model:page-size="size"
+                     :page-sizes="sizeOption" :total="total" background
+                     layout="prev, pager, next, ->, total, sizes"
+                     style="margin-top: 16px" @current-change="onPageChange"
+                     @size-change="onSizeChange"/>
 
-    <!-- 抽屉（关闭时清除错误信息） -->
-    <el-drawer v-model="drawerVisible" :with-header="false" size="50%"
-               @closed="errorMsg = ''">
-      <div style="white-space: pre-wrap;">{{ errorMsg }}</div>
-    </el-drawer>
-  </el-card>
+      <!-- 抽屉（关闭时清除错误信息） -->
+      <el-drawer v-model="drawerVisible" :with-header="false"
+                 size="50%"
+                 @closed="errorMsg = ''">
+        <div style="white-space: pre-wrap;">{{ errorMsg }}</div>
+      </el-drawer>
+    </el-card>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

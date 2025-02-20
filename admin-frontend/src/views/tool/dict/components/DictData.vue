@@ -127,7 +127,7 @@ function showDrawer(id: number) {
   dictDataForm.typeId = id
   drawerVisible.value = true
   searchLabel.value = ''
-  dictDataPageRefresh()
+  dictDataPageRefresh({params: {typeId: typeId.value}})
 }
 
 defineExpose({

@@ -61,14 +61,14 @@ idea打开最好右键排除掉一些不需要索引的文件夹
 
 ## 项目截图
 
-![登入](./images/1登入.png)
+![登入](images/1登入.png)
 
-![首页](./images/2首页.png)
+![首页](images/2首页.png)
 
-![菜单管理](./images/3菜单管理.png)
+![菜单管理](images/3菜单管理.png)
 
-![接口文档](./images/4接口文档.png)
+![接口文档](images/4接口文档.png)
 
-![字典管理](./images/5字典管理.png)
+![字典管理](images/5字典管理.png)
 
-![日志管理](./images/6日志管理.png)
+![日志管理](images/6日志管理.png)
