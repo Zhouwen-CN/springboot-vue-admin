@@ -101,8 +101,6 @@ const tagMenuVisible = ref(false)
 const left = ref(0)
 const top = ref(0)
 const selectedIndex = ref(-1)
-// 获取当前组件
-const instance = getCurrentInstance()!
 
 // 关闭 tagView 右键菜单
 function closeTagMenu() {
@@ -120,29 +118,18 @@ watch(tagMenuVisible, (value) => {
 // 打开 tagView 右键菜单
 function openTagMenu(_index: number, e: MouseEvent) {
   // 右键菜单宽度
-  const tagMenuWidth = 100
-  // 面包屑的高度
-  const headerHeight = 40
+  const tagMenuWidth = 95
 
-  // 当前组件左侧距离窗口左侧的距离
-  const offsetLeft = instance.proxy?.$el.getBoundingClientRect().left
+  // 视口的宽度
+  const viewportWidth = window.innerWidth
 
-  // 当前组件的宽度
-  const offsetWidth = instance.proxy?.$el.offsetWidth
-
-  // 最大 left 值
-  const maxLeft = offsetWidth - tagMenuWidth
-
-  // 当前组件左侧到鼠标点击的距离
-  const l = e.clientX - offsetLeft
-
-  if (l > maxLeft) {
-    left.value = maxLeft
+  if (e.clientX + tagMenuWidth > viewportWidth) {
+    left.value = e.clientX - tagMenuWidth
   } else {
-    left.value = l
+    left.value = e.clientX
   }
 
-  top.value = e.clientY - headerHeight
+  top.value = e.clientY
 
   tagMenuVisible.value = true
   selectedIndex.value = _index
@@ -206,49 +193,51 @@ onMounted(() => {
     </el-icon>
 
     <!-- tag标签操作菜单 -->
-    <ul v-show="tagMenuVisible"
+    <Teleport to="body">
+      <ul v-if="tagMenuVisible"
         :style="{ left: left + 'px', top: top + 'px' }"
-        class="tag-menu">
-      <li @click="refreshTagView(selectedIndex)">
-        <el-icon>
-          <Refresh/>
-        </el-icon>
-        刷新
-      </li>
-      <li v-if="!isAffix()"
+          class="tag-context-menu">
+        <li @click="refreshTagView(selectedIndex)">
+          <el-icon>
+            <Refresh/>
+          </el-icon>
+          刷新
+        </li>
+        <li v-if="!isAffix()"
           @click="closeTagView(selectedIndex, 'selected')">
-        <el-icon>
-          <Close/>
-        </el-icon>
-        关闭
-      </li>
-      <li v-if="!isFirstTagView()"
+          <el-icon>
+            <Close/>
+          </el-icon>
+          关闭
+        </li>
+        <li v-if="!isFirstTagView()"
           @click="closeTagView(selectedIndex, 'left')">
-        <el-icon>
-          <Back/>
-        </el-icon>
-        关闭左侧
-      </li>
-      <li v-if="!isLastTagView()"
+          <el-icon>
+            <Back/>
+          </el-icon>
+          关闭左侧
+        </li>
+        <li v-if="!isLastTagView()"
           @click="closeTagView(selectedIndex, 'right')">
-        <el-icon>
-          <Right/>
-        </el-icon>
-        关闭右侧
-      </li>
-      <li @click="closeTagView(selectedIndex, 'other')">
-        <el-icon>
-          <Sort/>
-        </el-icon>
-        关闭其它
-      </li>
-      <li @click="closeTagView(selectedIndex, 'all')">
-        <el-icon>
-          <Minus/>
-        </el-icon>
-        关闭所有
-      </li>
-    </ul>
+          <el-icon>
+            <Right/>
+          </el-icon>
+          关闭右侧
+        </li>
+        <li @click="closeTagView(selectedIndex, 'other')">
+          <el-icon>
+            <Sort/>
+          </el-icon>
+          关闭其它
+        </li>
+        <li @click="closeTagView(selectedIndex, 'all')">
+          <el-icon>
+            <Minus/>
+          </el-icon>
+          关闭所有
+        </li>
+      </ul>
+    </Teleport>
   </div>
 
 </template>
@@ -334,22 +323,22 @@ onMounted(() => {
     white-space: nowrap;
 
   }
+}
 
-  .tag-menu {
-    position: absolute;
-    z-index: 99;
-    font-size: 12px;
-    background: var(--el-bg-color-overlay);
-    border-radius: 4px;
-    box-shadow: var(--el-box-shadow-light);
+.tag-context-menu {
+  position: fixed;
+  z-index: 99;
+  font-size: 12px;
+  background: var(--el-bg-color-overlay);
+  border-radius: 4px;
+  box-shadow: var(--el-box-shadow-light);
 
-    li {
-      padding: 8px 16px;
-      cursor: pointer;
+  li {
+    padding: 8px 16px;
+    cursor: pointer;
 
-      &:hover {
-        background: var(--el-fill-color-light);
-      }
+    &:hover {
+      background: var(--el-fill-color-light);
     }
   }
 }
