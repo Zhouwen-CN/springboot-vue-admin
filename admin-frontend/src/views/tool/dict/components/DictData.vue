@@ -22,8 +22,7 @@ const dictDataForm = reactive<DictDataForm>({
   typeId: -1,
   label: '',
   value: 0,
-  sort: 0,
-  enable: true
+  sort: 0
 })
 // 字典数据弹窗
 const toggleDialog = reactive({
@@ -85,8 +84,6 @@ function modifyDictData(row: DictData) {
   dictDataForm.label = row.label
   dictDataForm.value = row.value
   dictDataForm.sort = row.sort
-  dictDataForm.enable = row.enable
-
 }
 
 // 表单校验
@@ -117,7 +114,6 @@ function dictDataDialogClean() {
   dictDataForm.label = ''
   dictDataForm.value = 0
   dictDataForm.sort = 0
-  dictDataForm.enable = true
   dictDataFormRef.value?.clearValidate()
 }
 
@@ -178,13 +174,6 @@ defineExpose({
                          prop="value"></el-table-column>
         <el-table-column label="排序" min-width="40px"
                          prop="sort"></el-table-column>
-        <el-table-column align="center" label="是否启用" min-width="40px"
-                         prop="enable">
-          <template #default="{ row }: { row: DictData }">
-            <el-switch v-model="row.enable" :disabled="true">
-            </el-switch>
-          </template>
-        </el-table-column>
         <el-table-column label="更新时间" prop="updateTime"
                          show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" min-width="40px">
@@ -228,10 +217,6 @@ defineExpose({
           <el-form-item label="排序" prop="sort">
             <el-input v-model="dictDataForm.sort"
                       type="number"></el-input>
-          </el-form-item>
-          <el-form-item label="是否启用" prop="enable">
-            <el-switch v-model="dictDataForm.enable">
-            </el-switch>
           </el-form-item>
           <el-form-item>
             <el-button

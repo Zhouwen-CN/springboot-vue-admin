@@ -35,10 +35,6 @@ public class DictType {
     @TableField("`type`")
     private String type;
 
-    @Schema(description = "是否启用")
-    @TableField("`is_enable`")
-    private Boolean enable;
-
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)
     private LocalDateTime createTime;

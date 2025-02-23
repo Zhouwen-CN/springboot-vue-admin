@@ -23,8 +23,7 @@ const toggleDialog = reactive({
 const dictTypeForm = reactive<DictTypeForm>({
   id: undefined,
   name: '',
-  type: '',
-  enable: true
+  type: ''
 })
 
 // 分页
@@ -91,7 +90,6 @@ function modifyDictType(row: DictType) {
   dictTypeForm.id = row.id
   dictTypeForm.type = row.type
   dictTypeForm.name = row.name
-  dictTypeForm.enable = row.enable
 }
 
 // 表单校验
@@ -120,7 +118,6 @@ function dialogClean() {
   dictTypeForm.id = undefined
   dictTypeForm.type = ''
   dictTypeForm.name = ''
-  dictTypeForm.enable = true
   dictTypeFormRef.value?.clearValidate()
 }
 
@@ -180,13 +177,6 @@ onMounted(() => {
           </template>
         </el-table-column>
         <el-table-column label="字典名称" prop="name"></el-table-column>
-        <el-table-column align="center" label="是否启用" min-width="40px"
-                         prop="enable">
-          <template #default="{ row }: { row: DictType }">
-            <el-switch v-model="row.enable" :disabled="true">
-            </el-switch>
-          </template>
-        </el-table-column>
         <el-table-column label="创建时间"
                          prop="createTime"></el-table-column>
         <el-table-column label="更新时间"
@@ -235,10 +225,6 @@ onMounted(() => {
           <el-form-item label="字典名称" prop="name">
             <el-input v-model="dictTypeForm.name"
                       placeholder="请输入字典名称"></el-input>
-          </el-form-item>
-          <el-form-item label="是否启用" prop="enable">
-            <el-switch v-model="dictTypeForm.enable">
-            </el-switch>
           </el-form-item>
           <el-form-item>
             <el-button

@@ -7,7 +7,6 @@ export interface DictType extends CreateAndUpdateTime {
   id: number
   name: string
   type: string
-  enable: boolean
 }
 
 export type DictTypeForm = Omit<DictType, 'id' | 'createTime' | 'updateTime'> & { id?: number }
@@ -46,7 +45,6 @@ export interface DictData extends CreateAndUpdateTime {
   label: string
   value: number
   sort: number
-  enable: boolean
 }
 
 export type DictDataForm = Omit<DictData, 'id' | 'createTime' | 'updateTime'> & { id?: number }

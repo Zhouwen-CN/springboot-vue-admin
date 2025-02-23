@@ -115,7 +115,6 @@ create table t_dict_type(
   `id` bigint primary key auto_increment comment '主键',
   `type` varchar(50) not null comment '字典类型',
   `name` varchar(50) not null comment '字典名称',
-  `is_enable` tinyint(1) default 1 comment '是否启用',
   `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
   `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
   constraint uniq_type unique (type)
@@ -128,7 +127,6 @@ create table t_dict_data(
   `label` varchar(50) not null comment '字典键',
   `value` int not null comment '字典值',
   `sort` int default 0 comment '字典排序',
-  `is_enable` tinyint(1) default 1 comment '是否启用',
   `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
   `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment '字典数据表';
