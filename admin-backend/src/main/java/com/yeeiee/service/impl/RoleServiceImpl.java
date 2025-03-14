@@ -74,6 +74,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public void modifyRole(RoleMenuIdsDto roleMenuIdsDto) {
         val roleId = roleMenuIdsDto.getId();
 
+        // todo: 1 号角色不能修改
         if (roleId == 1) {
             throw new DmlOperationException("① 号角色不能修改");
         }
@@ -131,7 +132,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         this.removeById(id);
-
         roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>()
                 .eq(RoleMenu::getRoleId, id)
         );

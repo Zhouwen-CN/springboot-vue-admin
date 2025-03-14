@@ -7,7 +7,7 @@ import {
   reqSaveDictData
 } from '@/api/tool/dict'
 import useRequest from '@/hooks/useRequest'
-import {Search} from '@element-plus/icons-vue'
+import {Edit, Search} from '@element-plus/icons-vue'
 import {type FormInstance, type FormRules} from 'element-plus'
 
 // 搜索关键字
@@ -178,8 +178,8 @@ defineExpose({
                          show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" min-width="40px">
           <template #default="{ row }: { row: DictData }">
-            <el-button size="small" type="primary"
-                       @click="modifyDictData(row)">编辑
+            <el-button :icon="Edit" size="small" type="primary"
+                       @click="modifyDictData(row)">
             </el-button>
           </template>
         </el-table-column>

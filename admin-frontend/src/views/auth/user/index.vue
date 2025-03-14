@@ -52,6 +52,9 @@ onSuccess(() => {
   ElMessage.success('操作成功')
 })
 
+// 禁用密码修改
+const disableEditPassowrd = ref(false)
+
 // 多选框相关
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
@@ -91,6 +94,7 @@ function updateUser(row: UserRoleInfo) {
   userRoleForm.username = row.username
   userRoleForm.password = row.password
   userRoleForm.roleIds = row.roleList.map(role => role.id)
+  disableEditPassowrd.value = true
 }
 
 // 删除用户
@@ -124,6 +128,11 @@ async function deleteUsers() {
   }
 }
 
+function editPassword() {
+  disableEditPassowrd.value = false
+  userRoleForm.password = ''
+}
+
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof userRoleForm>>({
@@ -146,9 +155,10 @@ async function onSubmit(formEl: FormInstance | undefined) {
     toggleDialog.show = false
 
     // 如果修改的是当前用户，则退出重新登入
-    if (userRoleForm.username === userStore.userInfo.username) {
+    if (userRoleForm.id === userStore.userInfo.id) {
       userStore.$reset()
       deleteAsyncRoutes(router)
+      ElMessage.warning("修改成功，请重新登入")
       return
     }
 
@@ -167,6 +177,7 @@ function clean() {
   userRoleForm.roleIds = []
   checkAll.value = false
   isIndeterminate.value = true
+  disableEditPassowrd.value = false
   ruleFormRef.value?.clearValidate()
 }
 
@@ -267,35 +278,34 @@ onMounted(() => {
             <el-input
                 v-model="userRoleForm.password"
                 placeholder="请输入用户密码"
-                type="password"></el-input>
+                :disabled="disableEditPassowrd"
+                type="password">
+              <template v-if="disableEditPassowrd" #append>
+                <el-button :icon="Edit" type="primary"
+                           @click="editPassword"></el-button>
+              </template>
+            </el-input>
           </el-form-item>
           <!-- 多选框组 -->
           <el-form-item v-if="userRoleForm.id !== 1" label="角色列表"
                         prop="roleIds">
-            <el-space alignment="stretch"
-                      direction="vertical">
-              <el-checkbox
-                  v-model="checkAll"
-                  :indeterminate="isIndeterminate"
-                  @change="handleCheckAllChange">
+            <el-space alignment="stretch" direction="vertical">
+              <el-checkbox v-model="checkAll"
+                           :indeterminate="isIndeterminate"
+                           @change="handleCheckAllChange">
                 全选
               </el-checkbox>
-              <!-- TODO: 不能授予用户admin角色 -->
               <el-checkbox-group v-model="userRoleForm.roleIds"
                                  @change="handleCheckedCitiesChange">
-                <el-checkbox
-                    v-for="role in roleData"
-                    :key="role.id"
-                    :label="role.roleName"
-                    :value="role.id">
+                <el-checkbox v-for="role in roleData" :key="role.id"
+                             :label="role.roleName" :value="role.id">
                   {{ role.roleName }}
                 </el-checkbox>
               </el-checkbox-group>
             </el-space>
           </el-form-item>
           <el-form-item>
-            <el-button
-                @click="toggleDialog.show = false">取消
+            <el-button @click="toggleDialog.show = false">取消
             </el-button>
             <el-button :loading="saveUserRoleLoading" type="primary"
                        native-type="submit">确认

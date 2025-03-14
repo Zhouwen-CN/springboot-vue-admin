@@ -155,6 +155,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void modifyUser(UserRoleIdsDto userRoleIdsDto) {
         val userId = userRoleIdsDto.getId();
+        val username = userRoleIdsDto.getUsername();
+        var password = userRoleIdsDto.getPassword();
 
         // admin自己才能修改自己
         val securityUser = CommonUtil.getSecurityUser();
@@ -162,8 +164,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DmlOperationException("不能修改 ① 号用户");
         }
 
-        // 更新用户
-        val password = userRoleIdsDto.getPassword();
+        // 密码不能为空
         if (!StringUtils.hasText(password)) {
             throw new DmlOperationException("密码不能为空");
         }
@@ -171,13 +172,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 如果不符合加密模式，则进行加密
         Matcher matcher = BCRYPT_PATTERN.matcher(password);
         if (!matcher.matches()) {
-            userRoleIdsDto.setPassword(bCryptPasswordEncoder.encode(password));
+            password = bCryptPasswordEncoder.encode(password);
         }
 
-        val user = new User();
-        user.setId(userRoleIdsDto.getId());
-        user.setUsername(userRoleIdsDto.getUsername());
-        user.setPassword(userRoleIdsDto.getPassword());
+        // 查询用户，需要更新token version
+        val user = this.lambdaQuery()
+                .eq(User::getId, userId)
+                .one();
+
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setTokenVersion(user.getTokenVersion() + 1);
 
         this.updateById(user);
 
@@ -213,13 +218,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUserById(Long id) {
-        // tip: 1号用户不能删除
+        // todo: 1 号用户不能删除
         if (id == 1L) {
             throw new DmlOperationException("① 号用户不能删除");
         }
 
         this.removeById(id);
-
         userRoleService.remove(new LambdaQueryWrapper<UserRole>()
                 .eq(UserRole::getUserId, id)
         );

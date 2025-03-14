@@ -71,8 +71,11 @@ public class WebSecurityConfig {
         );
     }
 
-    /*
-        登入 api，可以添加多种登入方式，方便扩展
+    /**
+     * 登入 api，可以添加多种登入方式，方便扩展
+     * @param http spring security 配置对象
+     * @return spring security 过滤器链
+     * @throws Exception 抛出异常
      */
     @Bean
     public SecurityFilterChain loginApiFilterChain(HttpSecurity http) throws Exception {
@@ -92,8 +95,11 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    /*
-        这个过滤链最后加载
+    /**
+     * 最后加载的过滤器链
+     * @param http spring security 配置对象
+     * @return spring security 过滤器链
+     * @throws Exception 抛出异常
      */
     @Bean
     @Order
