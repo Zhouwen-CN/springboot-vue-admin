@@ -1,17 +1,18 @@
 #!/bin/bash
 
-set -eu
-app_name='springboot-vue-admin'
+set -euo pipefail
+set -x
+app_name='admin-backend-1.0.0-SNAPSHOT.jar'
 
 function start_app(){
-    nohup java -jar ${app_name}*.jar > /dev/null 2>&1 &
+    nohup java -jar ${app_name} > /dev/null 2>&1 &
     echo '------------ APP Start ------------'
 }
 
 function stop_app(){
-    pid=$(ps -ef | grep -v grep | grep "${app_name}*" | awk '{print $2}')
+    pid=$(pgrep -f ${app_name})
     if [[ -n ${pid} ]]; then
-        kill -9 $pid
+        kill -9 ${pid}
         echo '------------- APP Stop -------------'
     fi
 }
