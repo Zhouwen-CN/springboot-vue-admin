@@ -35,7 +35,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
     }
 
-    // 认证成功也可能需要从 token 中获取一些信息
+    /**
+     * 认证成功也可能需要从 token 中获取一些信息
+     *
+     * @return access token
+     */
     @Override
     public Object getCredentials() {
         return accessToken;

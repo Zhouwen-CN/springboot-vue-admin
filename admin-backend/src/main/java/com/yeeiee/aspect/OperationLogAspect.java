@@ -7,6 +7,7 @@ import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 @Aspect
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OperationLogAspect {
 
     private final OperationLogService operationLogService;
@@ -39,15 +41,17 @@ public class OperationLogAspect {
     public Object around(ProceedingJoinPoint pjp, Operation operation) throws Throwable {
         long beginTime = System.currentTimeMillis();
 
+        log.info("Start a request [{}]", operation.summary());
         try {
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operation, OperationStatusEnum.SUCCESS, time);
-
+            log.info("Finish a request [{}] in {}ms", operation.summary(), time);
             return result;
         } catch (Throwable e) {
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operation, OperationStatusEnum.FIELD, time);
+            log.warn("Failed request [{}]: {}", operation.summary(), e.getMessage());
             throw e;
         }
     }

@@ -64,7 +64,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val username = claimMap.get("username").asString();
         val version = claimMap.get("version").asLong();
 
-
         val user = this.lambdaQuery()
                 .eq(User::getUsername, username)
                 .one();
@@ -74,21 +73,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new VerifyTokenException("token校验失败");
         }
 
+        val userId = user.getId();
+        val tokenVersion = user.getTokenVersion();
 
         val roleNames = claimMap.get("roleNames").asList(String.class);
-        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, user.getTokenVersion());
-        refreshToken = JwtTokenUtil.generateRefreshToken(username, roleNames, user.getTokenVersion());
+        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, tokenVersion);
+        refreshToken = JwtTokenUtil.generateRefreshToken(username, roleNames, tokenVersion);
 
         val userVo = new UserVo();
-        userVo.setId(user.getId());
+        userVo.setId(userId);
         userVo.setUsername(username);
         userVo.setAccessToken(accessToken);
         userVo.setRefreshToken(refreshToken);
 
         // 更新 token version
         this.lambdaUpdate()
-                .set(User::getTokenVersion, user.getTokenVersion() + 1)
-                .eq(User::getUsername, username)
+                .set(User::getTokenVersion, tokenVersion + 1)
+                .eq(User::getId, userId)
                 .update();
 
         return userVo;
@@ -175,16 +176,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             password = bCryptPasswordEncoder.encode(password);
         }
 
-        // 查询用户，需要更新token version
-        val user = this.lambdaQuery()
+        this.lambdaUpdate()
                 .eq(User::getId, userId)
-                .one();
-
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setTokenVersion(user.getTokenVersion() + 1);
-
-        this.updateById(user);
+                .set(User::getUsername, username)
+                .set(User::getPassword, password)
+                .setIncrBy(User::getTokenVersion, 1)
+                .update();
 
         // 获取 user role 关系
         val userRoles = userRoleService.lambdaQuery()

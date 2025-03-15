@@ -2,7 +2,6 @@ spring:
   profiles:
     active: dev
 
-
 springdoc:
   swagger-ui:
     # 页面设置不展开
