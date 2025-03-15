@@ -5,7 +5,10 @@ spring:
     username: mpw:9iGk7ZB/By/bvChPtc3Log==
     password: mpw:t6ofvDUsRpCy21HQ/re43A==
 
-# mybatis 控制台打印sql
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+decorator:
+  datasource:
+    p6spy:
+      # 日志格式
+      log-format: "Execute SQL in %(executionTime)ms: [%(sql)]"
+      # 自定义日志类
+      logging: slf4j

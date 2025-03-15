@@ -37,19 +37,19 @@ public final class R<T> {
     @Schema(title = "消息")
     private String message;
 
-    public static R<String> ok() {
-        return new R<>(true, "success", 200, null);
+    public static R<Void> ok() {
+        return new R<>(true, null, 200, null);
     }
 
     public static <T> R<T> ok(T data) {
         return new R<>(true, data, 200, null);
     }
 
-    public static R<String> error(HttpStatus httpStatus, Exception e) {
-        return new R<>(false, "error", httpStatus.value(), e.getMessage());
+    public static R<Void> error(HttpStatus httpStatus, Exception e) {
+        return new R<>(false, null, httpStatus.value(), e.getMessage());
     }
 
-    public static R<String> error(HttpStatus httpStatus, String message) {
-        return new R<>(false, "error", httpStatus.value(), message);
+    public static R<Void> error(HttpStatus httpStatus, String message) {
+        return new R<>(false, null, httpStatus.value(), message);
     }
 }

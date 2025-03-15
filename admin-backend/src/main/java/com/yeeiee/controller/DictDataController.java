@@ -13,15 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +55,7 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    public R<String> addData(@RequestBody DictData dictData) {
+    public R<Void> addData(@RequestBody DictData dictData) {
         val exists = dictDataService.lambdaQuery()
                 .eq(DictData::getLabel, dictData.getLabel())
                 .exists();
@@ -78,14 +70,14 @@ public class DictDataController {
 
     @Operation(summary = "修改字典数据")
     @PutMapping
-    public R<String> modifyData(@RequestBody DictData dictData) {
+    public R<Void> modifyData(@RequestBody DictData dictData) {
         dictDataService.updateById(dictData);
         return R.ok();
     }
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<String> removeDataById(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
+    public R<Void> removeDataById(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
         dictDataService.removeByIds(ids);
         return R.ok();
     }

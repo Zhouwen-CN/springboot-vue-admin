@@ -29,22 +29,22 @@ public class GlobalExceptionHandler {
     private final ErrorLogService errorLogService;
 
     @ExceptionHandler(DmlOperationException.class)
-    public R<String> dmlFailureHandler(DmlOperationException e) {
+    public R<Void> dmlFailureHandler(DmlOperationException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     @ExceptionHandler(VerifyTokenException.class)
-    public R<String> verifyTokenException(VerifyTokenException e) {
+    public R<Void> verifyTokenException(VerifyTokenException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public R<String> noResourceFoundHandler(NoResourceFoundException e) {
+    public R<Void> noResourceFoundHandler(NoResourceFoundException e) {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
     @ExceptionHandler(Exception.class)
-    public R<String> defaultHandler(Exception e) {
+    public R<Void> defaultHandler(Exception e) {
         this.saveErrorLog(e);
         return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }

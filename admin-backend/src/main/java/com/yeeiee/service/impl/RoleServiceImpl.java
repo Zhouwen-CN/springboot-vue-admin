@@ -1,8 +1,8 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.Role;
@@ -47,9 +47,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void addRole(RoleMenuIdsDto roleMenuIdsDto) {
-        val exists = this.exists(new QueryWrapper<Role>()
-                .lambda()
-                .eq(Role::getRoleName, roleMenuIdsDto.getRoleName()));
+        val exists = this.exists(
+                Wrappers.<Role>lambdaQuery()
+                        .eq(Role::getRoleName, roleMenuIdsDto.getRoleName())
+        );
 
         if (exists) {
             throw new DmlOperationException("角色名已经存在");

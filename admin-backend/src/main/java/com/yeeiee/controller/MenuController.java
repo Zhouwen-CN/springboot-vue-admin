@@ -37,21 +37,21 @@ public class MenuController {
 
     @Operation(summary = "新增菜单")
     @PostMapping
-    public R<String> addMenu(@RequestBody Menu menu) {
+    public R<Void> addMenu(@RequestBody Menu menu) {
         menuService.addMenu(menu);
         return R.ok();
     }
 
     @Operation(summary = "更新菜单")
     @PutMapping
-    public R<String> modifyMenu(@RequestBody Menu menu) {
+    public R<Void> modifyMenu(@RequestBody Menu menu) {
         menuService.updateById(menu);
         return R.ok();
     }
 
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
-    public R<String> removeMenuById(@PathVariable("id") Long id) {
+    public R<Void> removeMenuById(@PathVariable("id") Long id) {
         menuService.removeMenu(id);
         return R.ok();
     }

@@ -12,15 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,21 +52,21 @@ public class RoleController {
 
     @Operation(summary = "新增角色")
     @PostMapping
-    public R<String> addRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
+    public R<Void> addRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
         roleService.addRole(roleMenuIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
     @PutMapping
-    public R<String> modifyRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
+    public R<Void> modifyRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
         roleService.modifyRole(roleMenuIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
-    public R<String> removeRoleById(@PathVariable("id") Long id) {
+    public R<Void> removeRoleById(@PathVariable("id") Long id) {
         roleService.removeRoleById(id);
         return R.ok();
     }
@@ -82,7 +74,7 @@ public class RoleController {
 
     @Operation(summary = "批量删除角色")
     @DeleteMapping
-    public R<String> removeRoleByIds(@RequestParam("ids") @Parameter(description = "需要删除的角色id列表") Collection<Long> ids) {
+    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "需要删除的角色id列表") Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
     }

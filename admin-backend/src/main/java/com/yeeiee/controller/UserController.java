@@ -13,15 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -58,35 +50,35 @@ public class UserController {
 
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
-    public R<String> logout(@PathVariable("id") Long id) {
+    public R<Void> logout(@PathVariable("id") Long id) {
         userService.logout(id);
         return R.ok();
     }
 
     @Operation(summary = "新增用户")
     @PostMapping
-    public R<String> addUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
+    public R<Void> addUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.addUser(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping
-    public R<String> modifyUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
+    public R<Void> modifyUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
         userService.modifyUser(userRoleIdsDto);
         return R.ok();
     }
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<String> removeUserById(@PathVariable("id") Long id) {
+    public R<Void> removeUserById(@PathVariable("id") Long id) {
         userService.removeUserById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping
-    public R<String> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") Collection<Long> ids) {
+    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }

@@ -51,28 +51,28 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
 
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
-    public R<String> removeById(@PathVariable("id") I id) {
+    public R<Void> removeById(@PathVariable("id") I id) {
         service.removeById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除")
     @DeleteMapping
-    public R<String> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<I> ids) {
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<I> ids) {
         service.removeByIds(ids);
         return R.ok();
     }
 
     @Operation(summary = "新增")
     @PostMapping
-    public R<String> add(@RequestBody D entity) {
+    public R<Void> add(@RequestBody D entity) {
         service.save(entity);
         return R.ok();
     }
 
     @Operation(summary = "更新")
     @PutMapping
-    public R<String> modify(@RequestBody D entity) {
+    public R<Void> modify(@RequestBody D entity) {
         service.updateById(entity);
         return R.ok();
     }

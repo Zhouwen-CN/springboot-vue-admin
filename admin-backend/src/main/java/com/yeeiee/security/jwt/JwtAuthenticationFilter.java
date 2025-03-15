@@ -46,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             val username = claimMap.get("username").asString();
             val version = claimMap.get("version").asLong();
 
-
             // 加载与 token 关联的用户
             val user = userService.lambdaQuery()
                     .eq(User::getUsername, username)
