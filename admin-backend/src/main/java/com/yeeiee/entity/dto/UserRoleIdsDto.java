@@ -1,5 +1,7 @@
 package com.yeeiee.entity.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yeeiee.config.EncryptSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,6 +22,7 @@ import java.util.List;
 public class UserRoleIdsDto {
     private Long id;
     private String username;
+    @JsonSerialize(using = EncryptSerializer.class)
     private String password;
     private List<Long> roleIds;
 }
