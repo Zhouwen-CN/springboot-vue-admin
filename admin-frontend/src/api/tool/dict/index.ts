@@ -63,9 +63,14 @@ export function reqSaveDictData(dictDataForm: DictDataForm) {
   }
 }
 
+// 删除字典数据
+export function reqRemoveDictDataById(id: number) {
+  return request.delete<string, number>(`/dict/data/${id}`)
+}
+
 // 批量删除字典数据
-export function reqRemoveDictDataByIds(id: number[]) {
-  return request.delete<string, number[]>('/dict/data', {params: {ids: id + ''}})
+export function reqRemoveDictDataByIds(ids: number[]) {
+  return request.delete<string, number[]>('/dict/data', {params: {ids: ids + ''}})
 }
 
 // 根据字典类型查询字典列表

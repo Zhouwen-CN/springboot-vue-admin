@@ -28,19 +28,19 @@ const dictTypeForm = reactive<DictTypeForm>({
 
 // 分页
 const {
-  loading,
+  loading: pageLoading,
   current,
   total,
   size,
   sizeOption,
-  data: dictTypePage,
-  refresh: dictTypePageRefresh,
+  data: pageData,
+  refresh,
   onPageChange,
   onSizeChange
 } = reqGetDictTypePage()
 
 // 新增或修改字典类型
-const {run: saveDictType, loading: saveDictTypeLoading, onSuccess} = useRequest(reqSaveDictType)
+const {run: saveDictType, loading: saveLoading, onSuccess} = useRequest(reqSaveDictType)
 onSuccess(() => {
   ElMessage.success('操作成功')
 })
@@ -48,14 +48,14 @@ onSuccess(() => {
 // 查询字典类型
 function searchByKeyword() {
   keyword.value = keyword.value.trim()
-  dictTypePageRefresh({params: {keyword: keyword.value}})
+  refresh({params: {keyword: keyword.value}})
 }
 
 // 删除字典类型
 async function removeDictType(id: number) {
   try {
     await reqRemoveDictTypeById(id)
-    dictTypePageRefresh({params: {keyword: keyword.value}})
+    refresh({params: {keyword: keyword.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do nothing
@@ -70,7 +70,7 @@ function handleSelectionChange(dictTypes: DictType[]) {
 async function removeBatchDictType() {
   try {
     await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
-    dictTypePageRefresh({params: {keyword: keyword.value}})
+    refresh({params: {keyword: keyword.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do noting
@@ -105,7 +105,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await saveDictType(dictTypeForm)
-    dictTypePageRefresh({params: {keyword: keyword.value}})
+    refresh({params: {keyword: keyword.value}})
     toggleDialog.show = false
   } catch (error) {
     // do nothing
@@ -130,7 +130,7 @@ function openDrawer(typeId: number) {
 }
 
 onMounted(() => {
-  dictTypePageRefresh()
+  refresh()
 })
 </script>
 
@@ -143,7 +143,7 @@ onMounted(() => {
           <el-input v-model="keyword" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" :loading="loading"
+          <el-button :icon="Search" :loading="pageLoading"
                      native-type="submit"
                      type="primary">搜索
           </el-button>
@@ -165,7 +165,7 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="dictTypePage" row-key="id"
+      <el-table :border="true" :data="pageData" row-key="id"
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
@@ -230,7 +230,7 @@ onMounted(() => {
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button :loading="saveDictTypeLoading"
+            <el-button :loading="saveLoading"
                        native-type="submit"
                        type="primary">确认
             </el-button>

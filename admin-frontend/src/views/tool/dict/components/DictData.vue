@@ -3,11 +3,12 @@ import {
   type DictData,
   type DictDataForm,
   reqGetDictDataPageByTypeId,
+  reqRemoveDictDataById,
   reqRemoveDictDataByIds,
   reqSaveDictData
 } from '@/api/tool/dict'
 import useRequest from '@/hooks/useRequest'
-import {Edit, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Search} from '@element-plus/icons-vue'
 import {type FormInstance, type FormRules} from 'element-plus'
 
 // 搜索关键字
@@ -32,26 +33,37 @@ const toggleDialog = reactive({
 
 // 分页
 const {
-  loading,
+  loading: pageLoading,
   current,
   total,
   size,
   sizeOption,
-  data: dictDataPage,
-  refresh: dictDataPageRefresh,
+  data: pageData,
+  refresh,
   onPageChange,
   onSizeChange
 } = reqGetDictDataPageByTypeId()
 
 // 新增或修改字典数据
-const {run: saveDictData, loading: saveDictDataLoading, onSuccess: saveDictDataOnSuccess} = useRequest(reqSaveDictData)
-saveDictDataOnSuccess(() => {
+const {run: saveDictData, loading: saveLoading, onSuccess: saveOnSuccess} = useRequest(reqSaveDictData)
+saveOnSuccess(() => {
   ElMessage.success('操作成功')
 })
 
 // 查询字典数据
 function searchByLabel() {
-  dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+}
+
+// 删除字典数据
+async function removeDictData(id: number) {
+  try {
+    await reqRemoveDictDataById(id)
+    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+    ElMessage.success('操作成功')
+  } catch (e) {
+    // do nothing
+  }
 }
 
 // 批量删除字典数据
@@ -62,7 +74,7 @@ function handleSelectionChange(dictDatas: DictData[]) {
 async function removeBatchDictData() {
   try {
     await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
-    dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
+    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
     ElMessage.success('操作成功')
   } catch (e) {
     // do noting
@@ -100,7 +112,7 @@ async function dictDataFormSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await saveDictData(dictDataForm)
-    dictDataPageRefresh({params: {typeId: typeId.value, label: searchLabel.value}})
+    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
     toggleDialog.show = false
   } catch (error) {
     // do nothing
@@ -123,7 +135,7 @@ function showDrawer(id: number) {
   dictDataForm.typeId = id
   drawerVisible.value = true
   searchLabel.value = ''
-  dictDataPageRefresh({params: {typeId: typeId.value}})
+  refresh({params: {typeId: typeId.value}})
 }
 
 defineExpose({
@@ -140,7 +152,7 @@ defineExpose({
           <el-input v-model="searchLabel" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" :loading="loading"
+          <el-button :icon="Search" :loading="pageLoading"
                      native-type="submit"
                      type="primary">搜索
           </el-button>
@@ -162,7 +174,7 @@ defineExpose({
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="dictDataPage" row-key="id"
+      <el-table :border="true" :data="pageData" row-key="id"
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
@@ -176,11 +188,21 @@ defineExpose({
                          prop="sort"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"
                          show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" min-width="40px">
+
+        <el-table-column label="操作">
           <template #default="{ row }: { row: DictData }">
-            <el-button :icon="Edit" size="small" type="primary"
-                       @click="modifyDictData(row)">
-            </el-button>
+            <el-button-group>
+              <el-button :icon="Edit" size="small" type="primary"
+                         @click="modifyDictData(row)">
+              </el-button>
+              <el-popconfirm title="是否删除？"
+                             @confirm="removeDictData(row.id)">
+                <template #reference>
+                  <el-button :icon="Delete" size="small"
+                             type="danger"></el-button>
+                </template>
+              </el-popconfirm>
+            </el-button-group>
           </template>
         </el-table-column>
       </el-table>
@@ -222,7 +244,7 @@ defineExpose({
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button :loading="saveDictDataLoading"
+            <el-button :loading="saveLoading"
                        native-type="submit"
                        type="primary">确认
             </el-button>

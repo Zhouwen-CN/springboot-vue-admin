@@ -56,12 +56,16 @@ public class DictDataController {
     @Operation(summary = "新增字典数据")
     @PostMapping
     public R<Void> addData(@RequestBody DictData dictData) {
-        val exists = dictDataService.lambdaQuery()
-                .eq(DictData::getLabel, dictData.getLabel())
-                .exists();
+        val exists = dictDataService.exists(
+                Wrappers.<DictData>lambdaQuery()
+                        .eq(DictData::getTypeId, dictData.getTypeId())
+                        .and(c1 -> c1.eq(DictData::getLabel, dictData.getLabel())
+                                .or(c2 -> c2.eq(DictData::getValue, dictData.getValue()))
+                        )
+        );
 
         if (exists) {
-            throw new DmlOperationException("标签键已存在");
+            throw new DmlOperationException("标签键或标签值已存在");
         }
 
         dictDataService.save(dictData);
@@ -75,9 +79,16 @@ public class DictDataController {
         return R.ok();
     }
 
+    @Operation(summary = "删除字典数据")
+    @DeleteMapping("/{id}")
+    public R<Void> removeDataById(@PathVariable("id") Long id) {
+        dictDataService.removeById(id);
+        return R.ok();
+    }
+
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDataById(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
+    public R<Void> removeDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
         dictDataService.removeByIds(ids);
         return R.ok();
     }

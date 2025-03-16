@@ -49,20 +49,6 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
         return R.ok(one);
     }
 
-    @Operation(summary = "按照id删除")
-    @DeleteMapping("/{id}")
-    public R<Void> removeById(@PathVariable("id") I id) {
-        service.removeById(id);
-        return R.ok();
-    }
-
-    @Operation(summary = "批量删除")
-    @DeleteMapping
-    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<I> ids) {
-        service.removeByIds(ids);
-        return R.ok();
-    }
-
     @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@RequestBody D entity) {
@@ -76,4 +62,19 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
         service.updateById(entity);
         return R.ok();
     }
+
+    @Operation(summary = "按照id删除")
+    @DeleteMapping("/{id}")
+    public R<Void> removeById(@PathVariable("id") I id) {
+        service.removeById(id);
+        return R.ok();
+    }
+
+    @Operation(summary = "批量删除")
+    @DeleteMapping
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<I> ids) {
+        service.removeByIds(ids);
+        return R.ok();
+    }
 }
+

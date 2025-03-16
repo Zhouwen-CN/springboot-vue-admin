@@ -2,8 +2,10 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.entity.DictData;
 import com.yeeiee.entity.DictType;
 import com.yeeiee.exception.DmlOperationException;
+import com.yeeiee.service.DictDataService;
 import com.yeeiee.service.DictTypeService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +16,7 @@ import lombok.val;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * <p>
@@ -31,6 +33,7 @@ import java.util.Arrays;
 public class DictTypeController {
 
     private final DictTypeService dictTypeService;
+    private final DictDataService dictDataService;
 
     @Operation(summary = "查询字典类型分页")
     @GetMapping("/{size}/{current}")
@@ -73,14 +76,30 @@ public class DictTypeController {
     @Operation(summary = "删除字典类型")
     @DeleteMapping("/{id}")
     public R<Void> removeTypeById(@PathVariable("id") Long id) {
+        val dictDataList = dictDataService.lambdaQuery()
+                .eq(DictData::getTypeId, id)
+                .list();
+
+        if (!dictDataList.isEmpty()) {
+            throw new DmlOperationException("删除失败，尚有字典数据依赖");
+        }
+
         dictTypeService.removeById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除字典类型")
     @DeleteMapping
-    public R<Void> removeTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Long[] ids) {
-        dictTypeService.removeByIds(Arrays.asList(ids));
+    public R<Void> removeTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
+        val dictDataList = dictDataService.lambdaQuery()
+                .in(DictData::getTypeId, ids)
+                .list();
+
+        if (!dictDataList.isEmpty()) {
+            throw new DmlOperationException("删除失败，尚有字典数据依赖");
+        }
+
+        dictTypeService.removeByIds(ids);
         return R.ok();
     }
 }
