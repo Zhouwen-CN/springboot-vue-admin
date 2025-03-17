@@ -2,14 +2,14 @@ import request from '@/utils/request'
 import {type CreateAndUpdateTime} from '@/utils/requestTypes'
 
 export interface MenuInfo extends CreateAndUpdateTime {
-    id: number
-    title: string
-    accessPath: string
-    filePath: string
-    icon: string
-    keepAlive: boolean
-    pid: number
-    children: MenuInfo[]
+  id: number
+  title: string
+  accessPath: string
+  filePath: string
+  icon: string
+  keepAlive: boolean
+  pid: number
+  children: MenuInfo[]
 }
 
 /**
@@ -17,7 +17,7 @@ export interface MenuInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetMenuList(roleIds: number[]) {
-    return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
+  return request.get<MenuInfo[]>('/menu', {params: {ids: roleIds + ''}})
 }
 
 export interface MenuForm {
@@ -28,7 +28,6 @@ export interface MenuForm {
   icon: string
   keepAlive: boolean
   pid: number
-  hasChildren?: boolean
 }
 
 /**
@@ -37,7 +36,6 @@ export interface MenuForm {
  * @returns
  */
 export function reqSaveMenu(menuForm: MenuForm) {
-  delete menuForm.hasChildren
   if (menuForm.id) {
     return request.put<any, MenuForm>('/menu', menuForm)
   } else {
