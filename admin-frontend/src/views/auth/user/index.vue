@@ -10,10 +10,9 @@ import {
 } from '@/api/auth/user'
 import type {CheckboxValueType} from 'element-plus'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import {reqGetRoles} from '@/api/auth/role'
+import {reqGetRoles, type RoleCompact} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
-import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -32,6 +31,12 @@ const toggleDialog = reactive({
   title: ''
 })
 
+// 保存角色按钮loading
+const saveLoading = ref(false)
+
+// 角色列表数据
+const roleData = ref<RoleCompact[]>([])
+
 // 获取分页数据
 const searchName = ref('')
 const {
@@ -46,20 +51,13 @@ const {
   onSizeChange
 } = reqGetUserRolePage()
 
-// 保存或更新用户角色信息
-const {run: saveUserRole, loading: saveUserRoleLoading, onSuccess} = useRequest(reqSaveUserRole)
-onSuccess(() => {
-  ElMessage.success('操作成功')
-})
-
 // 禁用密码修改
 const disableEditPassowrd = ref(false)
 
 // 多选框相关
 const checkAll = ref(false)
 const isIndeterminate = ref(true)
-// 获取角色列表
-const {data: roleData, run: getRoles} = useRequest(reqGetRoles)
+
 const handleCheckAllChange = (val: CheckboxValueType) => {
   if (val) {
     userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
@@ -149,9 +147,10 @@ const rules = reactive<FormRules<typeof userRoleForm>>({
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
+  saveLoading.value = true
   try {
     await formEl.validate()
-    await saveUserRole(userRoleForm)
+    await reqSaveUserRole(userRoleForm)
     toggleDialog.show = false
 
     // 如果修改的是当前用户，则退出重新登入
@@ -162,9 +161,12 @@ async function onSubmit(formEl: FormInstance | undefined) {
       return
     }
 
+    ElMessage.success('操作成功')
     pageRefresh({params: {searchName: searchName.value}})
   } catch (error) {
     // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -182,8 +184,9 @@ function clean() {
 }
 
 onMounted(() => {
+  // 这里不需要同步
+  reqGetRoles().then(res => roleData.value = res.data)
   pageRefresh()
-  getRoles()
 })
 </script>
 
@@ -215,7 +218,7 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" row-key="id"
+      <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
@@ -307,7 +310,7 @@ onMounted(() => {
           <el-form-item>
             <el-button @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button :loading="saveUserRoleLoading" type="primary"
+            <el-button :loading="saveLoading" type="primary"
                        native-type="submit">确认
             </el-button>
           </el-form-item>
@@ -317,4 +320,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.header-row-style {
+  font-weight: 700;
+}
+</style>

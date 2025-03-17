@@ -11,7 +11,6 @@ import {
 import {ElMessage, type FormInstance, type FormRules, type TreeInstance} from 'element-plus'
 import useUserStore from '@/stores/user'
 import type {MenuInfo} from '@/api/auth/menu'
-import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 
@@ -29,6 +28,9 @@ const toggleDialog = reactive({
   title: ''
 })
 
+// 保存角色按钮loading
+const saveLoading = ref(false)
+
 // 分页
 const searchName = ref('')
 const {
@@ -42,12 +44,6 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetRolePage()
-
-// 保存或更新角色菜单信息
-const {run: saveRoleMenu, loading: saveRoleMenuLoading, onSuccess} = useRequest(reqSaveRoleMenu)
-onSuccess(() => {
-  ElMessage.success('操作成功')
-})
 
 // 查询角色
 function searchRole() {
@@ -112,17 +108,21 @@ const rules = reactive<FormRules<typeof roleMenuForm>>({
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
+  saveLoading.value = true
   try {
     await formEl.validate()
     // 选中的 和 半选中的菜单
     const checkedKeys = menuTreeRef.value?.getCheckedKeys() || []
     const halfCheckedKeys = menuTreeRef.value?.getHalfCheckedKeys() || []
     roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
-    await saveRoleMenu(roleMenuForm)
+    await reqSaveRoleMenu(roleMenuForm)
     pageRefresh({params: {searchName: searchName.value}})
     toggleDialog.show = false
+    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -198,7 +198,7 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" row-key="id"
+      <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
@@ -269,7 +269,7 @@ onMounted(() => {
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button :loading="saveRoleMenuLoading" type="primary"
+            <el-button :loading="saveLoading" type="primary"
                        native-type="submit">确认
             </el-button>
           </el-form-item>

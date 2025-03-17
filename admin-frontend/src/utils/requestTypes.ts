@@ -2,7 +2,7 @@
  * 请求api
  *    1、如果需要状态存储，使用 request
  *    2、如果是分页，使用 usePagination
- *    3、如果需要按钮 loading，使用 useRequest 包装 request
+ *    3、如果请求有顺序，则使用request + async await（比如更新数据后重新分页）
  * 页面
  *    动态路由视图组件命名规则：/views/${ComponentName}/index.vue
  */

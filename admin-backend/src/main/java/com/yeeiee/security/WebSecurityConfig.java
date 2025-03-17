@@ -78,6 +78,7 @@ public class WebSecurityConfig {
      * @throws Exception 抛出异常
      */
     @Bean
+    @Order(1)
     public SecurityFilterChain loginApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
         // 使用 securityMatcher 限定当前配置作用的路径
@@ -102,7 +103,6 @@ public class WebSecurityConfig {
      * @throws Exception 抛出异常
      */
     @Bean
-    @Order
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
         http.authorizeHttpRequests(authorize ->

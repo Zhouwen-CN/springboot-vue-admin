@@ -7,7 +7,6 @@ import {
   reqRemoveDictDataByIds,
   reqSaveDictData
 } from '@/api/tool/dict'
-import useRequest from '@/hooks/useRequest'
 import {Delete, Edit, Search} from '@element-plus/icons-vue'
 import {type FormInstance, type FormRules} from 'element-plus'
 
@@ -31,6 +30,9 @@ const toggleDialog = reactive({
   title: ''
 })
 
+// 保存字典数据按钮loading
+const saveLoading = ref(false)
+
 // 分页
 const {
   loading: pageLoading,
@@ -43,12 +45,6 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetDictDataPageByTypeId()
-
-// 新增或修改字典数据
-const {run: saveDictData, loading: saveLoading, onSuccess: saveOnSuccess} = useRequest(reqSaveDictData)
-saveOnSuccess(() => {
-  ElMessage.success('操作成功')
-})
 
 // 查询字典数据
 function searchByLabel() {
@@ -109,13 +105,17 @@ const rules = reactive<FormRules<typeof dictDataForm>>({
 // 表单提交
 async function dictDataFormSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
+  saveLoading.value = true
   try {
     await formEl.validate()
-    await saveDictData(dictDataForm)
+    await reqSaveDictData(dictDataForm)
     refresh({params: {typeId: typeId.value, label: searchLabel.value}})
     toggleDialog.show = false
+    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -174,7 +174,7 @@ defineExpose({
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" row-key="id"
+      <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
@@ -186,9 +186,8 @@ defineExpose({
                          prop="value"></el-table-column>
         <el-table-column label="排序" min-width="40px"
                          prop="sort"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"
-                         show-overflow-tooltip></el-table-column>
-
+        <el-table-column label="更新时间"
+                         prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }: { row: DictData }">
             <el-button-group>

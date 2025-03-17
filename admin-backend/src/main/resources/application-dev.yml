@@ -11,4 +11,4 @@ decorator:
       # 日志格式
       log-format: "Execute SQL in %(executionTime)ms: [%(sql)]"
       # 自定义日志类
-      logging: slf4j
+      logging: SYSOUT

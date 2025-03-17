@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
-interface RoleCompact {
+export interface RoleCompact {
   id: number
   roleName: string
 }

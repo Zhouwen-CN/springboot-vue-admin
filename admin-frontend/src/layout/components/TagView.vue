@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import useTagViewStore, {type CloseOption, type TagView} from '@/stores/tagView'
 import {ArrowLeft, ArrowRight, Back, Close, Minus, Refresh, Right, Sort} from '@element-plus/icons-vue'
-import {ElScrollbar} from 'element-plus'
+import {ElScrollbar, type ScrollbarInstance} from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
 const tagViewStore = useTagViewStore()
 
 // el 滚动组件
-const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+const scrollbarRef = ref<ScrollbarInstance>()
 // 当前滚动的距离
 let currentScrollLeft = 0
 
@@ -195,7 +195,7 @@ onMounted(() => {
     <!-- tag标签操作菜单 -->
     <Teleport to="body">
       <ul v-if="tagMenuVisible"
-        :style="{ left: left + 'px', top: top + 'px' }"
+          :style="{ left: left + 'px', top: top + 'px' }"
           class="tag-context-menu">
         <li @click="refreshTagView(selectedIndex)">
           <el-icon>
@@ -204,7 +204,7 @@ onMounted(() => {
           刷新
         </li>
         <li v-if="!isAffix()"
-          @click="closeTagView(selectedIndex, 'selected')">
+            @click="closeTagView(selectedIndex, 'selected')">
           <el-icon>
             <Close/>
           </el-icon>

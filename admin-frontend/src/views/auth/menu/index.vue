@@ -4,7 +4,6 @@ import useUserStore from '@/stores/user'
 import type {MenuInfo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import useRequest from '@/hooks/useRequest'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -23,9 +22,14 @@ const menuForm = reactive<MenuForm>({
   filePath: undefined,
   icon: '',
   keepAlive: false,
-  pid: 0,
-  hasChildren: false
+  pid: 0
 })
+
+// 保存菜单按钮loading
+const saveLoading = ref(false)
+
+// 是否存在子节点
+const hasChildren = ref(false)
 
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
@@ -57,12 +61,6 @@ const rules = reactive<FormRules<typeof menuForm>>({
   icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
 })
 
-// 保存菜单信息
-const {run: saveMenu, loading: saveMenuLoading, onSuccess} = useRequest(reqSaveMenu)
-onSuccess(() => {
-  ElMessage.success('操作成功')
-})
-
 // 添加主菜单
 function addMainMenu() {
   toggleDialog.show = true
@@ -87,7 +85,7 @@ function updateMenu(row: MenuInfo) {
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
-  menuForm.hasChildren = row.children.length > 0
+  hasChildren.value = row.children.length > 0
 }
 
 // 删除菜单
@@ -105,14 +103,18 @@ async function deleteMenu(menu: MenuInfo) {
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
+  saveLoading.value = true
   try {
     await formEl.validate()
-    await saveMenu(menuForm)
+    await reqSaveMenu(menuForm)
     // 重新请求表单信息
     await userStore.getMenuInfo()
     toggleDialog.show = false
+    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -126,7 +128,7 @@ function clean() {
   menuForm.icon = ''
   menuForm.keepAlive = false
   menuForm.pid = 0
-  menuForm.hasChildren = false
+  hasChildren.value = false
   ruleFormRef.value?.clearValidate()
 }
 </script>
@@ -141,10 +143,11 @@ function clean() {
       </div>
       <!-- 表格 -->
       <el-table
-          :border="true"
           :data="userStore.menuInfo"
           default-expand-all
           row-key="id"
+          :border="true"
+          show-overflow-tooltip
           style="margin-top: 16px">
         <el-table-column label="菜单名称" prop="title">
           <template #default="{ row }: { row: MenuInfo }">
@@ -215,7 +218,7 @@ function clean() {
                         prop="filePath">
             <el-input
                 v-model="menuForm.filePath"
-                :disabled="menuForm.hasChildren || menuForm.pid === 0"
+                :disabled="hasChildren || menuForm.pid === 0"
                 placeholder="请输入文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
@@ -224,7 +227,7 @@ function clean() {
           </el-form-item>
           <el-form-item label="是否缓存" prop="keepAlive">
             <el-switch
-                :disabled="menuForm.hasChildren || menuForm.pid === 0"
+                :disabled="hasChildren || menuForm.pid === 0"
                 v-model="menuForm.keepAlive"
                 active-icon="Check"
                 inactive-icon="Close"
@@ -235,7 +238,7 @@ function clean() {
             <el-button
                 @click="toggleDialog.show = false">取消
             </el-button>
-            <el-button :loading="saveMenuLoading" type="primary"
+            <el-button :loading="saveLoading" type="primary"
                        native-type="submit">
               确认
             </el-button>
