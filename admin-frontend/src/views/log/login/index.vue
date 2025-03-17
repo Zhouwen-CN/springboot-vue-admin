@@ -78,7 +78,7 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px;">
       <!-- 表格 -->
-      <el-table :data="data" border stripe>
+      <el-table :border="true" :data="data" show-overflow-tooltip>
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
         <el-table-column label="操作类型"
@@ -88,8 +88,7 @@ onMounted(() => {
         <el-table-column label="ip地址" prop="ip"></el-table-column>
         <el-table-column
             label="用户代理"
-            prop="userAgent"
-            show-overflow-tooltip></el-table-column>
+            prop="userAgent"></el-table-column>
         <el-table-column label="创建时间"
                          prop="createTime"></el-table-column>
       </el-table>

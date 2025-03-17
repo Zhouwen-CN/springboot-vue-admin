@@ -11,7 +11,7 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <collection column="menu_id" property="menuIds" ofType="java.lang.Long">
-            <id column="menu_id" property="menuIds"/>
+            <id column="menu_id"/>
         </collection>
     </resultMap>
 

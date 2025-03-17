@@ -66,7 +66,7 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px;">
       <!-- 表格 -->
-      <el-table :data="data" border stripe>
+      <el-table :border="true" :data="data" show-overflow-tooltip>
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
         <el-table-column label="操作类型"
@@ -74,8 +74,7 @@ onMounted(() => {
         <el-table-column label="请求地址" prop="url"></el-table-column>
         <el-table-column label="请求方式"
                          prop="method"></el-table-column>
-        <el-table-column label="请求参数" prop="params"
-                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="请求参数" prop="params"></el-table-column>
         <el-table-column label="请求耗时">
           <template #default="{ row }: { row: OperationLog }">
             {{ row.time }} ms
@@ -84,8 +83,8 @@ onMounted(() => {
         <el-table-column label="操作状态" min-width="40px"
                          prop="status"></el-table-column>
         <el-table-column label="ip地址" prop="ip"></el-table-column>
-        <el-table-column label="用户代理" prop="userAgent"
-                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="用户代理"
+                         prop="userAgent"></el-table-column>
         <el-table-column label="创建时间"
                          prop="createTime"></el-table-column>
       </el-table>

@@ -9,7 +9,6 @@ import {
   reqSaveDictType
 } from '@/api/tool/dict'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import useRequest from '@/hooks/useRequest'
 import DictData from './components/DictData.vue'
 
 // 搜索关键字
@@ -26,6 +25,9 @@ const dictTypeForm = reactive<DictTypeForm>({
   type: ''
 })
 
+// 保存字典按钮loading
+const saveLoading = ref(false)
+
 // 分页
 const {
   loading: pageLoading,
@@ -38,12 +40,6 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetDictTypePage()
-
-// 新增或修改字典类型
-const {run: saveDictType, loading: saveLoading, onSuccess} = useRequest(reqSaveDictType)
-onSuccess(() => {
-  ElMessage.success('操作成功')
-})
 
 // 查询字典类型
 function searchByKeyword() {
@@ -102,13 +98,17 @@ const rules = reactive<FormRules<typeof dictTypeForm>>({
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
+  saveLoading.value = true
   try {
     await formEl.validate()
-    await saveDictType(dictTypeForm)
+    await reqSaveDictType(dictTypeForm)
     refresh({params: {keyword: keyword.value}})
     toggleDialog.show = false
+    ElMessage.success('操作成功')
   } catch (error) {
     // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -165,7 +165,7 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" row-key="id"
+      <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"/>
