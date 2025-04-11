@@ -9,7 +9,6 @@ import com.yeeiee.security.user.UserAuthenticationProcessingFilter;
 import com.yeeiee.security.user.UserAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -18,7 +17,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -36,9 +34,6 @@ public class WebSecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
 
     private static final String[] WHITE_LIST = new String[]{
             "/",
@@ -112,25 +107,6 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
-        http.headers(headers -> {
-                    // 如果检测到恶意代码，不渲染恶意代码
-                    headers.xssProtection(xXssConfig -> xXssConfig.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK));
-
-                    /*
-                        x-frame-options
-                            1. 生产环境允许同域名的页面嵌入当前页面
-                            2. 其他环境允许所有页面嵌入当前页面，方便测试
-                     */
-                    headers.frameOptions(frameOptionsConfig -> {
-                        if ("prod".equals(activeProfile)) {
-                            frameOptionsConfig.sameOrigin();
-                        } else {
-                            frameOptionsConfig.disable();
-                        }
-                    });
-                }
-        );
-
         http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源和swagger

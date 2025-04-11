@@ -41,7 +41,7 @@
 | Node.js             | 18+    |
 | pnpm                | 9+     |
 | Vue                 | 3.4.21 |
-| Element-Plus        | 2.7.2  |
+| Element-Plus        | 2.8.8  |
 
 ## tips
 

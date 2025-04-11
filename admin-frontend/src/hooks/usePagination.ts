@@ -12,7 +12,7 @@ export interface PaginationResult<T> {
     data: Ref<T[]>
     refresh: (config?: AxiosRequestConfig) => void
     onPageChange: (pageNumber: number, config?: AxiosRequestConfig) => void
-  onSizeChange: (pageSize: number, config?: AxiosRequestConfig) => void
+    onSizeChange: (pageSize: number, config?: AxiosRequestConfig) => void
 }
 
 /**

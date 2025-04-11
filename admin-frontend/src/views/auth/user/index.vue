@@ -243,14 +243,13 @@ onMounted(() => {
       </el-table>
 
       <!-- 分页 -->
-      <!-- TODO: jumper有bug，会出现警告信息，暂时不用 -->
       <el-pagination v-model:current-page="current"
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, ->, total, sizes"
+                     layout="prev, pager, next, jumper, ->, total, sizes"
                      style="margin-top: 16px"
-                     @current-change="(val) => onPageChange(val, { params: { searchName: searchName } })"
-                     @size-change="(val) => onSizeChange(val, { params: { searchName: searchName } })"/>
+                     @current-change="(val: number) => onPageChange(val, { params: { searchName: searchName } })"
+                     @size-change="(val: number) => onSizeChange(val, { params: { searchName: searchName } })"/>
     </el-card>
 
     <!-- 对话框表单 -->

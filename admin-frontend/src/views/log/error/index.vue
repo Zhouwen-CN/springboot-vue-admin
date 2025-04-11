@@ -117,9 +117,10 @@ onMounted(() => {
       <el-pagination v-model:current-page="current"
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, ->, total, sizes"
-                     style="margin-top: 16px" @current-change="onPageChange"
-                     @size-change="onSizeChange"/>
+                     layout="prev, pager, next, jumper, ->, total, sizes"
+                     style="margin-top: 16px"
+                     @current-change="(val: number) => onPageChange(val)"
+                     @size-change="(val: number) => onSizeChange(val)"/>
 
       <!-- 抽屉（关闭时清除错误信息） -->
       <el-drawer v-model="drawerVisible" :with-header="false"

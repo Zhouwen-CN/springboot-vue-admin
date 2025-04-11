@@ -202,10 +202,10 @@ defineExpose({
       <el-pagination v-model:current-page="current"
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, ->, total, sizes"
+                     layout="prev, pager, next, jumper, ->, total, sizes"
                      style="margin-top: 16px"
-                     @current-change="(val) => onPageChange(val, { params: { typeId: typeId, label: searchLabel } })"
-                     @size-change="(val) => onSizeChange(val, { params: { typeId: typeId, label: searchLabel } })"/>
+                     @current-change="(val: number) => onPageChange(val, { params: { typeId: typeId, label: searchLabel } })"
+                     @size-change="(val: number) => onSizeChange(val, { params: { typeId: typeId, label: searchLabel } })"/>
     </el-card>
 
     <!-- 对话框表单 -->
