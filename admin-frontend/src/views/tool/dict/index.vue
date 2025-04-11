@@ -49,13 +49,9 @@ function searchByKeyword() {
 
 // 删除字典类型
 async function removeDictType(id: number) {
-  try {
-    await reqRemoveDictTypeById(id)
-    refresh({params: {keyword: keyword.value}})
-    ElMessage.success('操作成功')
-  } catch (e) {
-    // do nothing
-  }
+  await reqRemoveDictTypeById(id)
+  refresh({params: {keyword: keyword.value}})
+  ElMessage.success('操作成功')
 }
 
 // 批量删除字典类型
@@ -64,13 +60,9 @@ function handleSelectionChange(dictTypes: DictType[]) {
   removeBatchDictTypeIds.value = dictTypes.map((dictType) => dictType.id)
 }
 async function removeBatchDictType() {
-  try {
-    await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
-    refresh({params: {keyword: keyword.value}})
-    ElMessage.success('操作成功')
-  } catch (e) {
-    // do noting
-  }
+  await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
+  refresh({params: {keyword: keyword.value}})
+  ElMessage.success('操作成功')
 }
 
 // 新增字典类型按钮

@@ -70,13 +70,9 @@ function updateRole(row: RoleMenuInfo) {
 
 // 删除角色
 async function deleteRole(id: number) {
-  try {
-    await reqDeleteRole(id)
-    pageRefresh({params: {searchName: searchName.value}})
-    ElMessage.success('操作成功')
-  } catch (error) {
-    // do nothing
-  }
+  await reqDeleteRole(id)
+  pageRefresh({params: {searchName: searchName.value}})
+  ElMessage.success('操作成功')
 }
 
 // 批量删除
@@ -89,13 +85,9 @@ async function deleteRoles() {
     ElMessage.warning('请选择要删除的用户')
     return
   }
-  try {
-    await reqDeleteRoles(deleteIds.value)
-    pageRefresh({params: {searchName: searchName.value}})
-    ElMessage.success('操作成功')
-  } catch (error) {
-    // do nothing
-  }
+  await reqDeleteRoles(deleteIds.value)
+  pageRefresh({params: {searchName: searchName.value}})
+  ElMessage.success('操作成功')
 }
 
 // 表单校验

@@ -1,5 +1,5 @@
 import type {AxiosInstance, AxiosRequestConfig} from 'axios'
-import axios, {AxiosError} from 'axios'
+import axios from 'axios'
 import {ElMessage} from 'element-plus'
 import type {ResultData} from '@/utils/requestTypes'
 import useUserStore from '@/stores/user'
@@ -51,9 +51,6 @@ class Request {
             if (isSuccess) {
               config.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
               return await this.request(config)
-            } else {
-              this.alterMessage(data.code, data.message)
-              return Promise.reject(data.message)
             }
           }
 
@@ -67,12 +64,6 @@ class Request {
           return data
         },
         (error) => {
-          if (error instanceof AxiosError) {
-            this.alterMessage(400, error.message)
-          } else if (error.response) {
-            const response = error.response
-            this.alterMessage(response.status, response.statusText)
-          }
           return Promise.reject(error)
         }
     )

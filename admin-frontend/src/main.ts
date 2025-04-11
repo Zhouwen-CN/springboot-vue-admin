@@ -17,30 +17,41 @@ const app = createApp(App)
 
 // 注册所有的element-plus图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+  app.component(key, component)
 }
 
-// 全局 错误|警告 处理
+// 全局错误处理
 app.config.errorHandler = (err, vm, info) => {
+  if ('development' === import.meta.env.MODE) {
     console.group('global error handler')
     console.log('err', err)
     console.log('vm', vm)
     console.log('info', info)
     console.groupEnd()
+  }
 }
 
+// 全局警告处理
 app.config.warnHandler = (msg, vm, trace) => {
+  if ('development' === import.meta.env.MODE) {
     console.group('global warning handler')
     console.log('msg', msg)
     console.log('vm', vm)
     console.log('trace', trace)
     console.groupEnd()
+  }
 }
+
+// 全局未捕获的promise错误处理
+window.addEventListener('unhandledrejection', (event) => {
+  event.preventDefault()
+  // do noting
+})
 
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus, {
-    locale: zhCn
+  locale: zhCn
 })
 
 app.mount('#app')

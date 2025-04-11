@@ -53,13 +53,9 @@ function searchByLabel() {
 
 // 删除字典数据
 async function removeDictData(id: number) {
-  try {
-    await reqRemoveDictDataById(id)
-    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
-    ElMessage.success('操作成功')
-  } catch (e) {
-    // do nothing
-  }
+  await reqRemoveDictDataById(id)
+  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  ElMessage.success('操作成功')
 }
 
 // 批量删除字典数据
@@ -68,13 +64,9 @@ function handleSelectionChange(dictDatas: DictData[]) {
   removeBatchDictDataIds.value = dictDatas.map((dictData) => dictData.id)
 }
 async function removeBatchDictData() {
-  try {
-    await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
-    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
-    ElMessage.success('操作成功')
-  } catch (e) {
-    // do noting
-  }
+  await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
+  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  ElMessage.success('操作成功')
 }
 
 // 添加字典数据按钮

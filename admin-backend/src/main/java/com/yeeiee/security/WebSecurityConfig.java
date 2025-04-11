@@ -37,6 +37,9 @@ public class WebSecurityConfig {
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     private static final String[] WHITE_LIST = new String[]{
             "/",
             "/index.html",
@@ -72,8 +75,6 @@ public class WebSecurityConfig {
                 }
         );
     }
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
 
     /**
      * 登入 api，可以添加多种登入方式，方便扩展

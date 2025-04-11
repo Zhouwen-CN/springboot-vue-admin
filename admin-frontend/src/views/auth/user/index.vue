@@ -97,13 +97,9 @@ function updateUser(row: UserRoleInfo) {
 
 // 删除用户
 async function deleteUser(id: number) {
-  try {
-    await reqDeleteUser(id)
-    pageRefresh({params: {searchName: searchName.value}})
-    ElMessage.success('操作成功')
-  } catch (error) {
-    // do nothing
-  }
+  await reqDeleteUser(id)
+  pageRefresh({params: {searchName: searchName.value}})
+  ElMessage.success('操作成功')
 }
 
 // 批量删除
@@ -116,14 +112,9 @@ async function deleteUsers() {
     ElMessage.warning('请选择要删除的用户')
     return
   }
-
-  try {
-    await reqDeleteUsers(deleteIds.value)
-    pageRefresh({params: {searchName: searchName.value}})
-    ElMessage.success('操作成功')
-  } catch (error) {
-    // do nothing
-  }
+  await reqDeleteUsers(deleteIds.value)
+  pageRefresh({params: {searchName: searchName.value}})
+  ElMessage.success('操作成功')
 }
 
 function editPassword() {

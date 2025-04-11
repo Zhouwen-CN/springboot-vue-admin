@@ -90,14 +90,10 @@ function updateMenu(row: MenuInfo) {
 
 // 删除菜单
 async function deleteMenu(menu: MenuInfo) {
-  try {
-    await reqDeleteMenu(menu.id)
-    await userStore.getMenuInfo()
-    router.removeRoute(menu.accessPath)
-    ElMessage.success('操作成功')
-  } catch (error) {
-    // do noting
-  }
+  await reqDeleteMenu(menu.id)
+  await userStore.getMenuInfo()
+  router.removeRoute(menu.accessPath)
+  ElMessage.success('操作成功')
 }
 
 // 表单提交
