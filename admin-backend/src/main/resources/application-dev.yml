@@ -5,10 +5,9 @@ spring:
     username: mpw:9iGk7ZB/By/bvChPtc3Log==
     password: mpw:t6ofvDUsRpCy21HQ/re43A==
 
+# 控制台打印 sql
 decorator:
   datasource:
     p6spy:
-      # 日志格式
-      log-format: "Execute SQL in %(executionTime)ms: [%(sql)]"
-      # 自定义日志类
+      # 日志类
       logging: SYSOUT
