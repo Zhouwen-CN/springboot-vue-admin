@@ -193,10 +193,10 @@ onMounted(() => {
       <el-pagination v-model:current-page="current"
                      v-model:page-size="size"
                      :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, ->, total, sizes"
+                     layout="prev, pager, next, jumper, ->, total, sizes"
                      style="margin-top: 16px"
-                     @current-change="(val) => onPageChange(val, { params: { keyword: keyword } })"
-                     @size-change="(val) => onSizeChange(val, { params: { keyword: keyword } })"/>
+                     @current-change="(val: number) => onPageChange(val, { params: { keyword: keyword } })"
+                     @size-change="(val: number) => onSizeChange(val, { params: { keyword: keyword } })"/>
     </el-card>
 
     <!-- 对话框表单 -->
