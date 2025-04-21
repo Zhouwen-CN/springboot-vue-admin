@@ -1,6 +1,10 @@
 package com.yeeiee.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-02-11
+ * @since 2025-04-21
  */
 @Getter
 @Setter
@@ -50,6 +54,14 @@ public class Menu {
     @Schema(description = "是否缓存")
     @TableField("`is_keep_alive`")
     private Boolean keepAlive;
+
+    @Schema(description = "是否外链")
+    @TableField("`is_iframe`")
+    private Boolean iframe;
+
+    @Schema(description = "外链地址")
+    @TableField("`iframe_url`")
+    private String iframeUrl;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

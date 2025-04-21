@@ -22,6 +22,8 @@ const menuForm = reactive<MenuForm>({
   filePath: undefined,
   icon: '',
   keepAlive: false,
+  iframe: false,
+  iframeUrl: undefined,
   pid: 0
 })
 
@@ -51,6 +53,13 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
     callback(new Error('文件路径须以 / 开头'))
   }
 }
+const validateIframeUrl = (rule: any, value: any, callback: any) => {
+  if (menuForm.iframe && /^https?:\/\/([\w.]+\/?)\S*$/.test(value)) {
+    callback()
+  } else {
+    callback(new Error('外链地址须以 http:// 或 https:// 开头'))
+  }
+}
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     {required: true, message: '请输入菜单名称', trigger: 'blur'},
@@ -58,6 +67,7 @@ const rules = reactive<FormRules<typeof menuForm>>({
   ],
   accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
   filePath: [{validator: validateFilePath, trigger: 'blur'}],
+  iframeUrl: [{validator: validateIframeUrl, trigger: 'blur'}],
   icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
 })
 
@@ -84,6 +94,8 @@ function updateMenu(row: MenuInfo) {
   menuForm.filePath = row.filePath
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
+  menuForm.iframe = row.iframe
+  menuForm.iframeUrl = row.iframeUrl
   menuForm.pid = row.pid
   hasChildren.value = row.children.length > 0
 }
@@ -123,6 +135,8 @@ function clean() {
   menuForm.filePath = undefined
   menuForm.icon = ''
   menuForm.keepAlive = false
+  menuForm.iframe = false
+  menuForm.iframeUrl = undefined
   menuForm.pid = 0
   hasChildren.value = false
   ruleFormRef.value?.clearValidate()
@@ -157,15 +171,23 @@ function clean() {
         </el-table-column>
         <el-table-column label="访问路径" prop="accessPath"/>
         <el-table-column label="文件路径" prop="filePath"/>
+        <el-table-column label="外链地址" prop="iframeUrl"/>
         <el-table-column align="center" label="是否缓存" min-width="40px"
                          prop="keepAlive">
           <template #default="{ row }: { row: MenuInfo }">
-            <el-switch
-                v-model="row.keepAlive"
-                active-icon="Check"
-                disabled
-                inactive-icon="Close"
-                inline-prompt/>
+            <el-tag
+                :type="row.keepAlive ? 'success' : 'info'"
+                size="large">{{ row.keepAlive ? '是' : '否' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="是否嵌入" min-width="40px"
+                         prop="keepAlive">
+          <template #default="{ row }: { row: MenuInfo }">
+            <el-tag
+                :type="row.iframe ? 'success' : 'info'"
+                size="large">{{ row.iframe ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="更新时间" prop="updateTime"/>
@@ -210,12 +232,19 @@ function clean() {
             <el-input v-model="menuForm.accessPath"
                       placeholder="请输入访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径"
+          <el-form-item v-if="!menuForm.iframe" label="文件路径"
                         prop="filePath">
             <el-input
                 v-model="menuForm.filePath"
                 :disabled="hasChildren || menuForm.pid === 0"
                 placeholder="请输入文件路径"></el-input>
+          </el-form-item>
+          <el-form-item v-if="menuForm.iframe" label="外链地址"
+                        prop="iframeUrl">
+            <el-input
+                v-model="menuForm.iframeUrl"
+                :disabled="hasChildren || menuForm.pid === 0"
+                placeholder="请输入外链地址"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-input v-model="menuForm.icon"
@@ -225,6 +254,14 @@ function clean() {
             <el-switch
                 :disabled="hasChildren || menuForm.pid === 0"
                 v-model="menuForm.keepAlive"
+                active-icon="Check"
+                inactive-icon="Close"
+                inline-prompt/>
+          </el-form-item>
+          <el-form-item label="是否外链" prop="iframe">
+            <el-switch
+                v-model="menuForm.iframe"
+                :disabled="hasChildren || menuForm.pid === 0"
                 active-icon="Check"
                 inactive-icon="Close"
                 inline-prompt/>

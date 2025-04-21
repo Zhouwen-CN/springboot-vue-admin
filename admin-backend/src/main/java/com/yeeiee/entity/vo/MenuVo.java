@@ -26,6 +26,8 @@ public class MenuVo {
     private String icon;
     private Long pid;
     private Boolean keepAlive;
+    private Boolean iframe;
+    private String iframeUrl;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private List<MenuVo> children;

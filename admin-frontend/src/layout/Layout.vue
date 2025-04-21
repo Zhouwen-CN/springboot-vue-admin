@@ -6,13 +6,13 @@ import Menu from '@/layout/components/Menu.vue'
 import Header from '@/layout/components/Header.vue'
 import TagView from '@/layout/components/TagView.vue'
 import useTagViewStore from '@/stores/tagView'
+import FrameIndex from '@/components/FrameIndex.vue'
 
 
 const route = useRoute()
 const settingStore = useSettingStore()
 
-const cachedViews = computed(() => useTagViewStore().cachedViews)
-
+const {iframe, cachedIframes, cachedViews} = useTagViewStore()
 </script>
 
 <template>
@@ -67,9 +67,23 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
         <el-scrollbar>
           <router-view>
             <template #default="{ Component, route }">
+              <!-- 不缓存的iframe -->
+              <FrameIndex v-if="iframe && route.name === iframe.name"
+                          :url="iframe.iframeUrl"/>
+
+              <!-- 缓存的iframe列表 -->
+              <FrameIndex
+                  v-for="item in cachedIframes"
+                  v-show="route.name === item.name"
+                  :key="item.name"
+                  :url="item.iframeUrl"/>
+
+              <!-- 组件使用keep-alive -->
               <transition name="fade">
                 <keep-alive :include="cachedViews" :max="5">
-                  <component :is="Component" :key="route.path"/>
+                  <component
+                      :is="Component"
+                      v-show="cachedIframes.every((e) => route.name !== e.name)" :key="route.path"/>
                 </keep-alive>
               </transition>
             </template>
@@ -87,7 +101,7 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
 }
 
 .fade-enter-active {
-  transition: all 0.5s;
+  transition: all 0.3s;
 }
 
 .fade-enter-to {

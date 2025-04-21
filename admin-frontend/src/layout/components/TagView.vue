@@ -58,7 +58,9 @@ function initTagView() {
         query: undefined,
         title: route.meta.title as string,
         affix: route.meta?.affix as boolean,
-        keepAlive: route.meta?.keepAlive as boolean
+        keepAlive: route.meta?.keepAlive as boolean,
+        iframe: route.meta?.iframe as boolean,
+        iframeUrl: route.meta?.iframeUrl as string
       }
 
       tagViewStore.addView(tagView)

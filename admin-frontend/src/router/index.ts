@@ -16,7 +16,7 @@ const modules = import.meta.glob('../views/**/*.vue')
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   scrollBehavior() {
-    return {left: 0, top: 0}
+      return {left: 0, top: 0}
   },
   routes: defaultRoutes
 })
@@ -34,7 +34,7 @@ router.beforeEach((to, _, next) => {
   if (token) {
     // 登入逻辑
     if (to.path === '/login') {
-      next({path: '/home'})
+        next({path: '/home'})
     } else {
       next()
     }
@@ -42,7 +42,7 @@ router.beforeEach((to, _, next) => {
     if (to.path === '/login') {
       next()
     } else {
-      next({path: '/login', query: {redirect: to.path}})
+        next({path: '/login', query: {redirect: to.path}})
     }
   }
 })
@@ -53,13 +53,15 @@ router.afterEach((to) => {
   if (!to.meta.hidden) {
     const tagViewStore = useTagViewStore()
     const tagView: TagView = {
-      path: to.path,
-      fullPath: to.fullPath,
-      name: to.name as string,
-      query: to.query,
-      title: to.meta.title as string,
-      affix: to.meta?.affix as boolean,
-      keepAlive: to.meta?.keepAlive as boolean
+        path: to.path,
+        fullPath: to.fullPath,
+        name: to.name as string,
+        query: to.query,
+        title: to.meta.title as string,
+        affix: to.meta?.affix as boolean,
+        keepAlive: to.meta?.keepAlive as boolean,
+        iframe: to.meta?.iframe as boolean,
+        iframeUrl: to.meta?.iframeUrl as string
     }
     tagViewStore.addView(tagView)
   }

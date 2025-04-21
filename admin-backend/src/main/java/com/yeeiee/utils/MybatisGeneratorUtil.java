@@ -137,7 +137,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_dict_data");
+        generator(args[0], "t_menu");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

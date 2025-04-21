@@ -14,10 +14,9 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-02-11
+ * @since 2025-04-21
  */
 public interface MenuMapper extends BaseMapper<Menu> {
-
     /**
      * 根据角色列表查询拥有权限的菜单，一个用户可能有多个角色
      *
@@ -25,5 +24,4 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return 菜单列表
      */
     List<MenuVo> selectMenusByRoleIds(@Param("roleIds") Collection<Long> roleIds);
-
 }
