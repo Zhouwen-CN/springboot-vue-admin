@@ -59,7 +59,8 @@ create table t_menu
     `pid`         bigint      not null comment '父级菜单id',
     `is_keep_alive` tinyint(1) default 0 null comment '是否缓存',
     `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    constraint uniq_access_path unique (access_path)
 ) comment '菜单表';
 
 
@@ -111,6 +112,7 @@ create table t_error_log
 ) comment '错误日志表';
 
 
+drop table if exists t_dict_type;
 create table t_dict_type(
   `id` bigint primary key auto_increment comment '主键',
   `type` varchar(50) not null comment '字典类型',
@@ -121,6 +123,7 @@ create table t_dict_type(
 ) comment '字典类型表';
 
 
+drop table if exists t_dict_data;
 create table t_dict_data(
   `id` bigint primary key auto_increment comment '主键',
   `type_id` bigint not null comment '字典类型id',
@@ -128,5 +131,6 @@ create table t_dict_data(
   `value` int not null comment '字典值',
   `sort` int default 0 comment '字典排序',
   `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
+  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  constraint uniq_type_label unique (type_id, label)
 ) comment '字典数据表';

@@ -1,6 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.entity.Menu;
 import com.yeeiee.entity.RoleMenu;
@@ -33,6 +34,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public void addMenu(Menu menu) {
+        val exists = this.exists(
+                Wrappers.<Menu>lambdaQuery()
+                        .eq(Menu::getAccessPath, menu.getAccessPath())
+        );
+
+        if (exists) {
+            throw new DmlOperationException("菜单访问路径已经存在");
+        }
+
         this.save(menu);
 
         // 每次添加菜单，都会赋予admin菜单权限
