@@ -31,17 +31,6 @@ app.config.errorHandler = (err, vm, info) => {
   }
 }
 
-// 全局警告处理
-app.config.warnHandler = (msg, vm, trace) => {
-  if ('development' === import.meta.env.MODE) {
-    console.group('global warning handler')
-    console.log('msg', msg)
-    console.log('vm', vm)
-    console.log('trace', trace)
-    console.groupEnd()
-  }
-}
-
 // 全局未捕获的promise错误处理
 window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault()

@@ -1,13 +1,14 @@
 import {type LocationQuery} from 'vue-router'
+import {getItem, removeItem, setItem} from '@/utils/localstorageUtil'
 
 export interface TagView {
-  path: string
-  fullPath: string
-  name: string
-  query?: LocationQuery
-  title: string
-  affix: boolean
-  keepAlive: boolean
+    path: string
+    fullPath: string
+    name: string
+    query?: LocationQuery
+    title: string
+    affix: boolean
+    keepAlive: boolean
 }
 
 export type CloseOption = keyof typeof closeOptionFunction
@@ -21,13 +22,15 @@ const closeOptionFunction = {
 }
 
 const useTagViewStore = defineStore('tagView', () => {
-  const cachedViews = ref<string[]>([])
-  const visitedViews = ref<TagView[]>([])
+    const cachedViews = ref<string[]>([])
+    const visitedViews = ref<TagView[]>(getItem<TagView[]>('VISITED_VIEWS', '[]'))
 
   // 添加页面
   function addView(view: TagView) {
-    addVisitedView(view)
-    addCachedView(view)
+      addVisitedView(view)
+      addCachedView(view)
+
+      setItem('VISITED_VIEWS', visitedViews.value)
   }
 
   // 添加访问页面
@@ -67,15 +70,16 @@ const useTagViewStore = defineStore('tagView', () => {
       }
     }
 
-    visitedViews.value = remainTagView
-    for (const v of removeTagView) {
-      if (v.path === currentRoutePath) {
-        isDeletedActive = true
+      visitedViews.value = remainTagView
+      for (const v of removeTagView) {
+          if (v.path === currentRoutePath) {
+              isDeletedActive = true
+          }
+
+          removeCacheView(v)
       }
 
-      removeCacheView(v)
-    }
-
+      setItem('VISITED_VIEWS', visitedViews.value)
       return isDeletedActive
   }
 
@@ -89,6 +93,7 @@ const useTagViewStore = defineStore('tagView', () => {
     function $reset() {
         cachedViews.value = []
         visitedViews.value = []
+        removeItem('VISITED_VIEWS')
     }
 
     return {cachedViews, visitedViews, addView, removeView, removeCacheView, $reset}
