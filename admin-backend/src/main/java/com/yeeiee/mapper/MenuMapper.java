@@ -1,8 +1,8 @@
 package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.vo.MenuVo;
+import com.yeeiee.domain.entity.Menu;
+import com.yeeiee.domain.vo.MenuVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;

@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.LoginLog;
-import com.yeeiee.entity.User;
-import com.yeeiee.entity.UserRole;
-import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleVo;
-import com.yeeiee.entity.vo.UserVo;
+import com.yeeiee.domain.entity.LoginLog;
+import com.yeeiee.domain.entity.User;
+import com.yeeiee.domain.entity.UserRole;
+import com.yeeiee.domain.form.UserRoleIdsForm;
+import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
@@ -124,9 +124,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void addUser(UserRoleIdsDto userRoleIdsDto) {
-        val username = userRoleIdsDto.getUsername();
-        val password = userRoleIdsDto.getPassword();
+    public void addUser(UserRoleIdsForm userRoleIdsForm) {
+        val username = userRoleIdsForm.getUsername();
+        val password = userRoleIdsForm.getPassword();
 
         val exists = this.exists(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, username)
@@ -142,8 +142,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         this.save(user);
 
-        if (!userRoleIdsDto.getRoleIds().isEmpty()) {
-            val userRoleList = userRoleIdsDto.getRoleIds().stream().map(roleId -> {
+        if (!userRoleIdsForm.getRoleIds().isEmpty()) {
+            val userRoleList = userRoleIdsForm.getRoleIds().stream().map(roleId -> {
                 val userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(roleId);
@@ -154,10 +154,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void modifyUser(UserRoleIdsDto userRoleIdsDto) {
-        val userId = userRoleIdsDto.getId();
-        val username = userRoleIdsDto.getUsername();
-        var password = userRoleIdsDto.getPassword();
+    public void modifyUser(UserRoleIdsForm userRoleIdsForm) {
+        val userId = userRoleIdsForm.getId();
+        val username = userRoleIdsForm.getUsername();
+        var password = userRoleIdsForm.getPassword();
 
         // admin自己才能修改自己
         val securityUser = CommonUtil.getSecurityUser();
@@ -190,7 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 获取当前 ids 和 更新的 ids 做差集
         val currentRoleIds = userRoles.stream().map(UserRole::getRoleId).toList();
-        val updateRoleIds = userRoleIdsDto.getRoleIds();
+        val updateRoleIds = userRoleIdsForm.getRoleIds();
         val pair = CollectionUtil.differenceSet(currentRoleIds, updateRoleIds);
 
         // 当前 - 更新 = 删除

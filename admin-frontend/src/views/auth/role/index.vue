@@ -6,11 +6,11 @@ import {
   reqGetRolePage,
   reqSaveRoleMenu,
   type RoleMenuForm,
-  type RoleMenuInfo
+  type RoleMenuVo
 } from '@/api/auth/role'
 import {ElMessage, type FormInstance, type FormRules, type TreeInstance} from 'element-plus'
 import useUserStore from '@/stores/user'
-import type {MenuInfo} from '@/api/auth/menu'
+import type {MenuVo} from '@/api/auth/menu'
 
 const userStore = useUserStore()
 
@@ -58,14 +58,14 @@ function addRole() {
 }
 
 // 更新角色
-function updateRole(row: RoleMenuInfo) {
+function updateRole(row: RoleMenuVo) {
   toggleDialog.show = true
   toggleDialog.title = '修改角色'
   roleMenuForm.id = row.id
   roleMenuForm.roleName = row.roleName
   roleMenuForm.desc = row.desc
   const menuIds = row.menuIds
-  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuInfo[], menuIds)
+  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], menuIds)
 }
 
 // 删除角色
@@ -77,9 +77,11 @@ async function deleteRole(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-function handleSelectionChange(roles: RoleMenuInfo[]) {
+
+function handleSelectionChange(roles: RoleMenuVo[]) {
   deleteIds.value = roles.map((role) => role.id)
 }
+
 async function deleteRoles() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -132,7 +134,7 @@ const defaultProps = {
  * @param selectedKeys
  */
 function getSelectKeys(
-    menus: MenuInfo[],
+    menus: MenuVo[],
     menuIds: number[],
     selectedKeys: number[] = []
 ): number[] {
@@ -203,7 +205,7 @@ onMounted(() => {
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: RoleMenuInfo }">
+          <template #default="{ row }: { row: RoleMenuVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="updateRole(row)"></el-button>

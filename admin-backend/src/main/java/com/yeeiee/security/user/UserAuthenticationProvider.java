@@ -1,6 +1,6 @@
 package com.yeeiee.security.user;
 
-import com.yeeiee.entity.User;
+import com.yeeiee.domain.entity.User;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.service.UserService;
 import lombok.RequiredArgsConstructor;

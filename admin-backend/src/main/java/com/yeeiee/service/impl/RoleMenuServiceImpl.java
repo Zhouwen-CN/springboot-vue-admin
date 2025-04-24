@@ -1,7 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.RoleMenu;
+import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.mapper.RoleMenuMapper;
 import com.yeeiee.service.RoleMenuService;
 import org.springframework.stereotype.Service;

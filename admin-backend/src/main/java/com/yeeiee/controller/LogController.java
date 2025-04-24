@@ -2,9 +2,9 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.ErrorLog;
-import com.yeeiee.entity.LoginLog;
-import com.yeeiee.entity.OperationLog;
+import com.yeeiee.domain.entity.ErrorLog;
+import com.yeeiee.domain.entity.LoginLog;
+import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.ErrorLogService;

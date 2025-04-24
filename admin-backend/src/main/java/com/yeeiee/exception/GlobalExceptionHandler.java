@@ -1,6 +1,6 @@
 package com.yeeiee.exception;
 
-import com.yeeiee.entity.ErrorLog;
+import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.JsonUtil;

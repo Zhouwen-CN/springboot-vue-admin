@@ -1,8 +1,8 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.DictData;
-import com.yeeiee.entity.vo.DictDataVo;
+import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.vo.DictDataVo;
 import com.yeeiee.mapper.DictDataMapper;
 import com.yeeiee.service.DictDataService;
 import lombok.RequiredArgsConstructor;

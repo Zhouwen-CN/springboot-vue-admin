@@ -2,9 +2,9 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleVo;
-import com.yeeiee.entity.vo.UserVo;
+import com.yeeiee.domain.form.UserRoleIdsForm;
+import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +13,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -57,15 +65,15 @@ public class UserController {
 
     @Operation(summary = "新增用户")
     @PostMapping
-    public R<Void> addUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
-        userService.addUser(userRoleIdsDto);
+    public R<Void> addUser(@RequestBody UserRoleIdsForm userRoleIdsForm) {
+        userService.addUser(userRoleIdsForm);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping
-    public R<Void> modifyUser(@RequestBody UserRoleIdsDto userRoleIdsDto) {
-        userService.modifyUser(userRoleIdsDto);
+    public R<Void> modifyUser(@RequestBody UserRoleIdsForm userRoleIdsForm) {
+        userService.modifyUser(userRoleIdsForm);
         return R.ok();
     }
 

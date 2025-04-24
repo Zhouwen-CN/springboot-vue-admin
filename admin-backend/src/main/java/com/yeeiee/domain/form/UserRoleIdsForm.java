@@ -1,4 +1,4 @@
-package com.yeeiee.entity.dto;
+package com.yeeiee.domain.form;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yeeiee.config.EncryptSerializer;
@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserRoleIdsDto {
+public class UserRoleIdsForm {
     private Long id;
     private String username;
     @JsonSerialize(using = EncryptSerializer.class)

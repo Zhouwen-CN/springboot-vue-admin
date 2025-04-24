@@ -4,7 +4,7 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.vo.RoleMenuVo">
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.vo.RoleMenuVo">
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
         <result column="desc" property="desc"/>
@@ -39,7 +39,7 @@
         on a.id=b.role_id
     </select>
 
-    <select id="selectRoleListByUserId" resultType="com.yeeiee.entity.vo.RoleVo">
+    <select id="selectRoleListByUserId" resultType="com.yeeiee.domain.vo.RoleVo">
         select
             b.id as id,
             b.role_name as roleName
@@ -53,7 +53,7 @@
         on a.role_id = b.id
     </select>
 
-    <select id="selectRoleVoList" resultType="com.yeeiee.entity.vo.RoleVo">
+    <select id="selectRoleVoList" resultType="com.yeeiee.domain.vo.RoleVo">
         select
             id,
             role_name as roleName

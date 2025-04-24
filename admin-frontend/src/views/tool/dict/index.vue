@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {Delete, Edit, Search} from '@element-plus/icons-vue'
 import {
-  type DictType,
   type DictTypeForm,
+  type DictTypeVo,
   reqGetDictTypePage,
   reqRemoveDictTypeById,
   reqRemoveDictTypeByIds,
@@ -56,9 +56,11 @@ async function removeDictType(id: number) {
 
 // 批量删除字典类型
 const removeBatchDictTypeIds = ref<number[]>([])
-function handleSelectionChange(dictTypes: DictType[]) {
+
+function handleSelectionChange(dictTypes: DictTypeVo[]) {
   removeBatchDictTypeIds.value = dictTypes.map((dictType) => dictType.id)
 }
+
 async function removeBatchDictType() {
   await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
   refresh({params: {keyword: keyword.value}})
@@ -72,7 +74,7 @@ function addDictType() {
 }
 
 // 更新字典类型按钮
-function modifyDictType(row: DictType) {
+function modifyDictType(row: DictTypeVo) {
   toggleDialog.show = true
   toggleDialog.title = '更新字典类型'
   dictTypeForm.id = row.id
@@ -163,7 +165,7 @@ onMounted(() => {
         <el-table-column type="selection" width="55"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="字典类型" prop="type">
-          <template #default="{ row }: { row: DictType }">
+          <template #default="{ row }: { row: DictTypeVo }">
             <span class="dict-type"
                   @click="openDrawer(row.id)">{{ row.type }}</span>
           </template>
@@ -174,7 +176,7 @@ onMounted(() => {
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: DictType }">
+          <template #default="{ row }: { row: DictTypeVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="modifyDictType(row)"></el-button>

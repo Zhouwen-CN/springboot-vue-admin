@@ -1,7 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.DictType;
+import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.mapper.DictTypeMapper;
 import com.yeeiee.service.DictTypeService;
 import org.springframework.stereotype.Service;

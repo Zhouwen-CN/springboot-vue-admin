@@ -1,6 +1,6 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.entity.LoginLog;
+import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.NamedAuthenticationException;

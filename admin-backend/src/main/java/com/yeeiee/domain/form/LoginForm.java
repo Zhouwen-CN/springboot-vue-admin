@@ -1,4 +1,4 @@
-package com.yeeiee.entity.dto;
+package com.yeeiee.domain.form;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LoginDto {
+public class LoginForm {
     private String username;
     private String password;
 }

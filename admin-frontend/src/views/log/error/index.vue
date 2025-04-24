@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {type ErrorLog, reqGetErrorLogPage} from '@/api/log'
+import {type ErrorLogVo, reqGetErrorLogPage} from '@/api/log'
 import {ElMessage} from 'element-plus'
 
 // 抽屉可见性
@@ -23,7 +23,7 @@ const {
 } = reqGetErrorLogPage()
 
 // 打开抽屉
-function openErrorMessage(row: ErrorLog) {
+function openErrorMessage(row: ErrorLogVo) {
   drawerVisible.value = true
   errorMsg.value = row.errorMsg
 }
@@ -102,7 +102,7 @@ onMounted(() => {
         <el-table-column label="创建时间"
                          prop="createTime"></el-table-column>
         <el-table-column label="错误信息">
-          <template #default="{ row }: { row: ErrorLog }">
+          <template #default="{ row }: { row: ErrorLogVo }">
             <el-button-group class="ml-4">
               <el-button icon="View" type="primary"
                          @click="openErrorMessage(row)"/>

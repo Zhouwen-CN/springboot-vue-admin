@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yeeiee.entity.DictType;
+import com.yeeiee.domain.entity.DictType;
 
 /**
  * <p>

@@ -3,8 +3,8 @@ package com.yeeiee.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.User;
-import com.yeeiee.entity.vo.UserRoleVo;
+import com.yeeiee.domain.entity.User;
+import com.yeeiee.domain.vo.UserRoleVo;
 import org.apache.ibatis.annotations.Param;
 
 /**

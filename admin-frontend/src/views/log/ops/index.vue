@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {type OperationLog, reqGetOperationLogPage} from '@/api/log'
+import {type OperationLogVo, reqGetOperationLogPage} from '@/api/log'
 
 // 表单数据
 const searchForm = reactive({
@@ -76,7 +76,7 @@ onMounted(() => {
                          prop="method"></el-table-column>
         <el-table-column label="请求参数" prop="params"></el-table-column>
         <el-table-column label="请求耗时">
-          <template #default="{ row }: { row: OperationLog }">
+          <template #default="{ row }: { row: OperationLogVo }">
             {{ row.time }} ms
           </template>
         </el-table-column>

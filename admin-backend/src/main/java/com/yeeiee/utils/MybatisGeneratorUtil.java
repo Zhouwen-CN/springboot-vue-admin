@@ -83,7 +83,7 @@ public final class MybatisGeneratorUtil {
                 }))
                 .packageConfig(builder -> {
                     builder.parent("com.yeeiee") // 设置父包名
-                            .entity("entity")
+                            .entity("domain.entity")
                             .controller("controller")
                             .mapper("mapper")
                             .service("service")

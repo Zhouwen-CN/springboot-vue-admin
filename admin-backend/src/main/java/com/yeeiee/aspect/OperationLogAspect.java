@@ -1,6 +1,6 @@
 package com.yeeiee.aspect;
 
-import com.yeeiee.entity.OperationLog;
+import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;

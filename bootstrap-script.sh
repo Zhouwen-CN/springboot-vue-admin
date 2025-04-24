@@ -3,9 +3,10 @@
 set -euo pipefail
 set -x
 app_name='admin-backend-1.0.0-SNAPSHOT.jar'
+active_profile='prod'
 
 function start_app(){
-    nohup java -jar ${app_name} > /dev/null 2>&1 &
+    nohup java -jar ${app_name} --spring.profiles.active=${active_profile} > /dev/null 2>&1 &
     echo '------------ APP Start ------------'
 }
 

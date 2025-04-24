@@ -1,4 +1,4 @@
-package com.yeeiee.entity;
+package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 操作日志表
+ * 错误日志表
  * </p>
  *
  * @author chen
@@ -23,21 +23,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_operation_log`")
-@Schema(name = "OperationLog", description = "操作日志表")
-public class OperationLog {
+@TableName("`t_error_log`")
+@Schema(name = "ErrorLog", description = "错误日志表")
+public class ErrorLog {
 
-    @Schema(description = "主键")
     @TableId(value = "`id`", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "用户名")
     @TableField("`username`")
     private String username;
-
-    @Schema(description = "操作")
-    @TableField("`operation`")
-    private String operation;
 
     @Schema(description = "请求地址")
     @TableField("`url`")
@@ -51,14 +46,6 @@ public class OperationLog {
     @TableField("`params`")
     private String params;
 
-    @Schema(description = "请求耗时")
-    @TableField("`time`")
-    private Long time;
-
-    @Schema(description = "操作状态")
-    @TableField("`status`")
-    private String status;
-
     @Schema(description = "ip地址")
     @TableField("`ip`")
     private String ip;
@@ -66,6 +53,10 @@ public class OperationLog {
     @Schema(description = "用户代理")
     @TableField("`user_agent`")
     private String userAgent;
+
+    @Schema(description = "错误信息")
+    @TableField("`error_msg`")
+    private String errorMsg;
 
     @Schema(description = "创建时间")
     @TableField(value = "`create_time`", fill = FieldFill.INSERT)

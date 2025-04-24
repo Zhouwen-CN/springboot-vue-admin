@@ -1,6 +1,6 @@
 package com.yeeiee.security.jwt;
 
-import com.yeeiee.entity.User;
+import com.yeeiee.domain.entity.User;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.FilterChain;

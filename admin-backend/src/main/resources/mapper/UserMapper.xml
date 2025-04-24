@@ -4,13 +4,13 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="UserRoleVo" type="com.yeeiee.entity.vo.UserRoleVo">
+    <resultMap id="UserRoleVo" type="com.yeeiee.domain.vo.UserRoleVo">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <collection property="roleList" ofType="com.yeeiee.entity.vo.RoleVo">
+        <collection property="roleList" ofType="com.yeeiee.domain.vo.RoleVo">
             <id column="role_id" property="id"/>
             <result column="role_name" property="roleName"/>
         </collection>

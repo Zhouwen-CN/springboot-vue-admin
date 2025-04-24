@@ -1,21 +1,21 @@
 import request from '@/utils/request'
 import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
-import type {Role} from '@/api/auth/role'
+import type {RoleVo} from '../role'
 
 export interface LoginForm {
     username: string
     password: string
 }
 
-type RoleList = Omit<Role, 'desc' | 'createTime' | 'updateTime'>[]
+type RoleList = RoleVo[]
 
-export interface UserInfo {
-  id: number
-  username: string
-  accessToken: string
-  refreshToken: string
-  roleList: RoleList
+export interface UserVo {
+    id: number
+    username: string
+    accessToken: string
+    refreshToken: string
+    roleList: RoleList
 }
 
 /**
@@ -24,7 +24,7 @@ export interface UserInfo {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-  return request.post<UserInfo, LoginForm>('/login/user', loginForm)
+    return request.post<UserVo, LoginForm>('/login/user', loginForm)
 }
 
 /**
@@ -33,22 +33,22 @@ export function reqLogin(loginForm: LoginForm) {
  * @returns
  */
 export function reqRefreshToken(refreshToken: string) {
-  return request.get<UserInfo>('/user/refresh', {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`
-    }
-  })
+    return request.get<UserVo>('/user/refresh', {
+        headers: {
+            Authorization: `Bearer ${refreshToken}`
+        }
+    })
 }
 
 export function reqLogout(id: number) {
   return request.get<string>(`/user/logout/${id}`)
 }
 
-export interface UserRoleInfo extends CreateAndUpdateTime {
-  id: number
-  username: string
-  password: string
-  roleList: RoleList
+export interface UserRoleVo extends CreateAndUpdateTime {
+    id: number
+    username: string
+    password: string
+    roleList: RoleList
 }
 
 /**
@@ -56,7 +56,7 @@ export interface UserRoleInfo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetUserRolePage() {
-  return usePagination<UserRoleInfo>('/user')
+    return usePagination<UserRoleVo>('/user')
 }
 
 export interface UserRoleForm {

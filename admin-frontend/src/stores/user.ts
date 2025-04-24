@@ -1,48 +1,48 @@
-import type {LoginForm, UserInfo} from '@/api/auth/user'
+import type {LoginForm, UserVo} from '@/api/auth/user'
 import {reqLogin, reqLogout, reqRefreshToken} from '@/api/auth/user'
-import {type MenuInfo, reqGetMenuList} from '@/api/auth/menu'
+import {type MenuVo, reqGetMenuList} from '@/api/auth/menu'
 import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
 import router, {modules} from '@/router'
 import {getItem, removeItem, setItem} from '@/utils/localstorageUtil'
 import useTagViewStore from '@/stores/tagView'
 
 const useUserStore = defineStore('user', () => {
-    const userInfo = ref<UserInfo>(getItem<UserInfo>('USER_INFO', '{}'))
-    const menuInfo = ref<MenuInfo[]>(getItem<MenuInfo[]>('MENU_INFO', '[]'))
+    const userInfo = ref<UserVo>(getItem<UserVo>('USER_INFO', '{}'))
+    const menuInfo = ref<MenuVo[]>(getItem<MenuVo[]>('MENU_INFO', '[]'))
     let refreshTokenPromise: Promise<boolean> | null = null
 
     // 登入
     async function doLogin(loginForm: LoginForm) {
         const result = await reqLogin(loginForm)
-    userInfo.value = result.data
-    setItem('USER_INFO', userInfo.value)
-  }
-
-  // 刷新 token
-  async function doRefreshToken() {
-    if (refreshTokenPromise) {
-      return refreshTokenPromise
+        userInfo.value = result.data
+        setItem('USER_INFO', userInfo.value)
     }
-    // eslint-disable-next-line no-async-promise-executor
-    refreshTokenPromise = new Promise(async (resolve) => {
-      try {
-          // 状态码!=200，拦截器会返回一个失败的promise
-          const result = await reqRefreshToken(userInfo.value.refreshToken)
-          const {accessToken, refreshToken} = result.data
-          userInfo.value.accessToken = accessToken
-          userInfo.value.refreshToken = refreshToken
-          setItem('USER_INFO', userInfo.value)
-          resolve(true)
-      } catch (error) {
-        resolve(false)
-      }
-    })
 
-    refreshTokenPromise.finally(() => {
-      refreshTokenPromise = null
-    })
-    return refreshTokenPromise
-  }
+    // 刷新 token
+    async function doRefreshToken() {
+        if (refreshTokenPromise) {
+            return refreshTokenPromise
+        }
+        // eslint-disable-next-line no-async-promise-executor
+        refreshTokenPromise = new Promise(async (resolve) => {
+            try {
+                // 状态码!=200，拦截器会返回一个失败的promise
+                const result = await reqRefreshToken(userInfo.value.refreshToken)
+                const {accessToken, refreshToken} = result.data
+                userInfo.value.accessToken = accessToken
+                userInfo.value.refreshToken = refreshToken
+                setItem('USER_INFO', userInfo.value)
+                resolve(true)
+            } catch (error) {
+                resolve(false)
+            }
+        })
+
+        refreshTokenPromise.finally(() => {
+            refreshTokenPromise = null
+        })
+        return refreshTokenPromise
+    }
 
   // 登出
   async function doLogout() {
@@ -68,10 +68,10 @@ const useUserStore = defineStore('user', () => {
 
   // 重置仓库
   function $reset() {
-    removeItem('USER_INFO')
-    removeItem('MENU_INFO')
-    userInfo.value = {} as UserInfo
-    menuInfo.value = []
+      removeItem('USER_INFO')
+      removeItem('MENU_INFO')
+      userInfo.value = {} as UserVo
+      menuInfo.value = []
   }
 
     return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}

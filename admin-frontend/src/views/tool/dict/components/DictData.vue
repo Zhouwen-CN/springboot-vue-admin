@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {
-  type DictData,
   type DictDataForm,
+  type DictDataVo,
   reqGetDictDataPageByTypeId,
   reqRemoveDictDataById,
   reqRemoveDictDataByIds,
@@ -60,9 +60,11 @@ async function removeDictData(id: number) {
 
 // 批量删除字典数据
 const removeBatchDictDataIds = ref<number[]>([])
-function handleSelectionChange(dictDatas: DictData[]) {
+
+function handleSelectionChange(dictDatas: DictDataVo[]) {
   removeBatchDictDataIds.value = dictDatas.map((dictData) => dictData.id)
 }
+
 async function removeBatchDictData() {
   await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
   refresh({params: {typeId: typeId.value, label: searchLabel.value}})
@@ -76,7 +78,7 @@ function addDictData() {
 }
 
 // 更新字典数据按钮
-function modifyDictData(row: DictData) {
+function modifyDictData(row: DictDataVo) {
   toggleDialog.show = true
   toggleDialog.title = '更新字典数据'
   dictDataForm.id = row.id
@@ -181,7 +183,7 @@ defineExpose({
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: DictData }">
+          <template #default="{ row }: { row: DictDataVo }">
             <el-button-group>
               <el-button :icon="Edit" size="small" type="primary"
                          @click="modifyDictData(row)">

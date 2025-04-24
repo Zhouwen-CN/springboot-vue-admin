@@ -1,6 +1,6 @@
 package com.yeeiee.security.jwt;
 
-import com.yeeiee.entity.User;
+import com.yeeiee.domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

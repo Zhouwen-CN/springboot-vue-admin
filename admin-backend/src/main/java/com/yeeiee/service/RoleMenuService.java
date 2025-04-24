@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.RoleMenu;
+import com.yeeiee.domain.entity.RoleMenu;
 
 /**
  * <p>

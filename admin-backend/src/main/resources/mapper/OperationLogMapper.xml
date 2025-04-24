@@ -4,7 +4,7 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.entity.OperationLog">
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.OperationLog">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="operation" property="operation"/>

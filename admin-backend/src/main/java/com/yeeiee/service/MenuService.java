@@ -1,8 +1,8 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.Menu;
-import com.yeeiee.entity.vo.MenuVo;
+import com.yeeiee.domain.entity.Menu;
+import com.yeeiee.domain.vo.MenuVo;
 
 import java.util.Collection;
 import java.util.List;

@@ -3,10 +3,10 @@ package com.yeeiee.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.User;
-import com.yeeiee.entity.dto.UserRoleIdsDto;
-import com.yeeiee.entity.vo.UserRoleVo;
-import com.yeeiee.entity.vo.UserVo;
+import com.yeeiee.domain.entity.User;
+import com.yeeiee.domain.form.UserRoleIdsForm;
+import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collection;
@@ -49,16 +49,16 @@ public interface UserService extends IService<User> {
     /**
      * 新增用户和角色关系
      *
-     * @param userRoleIdsDto 用户和角色关系
+     * @param userRoleIdsForm 用户和角色关系
      */
-    void addUser(UserRoleIdsDto userRoleIdsDto);
+    void addUser(UserRoleIdsForm userRoleIdsForm);
 
     /**
      * 更新用户和角色关系
      *
-     * @param userRoleIdsDto 用户和角色关系
+     * @param userRoleIdsForm 用户和角色关系
      */
-    void modifyUser(UserRoleIdsDto userRoleIdsDto);
+    void modifyUser(UserRoleIdsForm userRoleIdsForm);
 
     /**
      * 删除用户和角色关系

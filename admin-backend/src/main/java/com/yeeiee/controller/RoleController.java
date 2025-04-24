@@ -2,9 +2,9 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.entity.dto.RoleMenuIdsDto;
-import com.yeeiee.entity.vo.RoleMenuVo;
-import com.yeeiee.entity.vo.RoleVo;
+import com.yeeiee.domain.form.RoleMenuIdsForm;
+import com.yeeiee.domain.vo.RoleMenuVo;
+import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,15 +60,15 @@ public class RoleController {
 
     @Operation(summary = "新增角色")
     @PostMapping
-    public R<Void> addRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
-        roleService.addRole(roleMenuIdsDto);
+    public R<Void> addRole(@RequestBody RoleMenuIdsForm roleMenuIdsForm) {
+        roleService.addRole(roleMenuIdsForm);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
     @PutMapping
-    public R<Void> modifyRole(@RequestBody RoleMenuIdsDto roleMenuIdsDto) {
-        roleService.modifyRole(roleMenuIdsDto);
+    public R<Void> modifyRole(@RequestBody RoleMenuIdsForm roleMenuIdsForm) {
+        roleService.modifyRole(roleMenuIdsForm);
         return R.ok();
     }
 

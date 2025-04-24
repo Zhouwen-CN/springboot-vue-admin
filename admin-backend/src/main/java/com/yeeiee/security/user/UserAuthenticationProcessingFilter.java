@@ -1,7 +1,7 @@
 package com.yeeiee.security.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yeeiee.entity.dto.LoginDto;
+import com.yeeiee.domain.form.LoginForm;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.utils.JsonUtil;
 import jakarta.servlet.ServletException;
@@ -49,16 +49,16 @@ public class UserAuthenticationProcessingFilter extends AbstractAuthenticationPr
                 .lines()
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        LoginDto loginDto;
+        LoginForm loginForm;
         try {
-            loginDto = JsonUtil.parse(body, LoginDto.class);
+            loginForm = JsonUtil.parse(body, LoginForm.class);
         } catch (JsonProcessingException e) {
             throw new NamedAuthenticationException("未知用户", "请求参数解析失败");
         }
 
         val unauthenticated = new UserAuthenticationToken();
-        unauthenticated.setUsername(loginDto.getUsername());
-        unauthenticated.setPassword(loginDto.getPassword());
+        unauthenticated.setUsername(loginForm.getUsername());
+        unauthenticated.setPassword(loginForm.getPassword());
         unauthenticated.setAuthenticated(false);
 
         return super.getAuthenticationManager().authenticate(unauthenticated);

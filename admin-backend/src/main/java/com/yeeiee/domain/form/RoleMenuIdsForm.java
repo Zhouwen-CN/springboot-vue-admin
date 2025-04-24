@@ -1,15 +1,14 @@
-package com.yeeiee.entity.vo;
+package com.yeeiee.domain.form;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * <p>
- * 角色信息，包含菜单id列表
+ * 新增 & 更新 角色信息
  * </p>
  *
  * @author chen
@@ -18,11 +17,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class RoleMenuVo {
+public class RoleMenuIdsForm {
     private Long id;
     private String roleName;
     private String desc;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
     private List<Long> menuIds;
 }

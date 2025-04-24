@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {Delete, Edit, Plus} from '@element-plus/icons-vue'
 import useUserStore from '@/stores/user'
-import type {MenuInfo} from '@/api/auth/menu'
+import type {MenuVo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 
@@ -75,7 +75,7 @@ function addSubmenu(pid: number) {
 }
 
 // 更新菜单
-function updateMenu(row: MenuInfo) {
+function updateMenu(row: MenuVo) {
   toggleDialog.show = true
   toggleDialog.title = '更新菜单'
   menuForm.id = row.id
@@ -89,7 +89,7 @@ function updateMenu(row: MenuInfo) {
 }
 
 // 删除菜单
-async function deleteMenu(menu: MenuInfo) {
+async function deleteMenu(menu: MenuVo) {
   await reqDeleteMenu(menu.id)
   await userStore.getMenuInfo()
   router.removeRoute(menu.accessPath)
@@ -146,7 +146,7 @@ function clean() {
           show-overflow-tooltip
           style="margin-top: 16px">
         <el-table-column label="菜单名称" prop="title">
-          <template #default="{ row }: { row: MenuInfo }">
+          <template #default="{ row }: { row: MenuVo }">
             <el-space>
               <el-icon :size="20">
                 <component :is="row.icon"></component>
@@ -159,7 +159,7 @@ function clean() {
         <el-table-column label="文件路径" prop="filePath"/>
         <el-table-column align="center" label="是否缓存" min-width="40px"
                          prop="keepAlive">
-          <template #default="{ row }: { row: MenuInfo }">
+          <template #default="{ row }: { row: MenuVo }">
             <el-switch
                 v-model="row.keepAlive"
                 active-icon="Check"
@@ -170,7 +170,7 @@ function clean() {
         </el-table-column>
         <el-table-column label="更新时间" prop="updateTime"/>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: MenuInfo }">
+          <template #default="{ row }: { row: MenuVo }">
             <el-button-group>
               <el-button :icon="Plus"
                          type="primary"

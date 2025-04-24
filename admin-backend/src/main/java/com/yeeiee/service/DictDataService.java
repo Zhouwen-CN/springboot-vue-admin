@@ -1,8 +1,8 @@
 package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.DictData;
-import com.yeeiee.entity.vo.DictDataVo;
+import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.vo.DictDataVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

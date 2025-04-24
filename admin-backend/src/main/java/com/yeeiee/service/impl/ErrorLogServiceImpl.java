@@ -1,7 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.entity.ErrorLog;
+import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.mapper.ErrorLogMapper;
 import com.yeeiee.service.ErrorLogService;
 import org.springframework.stereotype.Service;

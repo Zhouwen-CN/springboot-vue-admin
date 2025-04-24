@@ -3,10 +3,10 @@ package com.yeeiee.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.entity.Role;
-import com.yeeiee.entity.dto.RoleMenuIdsDto;
-import com.yeeiee.entity.vo.RoleMenuVo;
-import com.yeeiee.entity.vo.RoleVo;
+import com.yeeiee.domain.entity.Role;
+import com.yeeiee.domain.form.RoleMenuIdsForm;
+import com.yeeiee.domain.vo.RoleMenuVo;
+import com.yeeiee.domain.vo.RoleVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,16 +33,16 @@ public interface RoleService extends IService<Role> {
     /**
      * 添加角色 和 菜单ids
      *
-     * @param roleMenuIdsDto 角色 和 菜单ids
+     * @param roleMenuIdsForm 角色 和 菜单ids
      */
-    void addRole(RoleMenuIdsDto roleMenuIdsDto);
+    void addRole(RoleMenuIdsForm roleMenuIdsForm);
 
     /**
      * 修改角色 和 菜单ids
      *
-     * @param roleMenuIdsDto 角色 和 菜单ids
+     * @param roleMenuIdsForm 角色 和 菜单ids
      */
-    void modifyRole(RoleMenuIdsDto roleMenuIdsDto);
+    void modifyRole(RoleMenuIdsForm roleMenuIdsForm);
 
     /**
      * 根据id删除角色和菜单关系

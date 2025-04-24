@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yeeiee.entity.UserRole;
+import com.yeeiee.domain.entity.UserRole;
 
 /**
  * <p>

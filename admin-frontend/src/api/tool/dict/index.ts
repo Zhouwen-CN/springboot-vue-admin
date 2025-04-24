@@ -3,17 +3,17 @@ import request from '@/utils/request'
 import {type CreateAndUpdateTime} from '@/utils/requestTypes'
 
 // 字典类型
-export interface DictType extends CreateAndUpdateTime {
-  id: number
-  name: string
-  type: string
+export interface DictTypeVo extends CreateAndUpdateTime {
+    id: number
+    name: string
+    type: string
 }
 
-export type DictTypeForm = Omit<DictType, 'id' | 'createTime' | 'updateTime'> & { id?: number }
+export type DictTypeForm = Omit<DictTypeVo, 'id' | 'createTime' | 'updateTime'> & { id?: number }
 
 // 获取字典类型分页
 export function reqGetDictTypePage() {
-  return usePagination<DictType>('/dict/type')
+    return usePagination<DictTypeVo>('/dict/type')
 }
 
 // 新增或者更新字典类型
@@ -34,24 +34,24 @@ export function reqRemoveDictTypeById(id: number) {
 // 批量删除字典类型
 export function reqRemoveDictTypeByIds(ids: number[]) {
   return request.delete<string, number[]>('/dict/type', {
-    params: {ids: ids + ''}
+      params: {ids: ids + ''}
   })
 }
 
 // 字典数据
-export interface DictData extends CreateAndUpdateTime {
-  id: number
-  typeId: number
-  label: string
-  value: number
-  sort: number
+export interface DictDataVo extends CreateAndUpdateTime {
+    id: number
+    typeId: number
+    label: string
+    value: number
+    sort: number
 }
 
-export type DictDataForm = Omit<DictData, 'id' | 'createTime' | 'updateTime'> & { id?: number }
+export type DictDataForm = Omit<DictDataVo, 'id' | 'createTime' | 'updateTime'> & { id?: number }
 
 // 获取字典数据分页
 export function reqGetDictDataPageByTypeId() {
-  return usePagination<DictData>('/dict/data')
+    return usePagination<DictDataVo>('/dict/data')
 }
 
 // 新增或者更新字典数据
@@ -70,14 +70,14 @@ export function reqRemoveDictDataById(id: number) {
 
 // 批量删除字典数据
 export function reqRemoveDictDataByIds(ids: number[]) {
-  return request.delete<string, number[]>('/dict/data', {params: {ids: ids + ''}})
+    return request.delete<string, number[]>('/dict/data', {params: {ids: ids + ''}})
 }
 
 // 根据字典类型查询字典列表
-export type DictDataVo = Pick<DictData, 'label' | 'value'>
+export type LabelValueVo = Pick<DictDataVo, 'label' | 'value'>
 
 export function reqGetDictDataListByTypeId(type: string) {
-  return request.get<DictDataVo[]>('/dict/data', {
-    params: {type}
-  })
+    return request.get<LabelValueVo[]>('/dict/data', {
+        params: {type}
+    })
 }

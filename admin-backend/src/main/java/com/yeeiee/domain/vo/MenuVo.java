@@ -1,4 +1,4 @@
-package com.yeeiee.entity.vo;
+package com.yeeiee.domain.vo;
 
 import lombok.Getter;
 import lombok.Setter;

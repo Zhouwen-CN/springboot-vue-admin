@@ -6,11 +6,11 @@ import {
   reqGetUserRolePage,
   reqSaveUserRole,
   type UserRoleForm,
-  type UserRoleInfo
+  type UserRoleVo
 } from '@/api/auth/user'
 import type {CheckboxValueType} from 'element-plus'
 import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import {reqGetRoles, type RoleCompact} from '@/api/auth/role'
+import {reqGetRoles, type RoleVo} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
 
@@ -35,7 +35,7 @@ const toggleDialog = reactive({
 const saveLoading = ref(false)
 
 // 角色列表数据
-const roleData = ref<RoleCompact[]>([])
+const roleData = ref<RoleVo[]>([])
 
 // 获取分页数据
 const searchName = ref('')
@@ -85,7 +85,7 @@ function addUser() {
 }
 
 // 更新用户
-function updateUser(row: UserRoleInfo) {
+function updateUser(row: UserRoleVo) {
   toggleDialog.show = true
   toggleDialog.title = '修改用户'
   userRoleForm.id = row.id
@@ -104,9 +104,11 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-function handleSelectionChange(users: UserRoleInfo[]) {
+
+function handleSelectionChange(users: UserRoleVo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
+
 async function deleteUsers() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -217,7 +219,7 @@ onMounted(() => {
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
         <el-table-column label="角色名称" prop="roleIds">
-          <template #default="{ row }: { row: UserRoleInfo }">
+          <template #default="{ row }: { row: UserRoleVo }">
             {{ row.roleList.map(role => role.roleName).join(',') }}
           </template>
         </el-table-column>
@@ -226,7 +228,7 @@ onMounted(() => {
         <el-table-column label="更新时间"
                          prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: UserRoleInfo }">
+          <template #default="{ row }: { row: UserRoleVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="updateUser(row)"></el-button>

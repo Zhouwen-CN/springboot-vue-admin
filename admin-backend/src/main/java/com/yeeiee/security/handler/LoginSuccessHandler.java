@@ -1,9 +1,9 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.entity.LoginLog;
-import com.yeeiee.entity.User;
-import com.yeeiee.entity.vo.RoleVo;
-import com.yeeiee.entity.vo.UserVo;
+import com.yeeiee.domain.entity.LoginLog;
+import com.yeeiee.domain.entity.User;
+import com.yeeiee.domain.vo.RoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.LoginLogService;

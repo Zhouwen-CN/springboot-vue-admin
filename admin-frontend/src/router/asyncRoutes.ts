@@ -1,4 +1,4 @@
-import type {MenuInfo} from '@/api/auth/menu'
+import type {MenuVo} from '@/api/auth/menu'
 import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
 
 /**
@@ -30,7 +30,7 @@ function registerComponentName(componentName: string, component: () => Promise<u
  */
 export function getAsyncRoutes(
     modules: Record<string, () => Promise<unknown>>,
-    menus: MenuInfo[]
+    menus: MenuVo[]
 ): RouteRecordSingleViewWithChildren[] {
   return menus.map((menu) => {
     const componentName = 'sv' + menu.accessPath.replaceAll('/', '-')
@@ -87,7 +87,7 @@ export function initAsyncRoutes(router: Router, modules: Record<string, () => Pr
     return
   }
 
-  const menus = JSON.parse(localStorageUserInfo) as MenuInfo[]
+  const menus = JSON.parse(localStorageUserInfo) as MenuVo[]
   const routes = getAsyncRoutes(modules, menus)
   routes.forEach((route) => {
     router.addRoute('sv-layout', route)
