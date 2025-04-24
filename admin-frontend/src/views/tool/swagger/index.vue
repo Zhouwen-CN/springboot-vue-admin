@@ -3,15 +3,13 @@ import 'swagger-ui-dist/swagger-ui.css'
 import {SwaggerUIBundle, SwaggerUIStandalonePreset} from "swagger-ui-dist"
 import request from '@/utils/request'
 
+// 不用iframe是因为不好做鉴权
 onMounted(async () => {
-
   const data = await request.get('/v3/api-docs')
   SwaggerUIBundle({
     spec: data,
-    // url: "http://127.0.0.1:8080/v3/api-docs",
-    // configUrl: "http://127.0.0.1:8080/v3/api-docs/swagger-config",
     dom_id: '#swagger-ui',
-    deepLinking: true,
+    docExpansion: 'none',
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset

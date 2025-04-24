@@ -18,10 +18,12 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 
 /**
  * <p>
- * mysql 分页方言，使用 hint 来决定是否需要 limit 下压<br/>
- * &nbsp; 注意：<br/>
- * &emsp; 1. sql 主体的 from 后面默认为主表，也就是需要分页表<br/>
- * &emsp; 2. sql 主体的 from 只能是简单查询，如果有 join，需要谨慎<br/>
+ * mysql 分页方言，使用 hint 来决定是否需要 limit 下压
+ * <pre>
+ *     注意
+ *     1. sql 主体的 from 后面默认为主表，也就是需要分页表
+ *     2. sql 主体的 from 只能是简单查询，如果有 join，需要谨慎
+ * </pre>
  * </p>
  *
  * @author chen

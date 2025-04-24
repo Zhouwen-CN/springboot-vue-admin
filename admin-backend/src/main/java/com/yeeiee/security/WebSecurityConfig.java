@@ -42,12 +42,7 @@ public class WebSecurityConfig {
             "/js/**.js",
             "/css/**.css",
             "/images/**",
-            "/assets/**",
-            // swagger-ui，静态资源
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/v3/api-docs/swagger-config",
-            "/swagger-ui/**"
+            "/assets/**"
     };
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {

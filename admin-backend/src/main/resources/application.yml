@@ -11,7 +11,5 @@ decorator:
 
 springdoc:
   swagger-ui:
-    # 页面设置不展开
-    doc-expansion: none
-    # 关闭 swagger-ui
-    # enabled: false
+    # 关闭 swagger-ui，前端已经整合
+    enabled: false
