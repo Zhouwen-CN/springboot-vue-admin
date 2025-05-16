@@ -1,6 +1,11 @@
 spring:
   profiles:
     active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
+    username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
+    password: mpw:skR0PmgRHk6TEa77ZCgF+A==
 
 # 控制台打印sql
 decorator:

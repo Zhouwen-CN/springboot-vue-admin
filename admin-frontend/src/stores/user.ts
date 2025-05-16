@@ -11,15 +11,15 @@ export const storeName = 'PINIA:USER-STORE'
 const useUserStore = defineStore(
     storeName,
     () => {
-    const userInfo = ref<UserVo>({} as UserVo)
-    const menuInfo = ref<MenuVo[]>([])
-    let refreshTokenPromise: Promise<boolean> | null = null
+        const userInfo = ref<UserVo>({} as UserVo)
+        const menuInfo = ref<MenuVo[]>([])
+        let refreshTokenPromise: Promise<boolean> | null = null
 
-    // 登入
-    async function doLogin(loginForm: LoginForm) {
-        const result = await reqLogin(loginForm)
-        userInfo.value = result.data
-    }
+        // 登入
+        async function doLogin(loginForm: LoginForm) {
+            const result = await reqLogin(loginForm)
+            userInfo.value = result.data
+        }
 
     // 刷新 token
     async function doRefreshToken() {
@@ -46,14 +46,14 @@ const useUserStore = defineStore(
         return refreshTokenPromise
     }
 
-    // 登出
-    async function doLogout() {
-        await reqLogout(userInfo.value.id)
-        $reset()
-        useTagViewStore().$reset()
-        useSettingStore().$reset()
-        deleteAsyncRoutes(router)
-    }
+        // 登出
+        async function doLogout() {
+            await reqLogout(userInfo.value.id)
+            $reset()
+            useTagViewStore().$reset()
+            useSettingStore().$reset()
+            deleteAsyncRoutes(router)
+        }
 
         // 获取菜单信息
         async function getMenuInfo() {
@@ -70,9 +70,8 @@ const useUserStore = defineStore(
 
         // 重置仓库
         function $reset() {
-      userInfo.value = {} as UserVo
-      menuInfo.value = []
-            localStorage.removeItem(storeName)
+            userInfo.value = {} as UserVo
+            menuInfo.value = []
         }
 
         return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}

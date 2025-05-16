@@ -141,10 +141,10 @@ class Request {
     } else if (code >= 400 && code < 500) {
       // token失效退出登入
       if (code === 401) {
+        useUserStore().$reset()
+          useTagViewStore().$reset()
           useSettingStore().$reset()
-          useUserStore().$reset()
-        useTagViewStore().$reset()
-        deleteAsyncRoutes(router)
+          deleteAsyncRoutes(router)
       }
       ElMessage.warning(message)
     } else if (code >= 500) {
