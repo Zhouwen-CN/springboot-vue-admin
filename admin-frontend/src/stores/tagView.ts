@@ -1,7 +1,5 @@
 import {type LocationQuery} from 'vue-router'
 
-const storeName = 'PINIA:VIEW-STORE'
-
 export interface TagView {
   path: string
   fullPath: string
@@ -23,7 +21,7 @@ const closeOptionFunction = {
 }
 
 const useTagViewStore = defineStore(
-    storeName,
+    'PINIA:VIEW-STORE',
     () => {
         const cachedViews = ref<string[]>([])
         const visitedViews = ref<TagView[]>([])
@@ -92,7 +90,6 @@ const useTagViewStore = defineStore(
         function $reset() {
             cachedViews.value = []
             visitedViews.value = []
-            localStorage.removeItem(storeName)
         }
 
         return {cachedViews, visitedViews, addView, removeView, removeCacheView, $reset}

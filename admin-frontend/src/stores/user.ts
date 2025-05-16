@@ -4,7 +4,6 @@ import {type MenuVo, reqGetMenuList} from '@/api/auth/menu'
 import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
 import router, {modules} from '@/router'
 import useTagViewStore from '@/stores/tagView'
-import useSettingStore from './setting'
 
 export const storeName = 'PINIA:USER-STORE'
 
@@ -51,7 +50,6 @@ const useUserStore = defineStore(
         await reqLogout(userInfo.value.id)
         $reset()
         useTagViewStore().$reset()
-        useSettingStore().$reset()
         deleteAsyncRoutes(router)
     }
 
@@ -72,7 +70,6 @@ const useUserStore = defineStore(
         function $reset() {
       userInfo.value = {} as UserVo
       menuInfo.value = []
-            localStorage.removeItem(storeName)
         }
 
         return {userInfo, menuInfo, doLogin, doRefreshToken, doLogout, getMenuInfo, $reset}
