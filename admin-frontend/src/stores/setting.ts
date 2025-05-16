@@ -1,15 +1,29 @@
-const useSettingStore = defineStore('setting', () => {
-  // 侧边栏折叠
-  const collapse = ref(false)
+const storeName = 'PINIA:SETTING-STORE'
 
-  const {
-    VITE_APP_NAME: appName,
-    VITE_APP_SHORT_NAME: appShortName,
-    VITE_APP_GITEE_LINK: giteeLink,
-    VITE_APP_AVATAR_URL: avatarUrl
-  } = import.meta.env
+const useSettingStore = defineStore(
+    storeName,
+    () => {
+    // 侧边栏折叠
+    const collapse = ref(false)
 
-  return {collapse, appName, appShortName, giteeLink, avatarUrl}
-})
+    const {
+        VITE_APP_NAME: appName,
+        VITE_APP_SHORT_NAME: appShortName,
+        VITE_APP_GITEE_LINK: giteeLink,
+        VITE_APP_AVATAR_URL: avatarUrl
+    } = import.meta.env
+
+    function $reset() {
+        localStorage.removeItem(storeName)
+    }
+
+        return {collapse, appName, appShortName, giteeLink, avatarUrl, $reset}
+    },
+    {
+        persist: {
+            paths: ['collapse']
+        }
+    }
+)
 
 export default useSettingStore

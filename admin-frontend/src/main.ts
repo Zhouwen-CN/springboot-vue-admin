@@ -3,6 +3,7 @@ import {createPinia} from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 // element plus
 import ElementPlus from 'element-plus'
@@ -37,7 +38,9 @@ window.addEventListener('unhandledrejection', (event) => {
   // do noting
 })
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 app.use(router)
 app.use(ElementPlus, {
   locale: zhCn

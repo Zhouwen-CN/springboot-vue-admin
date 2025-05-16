@@ -1,5 +1,6 @@
 import type {MenuVo} from '@/api/auth/menu'
 import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
+import {storeName} from '@/stores/user'
 
 /**
  * 给组件注册 name 属性值
@@ -82,12 +83,12 @@ export function deleteAsyncRoutes(router: Router) {
  * @returns
  */
 export function initAsyncRoutes(router: Router, modules: Record<string, () => Promise<unknown>>) {
-  const localStorageUserInfo = localStorage.getItem('MENU_INFO')
-  if (!localStorageUserInfo) {
+  const localStorageUser = localStorage.getItem(storeName)
+  if (!localStorageUser) {
     return
   }
 
-  const menus = JSON.parse(localStorageUserInfo) as MenuVo[]
+  const menus = JSON.parse(localStorageUser).menuInfo as MenuVo[]
   const routes = getAsyncRoutes(modules, menus)
   routes.forEach((route) => {
     router.addRoute('sv-layout', route)

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Paths;
 import lombok.val;
 import org.springdoc.core.customizers.OpenApiCustomizer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
  * @since 2025-04-24
  */
 @Component
-@ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
-public class OpenApiPathPrefixCustomizer implements OpenApiCustomizer {
+@Profile("!prod")
+public class OpenApiPathCustomizer implements OpenApiCustomizer {
     /**
      * 前端开发服务地址
      */
