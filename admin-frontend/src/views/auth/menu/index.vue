@@ -1,9 +1,10 @@
 <script lang="ts" setup>
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import {Delete, Edit, Plus} from '@element-plus/icons-vue'
 import useUserStore from '@/stores/user'
 import type {MenuVo} from '@/api/auth/menu'
 import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
-import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
+import {ElMessage, type FormInstance, type FormRules, type PopoverInstance} from 'element-plus'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -58,7 +59,7 @@ const rules = reactive<FormRules<typeof menuForm>>({
   ],
   accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
   filePath: [{validator: validateFilePath, trigger: 'blur'}],
-  icon: [{required: true, message: '请输入菜单图标', trigger: 'blur'}]
+  icon: [{required: true, message: '请输入菜单图标', trigger: 'submit'}]
 })
 
 // 添加主菜单
@@ -127,6 +128,29 @@ function clean() {
   hasChildren.value = false
   ruleFormRef.value?.clearValidate()
 }
+
+// 搜索图标
+const searchIconKeyword = ref('')
+// 弹出框
+const iconPopoverRef = ref<PopoverInstance>()
+// element图标列表
+const elementIcons = ref<string[]>(Object.keys(ElementPlusIconsVue))
+// 筛选图标
+const filteredIcons = computed(() => {
+  const trimed = searchIconKeyword.value.trim()
+  if (trimed) {
+    return elementIcons.value.filter((icon) => icon.toLowerCase().includes(trimed.toLowerCase()))
+  } else {
+    return elementIcons.value
+  }
+})
+
+// 选择图标
+function selectIcon(icon: string) {
+  menuForm.icon = icon
+  iconPopoverRef.value?.hide()
+}
+
 </script>
 <template>
   <div>
@@ -218,21 +242,41 @@ function clean() {
                 placeholder="请输入文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
-            <el-input v-model="menuForm.icon"
-                      placeholder="请输入菜单图标"></el-input>
+            <el-popover ref="iconPopoverRef" :width="400"
+                        placement="bottom-start"
+                        trigger="click">
+              <template #reference>
+                <el-input
+                    v-model="menuForm.icon"
+                    clearable
+                    placeholder="请选择菜单图标">
+                </el-input>
+              </template>
+              <el-input v-model="searchIconKeyword" clearable
+                        placeholder="搜索图标"
+                        style="margin-bottom: 10px;"></el-input>
+              <el-scrollbar always height="300px">
+                <ul class="icon-grid">
+                  <li v-for="icon in filteredIcons" :key="icon"
+                      class="icon-grid-item" @click="selectIcon(icon)">
+                    <el-icon :size="20">
+                      <component :is="icon"/>
+                    </el-icon>
+                  </li>
+                </ul>
+              </el-scrollbar>
+            </el-popover>
+
           </el-form-item>
           <el-form-item label="是否缓存" prop="keepAlive">
-            <el-switch
-                :disabled="hasChildren || menuForm.pid === 0"
-                v-model="menuForm.keepAlive"
-                active-icon="Check"
-                inactive-icon="Close"
-                inline-prompt/>
+            <el-switch v-model="menuForm.keepAlive"
+                       :disabled="hasChildren || menuForm.pid === 0"
+                       active-icon="Check" inactive-icon="Close"
+                       inline-prompt/>
           </el-form-item>
 
           <el-form-item>
-            <el-button
-                @click="toggleDialog.show = false">取消
+            <el-button @click="toggleDialog.show = false">取消
             </el-button>
             <el-button :loading="saveLoading" type="primary"
                        native-type="submit">
@@ -245,4 +289,23 @@ function clean() {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+
+  .icon-grid-item {
+    padding: 8px;
+    margin: 4px;
+    cursor: pointer;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #4080ff;
+      transform: scale(1.2);
+    }
+  }
+}
+</style>
