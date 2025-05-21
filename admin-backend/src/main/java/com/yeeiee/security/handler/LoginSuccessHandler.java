@@ -11,7 +11,7 @@ import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.JwtTokenUtil;
+import com.yeeiee.utils.JwtUtil;
 import com.yeeiee.utils.R;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +40,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final UserService userService;
     private final RoleService roleService;
     private final LoginLogService loginLogService;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -58,9 +59,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .toList();
 
         // 生成token
-        val accessToken = JwtTokenUtil.generateAccessToken(user.getUsername(), roleNames, user.getTokenVersion());
+        val accessToken = jwtUtil.generateAccessToken(user.getUsername(), roleNames, user.getTokenVersion());
         loginUserVo.setAccessToken(accessToken);
-        val refreshToken = JwtTokenUtil.generateRefreshToken(user.getUsername(), roleNames, user.getTokenVersion());
+        val refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), roleNames, user.getTokenVersion());
         loginUserVo.setRefreshToken(refreshToken);
 
         // 更新 token version

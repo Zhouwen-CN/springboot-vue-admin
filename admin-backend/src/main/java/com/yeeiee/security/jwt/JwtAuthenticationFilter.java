@@ -2,7 +2,7 @@ package com.yeeiee.security.jwt;
 
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.JwtTokenUtil;
+import com.yeeiee.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,15 +31,16 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("Try to get and parse the access token");
         // 从 request 获取 JWT token
-        val token = JwtTokenUtil.getTokenFromRequest(request);
+        val token = jwtUtil.getTokenFromRequest(request);
 
         // 校验 token
-        val optional = JwtTokenUtil.parseAccessToken(token);
+        val optional = jwtUtil.parseAccessToken(token);
         if (optional.isPresent()) {
             val claimMap = optional.get();
 

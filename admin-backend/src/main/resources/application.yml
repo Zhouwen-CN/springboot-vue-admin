@@ -18,3 +18,12 @@ springdoc:
   swagger-ui:
     # 关闭 swagger-ui，前端已经整合
     enabled: false
+
+# jwt 相关
+jwt:
+  access:
+    key: 6&beRHT#gKZOF0%9$A5t
+    expiration: 1d
+  refresh:
+    key: MHy7K9Cmlf#AwNDXp3&h
+    expiration: 7d

@@ -21,7 +21,7 @@ import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.JwtTokenUtil;
+import com.yeeiee.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -49,12 +49,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserMapper userMapper;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtil jwtUtil;
     public static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2([ayb])?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
     @Override
     public UserVo refreshToken(HttpServletRequest request) {
-        var refreshToken = JwtTokenUtil.getTokenFromRequest(request);
-        val optional = JwtTokenUtil.parseRefreshToken(refreshToken);
+        var refreshToken = jwtUtil.getTokenFromRequest(request);
+        val optional = jwtUtil.parseRefreshToken(refreshToken);
 
         if (optional.isEmpty()) {
             throw new VerifyTokenException("token解析失败");
@@ -78,8 +79,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val tokenVersion = user.getTokenVersion();
 
         val roleNames = claimMap.get("roleNames").asList(String.class);
-        val accessToken = JwtTokenUtil.generateAccessToken(username, roleNames, tokenVersion);
-        refreshToken = JwtTokenUtil.generateRefreshToken(username, roleNames, tokenVersion);
+        val accessToken = jwtUtil.generateAccessToken(username, roleNames, tokenVersion);
+        refreshToken = jwtUtil.generateRefreshToken(username, roleNames, tokenVersion);
 
         val userVo = new UserVo();
         userVo.setId(userId);

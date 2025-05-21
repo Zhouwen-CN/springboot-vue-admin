@@ -5,8 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -20,17 +23,21 @@ import java.util.Optional;
  * @author chen
  * @since 2024-05-06
  */
-public final class JwtTokenUtil {
+@Component
+public final class JwtUtil {
     private static final String HEADER_STRING = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    private static final String ACCESS_SECRET_KEY = "6&beRHT#gKZOF0%9$A5t";
-    private static final String REFRESH_SECRET_KEY = "MHy7K9Cmlf#AwNDXp3&h";
+    @Value("${jwt.access.key}")
+    private String accessKey;
+    @Value("${jwt.access.expiration}")
+    private Duration accessExpiration;
+    @Value("${jwt.refresh.key}")
+    private String refreshKey;
+    @Value("${jwt.refresh.expiration}")
+    private Duration refreshExpiration;
 
-    private static final int ACCESS_EXPIRATION_HOUR = 1;
-    private static final int REFRESH_EXPIRATION_DAY = 7;
-
-    private static String generateToken(String username, List<String> roleNames, Long version, Calendar calendar, String secretKey) {
+    private String generateToken(String username, List<String> roleNames, Long version, Calendar calendar, String secretKey) {
         return JWT.create()
                 .withClaim("username", username)
                 .withClaim("roleNames", roleNames)
@@ -41,19 +48,19 @@ public final class JwtTokenUtil {
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
-    public static String generateAccessToken(String username, List<String> roleNames, Long version) {
+    public String generateAccessToken(String username, List<String> roleNames, Long version) {
         val instance = Calendar.getInstance();
-        instance.add(Calendar.HOUR, ACCESS_EXPIRATION_HOUR);
-        return generateToken(username, roleNames, version, instance, ACCESS_SECRET_KEY);
+        instance.setTimeInMillis(instance.getTimeInMillis() + accessExpiration.toMillis());
+        return generateToken(username, roleNames, version, instance, accessKey);
     }
 
-    public static String generateRefreshToken(String username, List<String> roleNames, Long version) {
+    public String generateRefreshToken(String username, List<String> roleNames, Long version) {
         val instance = Calendar.getInstance();
-        instance.add(Calendar.DATE, REFRESH_EXPIRATION_DAY);
-        return generateToken(username, roleNames, version, instance, REFRESH_SECRET_KEY);
+        instance.setTimeInMillis(instance.getTimeInMillis() + refreshExpiration.toMillis());
+        return generateToken(username, roleNames, version, instance, refreshKey);
     }
 
-    private static Optional<Map<String, Claim>> parseToken(String token, String secretKey) {
+    private Optional<Map<String, Claim>> parseToken(String token, String secretKey) {
         try {
             val jwt = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token);
             return Optional.of(jwt.getClaims());
@@ -63,15 +70,15 @@ public final class JwtTokenUtil {
         }
     }
 
-    public static Optional<Map<String, Claim>> parseAccessToken(String token) {
-        return parseToken(token, ACCESS_SECRET_KEY);
+    public Optional<Map<String, Claim>> parseAccessToken(String token) {
+        return parseToken(token, accessKey);
     }
 
-    public static Optional<Map<String, Claim>> parseRefreshToken(String token) {
-        return parseToken(token, REFRESH_SECRET_KEY);
+    public Optional<Map<String, Claim>> parseRefreshToken(String token) {
+        return parseToken(token, refreshKey);
     }
 
-    public static String getTokenFromRequest(HttpServletRequest request) {
+    public String getTokenFromRequest(HttpServletRequest request) {
         val bearerToken = request.getHeader(HEADER_STRING);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(7);
