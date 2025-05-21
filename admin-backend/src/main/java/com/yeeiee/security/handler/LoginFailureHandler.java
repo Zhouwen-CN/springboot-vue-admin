@@ -6,6 +6,7 @@ import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.utils.CommonUtil;
+import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.R;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,7 +49,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         loginLog.setUsername(username);
         loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
         loginLog.setStatus(OperationStatusEnum.FIELD.getStatus());
-        loginLog.setIp(CommonUtil.getIpAddr(request));
+        loginLog.setIp(IPUtil.getClientIP(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLogService.save(loginLog);
 

@@ -10,6 +10,7 @@ import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CommonUtil;
+import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JwtTokenUtil;
 import com.yeeiee.utils.R;
 import jakarta.servlet.ServletException;
@@ -73,7 +74,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         loginLog.setUsername(user.getUsername());
         loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
         loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
-        loginLog.setIp(CommonUtil.getIpAddr(request));
+        loginLog.setIp(IPUtil.getClientIP(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLogService.save(loginLog);
 

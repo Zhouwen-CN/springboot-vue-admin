@@ -4,6 +4,7 @@ import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.CommonUtil;
+import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +87,7 @@ public class OperationLogAspect {
         operationLog.setParams(params);
         operationLog.setTime(time);
         operationLog.setStatus(operationStatusEnum.getStatus());
-        operationLog.setIp(CommonUtil.getIpAddr(httpServletRequest));
+        operationLog.setIp(IPUtil.getClientIP(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
 
         operationLogService.save(operationLog);

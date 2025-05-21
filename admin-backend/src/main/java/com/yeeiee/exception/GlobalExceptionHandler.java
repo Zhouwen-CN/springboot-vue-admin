@@ -3,6 +3,7 @@ package com.yeeiee.exception;
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.utils.CommonUtil;
+import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
 import com.yeeiee.utils.R;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class GlobalExceptionHandler {
         errorLog.setMethod(request.getMethod());
         val parameterMap = CommonUtil.getParameterMap(request);
         errorLog.setParams(JsonUtil.toJsonString(parameterMap));
-        errorLog.setIp(CommonUtil.getIpAddr(request));
+        errorLog.setIp(IPUtil.getClientIP(request));
         errorLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         errorLog.setErrorMsg(ExceptionUtils.getStackTrace(e));
 

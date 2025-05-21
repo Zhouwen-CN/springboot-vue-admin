@@ -20,6 +20,7 @@ import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.CommonUtil;
+import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -112,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             loginLog.setUsername(user.getUsername());
             loginLog.setOperation(LoginOperationEnum.LOGOUT.getOperation());
             loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
-            loginLog.setIp(CommonUtil.getIpAddr(request));
+            loginLog.setIp(IPUtil.getClientIP(request));
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
             loginLogService.save(loginLog);
         }
