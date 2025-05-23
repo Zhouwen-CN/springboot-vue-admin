@@ -161,7 +161,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val username = userRoleIdsForm.getUsername();
         var password = userRoleIdsForm.getPassword();
 
-        // admin自己才能修改自己
+        // todo: admin自己才能修改自己
         val securityUser = CommonUtil.getSecurityUser();
         if (userId == 1 && securityUser.getId() != 1) {
             throw new DmlOperationException("不能修改 ① 号用户");

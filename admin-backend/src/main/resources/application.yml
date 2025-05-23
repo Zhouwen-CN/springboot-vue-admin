@@ -12,14 +12,14 @@ decorator:
   datasource:
     p6spy:
       # 日志格式
-      log-format: "Execute SQL in %(executionTime)ms: [%(sql)]"
+      log-format: "Execute SQL in %(executionTime)ms: %(sqlSingleLine)"
 
 springdoc:
   swagger-ui:
     # 关闭 swagger-ui，前端已经整合
     enabled: false
 
-# jwt 相关
+# jwt相关
 jwt:
   access:
     key: 6&beRHT#gKZOF0%9$A5t
@@ -27,3 +27,15 @@ jwt:
   refresh:
     key: MHy7K9Cmlf#AwNDXp3&h
     expiration: 7d
+
+# http相关
+http:
+  pool:
+    max-total: 100
+    max-per-route: 10
+    obtain-connection-timeout: 5s
+    validate-after-inactivity: 30s
+  connect:
+    connect-timeout: 5s
+    socket-timeout: 60s
+    default-keep-alive: 60s

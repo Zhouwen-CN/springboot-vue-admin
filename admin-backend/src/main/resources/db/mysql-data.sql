@@ -70,9 +70,7 @@ VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, '2024-05-06 13:46:48', '
 
 
 delete from `t_dict_type`;
-insert into t_dict_type(id, type, name) values(1,'login_operation','登入操作');
-insert into t_dict_type(id, type, name) values(2,'ops_status','操作状态');
+insert into t_dict_type(id, type, name) values(1,'gender','性别');
 
 delete from `t_dict_data`;
-insert into t_dict_data(id, type_id, label, value) values(1,1,'登入',1),(2,1,'退出',0);
-insert into t_dict_data(id, type_id, label, value) values(3,2,'成功',1),(4,2,'失败',0);
+insert into t_dict_data(id, type_id, label, value, sort) values(1,1,'女',0,0),(2,1,'男',1,1),(3,1,'保密',2,2);
