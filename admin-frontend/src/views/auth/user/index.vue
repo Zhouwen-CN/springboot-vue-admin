@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Delete, Edit, Refresh, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Plus, Refresh, Search} from '@element-plus/icons-vue'
 import {
   reqDeleteUser,
   reqDeleteUsers,
@@ -14,6 +14,8 @@ import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
 import {reqGetRoles, type RoleVo} from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import {deleteAsyncRoutes} from '@/router/asyncRoutes'
+import useTagViewStore from '@/stores/tagView'
+import useSettingStore from '@/stores/setting'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -145,6 +147,8 @@ function isCurrentUser(updateId: number) {
   const isCurUser = updateId === userStore.userInfo.id
   if (isCurUser) {
     userStore.$reset()
+    useTagViewStore().$reset()
+    useSettingStore().$reset()
     deleteAsyncRoutes(router)
     ElMessage.warning("修改成功，请重新登入")
   }
@@ -198,8 +202,9 @@ onMounted(() => {
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline @submit.prevent="searchUser()">
-        <el-form-item label="用户名：">
-          <el-input v-model="searchName" clearable></el-input>
+        <el-form-item label="用户名">
+          <el-input v-model="searchName" clearable
+                    placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="loading" type="primary"
@@ -212,10 +217,14 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button type="primary" @click="addUser">添加用户</el-button>
+        <el-button :icon="Plus" type="primary"
+                   @click="addUser">新建
+        </el-button>
         <el-popconfirm title="是否删除？" @confirm="deleteUsers">
           <template #reference>
-            <el-button type="danger">批量删除</el-button>
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
+                       type="danger">批量删除
+            </el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -224,7 +233,7 @@ onMounted(() => {
       <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"/>
+        <el-table-column type="selection" width="45"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="用户名称"
                          prop="username"></el-table-column>
@@ -284,12 +293,12 @@ onMounted(() => {
             @submit.prevent="onSubmit(ruleFormRef)">
           <el-form-item label="用户名" prop="username">
             <el-input v-model="userRoleForm.username"
-                      placeholder="请输入用户姓名"></el-input>
+                      placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item v-if="pwdVisible" label="密码" prop="password">
             <el-input
                 v-model="userRoleForm.password"
-                placeholder="请输入用户密码"
+                placeholder="密码"
                 type="password">
             </el-input>
           </el-form-item>

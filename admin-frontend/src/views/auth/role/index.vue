@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Plus, Search} from '@element-plus/icons-vue'
 import {
   reqDeleteRole,
   reqDeleteRoles,
@@ -175,8 +175,9 @@ onMounted(() => {
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline @submit.prevent="searchRole()">
-        <el-form-item label="角色名：">
-          <el-input v-model="searchName" clearable></el-input>
+        <el-form-item label="角色名">
+          <el-input v-model="searchName" clearable
+                    placeholder="角色名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="loading" type="primary"
@@ -189,10 +190,14 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button type="primary" @click="addRole">添加角色</el-button>
+        <el-button :icon="Plus" type="primary"
+                   @click="addRole">新建
+        </el-button>
         <el-popconfirm title="是否删除？" @confirm="deleteRoles">
           <template #reference>
-            <el-button type="danger">批量删除</el-button>
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
+                       type="danger">批量删除
+            </el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -201,7 +206,7 @@ onMounted(() => {
       <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"/>
+        <el-table-column type="selection" width="45"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="角色名称"
                          prop="roleName"></el-table-column>
@@ -249,11 +254,11 @@ onMounted(() => {
             @submit.prevent="onSubmit(ruleFormRef)">
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="roleMenuForm.roleName"
-                      placeholder="请输入角色名称"></el-input>
+                      placeholder="角色名称"></el-input>
           </el-form-item>
           <el-form-item label="角色说明" prop="desc">
             <el-input v-model="roleMenuForm.desc"
-                      placeholder="请输入角色说明"></el-input>
+                      placeholder="角色说明"></el-input>
           </el-form-item>
           <!-- 树形控件 -->
           <el-form-item label="菜单权限">

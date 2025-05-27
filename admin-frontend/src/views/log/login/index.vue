@@ -41,13 +41,13 @@ onMounted(() => {
       <!-- 表单 -->
       <el-form :model="searchForm" inline
                @submit.prevent="onSubmit()">
-        <el-form-item label="用户名：">
+        <el-form-item label="用户名">
           <el-input v-model="searchForm.username"
                     clearable
                     placeholder="用户名">
           </el-input>
         </el-form-item>
-        <el-form-item label="操作类型：">
+        <el-form-item label="操作类型">
           <el-select
               v-model="searchForm.operation"
               clearable
@@ -57,7 +57,7 @@ onMounted(() => {
             <el-option :value="0" label="退出"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态：">
+        <el-form-item label="状态">
           <el-select
               v-model="searchForm.status"
               clearable

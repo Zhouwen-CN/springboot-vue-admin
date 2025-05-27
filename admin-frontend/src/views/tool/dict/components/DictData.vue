@@ -7,7 +7,7 @@ import {
   reqRemoveDictDataByIds,
   reqSaveDictData
 } from '@/api/tool/dict'
-import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Plus, Search} from '@element-plus/icons-vue'
 import {type FormInstance, type FormRules} from 'element-plus'
 
 // 搜索关键字
@@ -59,14 +59,14 @@ async function removeDictData(id: number) {
 }
 
 // 批量删除字典数据
-const removeBatchDictDataIds = ref<number[]>([])
+const deleteIds = ref<number[]>([])
 
 function handleSelectionChange(dictDatas: DictDataVo[]) {
-  removeBatchDictDataIds.value = dictDatas.map((dictData) => dictData.id)
+  deleteIds.value = dictDatas.map((dictData) => dictData.id)
 }
 
 async function removeBatchDictData() {
-  await reqRemoveDictDataByIds(removeBatchDictDataIds.value)
+  await reqRemoveDictDataByIds(deleteIds.value)
   refresh({params: {typeId: typeId.value, label: searchLabel.value}})
   ElMessage.success('操作成功')
 }
@@ -142,8 +142,9 @@ defineExpose({
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline @submit.prevent="searchByLabel()">
-        <el-form-item label="标签键：">
-          <el-input v-model="searchLabel" clearable></el-input>
+        <el-form-item label="标签键">
+          <el-input v-model="searchLabel" clearable
+                    placeholder="标签键"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="pageLoading"
@@ -157,12 +158,14 @@ defineExpose({
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button type="primary"
-                   @click="addDictData">添加字典数据
+        <el-button :icon="Plus" type="primary"
+                   @click="addDictData">新建
         </el-button>
         <el-popconfirm title="是否删除？" @confirm="removeBatchDictData">
           <template #reference>
-            <el-button type="danger">批量删除</el-button>
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
+                       type="danger">批量删除
+            </el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -171,9 +174,7 @@ defineExpose({
       <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"/>
-        <el-table-column label="ID" min-width="40px"
-                         prop="id"></el-table-column>
+        <el-table-column type="selection" width="45"/>
         <el-table-column label="标签键" min-width="40px" prop="label">
         </el-table-column>
         <el-table-column label="标签值" min-width="40px"
@@ -223,11 +224,11 @@ defineExpose({
             @submit.prevent="dictDataFormSubmit(dictDataFormRef)">
           <el-form-item label="标签键" prop="label">
             <el-input v-model="dictDataForm.label"
-                      placeholder="请输入标签键"></el-input>
+                      placeholder="标签键"></el-input>
           </el-form-item>
           <el-form-item label="标签值" prop="value">
             <el-input v-model="dictDataForm.value" type="number"
-                      placeholder="请输入标签键"></el-input>
+                      placeholder="标签值"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="sort">
             <el-input v-model="dictDataForm.sort"

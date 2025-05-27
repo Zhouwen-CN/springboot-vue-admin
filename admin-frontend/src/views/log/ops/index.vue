@@ -40,7 +40,7 @@ onMounted(() => {
       <!-- 表单 -->
       <el-form :model="searchForm" inline
                @submit.prevent="onSubmit()">
-        <el-form-item label="用户名：">
+        <el-form-item label="用户名">
           <el-input v-model="searchForm.username"
                     clearable
                     placeholder="用户名">

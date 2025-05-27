@@ -158,7 +158,7 @@ function selectIcon(icon: string) {
     <el-card>
       <div>
         <el-button :icon="Plus" type="primary"
-                   @click="addMainMenu">添加主菜单
+                   @click="addMainMenu">新建
         </el-button>
       </div>
       <!-- 表格 -->
@@ -228,18 +228,18 @@ function selectIcon(icon: string) {
             @submit.prevent="onSubmit(ruleFormRef)">
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title"
-                      placeholder="请输入菜单名称"></el-input>
+                      placeholder="菜单名称"></el-input>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath"
-                      placeholder="请输入访问路径"></el-input>
+                      placeholder="访问路径"></el-input>
           </el-form-item>
           <el-form-item label="文件路径"
                         prop="filePath">
             <el-input
                 v-model="menuForm.filePath"
                 :disabled="hasChildren || menuForm.pid === 0"
-                placeholder="请输入文件路径"></el-input>
+                placeholder="文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-popover ref="iconPopoverRef" :width="400"
@@ -249,7 +249,7 @@ function selectIcon(icon: string) {
                 <el-input
                     v-model="menuForm.icon"
                     clearable
-                    placeholder="请选择菜单图标">
+                    placeholder="菜单图标">
                 </el-input>
               </template>
               <el-input v-model="searchIconKeyword" clearable

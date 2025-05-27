@@ -80,8 +80,29 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
     }
 }
 
+/**
+ * 重置密码
+ * @param id 用户id
+ * @returns
+ */
 export function reqResetPassword(id: number) {
-    return request.patch<null>(`/user/pwd/reset/${id}`)
+    return request.patch<any>(`/user/pwd/reset/${id}`)
+}
+
+export interface ChangePwdForm {
+    id: number
+    oldPwd: string
+    newPwd: string
+    confirmPwd: string
+}
+
+/**
+ * 修改密码
+ * @param changePwdForm 修改密码表单
+ * @returns
+ */
+export function reqChangePassword(changePwdForm: ChangePwdForm) {
+    return request.patch<any, ChangePwdForm>('/user/pwd/change', changePwdForm)
 }
 
 /**

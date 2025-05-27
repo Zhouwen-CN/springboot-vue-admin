@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Plus, Search} from '@element-plus/icons-vue'
 import {
   type DictTypeForm,
   type DictTypeVo,
@@ -55,14 +55,12 @@ async function removeDictType(id: number) {
 }
 
 // 批量删除字典类型
-const removeBatchDictTypeIds = ref<number[]>([])
-
+const deleteIds = ref<number[]>([])
 function handleSelectionChange(dictTypes: DictTypeVo[]) {
-  removeBatchDictTypeIds.value = dictTypes.map((dictType) => dictType.id)
+  deleteIds.value = dictTypes.map((dictType) => dictType.id)
 }
-
 async function removeBatchDictType() {
-  await reqRemoveDictTypeByIds(removeBatchDictTypeIds.value)
+  await reqRemoveDictTypeByIds(deleteIds.value)
   refresh({params: {keyword: keyword.value}})
   ElMessage.success('操作成功')
 }
@@ -133,8 +131,9 @@ onMounted(() => {
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline @submit.prevent="searchByKeyword()">
-        <el-form-item label="关键字：">
-          <el-input v-model="keyword" clearable></el-input>
+        <el-form-item label="关键字">
+          <el-input v-model="keyword" clearable
+                    placeholder="关键字"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="pageLoading"
@@ -148,12 +147,14 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button type="primary"
-                   @click="addDictType">添加字典类型
+        <el-button :icon="Plus" type="primary"
+                   @click="addDictType">新建
         </el-button>
         <el-popconfirm title="是否删除？" @confirm="removeBatchDictType">
           <template #reference>
-            <el-button type="danger">批量删除</el-button>
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
+                       type="danger">批量删除
+            </el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -162,7 +163,7 @@ onMounted(() => {
       <el-table :border="true" :data="pageData" show-overflow-tooltip
                 style="margin-top: 16px"
                 @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"/>
+        <el-table-column type="selection" width="45"/>
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="字典类型" prop="type">
           <template #default="{ row }: { row: DictTypeVo }">
@@ -214,11 +215,11 @@ onMounted(() => {
             @submit.prevent="onSubmit(dictTypeFormRef)">
           <el-form-item label="字典类型" prop="type">
             <el-input v-model="dictTypeForm.type"
-                      placeholder="请输入字典类型"></el-input>
+                      placeholder="字典类型"></el-input>
           </el-form-item>
           <el-form-item label="字典名称" prop="name">
             <el-input v-model="dictTypeForm.name"
-                      placeholder="请输入字典名称"></el-input>
+                      placeholder="字典名称"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button
