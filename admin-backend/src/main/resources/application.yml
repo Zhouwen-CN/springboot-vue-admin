@@ -19,6 +19,10 @@ springdoc:
     # 关闭 swagger-ui，前端已经整合
     enabled: false
 
+# 重置默认密码
+user:
+  default-password: 123456
+
 # jwt相关
 jwt:
   access:

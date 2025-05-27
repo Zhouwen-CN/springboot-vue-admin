@@ -11,6 +11,7 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -42,6 +43,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     public R<Void> noResourceFoundHandler(NoResourceFoundException e) {
         return R.error(HttpStatus.NOT_FOUND, e);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public R<Void> handleValidationExceptions(MethodArgumentNotValidException e) {
+        val bindingResult = e.getBindingResult();
+
+        val fieldError = bindingResult.getFieldError();
+        if (fieldError != null) {
+            return R.error(HttpStatus.BAD_REQUEST, String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage()));
+        }
+
+        val globalError = bindingResult.getGlobalError();
+        if (globalError != null) {
+            return R.error(HttpStatus.BAD_REQUEST, globalError.getDefaultMessage());
+        }
+
+        return R.error(HttpStatus.BAD_REQUEST, "请求参数错误");
     }
 
     @ExceptionHandler(Exception.class)

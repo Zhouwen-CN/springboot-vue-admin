@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.User;
-import com.yeeiee.domain.form.UserRoleIdsForm;
+import com.yeeiee.domain.form.ChangePasswordForm;
+import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.domain.vo.UserVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,16 +50,16 @@ public interface UserService extends IService<User> {
     /**
      * 新增用户和角色关系
      *
-     * @param userRoleIdsForm 用户和角色关系
+     * @param userForm 用户和角色关系
      */
-    void addUser(UserRoleIdsForm userRoleIdsForm);
+    void addUser(UserForm userForm);
 
     /**
      * 更新用户和角色关系
      *
-     * @param userRoleIdsForm 用户和角色关系
+     * @param userForm 用户和角色关系
      */
-    void modifyUser(UserRoleIdsForm userRoleIdsForm);
+    void modifyUser(UserForm userForm);
 
     /**
      * 删除用户和角色关系
@@ -73,4 +74,18 @@ public interface UserService extends IService<User> {
      * @param ids 用户id列表
      */
     void removeUserByIds(Collection<Long> ids);
+
+    /**
+     * 修改密码
+     *
+     * @param changePasswordForm 修改密码表单
+     */
+    void modifyUserChangePwd(ChangePasswordForm changePasswordForm);
+
+    /**
+     * 重置密码
+     *
+     * @param id 用户id
+     */
+    void modifyUserResetPwd(Long id);
 }

@@ -7,7 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
-import com.yeeiee.domain.form.UserRoleIdsForm;
+import com.yeeiee.domain.form.ChangePasswordForm;
+import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
@@ -25,14 +26,12 @@ import com.yeeiee.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -50,7 +49,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
-    public static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2([ayb])?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
+    @Value("${user.default-password}")
+    private String defaultPassword;
 
     @Override
     public UserVo refreshToken(HttpServletRequest request) {
@@ -126,9 +126,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void addUser(UserRoleIdsForm userRoleIdsForm) {
-        val username = userRoleIdsForm.getUsername();
-        val password = userRoleIdsForm.getPassword();
+    public void addUser(UserForm userForm) {
+        val username = userForm.getUsername();
+        val password = userForm.getPassword();
 
         val exists = this.exists(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, username)
@@ -144,8 +144,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         this.save(user);
 
-        if (!userRoleIdsForm.getRoleIds().isEmpty()) {
-            val userRoleList = userRoleIdsForm.getRoleIds().stream().map(roleId -> {
+        if (!userForm.getRoleIds().isEmpty()) {
+            val userRoleList = userForm.getRoleIds().stream().map(roleId -> {
                 val userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(roleId);
@@ -156,10 +156,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void modifyUser(UserRoleIdsForm userRoleIdsForm) {
-        val userId = userRoleIdsForm.getId();
-        val username = userRoleIdsForm.getUsername();
-        var password = userRoleIdsForm.getPassword();
+    public void modifyUser(UserForm userForm) {
+        val userId = userForm.getId();
+        val username = userForm.getUsername();
 
         // todo: admin自己才能修改自己
         val securityUser = CommonUtil.getSecurityUser();
@@ -167,21 +166,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DmlOperationException("不能修改 ① 号用户");
         }
 
-        // 密码不能为空
-        if (!StringUtils.hasText(password)) {
-            throw new DmlOperationException("密码不能为空");
-        }
-
-        // 如果不符合加密模式，则进行加密
-        Matcher matcher = BCRYPT_PATTERN.matcher(password);
-        if (!matcher.matches()) {
-            password = bCryptPasswordEncoder.encode(password);
-        }
-
+        // 更新用户
         this.lambdaUpdate()
                 .eq(User::getId, userId)
                 .set(User::getUsername, username)
-                .set(User::getPassword, password)
                 .setIncrBy(User::getTokenVersion, 1)
                 .update();
 
@@ -192,7 +180,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 获取当前 ids 和 更新的 ids 做差集
         val currentRoleIds = userRoles.stream().map(UserRole::getRoleId).toList();
-        val updateRoleIds = userRoleIdsForm.getRoleIds();
+        val updateRoleIds = userForm.getRoleIds();
         val pair = CollectionUtil.differenceSet(currentRoleIds, updateRoleIds);
 
         // 当前 - 更新 = 删除
@@ -239,5 +227,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userRoleService.remove(new LambdaQueryWrapper<UserRole>()
                 .in(UserRole::getUserId, ids)
         );
+    }
+
+    @Override
+    public void modifyUserChangePwd(ChangePasswordForm changePasswordForm) {
+        val id = changePasswordForm.getId();
+        val oldPwd = changePasswordForm.getOldPwd();
+
+        val user = this.lambdaQuery()
+                .eq(User::getId, id)
+                .one();
+
+        if (!bCryptPasswordEncoder.matches(oldPwd, user.getPassword())) {
+            throw new DmlOperationException("旧密码错误");
+        }
+
+        this.lambdaUpdate()
+                .eq(User::getId, id)
+                .set(User::getPassword, bCryptPasswordEncoder.encode(changePasswordForm.getNewPwd()))
+                .setIncrBy(User::getTokenVersion, 1)
+                .update();
+    }
+
+    @Override
+    public void modifyUserResetPwd(Long id) {
+        this.lambdaUpdate()
+                .eq(User::getId, id)
+                .set(User::getPassword, bCryptPasswordEncoder.encode(defaultPassword))
+                .setIncrBy(User::getTokenVersion, 1)
+                .update();
     }
 }
