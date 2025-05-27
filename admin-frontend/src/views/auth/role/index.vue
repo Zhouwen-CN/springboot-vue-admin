@@ -95,8 +95,14 @@ async function deleteRoles() {
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof roleMenuForm>>({
-  roleName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-  desc: [{required: true, message: '请输入密码', trigger: 'blur'}]
+  roleName: [
+    {required: true, message: '请输入角色名称', trigger: 'blur'},
+    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+  ],
+  desc: [
+    {required: true, message: '角色说明', trigger: 'blur'},
+    {max: 40, message: '长度不能大于 40 个字符', trigger: 'blur'}
+  ]
 })
 
 // 表单提交

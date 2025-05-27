@@ -133,7 +133,7 @@ const rules = reactive<FormRules<typeof userRoleForm>>({
   ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 5, message: '长度应大于5位', trigger: 'blur'}
+    {min: 5, message: '长度不能小于 5 个字符', trigger: 'blur'}
   ]
 })
 

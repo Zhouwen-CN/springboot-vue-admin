@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.Role;
-import com.yeeiee.domain.form.RoleMenuIdsForm;
+import com.yeeiee.domain.form.RoleForm;
 import com.yeeiee.domain.vo.RoleMenuVo;
 import com.yeeiee.domain.vo.RoleVo;
 
@@ -33,16 +33,16 @@ public interface RoleService extends IService<Role> {
     /**
      * 添加角色 和 菜单ids
      *
-     * @param roleMenuIdsForm 角色 和 菜单ids
+     * @param roleForm 角色 和 菜单ids
      */
-    void addRole(RoleMenuIdsForm roleMenuIdsForm);
+    void addRole(RoleForm roleForm);
 
     /**
      * 修改角色 和 菜单ids
      *
-     * @param roleMenuIdsForm 角色 和 菜单ids
+     * @param roleForm 角色 和 菜单ids
      */
-    void modifyRole(RoleMenuIdsForm roleMenuIdsForm);
+    void modifyRole(RoleForm roleForm);
 
     /**
      * 根据id删除角色和菜单关系

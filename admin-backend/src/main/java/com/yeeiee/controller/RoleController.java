@@ -2,7 +2,7 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.domain.form.RoleMenuIdsForm;
+import com.yeeiee.domain.form.RoleForm;
 import com.yeeiee.domain.vo.RoleMenuVo;
 import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.service.RoleService;
@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,15 +61,15 @@ public class RoleController {
 
     @Operation(summary = "新增角色")
     @PostMapping
-    public R<Void> addRole(@RequestBody RoleMenuIdsForm roleMenuIdsForm) {
-        roleService.addRole(roleMenuIdsForm);
+    public R<Void> addRole(@Validated(RoleForm.Create.class) @RequestBody RoleForm roleForm) {
+        roleService.addRole(roleForm);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
     @PutMapping
-    public R<Void> modifyRole(@RequestBody RoleMenuIdsForm roleMenuIdsForm) {
-        roleService.modifyRole(roleMenuIdsForm);
+    public R<Void> modifyRole(@Validated(RoleForm.Update.class) @RequestBody RoleForm roleForm) {
+        roleService.modifyRole(roleForm);
         return R.ok();
     }
 

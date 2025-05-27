@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Role;
 import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.domain.entity.UserRole;
-import com.yeeiee.domain.form.RoleMenuIdsForm;
+import com.yeeiee.domain.form.RoleForm;
 import com.yeeiee.domain.vo.RoleMenuVo;
 import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.exception.DmlOperationException;
@@ -46,10 +46,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void addRole(RoleMenuIdsForm roleMenuIdsForm) {
+    public void addRole(RoleForm roleForm) {
         val exists = this.exists(
                 Wrappers.<Role>lambdaQuery()
-                        .eq(Role::getRoleName, roleMenuIdsForm.getRoleName())
+                        .eq(Role::getRoleName, roleForm.getRoleName())
         );
 
         if (exists) {
@@ -57,11 +57,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         val role = new Role();
-        role.setRoleName(roleMenuIdsForm.getRoleName());
-        role.setDesc(roleMenuIdsForm.getDesc());
+        role.setRoleName(roleForm.getRoleName());
+        role.setDesc(roleForm.getDesc());
         this.save(role);
 
-        val roleMenuList = roleMenuIdsForm.getMenuIds().stream().map(id -> {
+        val roleMenuList = roleForm.getMenuIds().stream().map(id -> {
             val roleMenu = new RoleMenu();
             roleMenu.setRoleId(role.getId());
             roleMenu.setMenuId(id);
@@ -72,8 +72,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void modifyRole(RoleMenuIdsForm roleMenuIdsForm) {
-        val roleId = roleMenuIdsForm.getId();
+    public void modifyRole(RoleForm roleForm) {
+        val roleId = roleForm.getId();
 
         // todo: 1 号角色不能修改
         if (roleId == 1) {
@@ -83,8 +83,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 修改角色
         val role = new Role();
         role.setId(roleId);
-        role.setRoleName(roleMenuIdsForm.getRoleName());
-        role.setDesc(roleMenuIdsForm.getDesc());
+        role.setRoleName(roleForm.getRoleName());
+        role.setDesc(roleForm.getDesc());
         this.updateById(role);
 
         // 获取 role menu 关系
@@ -96,7 +96,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         val currentMenuIds = roleMenus.stream()
                 .map(RoleMenu::getMenuId)
                 .toList();
-        val updateMenuIds = roleMenuIdsForm.getMenuIds();
+        val updateMenuIds = roleForm.getMenuIds();
 
         val pair = CollectionUtil.differenceSet(currentMenuIds, updateMenuIds);
 
