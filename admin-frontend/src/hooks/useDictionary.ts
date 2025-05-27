@@ -1,10 +1,10 @@
-import {type LabelValueVo, reqGetDictDataListByTypeId} from '@/api/tool/dict'
-import {type Ref} from 'vue'
+import { type LabelValueVo, reqGetDictDataListByTypeId } from '@/api/tool/dict'
+import { type Ref } from 'vue'
 
 export interface UseDictResult {
-    dictData: Ref<LabelValueVo[]>
-    dictMap: Ref<Map<number, string>>
-    run: Function
+  dictData: Ref<LabelValueVo[]>
+  dictMap: Ref<Map<number, string>>
+  run: Function
 }
 
 /**
@@ -14,24 +14,24 @@ export interface UseDictResult {
  * @returns 字典
  */
 function useDict(type: string): UseDictResult {
-    const dictData = ref<LabelValueVo[]>([])
-    const dictMap = ref<Map<number, string>>(new Map<number, string>())
+  const dictData = ref<LabelValueVo[]>([])
+  const dictMap = ref<Map<number, string>>(new Map<number, string>())
 
-    function run() {
-        reqGetDictDataListByTypeId(type)
-            .then((res) => {
-                dictData.value = res.data
+  function run() {
+    reqGetDictDataListByTypeId(type)
+      .then((res) => {
+        dictData.value = res.data
 
-                res.data.forEach((item) => {
-                    dictMap.value.set(item.value, item.label)
-                })
-            })
-            .catch((error) => {
-                console.warn(error)
-            })
-    }
+        res.data.forEach((item) => {
+          dictMap.value.set(item.value, item.label)
+        })
+      })
+      .catch((error) => {
+        console.warn(error)
+      })
+  }
 
-    return {dictData, dictMap, run}
+  return { dictData, dictMap, run }
 }
 
 export default useDict

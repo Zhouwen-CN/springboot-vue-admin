@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import {Delete, Edit, Plus} from '@element-plus/icons-vue'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 import useUserStore from '@/stores/user'
-import type {MenuVo} from '@/api/auth/menu'
-import {type MenuForm, reqDeleteMenu, reqSaveMenu} from '@/api/auth/menu'
-import {ElMessage, type FormInstance, type FormRules, type PopoverInstance} from 'element-plus'
+import type { MenuVo } from '@/api/auth/menu'
+import { type MenuForm, reqDeleteMenu, reqSaveMenu } from '@/api/auth/menu'
+import { ElMessage, type FormInstance, type FormRules, type PopoverInstance } from 'element-plus'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -54,12 +54,12 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
 }
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
-    {required: true, message: '请输入菜单名称', trigger: 'blur'},
-    {min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur'}
+    { required: true, message: '请输入菜单名称', trigger: 'blur' },
+    { min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
   ],
-  accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
-  filePath: [{validator: validateFilePath, trigger: 'blur'}],
-  icon: [{required: true, message: '请输入菜单图标', trigger: 'submit'}]
+  accessPath: [{ validator: validateAccessPath, trigger: 'blur' }],
+  filePath: [{ validator: validateFilePath, trigger: 'blur' }],
+  icon: [{ required: true, message: '请输入菜单图标', trigger: 'submit' }]
 })
 
 // 添加主菜单
@@ -150,25 +150,23 @@ function selectIcon(icon: string) {
   menuForm.icon = icon
   iconPopoverRef.value?.hide()
 }
-
 </script>
 <template>
   <div>
     <!-- 表格上面的按钮 -->
     <el-card>
       <div>
-        <el-button :icon="Plus" type="primary"
-                   @click="addMainMenu">新建
-        </el-button>
+        <el-button :icon="Plus" type="primary" @click="addMainMenu">新建 </el-button>
       </div>
       <!-- 表格 -->
       <el-table
-          :data="userStore.menuInfo"
-          default-expand-all
-          row-key="id"
-          :border="true"
-          show-overflow-tooltip
-          style="margin-top: 16px">
+        :data="userStore.menuInfo"
+        default-expand-all
+        row-key="id"
+        :border="true"
+        show-overflow-tooltip
+        style="margin-top: 16px"
+      >
         <el-table-column label="菜单名称" prop="title">
           <template #default="{ row }: { row: MenuVo }">
             <el-space>
@@ -179,34 +177,28 @@ function selectIcon(icon: string) {
             </el-space>
           </template>
         </el-table-column>
-        <el-table-column label="访问路径" prop="accessPath"/>
-        <el-table-column label="文件路径" prop="filePath"/>
-        <el-table-column align="center" label="是否缓存" min-width="40px"
-                         prop="keepAlive">
+        <el-table-column label="访问路径" prop="accessPath" />
+        <el-table-column label="文件路径" prop="filePath" />
+        <el-table-column align="center" label="是否缓存" min-width="40px" prop="keepAlive">
           <template #default="{ row }: { row: MenuVo }">
             <el-switch
-                v-model="row.keepAlive"
-                active-icon="Check"
-                disabled
-                inactive-icon="Close"
-                inline-prompt/>
+              v-model="row.keepAlive"
+              active-icon="Check"
+              disabled
+              inactive-icon="Close"
+              inline-prompt
+            />
           </template>
         </el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"/>
+        <el-table-column label="更新时间" prop="updateTime" />
         <el-table-column label="操作">
           <template #default="{ row }: { row: MenuVo }">
             <el-button-group>
-              <el-button :icon="Plus"
-                         type="primary"
-                         @click="addSubmenu(row.id)"/>
-              <el-button :icon="Edit" type="primary"
-                         @click="updateMenu(row)"/>
+              <el-button :icon="Plus" type="primary" @click="addSubmenu(row.id)" />
+              <el-button :icon="Edit" type="primary" @click="updateMenu(row)" />
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
-                  <el-button
-                      :disabled="row.children.length > 0"
-                      :icon="Delete"
-                      type="danger"/>
+                  <el-button :disabled="row.children.length > 0" :icon="Delete" type="danger" />
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -216,72 +208,69 @@ function selectIcon(icon: string) {
     </el-card>
 
     <!-- 对话框 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
-               width="40%" @close="clean">
+    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
       <template #footer>
         <el-form
-            ref="ruleFormRef"
-            :model="menuForm"
-            :rules="rules"
-            label-width="80px"
-            style="padding: 0 20px"
-            @submit.prevent="onSubmit(ruleFormRef)">
+          ref="ruleFormRef"
+          :model="menuForm"
+          :rules="rules"
+          label-width="80px"
+          style="padding: 0 20px"
+          @submit.prevent="onSubmit(ruleFormRef)"
+        >
           <el-form-item label="菜单名称" prop="title">
-            <el-input v-model="menuForm.title"
-                      placeholder="菜单名称"></el-input>
+            <el-input v-model="menuForm.title" placeholder="菜单名称"></el-input>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
-            <el-input v-model="menuForm.accessPath"
-                      placeholder="访问路径"></el-input>
+            <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径"
-                        prop="filePath">
+          <el-form-item label="文件路径" prop="filePath">
             <el-input
-                v-model="menuForm.filePath"
-                :disabled="hasChildren || menuForm.pid === 0"
-                placeholder="文件路径"></el-input>
+              v-model="menuForm.filePath"
+              :disabled="hasChildren || menuForm.pid === 0"
+              placeholder="文件路径"
+            ></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
-            <el-popover ref="iconPopoverRef" :width="400"
-                        placement="bottom-start"
-                        trigger="click">
+            <el-popover ref="iconPopoverRef" :width="400" placement="bottom-start" trigger="click">
               <template #reference>
-                <el-input
-                    v-model="menuForm.icon"
-                    clearable
-                    placeholder="菜单图标">
-                </el-input>
+                <el-input v-model="menuForm.icon" clearable placeholder="菜单图标"> </el-input>
               </template>
-              <el-input v-model="searchIconKeyword" clearable
-                        placeholder="搜索图标"
-                        style="margin-bottom: 10px;"></el-input>
+              <el-input
+                v-model="searchIconKeyword"
+                clearable
+                placeholder="搜索图标"
+                style="margin-bottom: 10px"
+              ></el-input>
               <el-scrollbar always height="300px">
                 <ul class="icon-grid">
-                  <li v-for="icon in filteredIcons" :key="icon"
-                      class="icon-grid-item" @click="selectIcon(icon)">
+                  <li
+                    v-for="icon in filteredIcons"
+                    :key="icon"
+                    class="icon-grid-item"
+                    @click="selectIcon(icon)"
+                  >
                     <el-icon :size="20">
-                      <component :is="icon"/>
+                      <component :is="icon" />
                     </el-icon>
                   </li>
                 </ul>
               </el-scrollbar>
             </el-popover>
-
           </el-form-item>
           <el-form-item label="是否缓存" prop="keepAlive">
-            <el-switch v-model="menuForm.keepAlive"
-                       :disabled="hasChildren || menuForm.pid === 0"
-                       active-icon="Check" inactive-icon="Close"
-                       inline-prompt/>
+            <el-switch
+              v-model="menuForm.keepAlive"
+              :disabled="hasChildren || menuForm.pid === 0"
+              active-icon="Check"
+              inactive-icon="Close"
+              inline-prompt
+            />
           </el-form-item>
 
           <el-form-item>
-            <el-button @click="toggleDialog.show = false">取消
-            </el-button>
-            <el-button :loading="saveLoading" type="primary"
-                       native-type="submit">
-              确认
-            </el-button>
+            <el-button @click="toggleDialog.show = false">取消 </el-button>
+            <el-button :loading="saveLoading" type="primary" native-type="submit"> 确认 </el-button>
           </el-form-item>
         </el-form>
       </template>

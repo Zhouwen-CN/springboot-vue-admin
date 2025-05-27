@@ -1,21 +1,21 @@
 import request from '@/utils/request'
-import type {CreateAndUpdateTime} from '@/utils/requestTypes'
+import type { CreateAndUpdateTime } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
-import type {RoleVo} from '../role'
+import type { RoleVo } from '../role'
 
 export interface LoginForm {
-    username: string
-    password: string
+  username: string
+  password: string
 }
 
 type RoleList = RoleVo[]
 
 export interface UserVo {
-    id: number
-    username: string
-    accessToken: string
-    refreshToken: string
-    roleList: RoleList
+  id: number
+  username: string
+  accessToken: string
+  refreshToken: string
+  roleList: RoleList
 }
 
 /**
@@ -24,7 +24,7 @@ export interface UserVo {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-    return request.post<UserVo, LoginForm>('/login/user', loginForm)
+  return request.post<UserVo, LoginForm>('/login/user', loginForm)
 }
 
 /**
@@ -33,11 +33,11 @@ export function reqLogin(loginForm: LoginForm) {
  * @returns
  */
 export function reqRefreshToken(refreshToken: string) {
-    return request.get<UserVo>('/user/refresh', {
-        headers: {
-            Authorization: `Bearer ${refreshToken}`
-        }
-    })
+  return request.get<UserVo>('/user/refresh', {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`
+    }
+  })
 }
 
 export function reqLogout(id: number) {
@@ -45,9 +45,9 @@ export function reqLogout(id: number) {
 }
 
 export interface UserRoleVo extends CreateAndUpdateTime {
-    id: number
-    username: string
-    roleList: RoleList
+  id: number
+  username: string
+  roleList: RoleList
 }
 
 /**
@@ -55,14 +55,14 @@ export interface UserRoleVo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetUserRolePage() {
-    return usePagination<UserRoleVo>('/user')
+  return usePagination<UserRoleVo>('/user')
 }
 
 export interface UserRoleForm {
-    id?: number
-    username: string
-    password?: string
-    roleIds: number[]
+  id?: number
+  username: string
+  password?: string
+  roleIds: number[]
 }
 
 /**
@@ -71,13 +71,13 @@ export interface UserRoleForm {
  * @returns
  */
 export function reqSaveUserRole(userRoleForm: UserRoleForm) {
-    if (userRoleForm.id) {
-        // 修改
-        return request.put<any, UserRoleForm>('/user', userRoleForm)
-    } else {
-        // 新增
-        return request.post<any, UserRoleForm>('/user', userRoleForm)
-    }
+  if (userRoleForm.id) {
+    // 修改
+    return request.put<any, UserRoleForm>('/user', userRoleForm)
+  } else {
+    // 新增
+    return request.post<any, UserRoleForm>('/user', userRoleForm)
+  }
 }
 
 /**
@@ -86,14 +86,14 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
  * @returns
  */
 export function reqResetPassword(id: number) {
-    return request.patch<any>(`/user/pwd/reset/${id}`)
+  return request.patch<any>(`/user/pwd/reset/${id}`)
 }
 
 export interface ChangePwdForm {
-    id: number
-    oldPwd: string
-    newPwd: string
-    confirmPwd: string
+  id: number
+  oldPwd: string
+  newPwd: string
+  confirmPwd: string
 }
 
 /**
@@ -102,7 +102,7 @@ export interface ChangePwdForm {
  * @returns
  */
 export function reqChangePassword(changePwdForm: ChangePwdForm) {
-    return request.patch<any, ChangePwdForm>('/user/pwd/change', changePwdForm)
+  return request.patch<any, ChangePwdForm>('/user/pwd/change', changePwdForm)
 }
 
 /**
@@ -111,7 +111,7 @@ export function reqChangePassword(changePwdForm: ChangePwdForm) {
  * @returns
  */
 export function reqDeleteUser(id: number) {
-    return request.delete(`/user/${id}`)
+  return request.delete(`/user/${id}`)
 }
 
 /**
@@ -120,5 +120,5 @@ export function reqDeleteUser(id: number) {
  * @returns
  */
 export function reqDeleteUsers(ids: number[]) {
-    return request.delete<any, number[]>('/user', {params: {ids: ids + ''}})
+  return request.delete<any, number[]>('/user', { params: { ids: ids + '' } })
 }

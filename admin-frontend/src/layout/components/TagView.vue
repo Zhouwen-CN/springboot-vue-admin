@@ -1,7 +1,16 @@
 <script lang="ts" setup>
-import useTagViewStore, {type CloseOption, type TagView} from '@/stores/tagView'
-import {ArrowLeft, ArrowRight, Back, Close, Minus, Refresh, Right, Sort} from '@element-plus/icons-vue'
-import {ElScrollbar, type ScrollbarInstance} from 'element-plus'
+import useTagViewStore, { type CloseOption, type TagView } from '@/stores/tagView'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Back,
+  Close,
+  Minus,
+  Refresh,
+  Right,
+  Sort
+} from '@element-plus/icons-vue'
+import { ElScrollbar, type ScrollbarInstance } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -13,12 +22,12 @@ const scrollbarRef = ref<ScrollbarInstance>()
 let currentScrollLeft = 0
 
 // 触发滚动事件时，更新当前滚动的距离
-function scrollHandler({scrollLeft}: { scrollLeft: number }) {
+function scrollHandler({ scrollLeft }: { scrollLeft: number }) {
   currentScrollLeft = scrollLeft
   closeTagMenu()
 }
 // 左右滚动
-function scrollTo(direction: "left" | "right", step: number = 200) {
+function scrollTo(direction: 'left' | 'right', step: number = 200) {
   let scrollLeft = 0
 
   if (!scrollbarRef.value) {
@@ -39,7 +48,7 @@ function scrollTo(direction: "left" | "right", step: number = 200) {
   // 最后剩余可滚动的宽度
   const scrollableDistance = scrollWidth - clientWidth - currentScrollLeft
 
-  if (direction === "left") {
+  if (direction === 'left') {
     scrollLeft = Math.max(0, currentScrollLeft - step)
   } else {
     scrollLeft = Math.min(currentScrollLeft + step, currentScrollLeft + scrollableDistance)
@@ -68,7 +77,7 @@ function initTagView() {
 
 // 切换 tagView
 function changeTagView(tagView: TagView) {
-  router.push({path: tagView.path, query: tagView.query})
+  router.push({ path: tagView.path, query: tagView.query })
 }
 
 // 关闭 tagView
@@ -79,7 +88,7 @@ function closeTagView(_index: number, closeOption: CloseOption) {
   if (isDeleteActive) {
     const visitedViews = tagViewStore.visitedViews
     if (visitedViews.length === 0) {
-      router.push("/")
+      router.push('/')
     } else {
       const path = visitedViews[visitedViews.length - 1].path
       router.push(path)
@@ -92,10 +101,9 @@ function refreshTagView(_index: number) {
   const tagView = tagViewStore.visitedViews[_index]
   tagViewStore.removeCacheView(tagView)
   nextTick(() => {
-    router.replace("/redirect" + tagView.path)
+    router.replace('/redirect' + tagView.path)
   })
 }
-
 
 const tagMenuVisible = ref(false)
 const left = ref(0)
@@ -109,9 +117,9 @@ function closeTagMenu() {
 
 watch(tagMenuVisible, (value) => {
   if (value) {
-    document.body.addEventListener("click", closeTagMenu)
+    document.body.addEventListener('click', closeTagMenu)
   } else {
-    document.body.removeEventListener("click", closeTagMenu)
+    document.body.removeEventListener('click', closeTagMenu)
   }
 })
 
@@ -146,8 +154,10 @@ function isAffix() {
 
 // 是否是第一个标签
 function isFirstTagView() {
-  return selectedIndex.value === 0 ||
-      selectedIndex.value === tagViewStore.visitedViews.findIndex(v => !v.affix)
+  return (
+    selectedIndex.value === 0 ||
+    selectedIndex.value === tagViewStore.visitedViews.findIndex((v) => !v.affix)
+  )
 }
 
 // 是否是最后一个标签
@@ -162,26 +172,24 @@ onMounted(() => {
 
 <template>
   <div class="scroll-container">
-
     <el-icon class="arrow left" @click="scrollTo('left')">
-      <ArrowLeft/>
+      <ArrowLeft />
     </el-icon>
 
     <el-scrollbar ref="scrollbarRef" @scroll="scrollHandler">
-      <template v-for="(tagView, _index) in tagViewStore.visitedViews"
-                :key="tagView.title">
+      <template v-for="(tagView, _index) in tagViewStore.visitedViews" :key="tagView.title">
         <el-tag
-            :class="{ active: route.path === tagView.path }"
-            :closable="!tagView.affix"
-            class="tag-view-item"
-            disable-transitions
-            @click="changeTagView(tagView)"
-            @close="closeTagView(_index, 'selected')"
-            @contextmenu.prevent="openTagMenu(_index, $event)"
-            @click.middle="closeTagView(_index, 'selected')">
+          :class="{ active: route.path === tagView.path }"
+          :closable="!tagView.affix"
+          class="tag-view-item"
+          disable-transitions
+          @click="changeTagView(tagView)"
+          @close="closeTagView(_index, 'selected')"
+          @contextmenu.prevent="openTagMenu(_index, $event)"
+          @click.middle="closeTagView(_index, 'selected')"
+        >
           <div class="tag-view-content">
-            <span v-show="route.path === tagView.path"
-                  class="dot"></span>
+            <span v-show="route.path === tagView.path" class="dot"></span>
             <span>{{ tagView.title }}</span>
           </div>
         </el-tag>
@@ -189,57 +197,55 @@ onMounted(() => {
     </el-scrollbar>
 
     <el-icon class="arrow right" @click="scrollTo('right')">
-      <ArrowRight/>
+      <ArrowRight />
     </el-icon>
 
     <!-- tag标签操作菜单 -->
     <Teleport to="body">
-      <ul v-if="tagMenuVisible"
-          :style="{ left: left + 'px', top: top + 'px' }"
-          class="tag-context-menu">
+      <ul
+        v-if="tagMenuVisible"
+        :style="{ left: left + 'px', top: top + 'px' }"
+        class="tag-context-menu"
+      >
         <li @click="refreshTagView(selectedIndex)">
           <el-icon>
-            <Refresh/>
+            <Refresh />
           </el-icon>
           刷新
         </li>
-        <li v-if="!isAffix()"
-            @click="closeTagView(selectedIndex, 'selected')">
+        <li v-if="!isAffix()" @click="closeTagView(selectedIndex, 'selected')">
           <el-icon>
-            <Close/>
+            <Close />
           </el-icon>
           关闭
         </li>
-        <li v-if="!isFirstTagView()"
-          @click="closeTagView(selectedIndex, 'left')">
+        <li v-if="!isFirstTagView()" @click="closeTagView(selectedIndex, 'left')">
           <el-icon>
-            <Back/>
+            <Back />
           </el-icon>
           关闭左侧
         </li>
-        <li v-if="!isLastTagView()"
-          @click="closeTagView(selectedIndex, 'right')">
+        <li v-if="!isLastTagView()" @click="closeTagView(selectedIndex, 'right')">
           <el-icon>
-            <Right/>
+            <Right />
           </el-icon>
           关闭右侧
         </li>
         <li @click="closeTagView(selectedIndex, 'other')">
           <el-icon>
-            <Sort/>
+            <Sort />
           </el-icon>
           关闭其它
         </li>
         <li @click="closeTagView(selectedIndex, 'all')">
           <el-icon>
-            <Minus/>
+            <Minus />
           </el-icon>
           关闭所有
         </li>
       </ul>
     </Teleport>
   </div>
-
 </template>
 
 <style lang="scss" scoped>
@@ -264,7 +270,6 @@ onMounted(() => {
       margin-left: 8px;
     }
   }
-
 
   .tag-view-item {
     margin-top: 6px;
@@ -321,7 +326,6 @@ onMounted(() => {
   .el-scrollbar {
     flex: 1;
     white-space: nowrap;
-
   }
 }
 

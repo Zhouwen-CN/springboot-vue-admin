@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
-import {Link} from '@element-plus/icons-vue'
+import { Link } from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
 
 const userStore = useUserStore()
@@ -11,21 +11,20 @@ const settingStore = useSettingStore()
   <div>
     <el-card>
       <div class="box">
-        <img
-            alt=""
-            class="avatar"
-            :src="settingStore.avatarUrl"/>
+        <img alt="" class="avatar" :src="settingStore.avatarUrl" />
         <div class="message">
-          <h3 class="welcome-msg">Welcome
+          <h3 class="welcome-msg">
+            Welcome
             {{ userStore.userInfo.username }}
           </h3>
           <div>
             <el-link
-                :icon="Link"
-                :href="settingStore.giteeLink"
-                class="gitee-link"
-                target="_blank"
-                type="primary">
+              :icon="Link"
+              :href="settingStore.giteeLink"
+              class="gitee-link"
+              target="_blank"
+              type="primary"
+            >
               {{ settingStore.appName }} Project Gitee Link
             </el-link>
           </div>
@@ -34,7 +33,7 @@ const settingStore = useSettingStore()
     </el-card>
 
     <div class="welcome-img">
-      <img alt="" src="@/assets/images/welcome.svg" width="400px"/>
+      <img alt="" src="@/assets/images/welcome.svg" width="400px" />
     </div>
   </div>
 </template>

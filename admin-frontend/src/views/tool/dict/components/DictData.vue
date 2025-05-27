@@ -7,8 +7,8 @@ import {
   reqRemoveDictDataByIds,
   reqSaveDictData
 } from '@/api/tool/dict'
-import {Delete, Edit, Plus, Search} from '@element-plus/icons-vue'
-import {type FormInstance, type FormRules} from 'element-plus'
+import { Delete, Edit, Plus, Search } from '@element-plus/icons-vue'
+import { type FormInstance, type FormRules } from 'element-plus'
 
 // 搜索关键字
 const searchLabel = ref('')
@@ -48,13 +48,13 @@ const {
 
 // 查询字典数据
 function searchByLabel() {
-  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  refresh({ params: { typeId: typeId.value, label: searchLabel.value } })
 }
 
 // 删除字典数据
 async function removeDictData(id: number) {
   await reqRemoveDictDataById(id)
-  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  refresh({ params: { typeId: typeId.value, label: searchLabel.value } })
   ElMessage.success('操作成功')
 }
 
@@ -67,7 +67,7 @@ function handleSelectionChange(dictDatas: DictDataVo[]) {
 
 async function removeBatchDictData() {
   await reqRemoveDictDataByIds(deleteIds.value)
-  refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+  refresh({ params: { typeId: typeId.value, label: searchLabel.value } })
   ElMessage.success('操作成功')
 }
 
@@ -91,9 +91,9 @@ function modifyDictData(row: DictDataVo) {
 // 表单校验
 const dictDataFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictDataForm>>({
-  label: [{required: true, message: '请输入标签键', trigger: 'blur'}],
-  value: [{required: true, message: '请输入标签值', trigger: 'blur'}],
-  sort: [{required: true, message: '请输入排序值', trigger: 'blur'}]
+  label: [{ required: true, message: '请输入标签键', trigger: 'blur' }],
+  value: [{ required: true, message: '请输入标签值', trigger: 'blur' }],
+  sort: [{ required: true, message: '请输入排序值', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -103,7 +103,7 @@ async function dictDataFormSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await reqSaveDictData(dictDataForm)
-    refresh({params: {typeId: typeId.value, label: searchLabel.value}})
+    refresh({ params: { typeId: typeId.value, label: searchLabel.value } })
     toggleDialog.show = false
     ElMessage.success('操作成功')
   } catch (error) {
@@ -129,7 +129,7 @@ function showDrawer(id: number) {
   dictDataForm.typeId = id
   drawerVisible.value = true
   searchLabel.value = ''
-  refresh({params: {typeId: typeId.value}})
+  refresh({ params: { typeId: typeId.value } })
 }
 
 defineExpose({
@@ -143,13 +143,11 @@ defineExpose({
     <el-card>
       <el-form inline @submit.prevent="searchByLabel()">
         <el-form-item label="标签键">
-          <el-input v-model="searchLabel" clearable
-                    placeholder="标签键"></el-input>
+          <el-input v-model="searchLabel" clearable placeholder="标签键"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" :loading="pageLoading"
-                     native-type="submit"
-                     type="primary">搜索
+          <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
+            >搜索
           </el-button>
         </el-form-item>
       </el-form>
@@ -158,42 +156,37 @@ defineExpose({
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button :icon="Plus" type="primary"
-                   @click="addDictData">新建
-        </el-button>
+        <el-button :icon="Plus" type="primary" @click="addDictData">新建 </el-button>
         <el-popconfirm title="是否删除？" @confirm="removeBatchDictData">
           <template #reference>
-            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
-                       type="danger">批量删除
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
+              >批量删除
             </el-button>
           </template>
         </el-popconfirm>
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" show-overflow-tooltip
-                style="margin-top: 16px"
-                @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="45"/>
-        <el-table-column label="标签键" min-width="40px" prop="label">
-        </el-table-column>
-        <el-table-column label="标签值" min-width="40px"
-                         prop="value"></el-table-column>
-        <el-table-column label="排序" min-width="40px"
-                         prop="sort"></el-table-column>
-        <el-table-column label="更新时间"
-                         prop="updateTime"></el-table-column>
+      <el-table
+        :border="true"
+        :data="pageData"
+        show-overflow-tooltip
+        style="margin-top: 16px"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="45" />
+        <el-table-column label="标签键" min-width="40px" prop="label"> </el-table-column>
+        <el-table-column label="标签值" min-width="40px" prop="value"></el-table-column>
+        <el-table-column label="排序" min-width="40px" prop="sort"></el-table-column>
+        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }: { row: DictDataVo }">
             <el-button-group>
-              <el-button :icon="Edit" size="small" type="primary"
-                         @click="modifyDictData(row)">
+              <el-button :icon="Edit" size="small" type="primary" @click="modifyDictData(row)">
               </el-button>
-              <el-popconfirm title="是否删除？"
-                             @confirm="removeDictData(row.id)">
+              <el-popconfirm title="是否删除？" @confirm="removeDictData(row.id)">
                 <template #reference>
-                  <el-button :icon="Delete" size="small"
-                             type="danger"></el-button>
+                  <el-button :icon="Delete" size="small" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>
@@ -202,46 +195,51 @@ defineExpose({
       </el-table>
 
       <!-- 分页 -->
-      <el-pagination v-model:current-page="current"
-                     v-model:page-size="size"
-                     :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, jumper, ->, total, sizes"
-                     style="margin-top: 16px"
-                     @current-change="(val: number) => onPageChange(val, { params: { typeId: typeId, label: searchLabel } })"
-                     @size-change="(val: number) => onSizeChange(val, { params: { typeId: typeId, label: searchLabel } })"/>
+      <el-pagination
+        v-model:current-page="current"
+        v-model:page-size="size"
+        :page-sizes="sizeOption"
+        :total="total"
+        background
+        layout="prev, pager, next, jumper, ->, total, sizes"
+        style="margin-top: 16px"
+        @current-change="
+          (val: number) => onPageChange(val, { params: { typeId: typeId, label: searchLabel } })
+        "
+        @size-change="
+          (val: number) => onSizeChange(val, { params: { typeId: typeId, label: searchLabel } })
+        "
+      />
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
-               width="40%" @close="dictDataDialogClean">
+    <el-dialog
+      v-model="toggleDialog.show"
+      :title="toggleDialog.title"
+      width="40%"
+      @close="dictDataDialogClean"
+    >
       <template #footer>
         <el-form
-            ref="dictDataFormRef"
-            :model="dictDataForm"
-            :rules="rules"
-            label-width="80px"
-            style="padding: 0 20px"
-            @submit.prevent="dictDataFormSubmit(dictDataFormRef)">
+          ref="dictDataFormRef"
+          :model="dictDataForm"
+          :rules="rules"
+          label-width="80px"
+          style="padding: 0 20px"
+          @submit.prevent="dictDataFormSubmit(dictDataFormRef)"
+        >
           <el-form-item label="标签键" prop="label">
-            <el-input v-model="dictDataForm.label"
-                      placeholder="标签键"></el-input>
+            <el-input v-model="dictDataForm.label" placeholder="标签键"></el-input>
           </el-form-item>
           <el-form-item label="标签值" prop="value">
-            <el-input v-model="dictDataForm.value" type="number"
-                      placeholder="标签值"></el-input>
+            <el-input v-model="dictDataForm.value" type="number" placeholder="标签值"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="sort">
-            <el-input v-model="dictDataForm.sort"
-                      type="number"></el-input>
+            <el-input v-model="dictDataForm.sort" type="number"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-                @click="toggleDialog.show = false">取消
-            </el-button>
-            <el-button :loading="saveLoading"
-                       native-type="submit"
-                       type="primary">确认
-            </el-button>
+            <el-button @click="toggleDialog.show = false">取消 </el-button>
+            <el-button :loading="saveLoading" native-type="submit" type="primary">确认 </el-button>
           </el-form-item>
         </el-form>
       </template>

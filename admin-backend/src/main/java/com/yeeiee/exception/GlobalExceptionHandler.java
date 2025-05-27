@@ -31,22 +31,27 @@ public class GlobalExceptionHandler {
     private final ErrorLogService errorLogService;
 
     @ExceptionHandler(DmlOperationException.class)
-    public R<Void> dmlFailureHandler(DmlOperationException e) {
+    public R<Void> dmlFailureExceptionHandler(DmlOperationException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     @ExceptionHandler(VerifyTokenException.class)
-    public R<Void> verifyTokenException(VerifyTokenException e) {
+    public R<Void> verifyTokenExceptionHandler(VerifyTokenException e) {
         return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public R<Void> noResourceFoundHandler(NoResourceFoundException e) {
+    public R<Void> noResourceFoundExceptionHandler(NoResourceFoundException e) {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
+    @ExceptionHandler(PaginationSqlParseException.class)
+    public R<Void> paginationSqlParseExceptionHandler(PaginationSqlParseException e) {
+        return R.error(HttpStatus.BAD_REQUEST, String.format("分页SQL解析错误: %s", ExceptionUtils.getRootCauseMessage(e)));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public R<Void> handleValidationExceptions(MethodArgumentNotValidException e) {
+    public R<Void> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         val bindingResult = e.getBindingResult();
 
         val fieldError = bindingResult.getFieldError();
@@ -59,11 +64,11 @@ public class GlobalExceptionHandler {
             return R.error(HttpStatus.BAD_REQUEST, globalError.getDefaultMessage());
         }
 
-        return R.error(HttpStatus.BAD_REQUEST, "请求参数错误");
+        return R.error(HttpStatus.BAD_REQUEST, "请求参数校验失败");
     }
 
     @ExceptionHandler(Exception.class)
-    public R<Void> defaultHandler(Exception e) {
+    public R<Void> defaultExceptionHandler(Exception e) {
         this.saveErrorLog(e);
         return R.error(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }

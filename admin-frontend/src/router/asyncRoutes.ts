@@ -1,6 +1,6 @@
-import type {MenuVo} from '@/api/auth/menu'
-import type {Router, RouteRecordSingleViewWithChildren} from 'vue-router'
-import {storeName} from '@/stores/user'
+import type { MenuVo } from '@/api/auth/menu'
+import type { Router, RouteRecordSingleViewWithChildren } from 'vue-router'
+import { storeName } from '@/stores/user'
 
 /**
  * 给组件注册 name 属性值
@@ -12,13 +12,13 @@ function registerComponentName(componentName: string, component: () => Promise<u
   return () => {
     return new Promise((resolve, reject) => {
       component()
-          .then((res: any) => {
-            res.default.name = componentName
-            resolve(res)
-          })
-          .catch((e) => {
-            reject(e)
-          })
+        .then((res: any) => {
+          res.default.name = componentName
+          resolve(res)
+        })
+        .catch((e) => {
+          reject(e)
+        })
     })
   }
 }
@@ -30,8 +30,8 @@ function registerComponentName(componentName: string, component: () => Promise<u
  * @returns
  */
 export function getAsyncRoutes(
-    modules: Record<string, () => Promise<unknown>>,
-    menus: MenuVo[]
+  modules: Record<string, () => Promise<unknown>>,
+  menus: MenuVo[]
 ): RouteRecordSingleViewWithChildren[] {
   return menus.map((menu) => {
     const componentName = 'sv' + menu.accessPath.replaceAll('/', '-')
@@ -69,9 +69,9 @@ export function getAsyncRoutes(
 export function deleteAsyncRoutes(router: Router) {
   // 删除默认路由以外的路由
   const deleteNames = router
-      .getRoutes()
-      .filter((r) => !r.meta.require)
-      .map((r) => r.name as string)
+    .getRoutes()
+    .filter((r) => !r.meta.require)
+    .map((r) => r.name as string)
   deleteNames.forEach((name) => router.removeRoute(name))
   router.replace('/login')
 }

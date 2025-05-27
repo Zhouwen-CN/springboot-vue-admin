@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -46,7 +47,7 @@ public final class R<T> {
     }
 
     public static R<Void> error(HttpStatus httpStatus, Exception e) {
-        return new R<>(false, null, httpStatus.value(), e.getMessage());
+        return new R<>(false, null, httpStatus.value(), ExceptionUtils.getRootCauseMessage(e));
     }
 
     public static R<Void> error(HttpStatus httpStatus, String message) {

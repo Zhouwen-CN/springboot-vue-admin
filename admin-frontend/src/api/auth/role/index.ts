@@ -1,10 +1,10 @@
 import request from '@/utils/request'
-import type {CreateAndUpdateTime} from '@/utils/requestTypes'
+import type { CreateAndUpdateTime } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
 export interface RoleVo {
-    id: number
-    roleName: string
+  id: number
+  roleName: string
 }
 
 /**
@@ -12,12 +12,12 @@ export interface RoleVo {
  * @returns
  */
 export function reqGetRoles() {
-    return request.get<RoleVo[]>('/role')
+  return request.get<RoleVo[]>('/role')
 }
 
 export interface RoleMenuVo extends RoleVo, CreateAndUpdateTime {
-    desc: string
-    menuIds: number[]
+  desc: string
+  menuIds: number[]
 }
 
 /**
@@ -25,7 +25,7 @@ export interface RoleMenuVo extends RoleVo, CreateAndUpdateTime {
  * @returns
  */
 export function reqGetRolePage() {
-    return usePagination<RoleMenuVo>('/role')
+  return usePagination<RoleMenuVo>('/role')
 }
 
 export interface RoleMenuForm {
@@ -63,5 +63,5 @@ export function reqDeleteRole(id: number) {
  * @returns
  */
 export function reqDeleteRoles(ids: number[]) {
-    return request.delete<any, number[]>('/role', {params: {ids: ids + ''}})
+  return request.delete<any, number[]>('/role', { params: { ids: ids + '' } })
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Delete, Edit, Plus, Search} from '@element-plus/icons-vue'
+import { Delete, Edit, Plus, Search } from '@element-plus/icons-vue'
 import {
   type DictTypeForm,
   type DictTypeVo,
@@ -8,7 +8,7 @@ import {
   reqRemoveDictTypeByIds,
   reqSaveDictType
 } from '@/api/tool/dict'
-import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import DictData from './components/DictData.vue'
 
 // 搜索关键字
@@ -44,13 +44,13 @@ const {
 // 查询字典类型
 function searchByKeyword() {
   keyword.value = keyword.value.trim()
-  refresh({params: {keyword: keyword.value}})
+  refresh({ params: { keyword: keyword.value } })
 }
 
 // 删除字典类型
 async function removeDictType(id: number) {
   await reqRemoveDictTypeById(id)
-  refresh({params: {keyword: keyword.value}})
+  refresh({ params: { keyword: keyword.value } })
   ElMessage.success('操作成功')
 }
 
@@ -61,7 +61,7 @@ function handleSelectionChange(dictTypes: DictTypeVo[]) {
 }
 async function removeBatchDictType() {
   await reqRemoveDictTypeByIds(deleteIds.value)
-  refresh({params: {keyword: keyword.value}})
+  refresh({ params: { keyword: keyword.value } })
   ElMessage.success('操作成功')
 }
 
@@ -83,8 +83,8 @@ function modifyDictType(row: DictTypeVo) {
 // 表单校验
 const dictTypeFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictTypeForm>>({
-  name: [{required: true, message: '请输入字典类型', trigger: 'blur'}],
-  type: [{required: true, message: '请输入字典名称', trigger: 'blur'}]
+  name: [{ required: true, message: '请输入字典类型', trigger: 'blur' }],
+  type: [{ required: true, message: '请输入字典名称', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -94,7 +94,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await reqSaveDictType(dictTypeForm)
-    refresh({params: {keyword: keyword.value}})
+    refresh({ params: { keyword: keyword.value } })
     toggleDialog.show = false
     ElMessage.success('操作成功')
   } catch (error) {
@@ -132,13 +132,11 @@ onMounted(() => {
     <el-card>
       <el-form inline @submit.prevent="searchByKeyword()">
         <el-form-item label="关键字">
-          <el-input v-model="keyword" clearable
-                    placeholder="关键字"></el-input>
+          <el-input v-model="keyword" clearable placeholder="关键字"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Search" :loading="pageLoading"
-                     native-type="submit"
-                     type="primary">搜索
+          <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
+            >搜索
           </el-button>
         </el-form-item>
       </el-form>
@@ -147,42 +145,39 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
       <div>
-        <el-button :icon="Plus" type="primary"
-                   @click="addDictType">新建
-        </el-button>
+        <el-button :icon="Plus" type="primary" @click="addDictType">新建 </el-button>
         <el-popconfirm title="是否删除？" @confirm="removeBatchDictType">
           <template #reference>
-            <el-button :disabled="deleteIds.length == 0" :icon="Delete"
-                       type="danger">批量删除
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
+              >批量删除
             </el-button>
           </template>
         </el-popconfirm>
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="pageData" show-overflow-tooltip
-                style="margin-top: 16px"
-                @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="45"/>
+      <el-table
+        :border="true"
+        :data="pageData"
+        show-overflow-tooltip
+        style="margin-top: 16px"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="45" />
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="字典类型" prop="type">
           <template #default="{ row }: { row: DictTypeVo }">
-            <span class="dict-type"
-                  @click="openDrawer(row.id)">{{ row.type }}</span>
+            <span class="dict-type" @click="openDrawer(row.id)">{{ row.type }}</span>
           </template>
         </el-table-column>
         <el-table-column label="字典名称" prop="name"></el-table-column>
-        <el-table-column label="创建时间"
-                         prop="createTime"></el-table-column>
-        <el-table-column label="更新时间"
-                         prop="updateTime"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime"></el-table-column>
+        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }: { row: DictTypeVo }">
             <el-button-group>
-              <el-button :icon="Edit" type="primary"
-                         @click="modifyDictType(row)"></el-button>
-              <el-popconfirm title="是否删除？"
-                             @confirm="removeDictType(row.id)">
+              <el-button :icon="Edit" type="primary" @click="modifyDictType(row)"></el-button>
+              <el-popconfirm title="是否删除？" @confirm="removeDictType(row.id)">
                 <template #reference>
                   <el-button :icon="Delete" type="danger"></el-button>
                 </template>
@@ -193,42 +188,44 @@ onMounted(() => {
       </el-table>
 
       <!-- 分页 -->
-      <el-pagination v-model:current-page="current"
-                     v-model:page-size="size"
-                     :page-sizes="sizeOption" :total="total" background
-                     layout="prev, pager, next, jumper, ->, total, sizes"
-                     style="margin-top: 16px"
-                     @current-change="(val: number) => onPageChange(val, { params: { keyword: keyword } })"
-                     @size-change="(val: number) => onSizeChange(val, { params: { keyword: keyword } })"/>
+      <el-pagination
+        v-model:current-page="current"
+        v-model:page-size="size"
+        :page-sizes="sizeOption"
+        :total="total"
+        background
+        layout="prev, pager, next, jumper, ->, total, sizes"
+        style="margin-top: 16px"
+        @current-change="(val: number) => onPageChange(val, { params: { keyword: keyword } })"
+        @size-change="(val: number) => onSizeChange(val, { params: { keyword: keyword } })"
+      />
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title"
-               width="40%" @close="dialogClean">
+    <el-dialog
+      v-model="toggleDialog.show"
+      :title="toggleDialog.title"
+      width="40%"
+      @close="dialogClean"
+    >
       <template #footer>
         <el-form
-            ref="dictTypeFormRef"
-            :model="dictTypeForm"
-            :rules="rules"
-            label-width="80px"
-            style="padding: 0 20px"
-            @submit.prevent="onSubmit(dictTypeFormRef)">
+          ref="dictTypeFormRef"
+          :model="dictTypeForm"
+          :rules="rules"
+          label-width="80px"
+          style="padding: 0 20px"
+          @submit.prevent="onSubmit(dictTypeFormRef)"
+        >
           <el-form-item label="字典类型" prop="type">
-            <el-input v-model="dictTypeForm.type"
-                      placeholder="字典类型"></el-input>
+            <el-input v-model="dictTypeForm.type" placeholder="字典类型"></el-input>
           </el-form-item>
           <el-form-item label="字典名称" prop="name">
-            <el-input v-model="dictTypeForm.name"
-                      placeholder="字典名称"></el-input>
+            <el-input v-model="dictTypeForm.name" placeholder="字典名称"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-                @click="toggleDialog.show = false">取消
-            </el-button>
-            <el-button :loading="saveLoading"
-                       native-type="submit"
-                       type="primary">确认
-            </el-button>
+            <el-button @click="toggleDialog.show = false">取消 </el-button>
+            <el-button :loading="saveLoading" native-type="submit" type="primary">确认 </el-button>
           </el-form-item>
         </el-form>
       </template>

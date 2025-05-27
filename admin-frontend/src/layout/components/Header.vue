@@ -67,22 +67,21 @@ function changeCollapse() {
 // 表单校验
 const confirmValidator = (rule: any, value: any, callback: any) => {
   value === changePwdForm.newPwd ? callback() : callback(new Error('两次输入的密码不一致'))
-
 }
 const formRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof changePwdForm>>({
   oldPwd: [
-    {required: true, message: '请输入旧密码', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+    { required: true, message: '请输入旧密码', trigger: 'blur' },
+    { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
   ],
   newPwd: [
-    {required: true, message: '请输入新密码', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
   ],
   confirmPwd: [
-    {required: true, message: '请输入确认密码', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'},
-    {validator: confirmValidator, trigger: 'submit'}
+    { required: true, message: '请输入确认密码', trigger: 'blur' },
+    { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' },
+    { validator: confirmValidator, trigger: 'submit' }
   ]
 })
 
@@ -98,7 +97,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     tagViewStore.$reset()
     settingStore.$reset()
     deleteAsyncRoutes(router)
-    ElMessage.warning("修改成功，请重新登入")
+    ElMessage.warning('修改成功，请重新登入')
   } catch (error) {
     // do nothing
   } finally {
@@ -120,14 +119,14 @@ function clean() {
     <div class="left">
       <!-- 展开收起按钮 -->
       <el-icon :size="20" style="margin-right: 10px"
-               @click="changeCollapse">
+        @click="changeCollapse">
         <component :is="settingStore.collapse ? 'Expand' : 'Fold'">
         </component>
       </el-icon>
       <!-- 左侧面包屑 -->
       <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item v-for="(item, index) in routeInfo"
-                            :key="index" :to="item.path">
+          :key="index" :to="item.path">
           <el-icon>
             <component :is="item.meta.icon"></component>
           </el-icon>
@@ -139,27 +138,22 @@ function clean() {
     <div>
       <el-space size="large">
         <el-button :icon="FullScreen" circle size="default"
-                   @click="toggleFullScreen"></el-button>
-        <el-avatar
-            shape="square"
-            size="default"
-            :src="settingStore.avatarUrl">
-        </el-avatar>
+          @click="toggleFullScreen"></el-button>
+        <el-avatar shape="square" size="default"
+          :src="settingStore.avatarUrl"> </el-avatar>
 
         <el-dropdown>
           <span>
             {{ userStore.userInfo.username }}
             <el-icon>
-              <ArrowDown/>
+              <ArrowDown />
             </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item
-                  @click="changePassword">修改密码
+              <el-dropdown-item @click="changePassword">修改密码
               </el-dropdown-item>
-              <el-dropdown-item
-                  @click="logout">退出登入
+              <el-dropdown-item @click="logout">退出登入
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -169,29 +163,27 @@ function clean() {
 
     <!-- 对话框表单 -->
     <el-dialog v-model="dialogVisible" title="修改密码" width="40%"
-               @close="clean">
+      @close="clean">
       <el-form ref="formRef" :model="changePwdForm" :rules="rules"
-               label-width="80px" style="padding: 0 20px"
-               @submit.prevent="onSubmit(formRef)">
+        label-width="80px" style="padding: 0 20px"
+        @submit.prevent="onSubmit(formRef)">
         <el-form-item label="旧密码" prop="oldPwd">
           <el-input v-model="changePwdForm.oldPwd" placeholder="旧密码"
-                    show-password type="password"></el-input>
+            show-password type="password"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPwd">
           <el-input v-model="changePwdForm.newPwd" placeholder="新密码"
-                    show-password type="password"></el-input>
+            show-password type="password"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPwd">
           <el-input v-model="changePwdForm.confirmPwd"
-                    placeholder="确认密码"
-                    show-password type="password"></el-input>
+            placeholder="确认密码"
+            show-password type="password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="dialogVisible = false">取消
-          </el-button>
+          <el-button @click="dialogVisible = false">取消 </el-button>
           <el-button :loading="saveLoading" native-type="submit"
-                     type="primary">确认
-          </el-button>
+            type="primary">确认 </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

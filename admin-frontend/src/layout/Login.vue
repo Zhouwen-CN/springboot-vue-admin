@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {Lock, User} from '@element-plus/icons-vue'
-import {ElMessage, type FormInstance, type FormRules} from 'element-plus'
-import type {LoginForm} from '@/api/auth/user'
+import { Lock, User } from '@element-plus/icons-vue'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import type { LoginForm } from '@/api/auth/user'
 import useUserStore from '@/stores/user'
 import useSettingStore from '@/stores/setting'
 
@@ -18,12 +18,12 @@ const loginForm = reactive<LoginForm>({
 // 登入表单校验
 const rules = reactive<FormRules<typeof loginForm>>({
   username: [
-    {required: true, message: '请输入用户名', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
   ],
   password: [
-    {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur'}
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
   ]
 })
 
@@ -60,28 +60,33 @@ const onCancel = (formEl: FormInstance | undefined) => {
   <el-row class="container">
     <el-col :span="13"></el-col>
     <el-col :span="8" class="content">
-      <el-form ref="ruleFormRef" :model="loginForm" :rules="rules"
-               @submit.prevent="onSubmit(ruleFormRef)"
-               class="form" size="large">
+      <el-form
+        ref="ruleFormRef"
+        :model="loginForm"
+        :rules="rules"
+        @submit.prevent="onSubmit(ruleFormRef)"
+        class="form"
+        size="large"
+      >
         <h1>{{ settingStore.appName }}</h1>
         <el-form-item prop="username">
           <el-input
-              v-model="loginForm.username"
-              :prefix-icon="User"
-              placeholder="用户名"></el-input>
+            v-model="loginForm.username"
+            :prefix-icon="User"
+            placeholder="用户名"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-              v-model="loginForm.password"
-              :prefix-icon="Lock"
-              placeholder="密码"
-              show-password
-              type="password"></el-input>
+            v-model="loginForm.password"
+            :prefix-icon="Lock"
+            placeholder="密码"
+            show-password
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :loading="loading" type="primary"
-                     native-type="submit">登录
-          </el-button>
+          <el-button :loading="loading" type="primary" native-type="submit">登录 </el-button>
           <el-button @click="onCancel(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>

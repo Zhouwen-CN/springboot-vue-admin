@@ -61,8 +61,9 @@ public class LogController {
         if (status != null) {
             lambdaQueryWrapper.eq(LoginLog::getStatus, OperationStatusEnum.getStatus(status));
         }
+        lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime);
 
-        val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime));
+        val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(page);
     }
 
@@ -82,8 +83,9 @@ public class LogController {
         if (status != null) {
             lambdaQueryWrapper.eq(OperationLog::getStatus, OperationStatusEnum.getStatus(status));
         }
+        lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime);
 
-        val page = operationLogService.page(new Page<>(current, size), lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime));
+        val page = operationLogService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(page);
     }
 

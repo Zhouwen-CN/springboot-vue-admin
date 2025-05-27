@@ -21,22 +21,22 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-// 全局错误处理
-app.config.errorHandler = (err, vm, info) => {
-  if ('development' === import.meta.env.MODE) {
+if ('development' === import.meta.env.MODE) {
+  // 全局错误处理
+  app.config.errorHandler = (err, vm, info) => {
     console.group('global error handler')
     console.log('err', err)
     console.log('vm', vm)
     console.log('info', info)
     console.groupEnd()
+
+    // 全局未捕获的promise错误处理
+    window.addEventListener('unhandledrejection', (event) => {
+      event.preventDefault()
+      // do noting
+    })
   }
 }
-
-// 全局未捕获的promise错误处理
-window.addEventListener('unhandledrejection', (event) => {
-  event.preventDefault()
-  // do noting
-})
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

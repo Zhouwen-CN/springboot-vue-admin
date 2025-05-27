@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import useSettingStore from '@/stores/setting'
 import useUserStore from '@/stores/user'
-import {HomeFilled} from '@element-plus/icons-vue'
+import { HomeFilled } from '@element-plus/icons-vue'
 import Menu from '@/layout/components/Menu.vue'
 import Header from '@/layout/components/Header.vue'
 import TagView from '@/layout/components/TagView.vue'
 import useTagViewStore from '@/stores/tagView'
 
-
 const route = useRoute()
 const settingStore = useSettingStore()
 
 const cachedViews = computed(() => useTagViewStore().cachedViews)
-
 </script>
 
 <template>
@@ -20,30 +18,30 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
     <!-- 侧边栏菜单 -->
     <el-aside class="aside" width="auto">
       <el-scrollbar>
-        <div
-            :style="{ margin: settingStore.collapse ? '0' : '0 20px' }"
-            class="aside-header">
+        <div :style="{ margin: settingStore.collapse ? '0' : '0 20px' }" class="aside-header">
           <img
-              :style="{ 'margin-right': settingStore.collapse ? '0' : '10px' }"
-              alt=""
-              src="@/assets/logo.svg"/>
+            :style="{ 'margin-right': settingStore.collapse ? '0' : '10px' }"
+            alt=""
+            src="@/assets/logo.svg"
+          />
           <h1 v-show="!settingStore.collapse">
             {{ settingStore.appShortName }}
           </h1>
         </div>
 
         <el-menu
-            :collapse="settingStore.collapse"
-            :default-active="route.path"
-            active-text-color="#409eff"
-            background-color="#304156"
-            router
-            style="border: 0"
-            text-color="#ffffff"
-            unique-opened>
+          :collapse="settingStore.collapse"
+          :default-active="route.path"
+          active-text-color="#409eff"
+          background-color="#304156"
+          router
+          style="border: 0"
+          text-color="#ffffff"
+          unique-opened
+        >
           <el-menu-item index="/home">
             <el-icon :size="20">
-              <HomeFilled/>
+              <HomeFilled />
             </el-icon>
             <template #title>
               <span>首页</span>
@@ -69,7 +67,7 @@ const cachedViews = computed(() => useTagViewStore().cachedViews)
             <template #default="{ Component, route }">
               <transition name="fade">
                 <keep-alive :include="cachedViews" :max="5">
-                  <component :is="Component" :key="route.path"/>
+                  <component :is="Component" :key="route.path" />
                 </keep-alive>
               </transition>
             </template>

@@ -1,13 +1,13 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import useUserStore from '@/stores/user'
 import defaultRoutes from '@/router/defaultRoutes'
-import {initAsyncRoutes} from '@/router/asyncRoutes'
+import { initAsyncRoutes } from '@/router/asyncRoutes'
 // @ts-ignore
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import useTagViewStore, {type TagView} from '@/stores/tagView'
+import useTagViewStore, { type TagView } from '@/stores/tagView'
 
-NProgress.configure({showSpinner: false})
+NProgress.configure({ showSpinner: false })
 
 // 加载所有动态模块
 const modules = import.meta.glob('../views/**/*.vue')
@@ -16,7 +16,7 @@ const modules = import.meta.glob('../views/**/*.vue')
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   scrollBehavior() {
-    return {left: 0, top: 0}
+    return { left: 0, top: 0 }
   },
   routes: defaultRoutes
 })
@@ -34,7 +34,7 @@ router.beforeEach((to, _, next) => {
   if (token) {
     // 登入逻辑
     if (to.path === '/login') {
-      next({path: '/home'})
+      next({ path: '/home' })
     } else {
       next()
     }
@@ -42,7 +42,7 @@ router.beforeEach((to, _, next) => {
     if (to.path === '/login') {
       next()
     } else {
-      next({path: '/login', query: {redirect: to.path}})
+      next({ path: '/login', query: { redirect: to.path } })
     }
   }
 })
@@ -75,4 +75,4 @@ router.afterEach((to) => {
 })
 
 export default router
-export {modules}
+export { modules }
