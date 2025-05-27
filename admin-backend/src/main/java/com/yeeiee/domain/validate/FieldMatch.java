@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- *
+ * 校验表单对象内两个字段值是否相等
  * </p>
  *
  * @author chen

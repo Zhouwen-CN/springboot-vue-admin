@@ -2,6 +2,7 @@ package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.Menu;
+import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
 
 import java.util.Collection;
@@ -20,9 +21,9 @@ public interface MenuService extends IService<Menu> {
     /**
      * 添加菜单
      *
-     * @param menu 菜单
+     * @param menuForm 菜单
      */
-    void addMenu(Menu menu);
+    void addMenu(MenuForm menuForm);
 
     /**
      * 删除菜单

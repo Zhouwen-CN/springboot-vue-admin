@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.entity.RoleMenu;
+import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
@@ -33,22 +34,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private final MenuMapper menuMapper;
 
     @Override
-    public void addMenu(Menu menu) {
+    public void addMenu(MenuForm menuForm) {
         val exists = this.exists(
                 Wrappers.<Menu>lambdaQuery()
-                        .eq(Menu::getAccessPath, menu.getAccessPath())
+                        .eq(Menu::getAccessPath, menuForm.getAccessPath())
         );
 
         if (exists) {
             throw new DmlOperationException("菜单访问路径已经存在");
         }
 
-        this.save(menu);
+        this.save(menuForm.toMenu());
 
         // 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
-        roleMenu.setMenuId(menu.getId());
+        roleMenu.setMenuId(menuForm.getId());
 
         roleMenuService.save(roleMenu);
     }

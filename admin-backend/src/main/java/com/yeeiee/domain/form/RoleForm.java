@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- * 新增 & 更新 角色信息
+ * 新增 & 更新 角色表单
  * </p>
  *
  * @author chen

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.User;
-import com.yeeiee.domain.form.ChangePasswordForm;
+import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.domain.vo.UserVo;
@@ -78,9 +78,9 @@ public interface UserService extends IService<User> {
     /**
      * 修改密码
      *
-     * @param changePasswordForm 修改密码表单
+     * @param changePwdForm 修改密码表单
      */
-    void modifyUserChangePwd(ChangePasswordForm changePasswordForm);
+    void modifyUserChangePwd(ChangePwdForm changePwdForm);
 
     /**
      * 重置密码

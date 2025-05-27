@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
-import com.yeeiee.domain.form.ChangePasswordForm;
+import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.domain.vo.UserVo;
@@ -230,9 +230,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void modifyUserChangePwd(ChangePasswordForm changePasswordForm) {
-        val id = changePasswordForm.getId();
-        val oldPwd = changePasswordForm.getOldPwd();
+    public void modifyUserChangePwd(ChangePwdForm changePwdForm) {
+        val id = changePwdForm.getId();
+        val oldPwd = changePwdForm.getOldPwd();
 
         val user = this.lambdaQuery()
                 .eq(User::getId, id)
@@ -244,7 +244,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         this.lambdaUpdate()
                 .eq(User::getId, id)
-                .set(User::getPassword, bCryptPasswordEncoder.encode(changePasswordForm.getNewPwd()))
+                .set(User::getPassword, bCryptPasswordEncoder.encode(changePwdForm.getNewPwd()))
                 .setIncrBy(User::getTokenVersion, 1)
                 .update();
     }

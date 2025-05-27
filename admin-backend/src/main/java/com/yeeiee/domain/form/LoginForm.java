@@ -6,7 +6,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 用户登入 传输对象
+ * 用户登入表单
  * </p>
  *
  * @author chen

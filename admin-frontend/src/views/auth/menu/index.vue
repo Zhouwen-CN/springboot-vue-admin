@@ -55,7 +55,7 @@ const validateFilePath = (rule: any, value: any, callback: any) => {
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     {required: true, message: '请输入菜单名称', trigger: 'blur'},
-    {min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
+    {min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur'}
   ],
   accessPath: [{validator: validateAccessPath, trigger: 'blur'}],
   filePath: [{validator: validateFilePath, trigger: 'blur'}],

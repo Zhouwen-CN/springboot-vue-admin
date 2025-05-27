@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- * 新增 & 更新 用户信息
+ * 新增 & 更新 用户表单
  * </p>
  *
  * @author chen

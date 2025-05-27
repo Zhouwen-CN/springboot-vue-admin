@@ -2,7 +2,7 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.domain.form.ChangePasswordForm;
+import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.domain.vo.UserVo;
@@ -96,14 +96,14 @@ public class UserController {
 
     @Operation(summary = "修改用户密码")
     @PatchMapping("/pwd/change")
-    public R<Void> modifyUserChangePwd(@Validated @RequestBody ChangePasswordForm changePasswordForm) {
-        userService.modifyUserChangePwd(changePasswordForm);
+    public R<Void> modifyUserChangePwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
+        userService.modifyUserChangePwd(changePwdForm);
         return R.ok();
     }
 
     @Operation(summary = "重置用户密码")
-    @PatchMapping("/pwd/reset")
-    public R<Void> resetPasswordById(@RequestParam("id") Long id) {
+    @PatchMapping("/pwd/reset/{id}")
+    public R<Void> resetPasswordById(@PathVariable("id") Long id) {
         userService.modifyUserResetPwd(id);
         return R.ok();
     }

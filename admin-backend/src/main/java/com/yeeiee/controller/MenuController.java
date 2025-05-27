@@ -1,6 +1,6 @@
 package com.yeeiee.controller;
 
-import com.yeeiee.domain.entity.Menu;
+import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.R;
@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,15 +46,15 @@ public class MenuController {
 
     @Operation(summary = "新增菜单")
     @PostMapping
-    public R<Void> addMenu(@RequestBody Menu menu) {
-        menuService.addMenu(menu);
+    public R<Void> addMenu(@Validated(MenuForm.Create.class) @RequestBody MenuForm menuForm) {
+        menuService.addMenu(menuForm);
         return R.ok();
     }
 
     @Operation(summary = "更新菜单")
     @PutMapping
-    public R<Void> modifyMenu(@RequestBody Menu menu) {
-        menuService.updateById(menu);
+    public R<Void> modifyMenu(@Validated(MenuForm.Update.class) @RequestBody MenuForm menuForm) {
+        menuService.updateById(menuForm.toMenu());
         return R.ok();
     }
 
