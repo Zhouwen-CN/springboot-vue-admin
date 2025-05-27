@@ -161,7 +161,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val username = userForm.getUsername();
 
         // todo: ① 号用户不能修改
-        if (userId == 1) {
+        if (userId == 1L) {
             throw new DmlOperationException("① 号用户不能修改");
         }
 
