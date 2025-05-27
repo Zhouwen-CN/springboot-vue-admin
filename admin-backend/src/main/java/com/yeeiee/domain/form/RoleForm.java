@@ -27,7 +27,7 @@ public class RoleForm {
     @Length(groups = {Create.class, Update.class}, min = 5, max = 15)
     private String roleName;
     @NotBlank(groups = {Create.class, Update.class})
-    @Length(groups = {Create.class, Update.class}, max = 40)
+    @Length(groups = {Create.class, Update.class}, min = 1, max = 40)
     private String desc;
 
     public interface Create {

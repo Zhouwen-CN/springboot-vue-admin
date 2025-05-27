@@ -3,6 +3,7 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,12 +65,12 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    public R<Void> addData(@RequestBody DictData dictData) {
+    public R<Void> addData(@Validated(DictDataForm.Create.class) @RequestBody DictDataForm dictDataForm) {
         val exists = dictDataService.exists(
                 Wrappers.<DictData>lambdaQuery()
-                        .eq(DictData::getTypeId, dictData.getTypeId())
-                        .and(c1 -> c1.eq(DictData::getLabel, dictData.getLabel())
-                                .or(c2 -> c2.eq(DictData::getValue, dictData.getValue()))
+                        .eq(DictData::getTypeId, dictDataForm.getTypeId())
+                        .and(c1 -> c1.eq(DictData::getLabel, dictDataForm.getLabel())
+                                .or(c2 -> c2.eq(DictData::getValue, dictDataForm.getValue()))
                         )
         );
 
@@ -76,14 +78,14 @@ public class DictDataController {
             throw new DmlOperationException("标签键或标签值已存在");
         }
 
-        dictDataService.save(dictData);
+        dictDataService.save(dictDataForm.toDictData());
         return R.ok();
     }
 
     @Operation(summary = "修改字典数据")
     @PutMapping
-    public R<Void> modifyData(@RequestBody DictData dictData) {
-        dictDataService.updateById(dictData);
+    public R<Void> modifyData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
+        dictDataService.updateById(dictDataForm.toDictData());
         return R.ok();
     }
 

@@ -1,5 +1,7 @@
 package com.yeeiee.domain.form;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yeeiee.config.EncryptSerializer;
 import com.yeeiee.domain.validate.FieldMatch;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -28,8 +30,10 @@ public class ChangePwdForm {
     private Long id;
     @Length(min = 5, max = 15)
     private String oldPwd;
+    @JsonSerialize(using = EncryptSerializer.class)
     @Length(min = 5, max = 15)
     private String newPwd;
+    @JsonSerialize(using = EncryptSerializer.class)
     @Length(min = 5, max = 15)
     private String confirmPwd;
 }

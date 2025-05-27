@@ -160,10 +160,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val userId = userForm.getId();
         val username = userForm.getUsername();
 
-        // todo: admin自己才能修改自己
-        val securityUser = CommonUtil.getSecurityUser();
-        if (userId == 1 && securityUser.getId() != 1) {
-            throw new DmlOperationException("不能修改 ① 号用户");
+        // todo: ① 号用户不能修改
+        if (userId == 1) {
+            throw new DmlOperationException("① 号用户不能修改");
         }
 
         // 更新用户
@@ -205,7 +204,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void removeUserById(Long id) {
-        // todo: 1 号用户不能删除
+        // todo: ① 号用户不能删除
         if (id == 1L) {
             throw new DmlOperationException("① 号用户不能删除");
         }

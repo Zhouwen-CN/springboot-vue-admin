@@ -38,13 +38,13 @@ public class MenuForm {
 
     public Menu toMenu() {
         Menu menu = new Menu();
-        menu.setId(id);
-        menu.setTitle(title);
-        menu.setAccessPath(accessPath);
-        menu.setFilePath(filePath);
-        menu.setIcon(icon);
-        menu.setPid(pid);
-        menu.setKeepAlive(keepAlive);
+        menu.setId(this.id);
+        menu.setTitle(this.title);
+        menu.setAccessPath(this.accessPath);
+        menu.setFilePath(this.filePath);
+        menu.setIcon(this.icon);
+        menu.setPid(this.pid);
+        menu.setKeepAlive(this.keepAlive);
         return menu;
     }
 

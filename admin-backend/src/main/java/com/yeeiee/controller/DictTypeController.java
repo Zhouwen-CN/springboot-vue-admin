@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.entity.DictType;
+import com.yeeiee.domain.form.DictTypeForm;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
 import com.yeeiee.service.DictTypeService;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,22 +64,22 @@ public class DictTypeController {
 
     @Operation(summary = "新增字典类型")
     @PostMapping
-    public R<Void> addType(@RequestBody DictType dictType) {
+    public R<Void> addType(@Validated(DictTypeForm.Create.class) @RequestBody DictTypeForm dictTypeForm) {
         val exists = dictTypeService.lambdaQuery()
-                .eq(DictType::getType, dictType.getType())
+                .eq(DictType::getType, dictTypeForm.getType())
                 .exists();
 
         if (exists) {
             throw new DmlOperationException("字典类型已存在");
         }
-        dictTypeService.save(dictType);
+        dictTypeService.save(dictTypeForm.toDictType());
         return R.ok();
     }
 
     @Operation(summary = "更新字典类型")
     @PutMapping
-    public R<Void> modifyType(@RequestBody DictType dictType) {
-        dictTypeService.updateById(dictType);
+    public R<Void> modifyType(@Validated(DictTypeForm.Update.class) @RequestBody DictTypeForm dictTypeForm) {
+        dictTypeService.updateById(dictTypeForm.toDictType());
         return R.ok();
     }
 
