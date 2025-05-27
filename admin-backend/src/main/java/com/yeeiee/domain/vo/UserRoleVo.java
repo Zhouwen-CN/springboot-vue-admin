@@ -21,7 +21,6 @@ import java.util.List;
 public class UserRoleVo {
     private Long id;
     private String username;
-    private String password;
     private List<RoleVo> roleList;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

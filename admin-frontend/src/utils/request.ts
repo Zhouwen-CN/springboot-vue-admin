@@ -12,8 +12,8 @@ const config = {
     baseURL: import.meta.env.VITE_APP_BASE_URL,
     timeout: import.meta.env.VITE_APP_TIMEOUT,
     headers: {
-    'Content-type': 'application/json;charset=utf-8'
-  }
+        'Content-type': 'application/json;charset=utf-8'
+    }
 }
 
 class Request {
@@ -120,37 +120,45 @@ class Request {
       url: string,
       config?: AxiosRequestConfig<D>
   ): Promise<ResultData<T>> {
-    return this.instance.delete(url, config)
+      return this.instance.delete(url, config)
   }
 
-  /**
-   * 通用请求
-   * @param config 请求配置
-   * @returns
-   */
-  public request<T, D = unknown>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
-    return this.instance.request(config)
-  }
-
-  /**
-   * 消息提示
-   */
-  private alterMessage(code: number, message: string): void {
-    if (code > 200 && code < 400) {
-      ElMessage.info(message)
-    } else if (code >= 400 && code < 500) {
-      // token失效退出登入
-      if (code === 401) {
-        useUserStore().$reset()
-          useTagViewStore().$reset()
-          useSettingStore().$reset()
-          deleteAsyncRoutes(router)
-      }
-      ElMessage.warning(message)
-    } else if (code >= 500) {
-      ElMessage.error(message)
+    public patch<T, D = unknown>(
+        url: string,
+        data?: D,
+        config?: AxiosRequestConfig
+    ): Promise<ResultData<T>> {
+        return this.instance.patch(url, data, config)
     }
-  }
+
+    /**
+     * 通用请求
+     * @param config 请求配置
+     * @returns
+     */
+    public request<T, D = unknown>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
+        return this.instance.request(config)
+    }
+
+    /**
+     * 消息提示
+     */
+    private alterMessage(code: number, message: string): void {
+        if (code > 200 && code < 400) {
+            ElMessage.info(message)
+        } else if (code >= 400 && code < 500) {
+            // token失效退出登入
+            if (code === 401) {
+                useUserStore().$reset()
+                useTagViewStore().$reset()
+                useSettingStore().$reset()
+                deleteAsyncRoutes(router)
+            }
+            ElMessage.warning(message)
+        } else if (code >= 500) {
+            ElMessage.error(message)
+        }
+    }
 }
 
 const request = new Request(config)

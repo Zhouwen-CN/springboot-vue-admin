@@ -47,7 +47,6 @@ export function reqLogout(id: number) {
 export interface UserRoleVo extends CreateAndUpdateTime {
     id: number
     username: string
-    password: string
     roleList: RoleList
 }
 
@@ -60,10 +59,10 @@ export function reqGetUserRolePage() {
 }
 
 export interface UserRoleForm {
-  id?: number
-  username: string
-  password: string
-  roleIds: number[]
+    id?: number
+    username: string
+    password?: string
+    roleIds: number[]
 }
 
 /**
@@ -72,13 +71,17 @@ export interface UserRoleForm {
  * @returns
  */
 export function reqSaveUserRole(userRoleForm: UserRoleForm) {
-  if (userRoleForm.id) {
-    // 修改
-    return request.put<any, UserRoleForm>('/user', userRoleForm)
-  } else {
-    // 新增
-    return request.post<any, UserRoleForm>('/user', userRoleForm)
-  }
+    if (userRoleForm.id) {
+        // 修改
+        return request.put<any, UserRoleForm>('/user', userRoleForm)
+    } else {
+        // 新增
+        return request.post<any, UserRoleForm>('/user', userRoleForm)
+    }
+}
+
+export function reqResetPassword(id: number) {
+    return request.patch<null>(`/user/pwd/reset/${id}`)
 }
 
 /**
@@ -87,7 +90,7 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
  * @returns
  */
 export function reqDeleteUser(id: number) {
-  return request.delete(`/user/${id}`)
+    return request.delete(`/user/${id}`)
 }
 
 /**

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import {Delete, Edit, Search} from '@element-plus/icons-vue'
+import {Delete, Edit, Refresh, Search} from '@element-plus/icons-vue'
 import {
   reqDeleteUser,
   reqDeleteUsers,
   reqGetUserRolePage,
+  reqResetPassword,
   reqSaveUserRole,
   type UserRoleForm,
   type UserRoleVo
@@ -21,7 +22,7 @@ const router = useRouter()
 const userRoleForm = reactive<UserRoleForm>({
   id: undefined,
   username: '',
-  password: '',
+  password: undefined,
   roleIds: []
 })
 
@@ -30,6 +31,9 @@ const toggleDialog = reactive({
   show: false,
   title: ''
 })
+
+// 显示隐藏密码输入框
+const pwdVisible = ref(false)
 
 // 保存角色按钮loading
 const saveLoading = ref(false)
@@ -50,9 +54,6 @@ const {
   onPageChange,
   onSizeChange
 } = reqGetUserRolePage()
-
-// 禁用密码修改
-const disableEditPassowrd = ref(false)
 
 // 多选框相关
 const checkAll = ref(false)
@@ -82,6 +83,7 @@ function searchUser() {
 function addUser() {
   toggleDialog.show = true
   toggleDialog.title = '添加用户'
+  pwdVisible.value = true
 }
 
 // 更新用户
@@ -90,9 +92,17 @@ function updateUser(row: UserRoleVo) {
   toggleDialog.title = '修改用户'
   userRoleForm.id = row.id
   userRoleForm.username = row.username
-  userRoleForm.password = row.password
   userRoleForm.roleIds = row.roleList.map(role => role.id)
-  disableEditPassowrd.value = true
+  pwdVisible.value = false
+}
+
+// 重置密码
+async function resetPassword(id: number) {
+  await reqResetPassword(id)
+  if (isCurrentUser(id)) {
+    return
+  }
+  ElMessage.success('操作成功')
 }
 
 // 删除用户
@@ -104,11 +114,9 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(users: UserRoleVo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
-
 async function deleteUsers() {
   if (deleteIds.value.length === 0) {
     ElMessage.warning('请选择要删除的用户')
@@ -117,11 +125,6 @@ async function deleteUsers() {
   await reqDeleteUsers(deleteIds.value)
   pageRefresh({params: {searchName: searchName.value}})
   ElMessage.success('操作成功')
-}
-
-function editPassword() {
-  disableEditPassowrd.value = false
-  userRoleForm.password = ''
 }
 
 // 表单校验
@@ -137,6 +140,17 @@ const rules = reactive<FormRules<typeof userRoleForm>>({
   ]
 })
 
+// 修改的是否当前用户，是则需要重新登入
+function isCurrentUser(updateId: number) {
+  const isCurUser = updateId === userStore.userInfo.id
+  if (isCurUser) {
+    userStore.$reset()
+    deleteAsyncRoutes(router)
+    ElMessage.warning("修改成功，请重新登入")
+  }
+  return isCurUser
+}
+
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
@@ -147,10 +161,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
     toggleDialog.show = false
 
     // 如果修改的是当前用户，则退出重新登入
-    if (userRoleForm.id === userStore.userInfo.id) {
-      userStore.$reset()
-      deleteAsyncRoutes(router)
-      ElMessage.warning("修改成功，请重新登入")
+    if (isCurrentUser(userRoleForm.id as number)) {
       return
     }
 
@@ -168,11 +179,10 @@ function clean() {
   toggleDialog.title = ''
   userRoleForm.id = undefined
   userRoleForm.username = ''
-  userRoleForm.password = ''
+  userRoleForm.password = undefined
   userRoleForm.roleIds = []
   checkAll.value = false
   isIndeterminate.value = true
-  disableEditPassowrd.value = false
   ruleFormRef.value?.clearValidate()
 }
 
@@ -232,6 +242,13 @@ onMounted(() => {
             <el-button-group>
               <el-button :icon="Edit" type="primary"
                          @click="updateUser(row)"></el-button>
+              <el-popconfirm title="是否重置密码？"
+                             @confirm="resetPassword(row.id)">
+                <template #reference>
+                  <el-button :icon="Refresh"
+                             type="warning"></el-button>
+                </template>
+              </el-popconfirm>
               <el-popconfirm title="是否删除？"
                              @confirm="deleteUser(row.id)">
                 <template #reference>
@@ -269,21 +286,15 @@ onMounted(() => {
             <el-input v-model="userRoleForm.username"
                       placeholder="请输入用户姓名"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item v-if="pwdVisible" label="密码" prop="password">
             <el-input
                 v-model="userRoleForm.password"
                 placeholder="请输入用户密码"
-                :disabled="disableEditPassowrd"
                 type="password">
-              <template v-if="disableEditPassowrd" #append>
-                <el-button :icon="Edit" type="primary"
-                           @click="editPassword"></el-button>
-              </template>
             </el-input>
           </el-form-item>
           <!-- 多选框组 -->
-          <el-form-item v-if="userRoleForm.id !== 1" label="角色列表"
-                        prop="roleIds">
+          <el-form-item label="角色列表" prop="roleIds">
             <el-space alignment="stretch" direction="vertical">
               <el-checkbox v-model="checkAll"
                            :indeterminate="isIndeterminate"
