@@ -1,9 +1,7 @@
 package com.yeeiee.security.user;
 
 import com.yeeiee.domain.entity.User;
-import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 /**
@@ -14,9 +12,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
  * @author chen
  * @since 2025-01-13
  */
-@Getter
 @Setter
-@ToString
 public class UserAuthenticationToken extends AbstractAuthenticationToken {
     // 前端传过来的用户名密码
     private String username;

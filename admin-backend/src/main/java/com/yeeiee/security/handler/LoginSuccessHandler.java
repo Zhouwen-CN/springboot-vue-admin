@@ -9,10 +9,10 @@ import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JwtUtil;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -80,6 +80,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         loginLogService.save(loginLog);
 
         // 写出响应
-        CommonUtil.writeResponse(response, R.ok(loginUserVo));
+        ResponseObjectUtil.writeResponse(response, R.ok(loginUserVo));
     }
 }

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-import type { CreateAndUpdateTime } from '@/utils/requestTypes'
+import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
-import type { RoleVo } from '../role'
+import type {RoleVo} from '../role'
 
 export interface LoginForm {
   username: string
@@ -33,7 +33,7 @@ export function reqLogin(loginForm: LoginForm) {
  * @returns
  */
 export function reqRefreshToken(refreshToken: string) {
-  return request.get<UserVo>('/user/refresh', {
+  return request.get<UserVo>('/login/refresh', {
     headers: {
       Authorization: `Bearer ${refreshToken}`
     }

@@ -2,10 +2,11 @@ package com.yeeiee.exception;
 
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.service.ErrorLogService;
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.RequestObjectUtil;
+import com.yeeiee.utils.SecurityUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -74,13 +75,13 @@ public class GlobalExceptionHandler {
     }
 
     private void saveErrorLog(Exception e) {
-        val request = CommonUtil.getHttpServletRequest();
-        val user = CommonUtil.getSecurityUser();
+        val request = RequestObjectUtil.getHttpServletRequest();
+        val user = SecurityUserUtil.getSecurityUser();
         val errorLog = new ErrorLog();
         errorLog.setUsername(user.getUsername());
         errorLog.setUrl(request.getRequestURI());
         errorLog.setMethod(request.getMethod());
-        val parameterMap = CommonUtil.getParameterMap(request);
+        val parameterMap = RequestObjectUtil.getParameterMap(request);
         errorLog.setParams(JsonUtil.toJsonString(parameterMap));
         errorLog.setIp(IPUtil.getClientIP(request));
         errorLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));

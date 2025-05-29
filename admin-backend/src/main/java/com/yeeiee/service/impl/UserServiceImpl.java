@@ -10,20 +10,16 @@ import com.yeeiee.domain.entity.UserRole;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
-import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
-import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.CollectionUtil;
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yeeiee.utils.RequestObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,54 +44,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserMapper userMapper;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtUtil jwtUtil;
     @Value("${user.default-password}")
     private String defaultPassword;
-
-    @Override
-    public UserVo refreshToken(HttpServletRequest request) {
-        var refreshToken = jwtUtil.getTokenFromRequest(request);
-        val optional = jwtUtil.parseRefreshToken(refreshToken);
-
-        if (optional.isEmpty()) {
-            throw new VerifyTokenException("token解析失败");
-        }
-
-        // 封装返回对象
-        val claimMap = optional.get();
-        val username = claimMap.get("username").asString();
-        val version = claimMap.get("version").asLong();
-
-        val user = this.lambdaQuery()
-                .eq(User::getUsername, username)
-                .one();
-
-        // 检查 token version
-        if (user == null || version != user.getTokenVersion() - 1) {
-            throw new VerifyTokenException("token校验失败");
-        }
-
-        val userId = user.getId();
-        val tokenVersion = user.getTokenVersion();
-
-        val roleNames = claimMap.get("roleNames").asList(String.class);
-        val accessToken = jwtUtil.generateAccessToken(username, roleNames, tokenVersion);
-        refreshToken = jwtUtil.generateRefreshToken(username, roleNames, tokenVersion);
-
-        val userVo = new UserVo();
-        userVo.setId(userId);
-        userVo.setUsername(username);
-        userVo.setAccessToken(accessToken);
-        userVo.setRefreshToken(refreshToken);
-
-        // 更新 token version
-        this.lambdaUpdate()
-                .set(User::getTokenVersion, tokenVersion + 1)
-                .eq(User::getId, userId)
-                .update();
-
-        return userVo;
-    }
 
     @Override
     public void logout(Long id) {
@@ -109,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     .update();
 
             // 退出登入日志
-            val request = CommonUtil.getHttpServletRequest();
+            val request = RequestObjectUtil.getHttpServletRequest();
             val loginLog = new LoginLog();
             loginLog.setUsername(user.getUsername());
             loginLog.setOperation(LoginOperationEnum.LOGOUT.getOperation());

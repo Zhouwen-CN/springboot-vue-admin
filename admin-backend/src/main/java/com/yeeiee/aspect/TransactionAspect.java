@@ -1,6 +1,5 @@
 package com.yeeiee.aspect;
 
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -20,9 +19,8 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
  * @author chen
  * @since 2024-04-27
  */
-@Aspect
 @Component
-public class TransactionAdviceAspect {
+public class TransactionAspect {
     private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.yeeiee.service.impl.*.*(..))";
 
     /**

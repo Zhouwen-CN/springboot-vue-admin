@@ -1,7 +1,7 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +22,6 @@ import java.io.IOException;
 public class AuthorizationExceptionHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        CommonUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, "用户未授权"));
+        ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, "用户未授权"));
     }
 }

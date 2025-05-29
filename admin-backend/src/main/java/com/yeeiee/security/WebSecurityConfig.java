@@ -5,6 +5,8 @@ import com.yeeiee.security.handler.AuthorizationExceptionHandler;
 import com.yeeiee.security.handler.LoginFailureHandler;
 import com.yeeiee.security.handler.LoginSuccessHandler;
 import com.yeeiee.security.jwt.JwtAuthenticationFilter;
+import com.yeeiee.security.refresh.RefreshAuthenticationProcessingFilter;
+import com.yeeiee.security.refresh.RefreshAuthenticationProvider;
 import com.yeeiee.security.user.UserAuthenticationProcessingFilter;
 import com.yeeiee.security.user.UserAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final UserAuthenticationProvider userAuthenticationProvider;
+    private final RefreshAuthenticationProvider refreshAuthenticationProvider;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -89,6 +92,17 @@ public class WebSecurityConfig {
                 loginFailureHandler
         );
         http.addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 刷新token登入
+        val refreshAuthenticationFilter = new RefreshAuthenticationProcessingFilter(
+                new AntPathRequestMatcher("/login/refresh", HttpMethod.GET.name()),
+                refreshAuthenticationProvider,
+                loginSuccessHandler,
+                loginFailureHandler
+        );
+        http.addFilterBefore(refreshAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
         return http.build();
     }
 
@@ -104,10 +118,8 @@ public class WebSecurityConfig {
         this.commonHttpSetting(http);
         http.authorizeHttpRequests(authorize ->
                         authorize
-                                // 静态资源和swagger
+                                // 静态资源
                                 .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
-                                // 刷新 token
-                                .requestMatchers(HttpMethod.GET, "/user/refresh").permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理

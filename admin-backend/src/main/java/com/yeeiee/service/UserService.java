@@ -7,8 +7,6 @@ import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.UserRoleVo;
-import com.yeeiee.domain.vo.UserVo;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collection;
 
@@ -21,15 +19,6 @@ import java.util.Collection;
  * @since 2024-05-09
  */
 public interface UserService extends IService<User> {
-
-    /**
-     * 刷新 token
-     *
-     * @param request 请求对象
-     * @return user 对象信息
-     */
-    UserVo refreshToken(HttpServletRequest request);
-
     /**
      * 登出
      *

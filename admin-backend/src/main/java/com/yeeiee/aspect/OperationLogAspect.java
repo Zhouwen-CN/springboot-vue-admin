@@ -3,9 +3,10 @@ package com.yeeiee.aspect;
 import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.OperationLogService;
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
+import com.yeeiee.utils.RequestObjectUtil;
+import com.yeeiee.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +67,7 @@ public class OperationLogAspect {
      * @param time                耗时
      */
     private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, OperationStatusEnum operationStatusEnum, long time) throws NoSuchMethodException {
-        val httpServletRequest = CommonUtil.getHttpServletRequest();
+        val httpServletRequest = RequestObjectUtil.getHttpServletRequest();
         val targetClass = pjp.getTarget().getClass();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = targetClass.getDeclaredMethod(signature.getName(), signature.getParameterTypes());
@@ -77,7 +78,7 @@ public class OperationLogAspect {
             return;
         }
 
-        val user = CommonUtil.getSecurityUser();
+        val user = SecurityUserUtil.getSecurityUser();
         val operationLog = new OperationLog();
         operationLog.setUsername(user.getUsername());
         operationLog.setOperation(operation.summary());

@@ -1,6 +1,6 @@
 package com.yeeiee.exception;
 
-import lombok.experimental.StandardException;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * <p>
@@ -10,6 +10,10 @@ import lombok.experimental.StandardException;
  * @author chen
  * @since 2025-01-13
  */
-@StandardException
-public class VerifyTokenException extends RuntimeException {
+
+public class VerifyTokenException extends AuthenticationException {
+
+    public VerifyTokenException(String msg) {
+        super(msg);
+    }
 }

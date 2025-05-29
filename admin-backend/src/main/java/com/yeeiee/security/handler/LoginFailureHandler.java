@@ -5,9 +5,9 @@ import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.service.LoginLogService;
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,6 +54,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         loginLogService.save(loginLog);
 
         // 3.写出响应
-        CommonUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
+        ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 }

@@ -1,7 +1,7 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.utils.CommonUtil;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +22,6 @@ import java.io.IOException;
 public class AuthenticationExceptionHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        CommonUtil.writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未认证"));
+        ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.UNAUTHORIZED, "用户未认证"));
     }
 }
