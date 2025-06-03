@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -20,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-public class DictTypeForm {
+public class DictTypeForm implements FormToBean<DictType> {
     @NotNull(groups = {Update.class})
     private Long id;
     @NotBlank(groups = {Create.class, Update.class})
@@ -29,14 +28,6 @@ public class DictTypeForm {
     @NotBlank(groups = {Create.class, Update.class})
     @Length(groups = {Create.class, Update.class}, min = 1, max = 50)
     private String type;
-
-    public DictType toDictType() {
-        val dictType = new DictType();
-        dictType.setId(this.id);
-        dictType.setName(this.name);
-        dictType.setType(this.type);
-        return dictType;
-    }
 
     public interface Create {
     }

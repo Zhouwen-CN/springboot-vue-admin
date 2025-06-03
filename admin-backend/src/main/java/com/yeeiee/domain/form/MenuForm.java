@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-public class MenuForm {
+public class MenuForm implements FormToBean<Menu> {
     @NotNull(groups = {Update.class})
     private Long id;
     @NotBlank(groups = {Create.class, Update.class})
@@ -35,18 +35,6 @@ public class MenuForm {
     private Long pid;
     @NotNull(groups = {Create.class, Update.class})
     private Boolean keepAlive;
-
-    public Menu toMenu() {
-        Menu menu = new Menu();
-        menu.setId(this.id);
-        menu.setTitle(this.title);
-        menu.setAccessPath(this.accessPath);
-        menu.setFilePath(this.filePath);
-        menu.setIcon(this.icon);
-        menu.setPid(this.pid);
-        menu.setKeepAlive(this.keepAlive);
-        return menu;
-    }
 
     public interface Create {
     }

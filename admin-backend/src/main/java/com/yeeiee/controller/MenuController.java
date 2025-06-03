@@ -54,7 +54,7 @@ public class MenuController {
     @Operation(summary = "更新菜单")
     @PutMapping
     public R<Void> modifyMenu(@Validated(MenuForm.Update.class) @RequestBody MenuForm menuForm) {
-        menuService.updateById(menuForm.toMenu());
+        menuService.updateById(menuForm.toBean());
         return R.ok();
     }
 

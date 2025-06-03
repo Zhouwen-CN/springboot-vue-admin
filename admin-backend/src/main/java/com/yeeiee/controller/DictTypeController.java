@@ -72,14 +72,14 @@ public class DictTypeController {
         if (exists) {
             throw new DmlOperationException("字典类型已存在");
         }
-        dictTypeService.save(dictTypeForm.toDictType());
+        dictTypeService.save(dictTypeForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "更新字典类型")
     @PutMapping
     public R<Void> modifyType(@Validated(DictTypeForm.Update.class) @RequestBody DictTypeForm dictTypeForm) {
-        dictTypeService.updateById(dictTypeForm.toDictType());
+        dictTypeService.updateById(dictTypeForm.toBean());
         return R.ok();
     }
 

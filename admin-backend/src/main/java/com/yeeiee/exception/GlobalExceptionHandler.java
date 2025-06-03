@@ -20,6 +20,19 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 /**
  * <p>
  * 全局异常处理
+ * <pre>
+ *     200：成功
+ *     201：请求成功，并创建一个新的资源，通常是post、put请求相应
+ *     202：请求已收到，但是未采取行动
+ *     204：删除成功
+ *     400：请求有误
+ *     401：没有权限
+ *     403：禁止访问
+ *     404：资源不存在
+ *     410：记录被删除
+ *     422：参数错误
+ *     500：服务器错误
+ * </pre>
  * </p>
  *
  * @author chen
@@ -57,15 +70,15 @@ public class GlobalExceptionHandler {
 
         val fieldError = bindingResult.getFieldError();
         if (fieldError != null) {
-            return R.error(HttpStatus.BAD_REQUEST, String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage()));
+            return R.error(HttpStatus.UNPROCESSABLE_ENTITY, String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage()));
         }
 
         val globalError = bindingResult.getGlobalError();
         if (globalError != null) {
-            return R.error(HttpStatus.BAD_REQUEST, globalError.getDefaultMessage());
+            return R.error(HttpStatus.UNPROCESSABLE_ENTITY, globalError.getDefaultMessage());
         }
 
-        return R.error(HttpStatus.BAD_REQUEST, "请求参数校验失败");
+        return R.error(HttpStatus.UNPROCESSABLE_ENTITY, "请求参数校验失败");
     }
 
     @ExceptionHandler(Exception.class)

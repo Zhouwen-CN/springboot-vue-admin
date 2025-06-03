@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-public class DictDataForm {
+public class DictDataForm implements FormToBean<DictData> {
     @NotNull(groups = {Update.class})
     private Long id;
     @NotNull(groups = {Create.class, Update.class})
@@ -31,16 +31,6 @@ public class DictDataForm {
     private Integer value;
     @NotNull(groups = {Create.class, Update.class})
     private Integer sort;
-
-    public DictData toDictData() {
-        DictData dictData = new DictData();
-        dictData.setId(this.id);
-        dictData.setTypeId(this.typeId);
-        dictData.setLabel(this.label);
-        dictData.setValue(this.value);
-        dictData.setSort(this.sort);
-        return dictData;
-    }
 
     public interface Create {
     }

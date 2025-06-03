@@ -78,14 +78,14 @@ public class DictDataController {
             throw new DmlOperationException("标签键或标签值已存在");
         }
 
-        dictDataService.save(dictDataForm.toDictData());
+        dictDataService.save(dictDataForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "修改字典数据")
     @PutMapping
     public R<Void> modifyData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
-        dictDataService.updateById(dictDataForm.toDictData());
+        dictDataService.updateById(dictDataForm.toBean());
         return R.ok();
     }
 

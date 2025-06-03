@@ -44,7 +44,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new DmlOperationException("菜单访问路径已经存在");
         }
 
-        this.save(menuForm.toMenu());
+        this.save(menuForm.toBean());
 
         // 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
