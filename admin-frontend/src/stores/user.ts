@@ -1,8 +1,8 @@
-import type { LoginForm, UserVo } from '@/api/auth/user'
-import { reqLogin, reqLogout, reqRefreshToken } from '@/api/auth/user'
-import { type MenuVo, reqGetMenuList } from '@/api/auth/menu'
-import { deleteAsyncRoutes, getAsyncRoutes } from '@/router/asyncRoutes'
-import router, { modules } from '@/router'
+import type {LoginForm, UserVo} from '@/api/auth/user'
+import {reqLogin, reqLogout, reqRefreshToken} from '@/api/auth/user'
+import {type MenuVo, reqGetMenuList} from '@/api/auth/menu'
+import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
+import router, {modules} from '@/router'
 import useTagViewStore from '@/stores/tagView'
 import useSettingStore from './setting'
 
@@ -57,8 +57,7 @@ const useUserStore = defineStore(
 
     // 获取菜单信息
     async function getMenuInfo() {
-      const roleIds = userInfo.value.roleList.map((role) => role.id)
-      const result = await reqGetMenuList(roleIds)
+      const result = await reqGetMenuList()
       menuInfo.value = result.data
 
       // 加载动态路由

@@ -1,8 +1,8 @@
 package com.yeeiee.security.jwt;
 
 import com.yeeiee.domain.entity.User;
+import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.JwtUtil;
 import com.yeeiee.utils.RequestObjectUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -41,12 +41,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         val token = RequestObjectUtil.getTokenFromRequest(request);
 
         // 校验 token
-        val optional = jwtUtil.parseAccessToken(token);
+        val optional = jwtTokenProvider.parseAccessToken(token);
         if (optional.isPresent()) {
-            val claimMap = optional.get();
+            val payload = optional.get().getPayload();
 
-            val username = claimMap.get("username").asString();
-            val version = claimMap.get("version").asLong();
+            val username = payload.getSubject();
+            val version = payload.get("version", Long.class);
 
             // 加载与 token 关联的用户
             val user = userService.lambdaQuery()
@@ -55,13 +55,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 检查 token version
             if (version == user.getTokenVersion() - 1) {
-                val authorities = claimMap.get("roleNames")
-                        .asList(String.class)
+
+                val authorities = jwtTokenProvider.getRoles(payload)
                         .stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
                 val authenticated = new JwtAuthenticationToken(authorities);
+                authenticated.setAccessToken(token);
                 authenticated.setUser(user);
                 authenticated.setAuthenticated(true);
 

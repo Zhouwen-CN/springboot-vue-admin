@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -78,8 +77,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<MenuVo> getMenuList(Collection<Long> ids) {
-        val menuList = menuMapper.selectMenusByRoleIds(ids);
+    public List<MenuVo> getMenuListByRoleNames(List<String> roles) {
+        val menuList = menuMapper.selectMenusByRoleNames(roles);
         return CollectionUtil.makeTree(menuList,
                 MenuVo::getId,
                 MenuVo::getPid,

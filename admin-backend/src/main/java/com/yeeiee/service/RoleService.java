@@ -59,17 +59,17 @@ public interface RoleService extends IService<Role> {
     void removeRoleByIds(Collection<Long> ids);
 
     /**
-     * 根据用户 id 获取角色列表
-     *
-     * @param userId 用户 id
-     * @return 角色列表
-     */
-    List<RoleVo> getRoleListByUserId(Long userId);
-
-    /**
      * 获取用户列表
      *
      * @return 用户列表
      */
     List<RoleVo> getRoleVoList();
+
+    /**
+     * 根据用户id获取角色名列表
+     *
+     * @param id user id
+     * @return role names
+     */
+    List<String> getRoleNamesByUserId(Long id);
 }

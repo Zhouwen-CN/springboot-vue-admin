@@ -2,8 +2,8 @@ package com.yeeiee.security.refresh;
 
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.exception.VerifyTokenException;
+import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -26,21 +26,19 @@ import org.springframework.stereotype.Component;
 public class RefreshAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         log.debug("Resolve the token and verify the token version");
         val refreshToken = (String) authentication.getCredentials();
 
-        val optional = jwtUtil.parseRefreshToken(refreshToken);
-        if (optional.isEmpty()) {
-            throw new VerifyTokenException("token解析失败");
-        }
+        val payload = jwtTokenProvider.parseRefreshToken(refreshToken)
+                .orElseThrow(() -> new VerifyTokenException("token解析失败"))
+                .getPayload();
 
-        val claimMap = optional.get();
-        val username = claimMap.get("username").asString();
-        val version = claimMap.get("version").asLong();
+        val username = payload.getSubject();
+        val version = payload.get("version", Long.class);
 
         val user = userService.lambdaQuery()
                 .eq(User::getUsername, username)
@@ -52,7 +50,6 @@ public class RefreshAuthenticationProvider implements AuthenticationProvider {
         }
 
         val token = new RefreshAuthenticationToken();
-        token.setRefreshToken(refreshToken);
         token.setUser(user);
         token.setAuthenticated(true);
 

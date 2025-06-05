@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -116,6 +117,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
+        // 启用 XSS 过滤。如果检测到攻击，浏览器将不会清除页面，而是阻止页面加载（默认是0）
+        http.headers(headers -> headers.xssProtection(
+                xssProtection -> xssProtection.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+        );
         http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源

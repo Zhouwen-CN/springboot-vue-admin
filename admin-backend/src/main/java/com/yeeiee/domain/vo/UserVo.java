@@ -22,5 +22,5 @@ public class UserVo {
     private String username;
     private String accessToken;
     private String refreshToken;
-    private List<RoleVo> roleList;
+    private List<String> roles;
 }

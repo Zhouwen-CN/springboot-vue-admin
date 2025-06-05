@@ -2,10 +2,14 @@ package com.yeeiee.controller;
 
 import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
+import com.yeeiee.exception.VerifyTokenException;
+import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.R;
+import com.yeeiee.utils.RequestObjectUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
@@ -16,10 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,11 +38,19 @@ import java.util.List;
 @Tag(name = "菜单表 控制器")
 public class MenuController {
     private final MenuService menuService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "查询菜单列表")
     @GetMapping
-    public R<List<MenuVo>> getMenuList(@RequestParam("ids") Collection<Long> ids) {
-        val menuList = menuService.getMenuList(ids);
+    public R<List<MenuVo>> getMenuList(HttpServletRequest request) {
+        val token = RequestObjectUtil.getTokenFromRequest(request);
+
+        val payload = jwtTokenProvider.parseAccessToken(token)
+                .orElseThrow(() -> new VerifyTokenException("token解析失败"))
+                .getPayload();
+
+        val roles = jwtTokenProvider.getRoles(payload);
+        val menuList = menuService.getMenuListByRoleNames(roles);
         return R.ok(menuList);
     }
 

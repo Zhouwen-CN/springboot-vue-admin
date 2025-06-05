@@ -5,7 +5,6 @@ import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,9 +32,9 @@ public interface MenuService extends IService<Menu> {
     void removeMenu(Long id);
 
     /**
-     * 根据角色id查询菜单
+     * 根据角色名查询菜单
      *
      * @return 菜单列表
      */
-    List<MenuVo> getMenuList(Collection<Long> ids);
+    List<MenuVo> getMenuListByRoleNames(List<String> roles);
 }

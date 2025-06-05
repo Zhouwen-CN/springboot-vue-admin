@@ -22,7 +22,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     IPage<RoleMenuVo> selectRolePages(Page<RoleMenuVo> page, String searchName);
 
-    List<RoleVo> selectRoleListByUserId(@Param("userId") Long userId);
-
     List<RoleVo> selectRoleVoList();
+
+    List<String> selectRoleNamesByUserId(@Param("userId") Long id);
 }

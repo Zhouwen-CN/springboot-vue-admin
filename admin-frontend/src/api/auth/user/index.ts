@@ -1,21 +1,19 @@
 import request from '@/utils/request'
 import type {CreateAndUpdateTime} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
-import type {RoleVo} from '../role'
+import {type RoleVo} from '../role'
 
 export interface LoginForm {
   username: string
   password: string
 }
 
-type RoleList = RoleVo[]
-
 export interface UserVo {
   id: number
   username: string
   accessToken: string
   refreshToken: string
-  roleList: RoleList
+  roles: Array<string>
 }
 
 /**
@@ -47,7 +45,7 @@ export function reqLogout(id: number) {
 export interface UserRoleVo extends CreateAndUpdateTime {
   id: number
   username: string
-  roleList: RoleList
+  roleList: Array<RoleVo>
 }
 
 /**

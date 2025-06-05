@@ -20,8 +20,7 @@
     <sql id="Base_Column_List">
         id, title, access_path, file_path, icon, pid, is_keep_alive, create_time, update_time
     </sql>
-
-    <select id="selectMenusByRoleIds" resultMap="BaseResultMap" parameterType="collection">
+    <select id="selectMenusByRoleNames" resultType="com.yeeiee.domain.vo.MenuVo">
         select
             a.id,
             a.title,
@@ -35,24 +34,32 @@
         from t_menu a
         join (
             select
-                menu_id
-            from t_role_menu
-            <where>
-                <choose>
-                    <when test="roleIds != null and roleIds.size() > 0">
-                        role_id in
-                        <foreach collection="roleIds" item="item" open="(" separator="," close=")">
-                            #{item}
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        1!=1
-                    </otherwise>
-                </choose>
-            </where>
-            group by menu_id
+                b.menu_id
+            from (
+                select
+                id
+                from t_role a
+                <where>
+                    <choose>
+                        <when test="roles != null and roles.size() > 0">
+                            role_name in
+                            <foreach collection="roles" item="item" open="(" separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </when>
+                        <otherwise>
+                            1!=1
+                        </otherwise>
+                    </choose>
+                </where>
+            ) a
+            join t_role_menu b
+            on a.id = b.role_id
+            group by b.menu_id
         ) b
         on a.id = b.menu_id
         order by a.id
     </select>
+
+
 </mapper>

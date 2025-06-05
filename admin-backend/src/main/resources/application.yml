@@ -26,10 +26,10 @@ user:
 # jwt相关
 jwt:
   access:
-    key: 6&beRHT#gKZOF0%9$A5t
+    key: LyGR^*tpCYA&c#HMeJDndUKPShTrX%F!
     expiration: 1d
   refresh:
-    key: MHy7K9Cmlf#AwNDXp3&h
+    key: Y$tDyV!Sx&XZMnqT^AEpkQ#Wgvcs%F@w
     expiration: 7d
 
 # http相关

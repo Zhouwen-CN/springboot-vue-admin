@@ -2,15 +2,15 @@ package com.yeeiee.security.handler;
 
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
-import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
+import com.yeeiee.security.JwtTokenProvider;
+import com.yeeiee.security.user.UserAuthenticationToken;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.JwtUtil;
 import com.yeeiee.utils.R;
 import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
@@ -40,28 +40,25 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final UserService userService;
     private final RoleService roleService;
     private final LoginLogService loginLogService;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // 封装 LoginUserVo
         val user = (User) authentication.getPrincipal();
 
-        val roleVoList = roleService.getRoleListByUserId(user.getId());
+        // 根据userId获取角色名列表
+        val roles = roleService.getRoleNamesByUserId(user.getId());
 
+        // 封装 LoginUserVo
         val loginUserVo = new UserVo();
         loginUserVo.setId(user.getId());
         loginUserVo.setUsername(user.getUsername());
-        loginUserVo.setRoleList(roleVoList);
-
-        val roleNames = roleVoList.stream()
-                .map(RoleVo::getRoleName)
-                .toList();
+        loginUserVo.setRoles(roles);
 
         // 生成token
-        val accessToken = jwtUtil.generateAccessToken(user.getUsername(), roleNames, user.getTokenVersion());
+        val accessToken = jwtTokenProvider.generateAccessToken(user.getUsername(), roles, user.getTokenVersion());
         loginUserVo.setAccessToken(accessToken);
-        val refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), roleNames, user.getTokenVersion());
+        val refreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername(), roles, user.getTokenVersion());
         loginUserVo.setRefreshToken(refreshToken);
 
         // 更新 token version
@@ -70,14 +67,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .eq(User::getId, user.getId())
                 .update();
 
-        // 写入登入成功日志
-        val loginLog = new LoginLog();
-        loginLog.setUsername(user.getUsername());
-        loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
-        loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
-        loginLog.setIp(IPUtil.getClientIP(request));
-        loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-        loginLogService.save(loginLog);
+        // 写入登入成功日志（刷新token不需要写）
+        if (authentication instanceof UserAuthenticationToken) {
+            val loginLog = new LoginLog();
+            loginLog.setUsername(user.getUsername());
+            loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
+            loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
+            loginLog.setIp(IPUtil.getClientIP(request));
+            loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+            loginLogService.save(loginLog);
+        }
 
         // 写出响应
         ResponseObjectUtil.writeResponse(response, R.ok(loginUserVo));
