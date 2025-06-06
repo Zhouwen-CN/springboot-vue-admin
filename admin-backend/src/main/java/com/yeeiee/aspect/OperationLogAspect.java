@@ -68,9 +68,8 @@ public class OperationLogAspect {
      */
     private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, OperationStatusEnum operationStatusEnum, long time) throws NoSuchMethodException {
         val httpServletRequest = RequestObjectUtil.getHttpServletRequest();
-        val targetClass = pjp.getTarget().getClass();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
-        Method method = targetClass.getDeclaredMethod(signature.getName(), signature.getParameterTypes());
+        val method = signature.getMethod();
 
         // 查询接口不记录日志
         val getMapping = method.getAnnotation(GetMapping.class);

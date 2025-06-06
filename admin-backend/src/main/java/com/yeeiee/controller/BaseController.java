@@ -5,8 +5,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,13 +21,17 @@ import java.util.List;
 
 /**
  * <p>
- * 公共控制器
+ * 公共控制器，不建议生产环境使用
  * </p>
  *
+ * @param <I> 主键类型
+ * @param <D> entity类型
+ * @param <S> service类型
  * @author chen
  * @since 2024-04-27
  */
-public abstract class BaseController<I extends Serializable, D, S extends IService<D>> {
+@Deprecated
+public abstract class BaseController<I extends Serializable, D, S extends IService<D>> implements BaseControllerHelper<D> {
     protected S service;
 
     public BaseController(S service) {
@@ -30,8 +41,9 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
     @Operation(summary = "查询分页")
     @GetMapping("/{size}/{current}")
     public R<Page<D>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                              @PathVariable("current") @Parameter(description = "当前页面") Integer current) {
-        val page = service.page(new Page<>(current, size));
+                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                              HttpServletRequest request) {
+        val page = service.page(new Page<>(current, size), pageHelper(request));
         return R.ok(page);
     }
 

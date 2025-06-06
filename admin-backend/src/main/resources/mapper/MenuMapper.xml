@@ -20,7 +20,7 @@
     <sql id="Base_Column_List">
         id, title, access_path, file_path, icon, pid, is_keep_alive, create_time, update_time
     </sql>
-    <select id="selectMenusByRoleNames" resultType="com.yeeiee.domain.vo.MenuVo">
+    <select id="selectMenusByRoleNames" resultMap="BaseResultMap">
         select
             a.id,
             a.title,

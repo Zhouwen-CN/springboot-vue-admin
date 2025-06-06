@@ -20,7 +20,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
     /**
      * 根据角色列表查询拥有权限的菜单，一个用户可能有多个角色
      *
-     * @param roles 角色id列表
+     * @param roles 角色名列表
      * @return 菜单列表
      */
     List<MenuVo> selectMenusByRoleNames(@Param("roles") List<String> roles);
