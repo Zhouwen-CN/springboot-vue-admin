@@ -1,12 +1,12 @@
 package com.yeeiee.security.handler;
 
 import com.yeeiee.domain.entity.LoginLog;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.NamedAuthenticationException;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.R;
 import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

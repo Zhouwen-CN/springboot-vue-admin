@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
@@ -15,6 +16,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.sql.Types;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -130,6 +133,16 @@ public final class MybatisGeneratorUtil {
                             .enableFileOverride()
                     ;
 
+                })
+                .injectionConfig(injectConfig -> {
+                    Map<String,Object> customMap = new HashMap<>();
+                    customMap.put("abc","1234");
+                    injectConfig.customMap(customMap); //注入自定义属性
+                    injectConfig.customFile(new CustomFile.Builder()
+                            .fileName("entityDTO.java") //文件名称
+                            .templatePath("templates/entityDTO.java.ftl") //指定生成模板路径
+                            .packageName("dto") //包名,自3.5.10开始,可通过在package里面获取自定义包全路径,低版本下无法获取,示例:package.entityDTO
+                            .build());
                 })
                 // 使用Freemarker模板引擎，默认的是Velocity模板引擎
                 .templateEngine(new FreemarkerTemplateEngine())

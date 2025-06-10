@@ -2,10 +2,10 @@ package com.yeeiee.controller;
 
 import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.MenuService;
-import com.yeeiee.utils.R;
 import com.yeeiee.utils.RequestObjectUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

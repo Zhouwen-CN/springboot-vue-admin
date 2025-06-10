@@ -5,12 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.OperationLog;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.OperationLogService;
-import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +44,7 @@ public class LogController {
 
     @Operation(summary = "登入日志分页")
     @GetMapping("/login/{size}/{current}")
-    public R<Page<LoginLog>> loginLogPage(
+    public R<PageVo<LoginLog>> loginLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
@@ -64,12 +65,12 @@ public class LogController {
         lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime);
 
         val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper);
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "操作日志分页")
     @GetMapping("/ops/{size}/{current}")
-    public R<Page<OperationLog>> operationLogPage(
+    public R<PageVo<OperationLog>> operationLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
@@ -86,12 +87,12 @@ public class LogController {
         lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime);
 
         val page = operationLogService.page(new Page<>(current, size), lambdaQueryWrapper);
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "异常日志分页")
     @GetMapping("/error/{size}/{current}")
-    public R<Page<ErrorLog>> errorLogPage(
+    public R<PageVo<ErrorLog>> errorLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username
@@ -104,7 +105,7 @@ public class LogController {
         lambdaQueryWrapper.orderByDesc(ErrorLog::getCreateTime);
 
         val page = errorLogService.page(new Page<>(current, size), lambdaQueryWrapper);
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 }
 

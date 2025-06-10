@@ -2,6 +2,7 @@ package com.yeeiee.security.handler;
 
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
@@ -11,7 +12,6 @@ import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.IPUtil;
-import com.yeeiee.utils.R;
 import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,12 +1,12 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.form.RoleForm;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.RoleMenuVo;
 import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.service.RoleService;
-import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,11 +43,11 @@ public class RoleController {
 
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
-    public R<IPage<RoleMenuVo>> getRolePages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-        val list = roleService.getRolePages(new Page<>(current, size), searchName);
-        return R.ok(list);
+    public R<PageVo<RoleMenuVo>> getRolePages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+        val page = roleService.getRolePages(new Page<>(current, size), searchName);
+        return R.ok(PageVo.fromPage(page));
     }
 
     /**

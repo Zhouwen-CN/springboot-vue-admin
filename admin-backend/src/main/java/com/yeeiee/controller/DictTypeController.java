@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictTypeForm;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
 import com.yeeiee.service.DictTypeService;
-import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,9 +48,9 @@ public class DictTypeController {
 
     @Operation(summary = "查询字典类型分页")
     @GetMapping("/{size}/{current}")
-    public R<Page<DictType>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                     @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                     @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
+    public R<PageVo<DictType>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                       @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                       @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
         val lambdaQueryWrapper = new LambdaQueryWrapper<DictType>();
 
         if (StringUtils.hasText(keyword)) {
@@ -59,7 +60,7 @@ public class DictTypeController {
         }
 
         val page = dictTypeService.page(new Page<>(current, size), lambdaQueryWrapper);
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "新增字典类型")

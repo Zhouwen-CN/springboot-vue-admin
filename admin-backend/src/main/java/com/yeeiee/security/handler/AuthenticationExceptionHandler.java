@@ -1,6 +1,6 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.utils.R;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

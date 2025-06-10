@@ -1,4 +1,4 @@
-package com.yeeiee.utils;
+package com.yeeiee.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-@Schema(title = "R", description = "统一响应对象")
+@Schema(title = "R", description = "响应视图对象")
 public final class R<T> {
 
     @Schema(title = "是否成功")

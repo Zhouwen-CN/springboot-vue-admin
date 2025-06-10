@@ -1,10 +1,10 @@
 package com.yeeiee.exception;
 
 import com.yeeiee.domain.entity.ErrorLog;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
-import com.yeeiee.utils.R;
 import com.yeeiee.utils.RequestObjectUtil;
 import com.yeeiee.utils.SecurityUserUtil;
 import lombok.RequiredArgsConstructor;

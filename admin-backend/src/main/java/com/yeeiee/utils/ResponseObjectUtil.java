@@ -1,5 +1,6 @@
 package com.yeeiee.utils;
 
+import com.yeeiee.domain.vo.R;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
 

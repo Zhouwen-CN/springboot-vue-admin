@@ -1,12 +1,12 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.UserRoleVo;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,11 +43,11 @@ public class UserController {
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")
-    public R<IPage<UserRoleVo>> getUserPages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-        val list = userService.getUserPages(new Page<>(current, size), searchName);
-        return R.ok(list);
+    public R<PageVo<UserRoleVo>> getUserPages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+        val page = userService.getUserPages(new Page<>(current, size), searchName);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "退出登入")

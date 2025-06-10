@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataVo;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
-import com.yeeiee.utils.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,9 +45,9 @@ public class DictDataController {
 
     private final DictDataService dictDataService;
 
-    @Operation(summary = "查询字典类型列表")
+    @Operation(summary = "查询字典数据分页")
     @GetMapping("/{size}/{current}")
-    public R<Page<DictData>> getPageByTypeId(
+    public R<PageVo<DictData>> getPageByTypeId(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
@@ -60,7 +61,7 @@ public class DictDataController {
         lambdaUpdateWrapper.orderByAsc(DictData::getSort);
 
         val page = dictDataService.page(new Page<>(current, size), lambdaUpdateWrapper);
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "新增字典数据")
