@@ -1,8 +1,8 @@
-import type {LoginForm, UserVo} from '@/api/auth/user'
-import {reqLogin, reqLogout, reqRefreshToken} from '@/api/auth/user'
-import {type MenuVo, reqGetMenuList} from '@/api/auth/menu'
-import {deleteAsyncRoutes, getAsyncRoutes} from '@/router/asyncRoutes'
-import router, {modules} from '@/router'
+import type { LoginForm, UserVo } from '@/api/auth/user'
+import { reqLogin, reqLogout, reqRefreshToken } from '@/api/auth/user'
+import { type MenuVo, reqGetMenuList } from '@/api/auth/menu'
+import { deleteAsyncRoutes, getAsyncRoutes } from '@/router/asyncRoutes'
+import router, { modules } from '@/router'
 import useTagViewStore from '@/stores/tagView'
 import useSettingStore from './setting'
 

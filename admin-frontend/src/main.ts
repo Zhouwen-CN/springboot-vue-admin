@@ -1,5 +1,5 @@
-import {createApp} from 'vue'
-import {createPinia} from 'pinia'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
@@ -21,7 +21,13 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-if ('development' === import.meta.env.MODE) {
+if ('production' === import.meta.env.MODE) {
+  // 全局未捕获的promise错误处理
+  window.addEventListener('unhandledrejection', (event) => {
+    event.preventDefault()
+    // do noting
+  })
+} else {
   // 全局错误处理
   app.config.errorHandler = (err, vm, info) => {
     console.group('global error handler')
@@ -29,12 +35,6 @@ if ('development' === import.meta.env.MODE) {
     console.log('vm', vm)
     console.log('info', info)
     console.groupEnd()
-
-    // 全局未捕获的promise错误处理
-    window.addEventListener('unhandledrejection', (event) => {
-      event.preventDefault()
-      // do noting
-    })
   }
 }
 

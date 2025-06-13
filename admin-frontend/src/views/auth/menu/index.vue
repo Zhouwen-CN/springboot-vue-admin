@@ -35,18 +35,14 @@ const hasChildren = ref(false)
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
 const validateAccessPath = (rule: any, value: any, callback: any) => {
-  if (value.trim() === '') {
-    callback(new Error('请输入访问路径'))
+  if (value && value.startsWith('/')) {
+    callback()
   } else {
-    if ((value as string).startsWith('/')) {
-      callback()
-    } else {
-      callback(new Error('访问路径须以 / 开头'))
-    }
+    callback(new Error('访问路径须以 / 开头'))
   }
 }
 const validateFilePath = (rule: any, value: any, callback: any) => {
-  if (!value || value.startsWith('/')) {
+  if (value && value.startsWith('/')) {
     callback()
   } else {
     callback(new Error('文件路径须以 / 开头'))
@@ -127,6 +123,8 @@ function clean() {
   menuForm.pid = 0
   hasChildren.value = false
   ruleFormRef.value?.clearValidate()
+  // 关闭图标选择器
+  iconPopoverRef.value?.hide()
 }
 
 // 搜索图标
@@ -224,12 +222,8 @@ function selectIcon(icon: string) {
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径" prop="filePath">
-            <el-input
-              v-model="menuForm.filePath"
-              :disabled="hasChildren || menuForm.pid === 0"
-              placeholder="文件路径"
-            ></el-input>
+          <el-form-item label="文件路径" prop="filePath" v-if="!hasChildren && menuForm.pid !== 0">
+            <el-input v-model="menuForm.filePath" placeholder="文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-popover ref="iconPopoverRef" :width="400" placement="bottom-start" trigger="click">

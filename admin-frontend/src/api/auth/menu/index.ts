@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import {type CreateAndUpdateTime} from '@/utils/requestTypes'
+import { type CreateAndUpdateTime } from '@/utils/requestTypes'
 
 export interface MenuVo extends CreateAndUpdateTime {
   id: number
@@ -17,7 +17,7 @@ export interface MenuVo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetMenuList() {
-    return request.get<MenuVo[]>('/menu')
+  return request.get<MenuVo[]>('/menu')
 }
 
 export interface MenuForm {
