@@ -201,7 +201,7 @@ onMounted(() => {
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchUser()">
+      <el-form inline @submit.prevent="searchUser()" label-width="auto">
         <el-form-item label="用户名">
           <el-input v-model="searchName" clearable placeholder="用户名"></el-input>
         </el-form-item>
@@ -284,7 +284,7 @@ onMounted(() => {
           ref="ruleFormRef"
           :model="userRoleForm"
           :rules="rules"
-          label-width="80px"
+          label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="onSubmit(ruleFormRef)"
         >

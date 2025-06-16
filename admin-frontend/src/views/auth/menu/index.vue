@@ -212,7 +212,7 @@ function selectIcon(icon: string) {
           ref="ruleFormRef"
           :model="menuForm"
           :rules="rules"
-          label-width="80px"
+          label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="onSubmit(ruleFormRef)"
         >

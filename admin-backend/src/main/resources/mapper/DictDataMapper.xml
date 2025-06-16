@@ -19,19 +19,13 @@
         id, type_id, label, value, sort, create_time, update_time
     </sql>
 
-    <select id="selectListByType" resultType="com.yeeiee.domain.vo.DictDataVo">
+    <select id="selectListByTypeId" resultType="com.yeeiee.domain.vo.DictDataVo">
         select
-            b.label,
-            b.`value`
-        from (
-            select
-                id
-            from t_dict_type
-            where type=#{type}
-         ) a
-         join t_dict_data b
-        on a.id=b.type_id
-        order by b.`sort`
+            label,
+            `value`
+        from t_dict_data
+        where type_id=#{typeId}
+        order by `sort`
     </select>
 
 </mapper>

@@ -25,7 +25,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
     private final DictDataMapper dictDataMapper;
 
     @Override
-    public List<DictDataVo> getListByType(String type) {
-        return dictDataMapper.selectListByType(type);
+    public List<DictDataVo> getListByTypeId(Long typeId) {
+        return dictDataMapper.selectListByTypeId(typeId);
     }
 }

@@ -10,15 +10,15 @@ export interface UseDictResult {
 /**
  * 有下拉菜单表单提交，才会使用字典
  * 像日志管理，有下拉列表，没有表单提交，这种最好不使用字典
- * @param type 字典类型
+ * @param typeId 字典类型Id
  * @returns 字典
  */
-function useDict(type: string): UseDictResult {
+function useDict(typeId: number): UseDictResult {
   const dictData = ref<LabelValueVo[]>([])
   const dictMap = ref<Map<number, string>>(new Map<number, string>())
 
   function run() {
-    reqGetDictDataListByTypeId(type)
+    reqGetDictDataListByTypeId(typeId)
       .then((res) => {
         dictData.value = res.data
 

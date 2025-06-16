@@ -160,7 +160,7 @@ function clean() {
         ref="formRef"
         :model="changePwdForm"
         :rules="rules"
-        label-width="80px"
+        label-width="auto"
         style="padding: 0 20px"
         @submit.prevent="onSubmit(formRef)"
       >

@@ -44,7 +44,7 @@ public class LogController {
 
     @Operation(summary = "登入日志分页")
     @GetMapping("/login/{size}/{current}")
-    public R<PageVo<LoginLog>> loginLogPage(
+    public R<PageVo<LoginLog>> getLoginLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
@@ -70,7 +70,7 @@ public class LogController {
 
     @Operation(summary = "操作日志分页")
     @GetMapping("/ops/{size}/{current}")
-    public R<PageVo<OperationLog>> operationLogPage(
+    public R<PageVo<OperationLog>> getOperationLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
@@ -92,7 +92,7 @@ public class LogController {
 
     @Operation(summary = "异常日志分页")
     @GetMapping("/error/{size}/{current}")
-    public R<PageVo<ErrorLog>> errorLogPage(
+    public R<PageVo<ErrorLog>> getErrorLogPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username

@@ -43,9 +43,9 @@ public class UserController {
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<UserRoleVo>> getUserPages(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+    public R<PageVo<UserRoleVo>> getUserPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
         val page = userService.getUserPages(new Page<>(current, size), searchName);
         return R.ok(PageVo.fromPage(page));
     }
@@ -87,14 +87,14 @@ public class UserController {
 
     @Operation(summary = "修改用户密码")
     @PatchMapping("/pwd/change")
-    public R<Void> modifyUserChangePwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
+    public R<Void> changeUserPwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
         userService.modifyUserChangePwd(changePwdForm);
         return R.ok();
     }
 
     @Operation(summary = "重置用户密码")
     @PatchMapping("/pwd/reset/{id}")
-    public R<Void> resetPasswordById(@PathVariable("id") Long id) {
+    public R<Void> resetUserPwdById(@PathVariable("id") Long id) {
         userService.modifyUserResetPwd(id);
         return R.ok();
     }

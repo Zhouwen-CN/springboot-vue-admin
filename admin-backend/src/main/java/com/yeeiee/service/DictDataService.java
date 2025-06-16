@@ -3,7 +3,6 @@ package com.yeeiee.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.vo.DictDataVo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ import java.util.List;
  * @since 2025-02-13
  */
 public interface DictDataService extends IService<DictData> {
-    List<DictDataVo> getListByType(@Param("type") String type);
+    List<DictDataVo> getListByTypeId(Long typeId);
 }

@@ -48,9 +48,9 @@ public class DictTypeController {
 
     @Operation(summary = "查询字典类型分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DictType>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                       @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                       @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
+    public R<PageVo<DictType>> getDictTypePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                               @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                               @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
         val lambdaQueryWrapper = new LambdaQueryWrapper<DictType>();
 
         if (StringUtils.hasText(keyword)) {
@@ -65,7 +65,7 @@ public class DictTypeController {
 
     @Operation(summary = "新增字典类型")
     @PostMapping
-    public R<Void> addType(@Validated(DictTypeForm.Create.class) @RequestBody DictTypeForm dictTypeForm) {
+    public R<Void> addDictType(@Validated(DictTypeForm.Create.class) @RequestBody DictTypeForm dictTypeForm) {
         val exists = dictTypeService.lambdaQuery()
                 .eq(DictType::getType, dictTypeForm.getType())
                 .exists();
@@ -79,14 +79,14 @@ public class DictTypeController {
 
     @Operation(summary = "更新字典类型")
     @PutMapping
-    public R<Void> modifyType(@Validated(DictTypeForm.Update.class) @RequestBody DictTypeForm dictTypeForm) {
+    public R<Void> modifyDictType(@Validated(DictTypeForm.Update.class) @RequestBody DictTypeForm dictTypeForm) {
         dictTypeService.updateById(dictTypeForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "删除字典类型")
     @DeleteMapping("/{id}")
-    public R<Void> removeTypeById(@PathVariable("id") Long id) {
+    public R<Void> removeDictTypeById(@PathVariable("id") Long id) {
         val dictDataList = dictDataService.lambdaQuery()
                 .eq(DictData::getTypeId, id)
                 .list();
@@ -101,7 +101,7 @@ public class DictTypeController {
 
     @Operation(summary = "批量删除字典类型")
     @DeleteMapping
-    public R<Void> removeTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
+    public R<Void> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
         val dictDataList = dictDataService.lambdaQuery()
                 .in(DictData::getTypeId, ids)
                 .list();

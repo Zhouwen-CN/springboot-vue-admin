@@ -67,6 +67,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
         @submit.prevent="onSubmit(ruleFormRef)"
         class="form"
         size="large"
+        label-width="auto"
       >
         <h1>{{ settingStore.appName }}</h1>
         <el-form-item prop="username">

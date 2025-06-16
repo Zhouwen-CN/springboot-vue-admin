@@ -12,7 +12,9 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 样式清除
-import '@/assets/css/reset.scss'
+import './assets/css/reset.scss'
+// 自定义指令，给表单项添加提示
+import vFormItemTip from './utils/vFormItemTip'
 
 const app = createApp(App)
 
@@ -45,5 +47,6 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn
 })
+app.directive('tip', vFormItemTip)
 
 app.mount('#app')

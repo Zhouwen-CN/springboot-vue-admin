@@ -61,7 +61,7 @@ onMounted(() => {
   <div>
     <el-card>
       <!-- 表单 -->
-      <el-form inline @submit.prevent="onSubmit()">
+      <el-form inline @submit.prevent="onSubmit()" label-width="auto">
         <el-form-item label="用户名">
           <el-input v-model="searchName" clearable placeholder="用户名"> </el-input>
         </el-form-item>

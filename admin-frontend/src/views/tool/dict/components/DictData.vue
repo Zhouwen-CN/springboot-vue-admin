@@ -141,7 +141,7 @@ defineExpose({
   <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchByLabel()">
+      <el-form inline @submit.prevent="searchByLabel()" label-width="auto">
         <el-form-item label="标签键">
           <el-input v-model="searchLabel" clearable placeholder="标签键"></el-input>
         </el-form-item>
@@ -224,7 +224,7 @@ defineExpose({
           ref="dictDataFormRef"
           :model="dictDataForm"
           :rules="rules"
-          label-width="80px"
+          label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="dictDataFormSubmit(dictDataFormRef)"
         >

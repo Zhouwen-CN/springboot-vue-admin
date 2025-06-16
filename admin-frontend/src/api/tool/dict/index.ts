@@ -76,8 +76,6 @@ export function reqRemoveDictDataByIds(ids: number[]) {
 // 根据字典类型查询字典列表
 export type LabelValueVo = Pick<DictDataVo, 'label' | 'value'>
 
-export function reqGetDictDataListByTypeId(type: string) {
-  return request.get<LabelValueVo[]>('/dict/data', {
-    params: { type }
-  })
+export function reqGetDictDataListByTypeId(typeId: number) {
+  return request.get<LabelValueVo[]>(`/dict/data/${typeId}`)
 }

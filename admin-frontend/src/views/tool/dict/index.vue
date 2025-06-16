@@ -130,7 +130,7 @@ onMounted(() => {
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchByKeyword()">
+      <el-form inline @submit.prevent="searchByKeyword()" label-width="auto">
         <el-form-item label="关键字">
           <el-input v-model="keyword" clearable placeholder="关键字"></el-input>
         </el-form-item>
@@ -213,7 +213,7 @@ onMounted(() => {
           ref="dictTypeFormRef"
           :model="dictTypeForm"
           :rules="rules"
-          label-width="80px"
+          label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="onSubmit(dictTypeFormRef)"
         >

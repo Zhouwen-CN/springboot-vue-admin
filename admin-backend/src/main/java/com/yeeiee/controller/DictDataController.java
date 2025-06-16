@@ -47,7 +47,7 @@ public class DictDataController {
 
     @Operation(summary = "查询字典数据分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DictData>> getPageByTypeId(
+    public R<PageVo<DictData>> getDictDataPageByTypeId(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
@@ -66,7 +66,7 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    public R<Void> addData(@Validated(DictDataForm.Create.class) @RequestBody DictDataForm dictDataForm) {
+    public R<Void> addDictData(@Validated(DictDataForm.Create.class) @RequestBody DictDataForm dictDataForm) {
         val exists = dictDataService.exists(
                 Wrappers.<DictData>lambdaQuery()
                         .eq(DictData::getTypeId, dictDataForm.getTypeId())
@@ -85,30 +85,30 @@ public class DictDataController {
 
     @Operation(summary = "修改字典数据")
     @PutMapping
-    public R<Void> modifyData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
+    public R<Void> modifyDictData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.updateById(dictDataForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "删除字典数据")
     @DeleteMapping("/{id}")
-    public R<Void> removeDataById(@PathVariable("id") Long id) {
+    public R<Void> removeDictDataById(@PathVariable("id") Long id) {
         dictDataService.removeById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
+    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
         dictDataService.removeByIds(ids);
         return R.ok();
     }
 
     // todo: 后续考虑添加缓存
-    @Operation(summary = "根据类型查询字典列表")
-    @GetMapping
-    public R<List<DictDataVo>> getDataByType(@RequestParam("type") @Parameter(description = "字典类型") String type) {
-        val list = dictDataService.getListByType(type);
+    @Operation(summary = "根据类型id字典列表")
+    @GetMapping("/{typeId}")
+    public R<List<DictDataVo>> getDictDataListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
+        val list = dictDataService.getListByTypeId(typeId);
         return R.ok(list);
     }
 }
