@@ -1,12 +1,18 @@
 package com.yeeiee.config;
 
+import lombok.SneakyThrows;
 import lombok.val;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.socket.LayeredConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -71,14 +78,35 @@ public class RestTemplateConfig {
     @Value("${http.connect.default-keep-alive}")
     private Duration defaultKeepAlive;
 
+
+    @Bean
+    @SneakyThrows
+    public LayeredConnectionSocketFactory sslSocketFactory(){
+        // 1. 创建信任所有证书的 SSLContext
+        // 使用 HttpClient 5 提供的 TrustAllStrategy
+        SSLContext sslContext = SSLContexts.custom()
+                .loadTrustMaterial(null, TrustAllStrategy.INSTANCE) // 关键：加载信任所有策略
+                .build();
+
+        // 2. 创建 SSLConnectionSocketFactory，允许所有主机名
+        // NoopHostnameVerifier.INSTANCE 禁用主机名验证
+        return SSLConnectionSocketFactoryBuilder.create()
+                .setSslContext(sslContext)
+                .setHostnameVerifier(NoopHostnameVerifier.INSTANCE) // 关键：禁用主机名验证
+                .build();
+    }
+
+
     /**
      * http连接池
      *
      * @return 连接池
      */
     @Bean
-    public HttpClientConnectionManager httpClientConnectionManager() {
-        val manager = new PoolingHttpClientConnectionManager();
+    public HttpClientConnectionManager httpClientConnectionManager(LayeredConnectionSocketFactory sslSocketFactory) {
+        val manager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setSSLSocketFactory(sslSocketFactory)
+                .build();
 
         // 最大连接数
         manager.setMaxTotal(maxTotal);
@@ -123,6 +151,10 @@ public class RestTemplateConfig {
                 .setConnectionManager(httpClientConnectionManager)
                 // 定时清除过期的连接
                 .evictExpiredConnections()
+                // 禁用自动重试
+                .disableAutomaticRetries()
+                // 禁用重定向
+                .disableRedirectHandling()
                 // 不设置会有一个默认的 DefaultConnectionKeepAliveStrategy
                 // .setKeepAliveStrategy()
                 .build();
