@@ -6,17 +6,19 @@ spring:
     url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
     username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
     password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+  # 缓存类型
+  cache:
+    type: simple
 
 # 控制台打印sql
 decorator:
   datasource:
     p6spy:
-      # 日志格式
       log-format: "Execute SQL in %(executionTime)ms: %(sqlSingleLine)"
 
+# 关闭 swagger-ui，前端已经整合
 springdoc:
   swagger-ui:
-    # 关闭 swagger-ui，前端已经整合
     enabled: false
 
 # 重置默认密码

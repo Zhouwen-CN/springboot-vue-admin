@@ -8,6 +8,7 @@ import com.yeeiee.service.DictDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,5 +28,10 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
     @Override
     public List<DictDataVo> getListByTypeId(Long typeId) {
         return dictDataMapper.selectListByTypeId(typeId);
+    }
+
+    @Override
+    public List<Long> getTypeIdByDataIds(Collection<Long> ids) {
+        return dictDataMapper.selectTypeIdByDataIds(ids);
     }
 }

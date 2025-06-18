@@ -27,5 +27,18 @@
         where type_id=#{typeId}
         order by `sort`
     </select>
+    <select id="selectTypeIdByDataIds" resultType="java.lang.Long">
+        select
+            type_id
+        from t_dict_data
+        <where>
+            id in
+            <foreach item="item" collection="ids" separator="," close=")" open="(">
+                #{item}
+            </foreach>
+        </where>
+        group by type_id
+    </select>
+
 
 </mapper>

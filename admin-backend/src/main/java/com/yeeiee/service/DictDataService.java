@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.vo.DictDataVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,4 +17,6 @@ import java.util.List;
  */
 public interface DictDataService extends IService<DictData> {
     List<DictDataVo> getListByTypeId(Long typeId);
+
+    List<Long> getTypeIdByDataIds(Collection<Long> ids);
 }

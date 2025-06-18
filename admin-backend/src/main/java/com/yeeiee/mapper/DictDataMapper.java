@@ -5,6 +5,7 @@ import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.vo.DictDataVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ import java.util.List;
  */
 public interface DictDataMapper extends BaseMapper<DictData> {
     List<DictDataVo> selectListByTypeId(@Param("typeId") Long typeId);
+
+    List<Long> selectTypeIdByDataIds(@Param("ids") Collection<Long> ids);
 }

@@ -134,3 +134,36 @@ create table t_dict_data(
   `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
   constraint uniq_type_label unique (type_id, label)
 ) comment '字典数据表';
+
+
+create table t_api_endpoint(
+    `id` bigint primary key auto_increment comment '主键',
+	`service_id` bigint not null comment '服务ID',
+    `name` varchar(20)  not null comment '接口名称',
+    `desc` varchar(50)  not null comment '接口描述',
+    `access_path` varchar(100) not null comment '访问地址',
+    `request_path` varchar(100) not null comment '请求地址',
+	`method` tinyint not null comment '请求方法',
+    `response_type` tinyint not null comment '响应类型',
+    `pre_ops_script` text comment '前置操作脚本',
+    `status` tinyint(1) default 1 comment '接口状态',
+    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    constraint uniq_name unique (name),
+    constraint uniq_access_path unique (access_path)
+) comment '接口配置表';
+
+
+create table t_api_server(
+	`id` bigint primary key auto_increment comment '主键',
+    `name` varchar(20)  not null comment '服务名称',
+	`protocol` tinyint not null comment '协议类型',
+	`host` varchar(20) not null comment '域名或IP',
+	`port` int not null comment '端口',
+	`pre_ops_script` text comment '前置操作脚本',
+	`post_ops_script` text comment '后置操作脚本',
+	`status` tinyint(1) default 1 comment '服务状态',
+	`create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    constraint uniq_name unique (name)
+) comment '服务配置表';

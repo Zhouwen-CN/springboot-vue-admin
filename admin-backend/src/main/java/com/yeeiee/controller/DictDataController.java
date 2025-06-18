@@ -2,6 +2,7 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataVo;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,6 +48,7 @@ import java.util.List;
 public class DictDataController {
 
     private final DictDataService dictDataService;
+    private final DictCacheManager dictCacheManager;
 
     @Operation(summary = "查询字典数据分页")
     @GetMapping("/{size}/{current}")
@@ -85,6 +90,7 @@ public class DictDataController {
 
     @Operation(summary = "修改字典数据")
     @PutMapping
+    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#dictDataForm.typeId")
     public R<Void> modifyDictData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.updateById(dictDataForm.toBean());
         return R.ok();
@@ -93,6 +99,7 @@ public class DictDataController {
     @Operation(summary = "删除字典数据")
     @DeleteMapping("/{id}")
     public R<Void> removeDictDataById(@PathVariable("id") Long id) {
+        dictCacheManager.evictByDataIds(Collections.singleton(id));
         dictDataService.removeById(id);
         return R.ok();
     }
@@ -100,15 +107,17 @@ public class DictDataController {
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
     public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
-        dictDataService.removeByIds(ids);
+        if(!CollectionUtils.isEmpty(ids)){
+            dictCacheManager.evictByDataIds(ids);
+            dictDataService.removeByIds(ids);
+        }
         return R.ok();
     }
 
-    // todo: 后续考虑添加缓存
     @Operation(summary = "根据类型id字典列表")
     @GetMapping("/{typeId}")
     public R<List<DictDataVo>> getDictDataListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
-        val list = dictDataService.getListByTypeId(typeId);
+        val list = dictCacheManager.getDictCacheByTypeId(typeId);
         return R.ok(list);
     }
 }
