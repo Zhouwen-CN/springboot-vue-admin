@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { type ErrorLogVo, reqGetErrorLogPage } from '@/api/log'
-import { ElMessage } from 'element-plus'
 
 // 抽屉可见性
 const drawerVisible = ref(false)
@@ -26,30 +25,6 @@ function onSubmit() {
       username: searchName.value
     }
   })
-}
-
-// 惰性函数
-const copyText = (function () {
-  if (navigator.clipboard) {
-    return (text: string) => {
-      navigator.clipboard.writeText(text)
-    }
-  } else {
-    return (text: string) => {
-      const textarea = document.createElement('textarea')
-      textarea.value = text
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textarea)
-    }
-  }
-})()
-
-// 复制错误信息到剪切板
-async function copyErrorMassage(errorMsg: string) {
-  copyText(errorMsg)
-  ElMessage.success('复制成功')
 }
 
 onMounted(() => {
@@ -86,11 +61,7 @@ onMounted(() => {
           <template #default="{ row }: { row: ErrorLogVo }">
             <el-button-group class="ml-4">
               <el-button icon="View" type="primary" @click="openErrorMessage(row)" />
-              <el-button
-                icon="DocumentCopy"
-                type="primary"
-                @click="copyErrorMassage(row.errorMsg)"
-              />
+              <el-button icon="DocumentCopy" type="primary" v-copy="row.errorMsg" />
             </el-button-group>
           </template>
         </el-table-column>

@@ -1,12 +1,12 @@
 import { ElIcon, ElTooltip } from 'element-plus'
-import type { Directive, DirectiveBinding } from 'vue'
+import type { Directive } from 'vue'
 import { QuestionFilled } from '@element-plus/icons-vue'
 
 /**
  * 自定义指令，给表单项添加提示
  */
-const vFormItemTip: Directive<HTMLElement, string> = {
-  updated: (el: HTMLElement, binding: DirectiveBinding<string>) => {
+const vTip: Directive<HTMLElement, string> = {
+  updated: (el, binding) => {
     // 是否绑定了值
     const value = binding.value
     if (!value || value.trim() === '') {
@@ -52,4 +52,4 @@ function render(target: Element, tip: string) {
   target.appendChild(div)
 }
 
-export default vFormItemTip
+export default vTip

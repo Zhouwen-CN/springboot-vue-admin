@@ -14,7 +14,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 样式清除
 import './assets/css/reset.scss'
 // 自定义指令，给表单项添加提示
-import vFormItemTip from './utils/vFormItemTip'
+import vTip from './directive/vTip'
+import vCopy from './directive/vCopy'
 
 const app = createApp(App)
 
@@ -47,6 +48,7 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn
 })
-app.directive('tip', vFormItemTip)
+app.directive('tip', vTip)
+app.directive('copy', vCopy)
 
 app.mount('#app')
