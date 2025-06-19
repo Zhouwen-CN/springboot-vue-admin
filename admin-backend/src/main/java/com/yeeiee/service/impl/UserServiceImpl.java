@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
@@ -48,15 +49,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private String defaultPassword;
 
     @Override
-    public void logout(Long id) {
+    public void logout(Long id, UserCacheManager userCacheManager) {
         val user = this.getById(id);
 
         // 更新token version
         if (user != null) {
-            this.lambdaUpdate()
-                    .set(User::getTokenVersion, user.getTokenVersion() + 1)
-                    .eq(User::getId, user.getId())
-                    .update();
+            userCacheManager.updateUserTokenVersion(user);
 
             // 退出登入日志
             val request = RequestObjectUtil.getHttpServletRequest();

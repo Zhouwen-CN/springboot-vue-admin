@@ -1,6 +1,7 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.vo.PageVo;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * <p>
@@ -40,6 +43,7 @@ import java.util.Collection;
 @Tag(name = "用户表 控制器")
 public class UserController {
     private final UserService userService;
+    private final UserCacheManager userCacheManager;
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")
@@ -53,7 +57,7 @@ public class UserController {
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
     public R<Void> logout(@PathVariable("id") Long id) {
-        userService.logout(id);
+        userService.logout(id, userCacheManager);
         return R.ok();
     }
 
@@ -66,6 +70,7 @@ public class UserController {
 
     @Operation(summary = "更新用户")
     @PutMapping
+    @CacheEvict(cacheNames = UserCacheManager.USER_CACHE, key = "#userForm.username")
     public R<Void> modifyUser(@Validated(UserForm.Update.class) @RequestBody UserForm userForm) {
         userService.modifyUser(userForm);
         return R.ok();
@@ -74,6 +79,7 @@ public class UserController {
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
     public R<Void> removeUserById(@PathVariable("id") Long id) {
+        userCacheManager.evictByUserIds(Collections.singletonList(id));
         userService.removeUserById(id);
         return R.ok();
     }
@@ -81,6 +87,7 @@ public class UserController {
     @Operation(summary = "批量删除用户")
     @DeleteMapping
     public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") Collection<Long> ids) {
+        userCacheManager.evictByUserIds(ids);
         userService.removeUserByIds(ids);
         return R.ok();
     }

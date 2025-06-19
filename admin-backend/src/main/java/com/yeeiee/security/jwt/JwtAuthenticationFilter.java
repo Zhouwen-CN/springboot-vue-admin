@@ -1,8 +1,7 @@
 package com.yeeiee.security.jwt;
 
-import com.yeeiee.domain.entity.User;
+import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.security.JwtTokenProvider;
-import com.yeeiee.service.UserService;
 import com.yeeiee.utils.RequestObjectUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,9 +29,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserCacheManager userCacheManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -49,13 +47,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             val version = payload.get("version", Long.class);
 
             // 加载与 token 关联的用户
-            val user = userService.lambdaQuery()
-                    .eq(User::getUsername, username)
-                    .one();
+            val user = userCacheManager.getUserByUsername(username,true);
 
             // 检查 token version
-            if (version == user.getTokenVersion() - 1) {
-
+            if (user != null && version == user.getTokenVersion() - 1) {
                 val authorities = jwtTokenProvider.getRoles(payload)
                         .stream()
                         .map(SimpleGrantedAuthority::new)

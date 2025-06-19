@@ -1,8 +1,7 @@
 package com.yeeiee.security.user;
 
-import com.yeeiee.domain.entity.User;
+import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.exception.NamedAuthenticationException;
-import com.yeeiee.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,9 +23,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UserAuthenticationProvider implements AuthenticationProvider {
-
-    private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserCacheManager userCacheManager;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -34,9 +32,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         val username = (String) authentication.getPrincipal();
         val password = (String) authentication.getCredentials();
 
-        val user = userService.lambdaQuery()
-                .eq(User::getUsername, username)
-                .one();
+        // 这里不需要缓存，缓存登入成功也会被清除
+        val user = userCacheManager.getUserByUsername(username,false);
 
         if (user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw new NamedAuthenticationException(username, "用户名或密码错误");

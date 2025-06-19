@@ -1,9 +1,8 @@
 package com.yeeiee.security.refresh;
 
-import com.yeeiee.domain.entity.User;
+import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.security.JwtTokenProvider;
-import com.yeeiee.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,9 +23,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RefreshAuthenticationProvider implements AuthenticationProvider {
-
-    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserCacheManager userCacheManager;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -40,9 +38,8 @@ public class RefreshAuthenticationProvider implements AuthenticationProvider {
         val username = payload.getSubject();
         val version = payload.get("version", Long.class);
 
-        val user = userService.lambdaQuery()
-                .eq(User::getUsername, username)
-                .one();
+        // 加载与 token 关联的用户（这里不需要缓存，缓存登入成功也会被清除）
+        val user = userCacheManager.getUserByUsername(username, false);
 
         // 检查 token version
         if (user == null || version != user.getTokenVersion() - 1) {
