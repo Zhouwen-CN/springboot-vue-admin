@@ -24,9 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class DictCacheManager {
-    public static final String DICT_CACHE = "sv-admin:dict";
     private final DictDataService dictDataService;
     private final CacheManager cacheManager;
+    public static final String DICT_CACHE = "sv-admin::dict";
 
     /**
      * 字典缓存

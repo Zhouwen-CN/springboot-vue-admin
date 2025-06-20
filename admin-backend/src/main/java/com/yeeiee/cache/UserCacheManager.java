@@ -24,7 +24,7 @@ import java.util.Collection;
 public class UserCacheManager {
     private final UserService userService;
     private final CacheManager cacheManager;
-    public static final String USER_CACHE = "sv-admin:user";
+    public static final String USER_CACHE = "sv-admin::user";
 
     @Cacheable(cacheNames = USER_CACHE, key = "#username",condition = "#isCacheNeeded = true")
     public User getUserByUsername(String username, boolean isCacheNeeded) {

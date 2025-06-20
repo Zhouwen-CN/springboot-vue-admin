@@ -1,18 +1,20 @@
 package com.yeeiee.config;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.format.DateTimeFormatter;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
  * <p>
  * jackson 配置
+ * <pre>
+ *     web的序列化和redis的序列化会冲突，各用各的
+ * </pre>
  * </p>
  *
  * @author chen
@@ -20,22 +22,20 @@ import java.time.format.DateTimeFormatter;
  */
 @Configuration
 public class JacksonConfiguration {
-
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        return builder -> {
+    @Primary
+    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        return builder.createXmlMapper(false).build();
+    }
 
-            // LocalDate 和 LocalDateTime 的格式化方式
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    @Bean("redisObjectMapper")
+    public ObjectMapper redisObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        val objectMapper =  builder.createXmlMapper(false).build();
 
-            // 设置 LocalDate 和 LocalDateTime 反序列化器
-            builder.deserializers(new LocalDateDeserializer(dateFormatter));
-            builder.deserializers(new LocalDateTimeDeserializer(dateTimeFormatter));
-
-            // 设置 LocalDate 和 LocalDateTime 序列化器
-            builder.serializers(new LocalDateSerializer(dateFormatter));
-            builder.serializers(new LocalDateTimeSerializer(dateTimeFormatter));
-        };
+        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+                .allowIfBaseType(Object.class)
+                .build();
+        objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
+        return objectMapper;
     }
 }

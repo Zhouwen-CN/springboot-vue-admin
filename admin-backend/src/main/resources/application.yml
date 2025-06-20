@@ -6,9 +6,45 @@ spring:
     url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
     username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
     password: mpw:skR0PmgRHk6TEa77ZCgF+A==
-  # 缓存类型
+  # jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: always
+    serialization:
+      write-enums-using-to-string: true
+      write-dates-as-timestamps: false
+    deserialization:
+      read-enums-using-to-string: true
+      fail-on-unknown-properties: false
+  # 缓存配置
   cache:
     type: simple
+    redis:
+      # 缓存过期时间
+      time-to-live: 1h
+      # 是否存储空指
+      cache-null-values: false
+      # 是否使用key前缀
+      use-key-prefix: false
+  # redis配置
+  data:
+    redis:
+      database: 0
+#      password: hb56.#sllF
+      host: 127.0.0.1
+      port: 6379
+      # 连接超时
+      connect-timeout: 5s
+      # 读取超时
+      timeout: 5s
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 5
+          min-idle: 0
+          # 从连接池获取连接超时时间
+          max-wait: 5s
 
 # 控制台打印sql
 decorator:
