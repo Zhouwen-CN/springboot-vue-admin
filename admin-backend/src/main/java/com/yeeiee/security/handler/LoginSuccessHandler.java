@@ -1,6 +1,5 @@
 package com.yeeiee.security.handler;
 
-import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.vo.R;
@@ -11,6 +10,7 @@ import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.security.user.UserAuthenticationToken;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.RoleService;
+import com.yeeiee.service.UserService;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.ResponseObjectUtil;
 import jakarta.servlet.ServletException;
@@ -39,7 +39,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final RoleService roleService;
     private final LoginLogService loginLogService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserCacheManager userCacheManager;
+    private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -61,7 +61,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         loginUserVo.setRefreshToken(refreshToken);
 
         // 更新 token version
-        userCacheManager.updateUserTokenVersion(user);
+        userService.modifyTokenVersionByUser(user);
 
         // 写入登入成功日志（刷新token不需要写）
         if (authentication instanceof UserAuthenticationToken) {

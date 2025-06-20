@@ -26,7 +26,7 @@ spring:
       # 是否存储空指
       cache-null-values: false
       # 是否使用key前缀
-      use-key-prefix: false
+      use-key-prefix: true
   # redis配置
   data:
     redis:

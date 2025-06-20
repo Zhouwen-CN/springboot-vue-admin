@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
@@ -49,13 +48,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private String defaultPassword;
 
     @Override
-    public void logout(Long id, UserCacheManager userCacheManager) {
+    public void logout(Long id) {
         val user = this.getById(id);
 
         // 更新token version
         if (user != null) {
-            userCacheManager.updateUserTokenVersion(user);
-
             // 退出登入日志
             val request = RequestObjectUtil.getHttpServletRequest();
             val loginLog = new LoginLog();
@@ -202,6 +199,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .eq(User::getId, id)
                 .set(User::getPassword, bCryptPasswordEncoder.encode(defaultPassword))
                 .setIncrBy(User::getTokenVersion, 1)
+                .update();
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return this.lambdaQuery()
+                .eq(User::getUsername, username)
+                .one();
+    }
+
+    @Override
+    public void modifyTokenVersionByUser(User user) {
+        this.lambdaUpdate()
+                .eq(User::getId, user.getId())
+                .set(User::getTokenVersion, user.getTokenVersion() + 1)
                 .update();
     }
 }

@@ -3,7 +3,6 @@ package com.yeeiee.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yeeiee.cache.UserCacheManager;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
@@ -23,10 +22,9 @@ public interface UserService extends IService<User> {
     /**
      * 登出
      *
-     * @param id               用户 id
-     * @param userCacheManager 用户缓存管理器（循环依赖问题）
+     * @param id 用户 id
      */
-    void logout(Long id, UserCacheManager userCacheManager);
+    void logout(Long id);
 
     /**
      * 获取用户分页（包含角色ids）
@@ -79,4 +77,17 @@ public interface UserService extends IService<User> {
      * @param id 用户id
      */
     void modifyUserResetPwd(Long id);
+
+    /**
+     * 根据用户名查询用户
+     * @param username 用户名
+     * @return 用户
+     */
+    User getUserByUsername(String username);
+
+    /**
+     * 修改用户token版本
+     * @param user 用户
+     */
+    void modifyTokenVersionByUser(User user);
 }
