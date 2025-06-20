@@ -26,7 +26,7 @@ import java.util.List;
 public class DictCacheManager {
     private final DictDataService dictDataService;
     private final CacheManager cacheManager;
-    public static final String DICT_CACHE = "sv-admin::dict";
+    public static final String DICT_CACHE = "dict";
 
     /**
      * 字典缓存
