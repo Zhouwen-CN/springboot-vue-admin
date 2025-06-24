@@ -3,21 +3,18 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.cache.DictCacheManager;
-import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictTypeForm;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.exception.DmlOperationException;
-import com.yeeiee.service.DictDataService;
 import com.yeeiee.service.DictTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * <p>
@@ -45,10 +43,7 @@ import java.util.Collection;
 @RequestMapping("/dict/type")
 @Tag(name = "字典类型表 控制器")
 public class DictTypeController {
-
     private final DictTypeService dictTypeService;
-    private final DictDataService dictDataService;
-    private final DictCacheManager dictCacheManager;
 
     @Operation(summary = "查询字典类型分页")
     @GetMapping("/{size}/{current}")
@@ -70,14 +65,7 @@ public class DictTypeController {
     @Operation(summary = "新增字典类型")
     @PostMapping
     public R<Void> addDictType(@Validated(DictTypeForm.Create.class) @RequestBody DictTypeForm dictTypeForm) {
-        val exists = dictTypeService.lambdaQuery()
-                .eq(DictType::getType, dictTypeForm.getType())
-                .exists();
-
-        if (exists) {
-            throw new DmlOperationException("字典类型已存在");
-        }
-        dictTypeService.save(dictTypeForm.toBean());
+        dictTypeService.addDictType(dictTypeForm);
         return R.ok();
     }
 
@@ -91,35 +79,15 @@ public class DictTypeController {
 
     @Operation(summary = "删除字典类型")
     @DeleteMapping("/{id}")
-    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#id")
     public R<Void> removeDictTypeById(@PathVariable("id") Long id) {
-        val dictDataList = dictDataService.lambdaQuery()
-                .eq(DictData::getTypeId, id)
-                .list();
-
-        if (!dictDataList.isEmpty()) {
-            throw new DmlOperationException("删除失败，尚有字典数据依赖");
-        }
-
-        dictTypeService.removeById(id);
+        dictTypeService.removeDictTypeByIds(Collections.singleton(id));
         return R.ok();
     }
 
     @Operation(summary = "批量删除字典类型")
     @DeleteMapping
-    public R<Void> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
-        if (!CollectionUtils.isEmpty(ids)) {
-            val dictDataList = dictDataService.lambdaQuery()
-                    .in(DictData::getTypeId, ids)
-                    .list();
-
-            if (!dictDataList.isEmpty()) {
-                throw new DmlOperationException("删除失败，尚有字典数据依赖");
-            }
-
-            dictCacheManager.evictByTypeIds(ids);
-            dictTypeService.removeByIds(ids);
-        }
+    public R<Void> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+        dictTypeService.removeDictTypeByIds(ids);
         return R.ok();
     }
 }

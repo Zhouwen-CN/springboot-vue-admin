@@ -10,6 +10,7 @@ import com.yeeiee.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
@@ -83,7 +84,7 @@ public class RoleController {
 
     @Operation(summary = "批量删除角色")
     @DeleteMapping
-    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "需要删除的角色id列表") Collection<Long> ids) {
+    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "需要删除的角色id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
     }

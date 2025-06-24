@@ -10,6 +10,7 @@ import com.yeeiee.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
@@ -80,7 +81,7 @@ public class UserController {
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping
-    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") Collection<Long> ids) {
+    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }

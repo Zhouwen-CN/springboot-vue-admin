@@ -12,9 +12,11 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -64,6 +66,11 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.BAD_REQUEST, String.format("分页SQL解析错误: %s", ExceptionUtils.getRootCauseMessage(e)));
     }
 
+    /**
+     * body 参数校验
+     * @param e 参数校验异常
+     * @return 错误信息
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<Void> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         val bindingResult = e.getBindingResult();
@@ -78,9 +85,35 @@ public class GlobalExceptionHandler {
             return R.error(HttpStatus.UNPROCESSABLE_ENTITY, globalError.getDefaultMessage());
         }
 
-        return R.error(HttpStatus.UNPROCESSABLE_ENTITY, "请求参数校验失败");
+        return R.error(HttpStatus.UNPROCESSABLE_ENTITY, "请求体参数校验失败");
     }
 
+    /**
+     * url参数校验
+     * @param e 参数校验异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public R<Void> handlerMethodValidationExceptionHandler(HandlerMethodValidationException e) {
+        val allValidationResults = e.getAllValidationResults();
+        if (CollectionUtils.isEmpty(allValidationResults)) {
+            return R.error(HttpStatus.BAD_REQUEST, e.getReason());
+        }
+        val parameterValidationResult = allValidationResults.get(0);
+        val parameterName = parameterValidationResult.getMethodParameter().getParameterName();
+        val resolvableErrors = parameterValidationResult.getResolvableErrors();
+        var defaultMessage = "请求参数校验失败";
+        if (!CollectionUtils.isEmpty(resolvableErrors)) {
+            defaultMessage = resolvableErrors.get(0).getDefaultMessage();
+        }
+        return R.error(HttpStatus.BAD_REQUEST, String.format("%s %s", parameterName, defaultMessage));
+    }
+
+    /**
+     * 默认异常处理
+     * @param e 默认异常
+     * @return 错误信息
+     */
     @ExceptionHandler(Exception.class)
     public R<Void> defaultExceptionHandler(Exception e) {
         this.saveErrorLog(e);

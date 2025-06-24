@@ -2,6 +2,7 @@ package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataVo;
 
 import java.util.Collection;
@@ -19,4 +20,6 @@ public interface DictDataService extends IService<DictData> {
     List<DictDataVo> getListByTypeId(Long typeId);
 
     List<Long> getTypeIdByDataIds(Collection<Long> ids);
+
+    void addDictData(DictDataForm dictDataForm);
 }

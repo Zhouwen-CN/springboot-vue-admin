@@ -8,15 +8,14 @@ import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DictDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,19 +71,7 @@ public class DictDataController {
     @Operation(summary = "新增字典数据")
     @PostMapping
     public R<Void> addDictData(@Validated(DictDataForm.Create.class) @RequestBody DictDataForm dictDataForm) {
-        val exists = dictDataService.exists(
-                Wrappers.<DictData>lambdaQuery()
-                        .eq(DictData::getTypeId, dictDataForm.getTypeId())
-                        .and(c1 -> c1.eq(DictData::getLabel, dictDataForm.getLabel())
-                                .or(c2 -> c2.eq(DictData::getValue, dictDataForm.getValue()))
-                        )
-        );
-
-        if (exists) {
-            throw new DmlOperationException("标签键或标签值已存在");
-        }
-
-        dictDataService.save(dictDataForm.toBean());
+        dictDataService.addDictData(dictDataForm);
         return R.ok();
     }
 
@@ -106,11 +93,9 @@ public class DictDataController {
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") Collection<Long> ids) {
-        if(!CollectionUtils.isEmpty(ids)){
-            dictCacheManager.evictByDataIds(ids);
-            dictDataService.removeByIds(ids);
-        }
+    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+        dictCacheManager.evictByDataIds(ids);
+        dictDataService.removeByIds(ids);
         return R.ok();
     }
 
