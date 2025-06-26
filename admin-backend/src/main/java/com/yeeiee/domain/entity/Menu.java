@@ -23,43 +23,43 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_menu`")
+@TableName("t_menu")
 @Schema(name = "Menu", description = "菜单表")
 public class Menu {
 
     @Schema(description = "主键")
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "标题")
-    @TableField("`title`")
+    @TableField(value = "title",keepGlobalFormat = true)
     private String title;
 
     @Schema(description = "访问路径")
-    @TableField("`access_path`")
+    @TableField(value = "access_path",keepGlobalFormat = true)
     private String accessPath;
 
     @Schema(description = "文件路径")
-    @TableField("`file_path`")
+    @TableField(value = "file_path",keepGlobalFormat = true)
     private String filePath;
 
     @Schema(description = "图标")
-    @TableField("`icon`")
+    @TableField(value = "icon",keepGlobalFormat = true)
     private String icon;
 
     @Schema(description = "父级菜单id")
-    @TableField("`pid`")
+    @TableField(value = "pid",keepGlobalFormat = true)
     private Long pid;
 
     @Schema(description = "是否缓存")
-    @TableField("`is_keep_alive`")
+    @TableField(value = "is_keep_alive",keepGlobalFormat = true)
     private Boolean keepAlive;
 
     @Schema(description = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "`update_time`", fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE,keepGlobalFormat = true)
     private LocalDateTime updateTime;
 }

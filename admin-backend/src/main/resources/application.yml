@@ -87,3 +87,10 @@ http:
     connect-timeout: 5s #连接超时
     socket-timeout: 60s #读取超时
     default-keep-alive: 60s #默认保活时间
+
+# mybatis-plus相关
+mybatis-plus:
+  global-config:
+    db-config:
+      column-format: "`%s`" #数据库字段关键字处理
+      table-format: "`%s`" #表名关键字处理

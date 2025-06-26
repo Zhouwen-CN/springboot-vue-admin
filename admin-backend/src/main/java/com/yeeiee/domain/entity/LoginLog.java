@@ -23,35 +23,35 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_login_log`")
+@TableName("t_login_log")
 @Schema(name = "LoginLog", description = "登录日志表")
 public class LoginLog {
 
     @Schema(description = "主键")
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField("`username`")
+    @TableField(value = "username",keepGlobalFormat = true)
     private String username;
 
     @Schema(description = "操作类型")
-    @TableField("`operation`")
+    @TableField(value = "operation",keepGlobalFormat = true)
     private String operation;
 
     @Schema(description = "操作状态")
-    @TableField("`status`")
+    @TableField(value = "status",keepGlobalFormat = true)
     private String status;
 
     @Schema(description = "ip地址")
-    @TableField("`ip`")
+    @TableField(value = "ip",keepGlobalFormat = true)
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField("`user_agent`")
+    @TableField(value = "user_agent",keepGlobalFormat = true)
     private String userAgent;
 
     @Schema(description = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
     private LocalDateTime createTime;
 }

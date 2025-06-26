@@ -20,7 +20,7 @@ import java.util.List;
  */
 public interface RoleMapper extends BaseMapper<Role> {
 
-    IPage<RoleMenuVo> selectRolePages(Page<RoleMenuVo> page, String searchName);
+    IPage<RoleMenuVo> selectRolePages(Page<RoleMenuVo> page,@Param("searchName") String searchName);
 
     List<RoleVo> selectRoleVoList();
 

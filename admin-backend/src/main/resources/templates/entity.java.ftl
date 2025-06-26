@@ -36,7 +36,7 @@ import lombok.experimental.Accessors;
     </#if>
 </#if>
 <#if table.convert>
-@TableName("`${schemaName}${table.name}`")
+@TableName("${schemaName}${table.name}")
 </#if>
 <#if springdoc>
 @Schema(name = "${entity}", description = "${table.comment!}")
@@ -76,22 +76,22 @@ public class ${entity} {
     <#if field.keyFlag>
         <#-- 主键 -->
         <#if field.keyIdentityFlag>
-    @TableId(value = "`${field.annotationColumnName}`", type = IdType.AUTO)
+    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         <#elseif idType??>
-    @TableId(value = "`${field.annotationColumnName}`", type = IdType.${idType})
+    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
         <#elseif field.convert>
-    @TableId("`${field.annotationColumnName}`")
+    @TableId("${field.annotationColumnName}")
         </#if>
         <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
         <#if field.convert>
-    @TableField(value = "`${field.annotationColumnName}`", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill}, keepGlobalFormat = true)
         <#else>
     @TableField(fill = FieldFill.${field.fill})
         </#if>
     <#elseif field.convert>
-    @TableField("`${field.annotationColumnName}`")
+    @TableField(value = "${field.annotationColumnName}", keepGlobalFormat = true)
     </#if>
     <#-- 乐观锁注解 -->
     <#if field.versionField>

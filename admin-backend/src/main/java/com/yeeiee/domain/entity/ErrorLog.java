@@ -23,42 +23,42 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_error_log`")
+@TableName("t_error_log")
 @Schema(name = "ErrorLog", description = "错误日志表")
 public class ErrorLog {
 
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField("`username`")
+    @TableField(value = "username",keepGlobalFormat = true)
     private String username;
 
     @Schema(description = "请求地址")
-    @TableField("`url`")
+    @TableField(value = "url",keepGlobalFormat = true)
     private String url;
 
     @Schema(description = "请求方式")
-    @TableField("`method`")
+    @TableField(value = "method",keepGlobalFormat = true)
     private String method;
 
     @Schema(description = "请求参数")
-    @TableField("`params`")
+    @TableField(value = "params",keepGlobalFormat = true)
     private String params;
 
     @Schema(description = "ip地址")
-    @TableField("`ip`")
+    @TableField(value = "ip",keepGlobalFormat = true)
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField("`user_agent`")
+    @TableField(value = "user_agent",keepGlobalFormat = true)
     private String userAgent;
 
     @Schema(description = "错误信息")
-    @TableField("`error_msg`")
+    @TableField(value = "error_msg",keepGlobalFormat = true)
     private String errorMsg;
 
     @Schema(description = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
     private LocalDateTime createTime;
 }

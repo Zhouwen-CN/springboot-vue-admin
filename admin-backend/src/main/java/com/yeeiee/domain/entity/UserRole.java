@@ -23,27 +23,27 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_user_role`")
+@TableName("t_user_role")
 @Schema(name = "UserRole", description = "用户角色关系表")
 public class UserRole {
 
     @Schema(description = "主键")
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "用户id")
-    @TableField("`user_id`")
+    @TableField(value = "user_id", keepGlobalFormat = true)
     private Long userId;
 
     @Schema(description = "角色id")
-    @TableField("`role_id`")
+    @TableField(value = "role_id", keepGlobalFormat = true)
     private Long roleId;
 
     @Schema(description = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "`update_time`", fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE, keepGlobalFormat = true)
     private LocalDateTime updateTime;
 }

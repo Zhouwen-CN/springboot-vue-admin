@@ -23,35 +23,35 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("`t_dict_data`")
+@TableName("t_dict_data")
 @Schema(name = "DictData", description = "字典数据表")
 public class DictData {
 
     @Schema(description = "主键")
-    @TableId(value = "`id`", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "字典类型id")
-    @TableField("`type_id`")
+    @TableField(value = "type_id",keepGlobalFormat = true)
     private Long typeId;
 
     @Schema(description = "字典键")
-    @TableField("`label`")
+    @TableField(value = "label",keepGlobalFormat = true)
     private String label;
 
     @Schema(description = "字典值")
-    @TableField("`value`")
+    @TableField(value = "value",keepGlobalFormat = true)
     private Integer value;
 
     @Schema(description = "字典排序")
-    @TableField("`sort`")
+    @TableField(value = "sort",keepGlobalFormat = true)
     private Integer sort;
 
     @Schema(description = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "`update_time`", fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE,keepGlobalFormat = true)
     private LocalDateTime updateTime;
 }
