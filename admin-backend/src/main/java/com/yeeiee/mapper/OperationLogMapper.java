@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.OperationLog;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.OperationLog;
  * </p>
  *
  * @author chen
- * @since 2025-01-07
+ * @since 2025-06-27
  */
 public interface OperationLogMapper extends BaseMapper<OperationLog> {
 

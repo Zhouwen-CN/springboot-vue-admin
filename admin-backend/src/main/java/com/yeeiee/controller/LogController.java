@@ -7,8 +7,6 @@ import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.enumeration.LoginOperationEnum;
-import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.OperationLogService;
@@ -18,11 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -57,10 +51,10 @@ public class LogController {
             lambdaQueryWrapper.like(LoginLog::getUsername, username);
         }
         if (operation != null) {
-            lambdaQueryWrapper.eq(LoginLog::getOperation, LoginOperationEnum.getOperation(operation));
+            lambdaQueryWrapper.eq(LoginLog::getOperation, operation);
         }
         if (status != null) {
-            lambdaQueryWrapper.eq(LoginLog::getStatus, OperationStatusEnum.getStatus(status));
+            lambdaQueryWrapper.eq(LoginLog::getStatus, status);
         }
         lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime);
 
@@ -82,7 +76,7 @@ public class LogController {
             lambdaQueryWrapper.like(OperationLog::getUsername, username);
         }
         if (status != null) {
-            lambdaQueryWrapper.eq(OperationLog::getStatus, OperationStatusEnum.getStatus(status));
+            lambdaQueryWrapper.eq(OperationLog::getStatus, status);
         }
         lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime);
 

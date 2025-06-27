@@ -2,6 +2,7 @@ package com.yeeiee.aspect;
 
 import com.yeeiee.domain.entity.OperationLog;
 import com.yeeiee.enumeration.OperationStatusEnum;
+import com.yeeiee.enumeration.RequestMethodEnum;
 import com.yeeiee.service.OperationLogService;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
@@ -82,11 +83,11 @@ public class OperationLogAspect {
         operationLog.setUsername(user.getUsername());
         operationLog.setOperation(operation.summary());
         operationLog.setUrl(httpServletRequest.getRequestURI());
-        operationLog.setMethod(httpServletRequest.getMethod());
+        operationLog.setMethod(RequestMethodEnum.from(httpServletRequest.getMethod()));
         String params = this.getParameter(method, pjp.getArgs());
         operationLog.setParams(params);
         operationLog.setTime(time);
-        operationLog.setStatus(operationStatusEnum.getStatus());
+        operationLog.setStatus(operationStatusEnum);
         operationLog.setIp(IPUtil.getClientIP(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
 

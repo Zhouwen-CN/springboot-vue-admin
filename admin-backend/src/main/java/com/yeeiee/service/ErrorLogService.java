@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.ErrorLog;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.ErrorLog;
  * </p>
  *
  * @author chen
- * @since 2025-01-07
+ * @since 2025-06-27
  */
 public interface ErrorLogService extends IService<ErrorLog> {
 

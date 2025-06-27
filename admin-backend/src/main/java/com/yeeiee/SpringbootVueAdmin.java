@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.AdviceMode;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author chen
  * @since 2024-04-27
  */
-// @EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableCaching
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @MapperScan("com.yeeiee.mapper")

@@ -57,8 +57,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             val request = RequestObjectUtil.getHttpServletRequest();
             val loginLog = new LoginLog();
             loginLog.setUsername(user.getUsername());
-            loginLog.setOperation(LoginOperationEnum.LOGOUT.getOperation());
-            loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
+            loginLog.setOperation(LoginOperationEnum.LOGOUT);
+            loginLog.setStatus(OperationStatusEnum.SUCCESS);
             loginLog.setIp(IPUtil.getClientIP(request));
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
             loginLogService.save(loginLog);
