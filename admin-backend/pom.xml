@@ -130,7 +130,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                    <!-- <classifier>exec</classifier> -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -138,6 +141,14 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- 编译前清理工作 -->

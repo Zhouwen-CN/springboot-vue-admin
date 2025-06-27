@@ -1,9 +1,9 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.mapper.LoginLogMapper;
 import com.yeeiee.service.LoginLogService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author chen
- * @since 2025-01-07
+ * @since 2025-06-27
  */
 @Service
 public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> implements LoginLogService {

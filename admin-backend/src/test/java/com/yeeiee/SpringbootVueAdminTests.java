@@ -18,5 +18,4 @@ class SpringbootVueAdminTests {
         System.out.println("All beans in the ApplicationContext:");
         Arrays.stream(beanNames).forEach(System.out::println);
     }
-
 }

@@ -67,8 +67,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (authentication instanceof UserAuthenticationToken) {
             val loginLog = new LoginLog();
             loginLog.setUsername(user.getUsername());
-            loginLog.setOperation(LoginOperationEnum.LOGIN.getOperation());
-            loginLog.setStatus(OperationStatusEnum.SUCCESS.getStatus());
+            loginLog.setOperation(LoginOperationEnum.LOGIN);
+            loginLog.setStatus(OperationStatusEnum.SUCCESS);
             loginLog.setIp(IPUtil.getClientIP(request));
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
             loginLogService.save(loginLog);

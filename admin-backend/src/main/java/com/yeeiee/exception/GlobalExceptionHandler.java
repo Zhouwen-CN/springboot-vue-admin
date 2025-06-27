@@ -2,6 +2,7 @@ package com.yeeiee.exception;
 
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.domain.vo.R;
+import com.yeeiee.enumeration.RequestMethodEnum;
 import com.yeeiee.service.ErrorLogService;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
@@ -126,7 +127,7 @@ public class GlobalExceptionHandler {
         val errorLog = new ErrorLog();
         errorLog.setUsername(user.getUsername());
         errorLog.setUrl(request.getRequestURI());
-        errorLog.setMethod(request.getMethod());
+        errorLog.setMethod(RequestMethodEnum.from(request.getMethod()));
         val parameterMap = RequestObjectUtil.getParameterMap(request);
         errorLog.setParams(JsonUtil.toJsonString(parameterMap));
         errorLog.setIp(IPUtil.getClientIP(request));

@@ -111,7 +111,7 @@ public final class MybatisGeneratorUtil {
                             .template("/templates/controller.java")
                             // .superClass(BaseController.class)
                             .enableRestStyle()
-                           .enableFileOverride()
+//                           .enableFileOverride()
                     ;
 
                     builder.serviceBuilder()
@@ -146,7 +146,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_student");
+        generator(args[0], "t_operation_log");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

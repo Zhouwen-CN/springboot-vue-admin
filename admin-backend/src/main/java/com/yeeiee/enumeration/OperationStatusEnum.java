@@ -1,5 +1,9 @@
 package com.yeeiee.enumeration;
 
+import com.baomidou.mybatisplus.annotation.IEnum;
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+import lombok.Getter;
+
 /**
  * <p>
  * 操作状态枚举类
@@ -8,9 +12,12 @@ package com.yeeiee.enumeration;
  * @author chen
  * @since 2025-01-13
  */
-public enum OperationStatusEnum {
+@Getter
+public enum OperationStatusEnum implements IEnum<Integer> {
     SUCCESS(1, "成功"),
-    FIELD(0, "失败");
+    FIELD(0, "失败"),
+    @JsonEnumDefaultValue
+    UNKNOWN(-1, "未知状态");
 
     private final String status;
     private final Integer code;
@@ -20,16 +27,13 @@ public enum OperationStatusEnum {
         this.code = code;
     }
 
-    public static String getStatus(Integer code) {
-        for (OperationStatusEnum value : values()) {
-            if (value.code.equals(code)) {
-                return value.status;
-            }
-        }
-        return "未知状态";
+    @Override
+    public String toString() {
+        return this.status;
     }
 
-    public String getStatus() {
-        return this.status;
+    @Override
+    public Integer getValue() {
+        return this.code;
     }
 }

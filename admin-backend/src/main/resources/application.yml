@@ -26,6 +26,7 @@ spring:
       write-dates-as-timestamps: false
     deserialization:
       read-enums-using-to-string: true
+      read-unknown-enum-values-using-default-value: true
       fail-on-unknown-properties: false
   # 缓存配置
   cache:

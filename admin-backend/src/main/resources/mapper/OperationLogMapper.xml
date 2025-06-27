@@ -5,17 +5,17 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.OperationLog">
-        <id column="id" property="id"/>
-        <result column="username" property="username"/>
-        <result column="operation" property="operation"/>
-        <result column="url" property="url"/>
-        <result column="method" property="method"/>
-        <result column="params" property="params"/>
-        <result column="time" property="time"/>
-        <result column="status" property="status"/>
-        <result column="ip" property="ip"/>
-        <result column="user_agent" property="userAgent"/>
-        <result column="create_time" property="createTime"/>
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="operation" property="operation" />
+        <result column="url" property="url" />
+        <result column="method" property="method" />
+        <result column="params" property="params" />
+        <result column="time" property="time" />
+        <result column="status" property="status" />
+        <result column="ip" property="ip" />
+        <result column="user_agent" property="userAgent" />
+        <result column="create_time" property="createTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

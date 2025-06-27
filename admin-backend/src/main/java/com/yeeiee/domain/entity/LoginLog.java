@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.time.LocalDateTime;
+
+import com.yeeiee.enumeration.LoginOperationEnum;
+import com.yeeiee.enumeration.OperationStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-01-07
+ * @since 2025-06-27
  */
 @Getter
 @Setter
@@ -32,26 +34,26 @@ public class LoginLog {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username",keepGlobalFormat = true)
+    @TableField(value = "username", keepGlobalFormat = true)
     private String username;
 
     @Schema(description = "操作类型")
-    @TableField(value = "operation",keepGlobalFormat = true)
-    private String operation;
+    @TableField(value = "operation", keepGlobalFormat = true)
+    private LoginOperationEnum operation;
 
     @Schema(description = "操作状态")
-    @TableField(value = "status",keepGlobalFormat = true)
-    private String status;
+    @TableField(value = "status", keepGlobalFormat = true)
+    private OperationStatusEnum status;
 
     @Schema(description = "ip地址")
-    @TableField(value = "ip",keepGlobalFormat = true)
+    @TableField(value = "ip", keepGlobalFormat = true)
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField(value = "user_agent",keepGlobalFormat = true)
+    @TableField(value = "user_agent", keepGlobalFormat = true)
     private String userAgent;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
     private LocalDateTime createTime;
 }

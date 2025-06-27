@@ -1,5 +1,9 @@
 package com.yeeiee.enumeration;
 
+import com.baomidou.mybatisplus.annotation.IEnum;
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+import lombok.Getter;
+
 /**
  * <p>
  * 登入操作枚举类
@@ -8,9 +12,12 @@ package com.yeeiee.enumeration;
  * @author chen
  * @since 2025-01-13
  */
-public enum LoginOperationEnum {
+@Getter
+public enum LoginOperationEnum implements IEnum<Integer> {
     LOGIN(1, "登入"),
-    LOGOUT(0, "退出");
+    LOGOUT(0, "退出"),
+    @JsonEnumDefaultValue
+    UNKNOWN(-1, "未知操作");
 
     private final String operation;
     private final Integer code;
@@ -20,17 +27,13 @@ public enum LoginOperationEnum {
         this.code = code;
     }
 
-    public static String getOperation(Integer code) {
-        for (LoginOperationEnum value : values()) {
-            if (value.code.equals(code)) {
-                return value.operation;
-            }
-        }
-
-        return "未知操作";
+    @Override
+    public Integer getValue() {
+        return this.code;
     }
 
-    public String getOperation() {
+    @Override
+    public String toString() {
         return this.operation;
     }
 }
