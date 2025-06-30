@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "MenuForm", description = "菜单表单")
-public class MenuForm implements FormToBean<Menu> {
+public class MenuForm implements FormToBeanHelper<Menu> {
     @NotNull(groups = {Update.class})
     @Schema(description = "菜单id")
     private Long id;

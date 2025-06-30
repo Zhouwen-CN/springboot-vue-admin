@@ -16,8 +16,10 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -81,7 +83,7 @@ public class RestTemplateConfig {
 
     @Bean
     @SneakyThrows
-    public LayeredConnectionSocketFactory sslSocketFactory(){
+    public LayeredConnectionSocketFactory sslSocketFactory() {
         // 1. 创建信任所有证书的 SSLContext
         // 使用 HttpClient 5 提供的 TrustAllStrategy
         SSLContext sslContext = SSLContexts.custom()
@@ -171,6 +173,10 @@ public class RestTemplateConfig {
         val factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(httpClient);
         factory.setConnectTimeout(connectTimeout);
-        return new RestTemplate(factory);
+
+        return new RestTemplateBuilder()
+                .requestFactory(() -> factory)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=utf-8")
+                .build();
     }
 }

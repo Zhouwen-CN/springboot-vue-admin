@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "DictTypeForm", description = "字典类型表单")
-public class DictTypeForm implements FormToBean<DictType> {
+public class DictTypeForm implements FormToBeanHelper<DictType> {
     @NotNull(groups = {Update.class})
     @Schema(description = "字典类型id")
     private Long id;
