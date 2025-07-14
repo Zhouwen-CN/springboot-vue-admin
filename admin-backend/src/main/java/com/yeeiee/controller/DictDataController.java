@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictData;
@@ -18,15 +17,7 @@ import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -55,16 +46,14 @@ public class DictDataController {
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
-            @RequestParam(value = "label", required = false) @Parameter(description = "搜索标签键") String label) {
-        val lambdaUpdateWrapper = Wrappers.lambdaUpdate(DictData.class)
-                .eq(DictData::getTypeId, typeId);
+            @RequestParam(value = "label", required = false) @Parameter(description = "搜索标签键") String label
+    ) {
+        val page = dictDataService.lambdaQuery()
+                .eq(DictData::getTypeId, typeId)
+                .like(StringUtils.hasText(label), DictData::getLabel, label)
+                .orderByAsc(DictData::getSort)
+                .page(Page.of(current, size));
 
-        if (StringUtils.hasText(label)) {
-            lambdaUpdateWrapper.like(DictData::getLabel, label);
-        }
-        lambdaUpdateWrapper.orderByAsc(DictData::getSort);
-
-        val page = dictDataService.page(new Page<>(current, size), lambdaUpdateWrapper);
         return R.ok(PageVo.fromPage(page));
     }
 
@@ -93,7 +82,7 @@ public class DictDataController {
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictCacheManager.evictByDataIds(ids);
         dictDataService.removeByIds(ids);
         return R.ok();

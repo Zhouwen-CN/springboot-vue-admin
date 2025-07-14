@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictType;
@@ -17,15 +16,7 @@ import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -49,16 +40,14 @@ public class DictTypeController {
     @GetMapping("/{size}/{current}")
     public R<PageVo<DictType>> getDictTypePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                                @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                               @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword) {
-        val lambdaQueryWrapper = new LambdaQueryWrapper<DictType>();
+                                               @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword
+    ) {
+        val page = dictTypeService.lambdaQuery()
+                .like(StringUtils.hasText(keyword), DictType::getName, keyword)
+                .or()
+                .like(StringUtils.hasText(keyword), DictType::getType, keyword)
+                .page(Page.of(current, size));
 
-        if (StringUtils.hasText(keyword)) {
-            lambdaQueryWrapper.like(DictType::getName, keyword)
-                    .or()
-                    .like(DictType::getType, keyword);
-        }
-
-        val page = dictTypeService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(PageVo.fromPage(page));
     }
 

@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.domain.entity.LoginLog;
@@ -17,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 /**
  * <p>
@@ -45,20 +46,13 @@ public class LogController {
             @RequestParam(required = false, name = "operation") @Parameter(description = "操作类型") Integer operation,
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
+        val page = loginLogService.lambdaQuery()
+                .like(StringUtils.hasText(username), LoginLog::getUsername, username)
+                .eq(Objects.nonNull(operation), LoginLog::getOperation, operation)
+                .eq(Objects.nonNull(status), LoginLog::getStatus, status)
+                .orderByDesc(LoginLog::getCreateTime)
+                .page(Page.of(current, size));
 
-        val lambdaQueryWrapper = new LambdaQueryWrapper<LoginLog>();
-        if (StringUtils.hasText(username)) {
-            lambdaQueryWrapper.like(LoginLog::getUsername, username);
-        }
-        if (operation != null) {
-            lambdaQueryWrapper.eq(LoginLog::getOperation, operation);
-        }
-        if (status != null) {
-            lambdaQueryWrapper.eq(LoginLog::getStatus, status);
-        }
-        lambdaQueryWrapper.orderByDesc(LoginLog::getCreateTime);
-
-        val page = loginLogService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(PageVo.fromPage(page));
     }
 
@@ -70,17 +64,12 @@ public class LogController {
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username,
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
+        val page = operationLogService.lambdaQuery()
+                .like(StringUtils.hasText(username), OperationLog::getUsername, username)
+                .eq(Objects.nonNull(status), OperationLog::getStatus, status)
+                .orderByDesc(OperationLog::getCreateTime)
+                .page(Page.of(current, size));
 
-        val lambdaQueryWrapper = new LambdaQueryWrapper<OperationLog>();
-        if (StringUtils.hasText(username)) {
-            lambdaQueryWrapper.like(OperationLog::getUsername, username);
-        }
-        if (status != null) {
-            lambdaQueryWrapper.eq(OperationLog::getStatus, status);
-        }
-        lambdaQueryWrapper.orderByDesc(OperationLog::getCreateTime);
-
-        val page = operationLogService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(PageVo.fromPage(page));
     }
 
@@ -91,14 +80,11 @@ public class LogController {
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username
     ) {
+        val page = errorLogService.lambdaQuery()
+                .like(StringUtils.hasText(username), ErrorLog::getUsername, username)
+                .orderByDesc(ErrorLog::getCreateTime)
+                .page(Page.of(current, size));
 
-        val lambdaQueryWrapper = new LambdaQueryWrapper<ErrorLog>();
-        if (StringUtils.hasText(username)) {
-            lambdaQueryWrapper.like(ErrorLog::getUsername, username);
-        }
-        lambdaQueryWrapper.orderByDesc(ErrorLog::getCreateTime);
-
-        val page = errorLogService.page(new Page<>(current, size), lambdaQueryWrapper);
         return R.ok(PageVo.fromPage(page));
     }
 }

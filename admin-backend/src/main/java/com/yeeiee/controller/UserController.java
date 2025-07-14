@@ -14,16 +14,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -47,7 +38,7 @@ public class UserController {
     public R<PageVo<UserRoleVo>> getUserPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-        val page = userService.getUserPages(new Page<>(current, size), searchName);
+        val page = userService.getUserPages(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(page));
     }
 
