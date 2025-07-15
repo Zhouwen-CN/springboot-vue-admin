@@ -1,67 +1,51 @@
 package com.yeeiee.aspect;
 
-import org.springframework.aop.Advisor;
-import org.springframework.aop.aspectj.AspectJExpressionPointcut;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionManager;
-import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
-import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import java.util.regex.Pattern;
 
 /**
  * <p>
- * 使用 aspectj 控制事务
+ * 使用 aop 控制事务
  * </p>
  *
  * @author chen
- * @since 2024-04-27
+ * @since 2025-07-15
  */
+@Aspect
 @Component
+@RequiredArgsConstructor
 public class TransactionAspect {
-    private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.yeeiee.service.impl.*.*(..))";
+    private final TransactionTemplate transactionTemplate;
+    private final Pattern READ_ONLY_PATTERN = Pattern.compile("^(get|select|list|find).*$");
 
-    /**
-     * dao 层：insert delete update select
-     * service 层：add remove modify get
-     */
-    @Bean
-    public TransactionInterceptor transactionInterceptor(TransactionManager transactionManager) {
-        DefaultTransactionAttribute txAttrRequired = new DefaultTransactionAttribute();
-        txAttrRequired.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    @Around("execution (public * com.yeeiee.service.impl.*.*(..))")
+    public Object around(ProceedingJoinPoint pjp) {
+        val signature = pjp.getSignature();
+        val signatureName = signature.getName();
 
-        DefaultTransactionAttribute txAttrRequiredReadonly = new DefaultTransactionAttribute();
-        txAttrRequiredReadonly.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        txAttrRequiredReadonly.setReadOnly(true);
+        val isReadOnly = READ_ONLY_PATTERN.matcher(signatureName).matches();
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        transactionTemplate.setReadOnly(isReadOnly);
+        transactionTemplate.setName(signatureName);
 
-        NameMatchTransactionAttributeSource transactionAttributeSource = new NameMatchTransactionAttributeSource();
-
-        // read
-        transactionAttributeSource.addTransactionalMethod("select*", txAttrRequiredReadonly);
-        transactionAttributeSource.addTransactionalMethod("get*", txAttrRequiredReadonly);
-        transactionAttributeSource.addTransactionalMethod("query*", txAttrRequiredReadonly);
-        transactionAttributeSource.addTransactionalMethod("find*", txAttrRequiredReadonly);
-
-        // write
-        transactionAttributeSource.addTransactionalMethod("insert*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("add*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("save*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("create*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("delete*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("remove*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("update*", txAttrRequired);
-        transactionAttributeSource.addTransactionalMethod("modify*", txAttrRequired);
-
-        return new TransactionInterceptor(transactionManager, transactionAttributeSource);
-    }
-
-    @Bean
-    public Advisor transactionAdviceAdvisor(TransactionInterceptor transactionInterceptor) {
-        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-        // 定义切面
-        pointcut.setExpression(AOP_POINTCUT_EXPRESSION);
-        return new DefaultPointcutAdvisor(pointcut, transactionInterceptor);
+        // 这里最好不要捕获异常，捕获了也不知道返回什么（鉴权过程中的异常，比如事务超时，需要手动处理）
+        return transactionTemplate.execute(new TransactionCallback<>() {
+            @SneakyThrows
+            @Override
+            public Object doInTransaction(TransactionStatus status) {
+                return pjp.proceed();
+            }
+        });
     }
 }

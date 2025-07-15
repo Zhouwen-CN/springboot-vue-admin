@@ -53,7 +53,7 @@ public class UserAuthenticationProcessingFilter extends AbstractAuthenticationPr
         try {
             loginForm = JsonUtil.parse(body, LoginForm.class);
         } catch (JsonProcessingException e) {
-            throw new NamedAuthenticationException("未知用户", "请求参数解析失败");
+            throw new NamedAuthenticationException("请求参数解析失败");
         }
 
         val unauthenticated = new UserAuthenticationToken();

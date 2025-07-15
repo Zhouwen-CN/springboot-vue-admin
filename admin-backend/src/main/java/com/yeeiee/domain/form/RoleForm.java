@@ -27,7 +27,7 @@ public class RoleForm {
     @Schema(description = "角色id")
     private Long id;
     @NotBlank(groups = {Create.class, Update.class})
-    @Length(groups = {Create.class, Update.class}, min = 5, max = 15)
+    @Length(groups = {Create.class, Update.class}, min = 3, max = 15)
     @Schema(description = "角色名称")
     private String roleName;
     @NotBlank(groups = {Create.class, Update.class})

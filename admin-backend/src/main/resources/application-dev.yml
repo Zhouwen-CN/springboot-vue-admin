@@ -4,3 +4,7 @@ decorator:
     p6spy:
       # 日志类
       logging: SYSOUT
+
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug #事务debug日志

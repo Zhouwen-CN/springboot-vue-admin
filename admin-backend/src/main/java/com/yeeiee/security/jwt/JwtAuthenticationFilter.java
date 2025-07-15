@@ -1,5 +1,6 @@
 package com.yeeiee.security.jwt;
 
+import com.yeeiee.domain.entity.User;
 import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.UserService;
 import com.yeeiee.utils.RequestObjectUtil;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -46,8 +48,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             val username = payload.getSubject();
             val version = payload.get("version", Long.class);
 
-            // 加载与 token 关联的用户
-            val user = userService.getUserByUsername(username);
+            // 加载与 token 关联的用户（不能抛出异常，会中断 filter）
+            User user = null;
+            try {
+                user = userService.getUserByUsername(username);
+            } catch (Exception e) {
+                log.error("Jwt filter exception by: " + ExceptionUtils.getRootCauseMessage(e));
+            }
 
             // 检查 token version
             if (user != null && version == user.getTokenVersion() - 1) {

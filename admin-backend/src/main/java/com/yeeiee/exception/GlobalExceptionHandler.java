@@ -13,6 +13,7 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -108,6 +109,17 @@ public class GlobalExceptionHandler {
             defaultMessage = resolvableErrors.get(0).getDefaultMessage();
         }
         return R.error(HttpStatus.BAD_REQUEST, String.format("%s %s", parameterName, defaultMessage));
+    }
+
+    /**
+     * 事务超时异常处理
+     *
+     * @param e 事务超时异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(TransactionTimedOutException.class)
+    public R<Void> transactionTimedOutExceptionHandler(TransactionTimedOutException e) {
+        return R.error(HttpStatus.REQUEST_TIMEOUT, ExceptionUtils.getRootCauseMessage(e));
     }
 
     /**

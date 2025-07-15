@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: dev
+  transaction:
+    default-timeout: 30s #事务超时时间
+    rollback-on-commit-failure: true #提交失败回滚
   # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

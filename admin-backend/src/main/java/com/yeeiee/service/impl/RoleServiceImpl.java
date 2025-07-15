@@ -1,6 +1,5 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -133,7 +132,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         this.removeById(id);
-        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>()
+        roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery()
                 .eq(RoleMenu::getRoleId, id)
         );
     }
@@ -151,7 +150,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         this.removeByIds(ids);
 
-        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>()
+        roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery()
                 .in(RoleMenu::getRoleId, ids)
         );
     }

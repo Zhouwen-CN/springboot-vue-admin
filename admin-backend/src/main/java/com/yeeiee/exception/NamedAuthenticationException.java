@@ -14,11 +14,14 @@ import org.springframework.security.core.AuthenticationException;
 @Getter
 public class NamedAuthenticationException extends AuthenticationException {
 
-    private final String username;
+    private String username;
+
+    public NamedAuthenticationException(String msg){
+        super(msg);
+    }
 
     public NamedAuthenticationException(String username, String msg) {
         super(msg);
-
         this.username = username;
     }
 }

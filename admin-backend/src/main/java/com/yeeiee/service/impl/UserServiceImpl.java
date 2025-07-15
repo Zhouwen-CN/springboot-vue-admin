@@ -1,7 +1,7 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.LoginLog;
@@ -75,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val username = userForm.getUsername();
         val password = userForm.getPassword();
 
-        val exists = this.exists(new LambdaQueryWrapper<User>()
+        val exists = this.exists(Wrappers.<User>lambdaQuery()
                 .eq(User::getUsername, username)
         );
 
@@ -155,7 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         this.removeById(id);
-        userRoleService.remove(new LambdaQueryWrapper<UserRole>()
+        userRoleService.remove(Wrappers.<UserRole>lambdaQuery()
                 .eq(UserRole::getUserId, id)
         );
     }
@@ -168,7 +168,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         this.removeByIds(ids);
 
-        userRoleService.remove(new LambdaQueryWrapper<UserRole>()
+        userRoleService.remove(Wrappers.<UserRole>lambdaQuery()
                 .in(UserRole::getUserId, ids)
         );
     }

@@ -1,6 +1,5 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Menu;
@@ -71,7 +70,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         this.removeById(id);
 
-        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>()
+        roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery()
                 .eq(RoleMenu::getMenuId, id)
         );
     }

@@ -40,8 +40,9 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         // 1.获取登入用户名
         var username = "未知用户";
 
-        if (exception instanceof NamedAuthenticationException) {
-            username = ((NamedAuthenticationException) exception).getUsername();
+        if (exception instanceof NamedAuthenticationException namedAuthenticationException) {
+            val exceptionUsername = namedAuthenticationException.getUsername();
+            if(exceptionUsername != null) username = exceptionUsername;
         }
 
         // 2.写入日志
