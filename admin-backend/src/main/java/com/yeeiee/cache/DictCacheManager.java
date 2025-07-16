@@ -33,7 +33,7 @@ public class DictCacheManager {
      * @param typeId 字典类型id
      * @return 字典数据视图对象列表
      */
-    @Cacheable(cacheNames = DICT_CACHE, key = "#typeId")
+    @Cacheable(cacheNames = DICT_CACHE, key = "#p0")
     public List<DictDataVo> getDictByTypeId(Long typeId) {
         return dictDataService.getListByTypeId(typeId);
     }
