@@ -24,6 +24,17 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring-boot.version>3.2.12</spring-boot.version>
+        <mybatis-plus.version>3.5.7</mybatis-plus.version>
+        <jjwt.version>0.12.6</jjwt.version>
+        <openapi.version>2.5.0</openapi.version>
+        <p6spy.verison>1.10.0</p6spy.verison>
+
+        <!-- maven plugin -->
+        <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
     </properties>
 
     <profiles>
@@ -50,7 +61,80 @@
         </profile>
     </profiles>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- springboot dependencies -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- mybatis-plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- mybatis plus generator -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- open api -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${openapi.version}</version>
+            </dependency>
+
+            <!-- sql print -->
+            <dependency>
+                <groupId>com.github.gavlyukovskiy</groupId>
+                <artifactId>p6spy-spring-boot-starter</artifactId>
+                <version>${p6spy.verison}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <!--
                 问题:

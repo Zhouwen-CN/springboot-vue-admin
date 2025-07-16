@@ -2,27 +2,19 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.12</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.yeeiee</groupId>
+        <artifactId>springboot-vue-admin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.yeeiee</groupId>
     <artifactId>admin-backend</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>admin-backend</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mybatis-plus.version>3.5.7</mybatis-plus.version>
-        <jjwt.version>0.12.6</jjwt.version>
-        <openapi.version>2.5.0</openapi.version>
-        <p6spy.verison>1.10.0</p6spy.verison>
     </properties>
 
     <dependencies>
@@ -73,21 +65,18 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
         </dependency>
 
         <!-- open api -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${openapi.version}</version>
         </dependency>
 
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
 
         <!-- mysql connector -->
@@ -101,7 +90,6 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis-plus.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -120,7 +108,6 @@
         <dependency>
             <groupId>com.github.gavlyukovskiy</groupId>
             <artifactId>p6spy-spring-boot-starter</artifactId>
-            <version>${p6spy.verison}</version>
         </dependency>
 
         <!-- lombok -->
@@ -150,7 +137,19 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <!-- 打包是否包含 system scope -->
+                    <includeSystemScope>true</includeSystemScope>
+                    <!-- mvn package 生成的原始 jar包不被 repackage 目标重命名，可执行jar包的名称变为*-exec.jar。原始 jar包就可以被其他项目依赖了 -->
+                    <classifier>exec</classifier>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- 编译前清理工作 -->
