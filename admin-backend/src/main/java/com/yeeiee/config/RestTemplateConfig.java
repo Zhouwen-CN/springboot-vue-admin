@@ -16,11 +16,13 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateBuilderConfigurer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.NoOpResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
@@ -169,13 +171,17 @@ public class RestTemplateConfig {
      * @return 模版类
      */
     @Bean
-    public RestTemplate restTemplate(HttpClient httpClient) {
+    public RestTemplate restTemplate(RestTemplateBuilderConfigurer restTemplateBuilderConfigurer, HttpClient httpClient) {
         val factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(httpClient);
         factory.setConnectTimeout(connectTimeout);
 
-        return new RestTemplateBuilder()
-                .requestFactory(() -> factory)
+        var builder = new RestTemplateBuilder();
+        builder = restTemplateBuilderConfigurer.configure(builder);
+
+        return builder.requestFactory(() -> factory)
+                // 默认4xx，5xx会抛出异常
+                .errorHandler(new NoOpResponseErrorHandler())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=utf-8")
                 .build();
     }
