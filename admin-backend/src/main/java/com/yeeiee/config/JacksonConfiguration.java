@@ -63,7 +63,7 @@ public class JacksonConfiguration {
     @Bean("redisObjectMapper")
     public ObjectMapper redisObjectMapper(Jackson2ObjectMapperBuilder builder) {
         val objectMapper =  builder.createXmlMapper(false).build();
-        // 解决泛型类型擦除问题（关键配置）
+        // https://juejin.cn/post/7161704792723554341
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         return objectMapper;
     }

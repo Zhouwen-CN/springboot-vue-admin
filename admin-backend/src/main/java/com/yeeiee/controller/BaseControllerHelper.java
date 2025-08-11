@@ -2,7 +2,8 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -18,10 +19,10 @@ public interface BaseControllerHelper<D> {
     /**
      * 分页条件
      *
-     * @param request 请求对象，用来获取url参数
+     * @param params url 请求参数
      * @return query wrapper
      */
-    default Wrapper<D> pageHelper(HttpServletRequest request) {
+    default Wrapper<D> pageHelper(Map<String, String> params) {
         return Wrappers.emptyWrapper();
     }
 }

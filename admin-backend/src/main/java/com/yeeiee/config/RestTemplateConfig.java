@@ -1,5 +1,7 @@
 package com.yeeiee.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.apache.hc.client5.http.classic.HttpClient;
@@ -13,10 +15,9 @@ import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.ssl.SSLContexts;
-import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateBuilderConfigurer;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,50 +38,53 @@ import java.util.concurrent.TimeUnit;
  * @author chen
  * @since 2025-05-23
  */
+
+@Getter
+@Setter
 @Configuration
+@ConfigurationProperties(prefix = "http")
 public class RestTemplateConfig {
 
-    /**
-     * 最大连接
-     */
-    @Value("${http.pool.max-total}")
-    private Integer maxTotal;
+    private PoolConfig pool = new PoolConfig();
+    private ConnectConfig connect = new ConnectConfig();
 
-    /**
-     * 每个路由最大连接
-     */
-    @Value("${http.pool.max-per-route}")
-    private Integer maxPerRoute;
+    @Getter
+    @Setter
+    public static class PoolConfig {
+        /**
+         * 最大连接，默认100
+         */
+        private Integer maxTotal = 100;
 
-    /**
-     * 从连接池获取连接超时时间
-     */
-    @Value("${http.pool.obtain-connection-timeout}")
-    private Duration obtainConnectionTimeout;
+        /**
+         * 每个路由最大连接，默认10
+         */
+        private Integer maxPerRoute = 10;
 
-    /**
-     * 连接在空闲 指定时间 后再次使用，需验证有效性
-     */
-    @Value("${http.pool.validate-after-inactivity}")
-    private Duration validateAfterIdle;
+        /**
+         * 从连接池获取连接超时时间，默认5s
+         */
+        private Duration obtainConnectionTimeout = Duration.ofSeconds(5);
+    }
 
-    /**
-     * 建立连接超时时间
-     */
-    @Value("${http.connect.connect-timeout}")
-    private Duration connectTimeout;
+    @Getter
+    @Setter
+    public static class ConnectConfig{
+        /**
+         * 建立连接超时时间，默认5s
+         */
+        private Duration connectTimeout = Duration.ofSeconds(5);
 
-    /**
-     * 读取超时时间
-     */
-    @Value("${http.connect.socket-timeout}")
-    private Duration socketTimeout;
+        /**
+         * 读取超时时间，默认60s
+         */
+        private Duration socketTimeout = Duration.ofSeconds(60);
 
-    /**
-     * 默认的保持连接时间，如果响应头没有的话
-     */
-    @Value("${http.connect.default-keep-alive}")
-    private Duration defaultKeepAlive;
+        /**
+         * 默认的保持连接时间，如果响应头没有的话，默认60s
+         */
+        private Duration defaultKeepAlive = Duration.ofSeconds(60);
+    }
 
 
     @Bean
@@ -113,16 +117,15 @@ public class RestTemplateConfig {
                 .build();
 
         // 最大连接数
-        manager.setMaxTotal(maxTotal);
+        manager.setMaxTotal(this.pool.maxTotal);
         // 设置每个路由默认并发数
-        manager.setDefaultMaxPerRoute(maxPerRoute);
+        manager.setDefaultMaxPerRoute(this.pool.maxPerRoute);
 
         manager.setDefaultConnectionConfig(
                 ConnectionConfig.custom()
-                        .setValidateAfterInactivity(TimeValue.of(validateAfterIdle))
-                        .setConnectTimeout(Timeout.of(connectTimeout))
+                        .setConnectTimeout(Timeout.of(this.connect.connectTimeout))
                         // 通过源码发现，等同于 RequestConfig.setResponseTimeout()，如果ResponseTimeout不为空的话
-                        .setSocketTimeout(Timeout.of(socketTimeout))
+                        .setSocketTimeout(Timeout.of(this.connect.socketTimeout))
                         .build()
         );
 
@@ -135,8 +138,8 @@ public class RestTemplateConfig {
     @Bean
     public RequestConfig requestConfig() {
         return RequestConfig.custom()
-                .setConnectionRequestTimeout(Timeout.of(obtainConnectionTimeout))
-                .setDefaultKeepAlive(defaultKeepAlive.toMillis(), TimeUnit.MILLISECONDS)
+                .setConnectionRequestTimeout(Timeout.of(this.pool.obtainConnectionTimeout))
+                .setDefaultKeepAlive(this.connect.defaultKeepAlive.toMillis(), TimeUnit.MILLISECONDS)
                 .build();
     }
 
@@ -174,7 +177,7 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(RestTemplateBuilderConfigurer restTemplateBuilderConfigurer, HttpClient httpClient) {
         val factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(httpClient);
-        factory.setConnectTimeout(connectTimeout);
+        factory.setConnectTimeout(this.connect.connectTimeout);
 
         var builder = new RestTemplateBuilder();
         builder = restTemplateBuilderConfigurer.configure(builder);

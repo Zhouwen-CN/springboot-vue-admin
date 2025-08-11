@@ -5,11 +5,13 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -21,30 +23,57 @@ import java.util.Optional;
 
 /**
  * <p>
- *
+ * token提供者
  * </p>
  *
  * @author chen
  * @since 2025-06-04
  */
+
 @RequiredArgsConstructor
 @Component
+@ConfigurationProperties(prefix = "jwt")
 public class JwtTokenProvider implements InitializingBean {
-    @Value("${jwt.access.key}")
-    private String accessKey;
-    @Value("${jwt.access.expiration}")
-    private Duration accessExpiration;
-    @Value("${jwt.refresh.key}")
-    private String refreshKey;
-    @Value("${jwt.refresh.expiration}")
-    private Duration refreshExpiration;
+    @Setter
+    @Getter
+    private AccessTokenConfig access;
+    @Setter
+    @Getter
+    private RefreshTokenConfig refresh;
+
+    @Getter
+    @Setter
+    public static class AccessTokenConfig{
+        /**
+         * 访问token密钥
+         */
+        private String key;
+        /**
+         * 访问token过期时间
+         */
+        private Duration expiration;
+    }
+
+    @Getter
+    @Setter
+    public static class RefreshTokenConfig{
+        /**
+         * 刷新token密钥
+         */
+        private String key;
+        /**
+         * 刷新token过期时间
+         */
+        private Duration expiration;
+    }
+
     private SecretKey accessSecretKey;
     private SecretKey refreshSecretKey;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        accessSecretKey = Keys.hmacShaKeyFor(accessKey.getBytes(StandardCharsets.UTF_8));
-        refreshSecretKey = Keys.hmacShaKeyFor(refreshKey.getBytes(StandardCharsets.UTF_8));
+        accessSecretKey = Keys.hmacShaKeyFor(this.access.key.getBytes(StandardCharsets.UTF_8));
+        refreshSecretKey = Keys.hmacShaKeyFor(this.refresh.key.getBytes(StandardCharsets.UTF_8));
     }
 
     @SneakyThrows
@@ -65,11 +94,11 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public String generateAccessToken(String username, List<String> roles, Long tokenVersion) {
-        return generateToken(username, roles, tokenVersion, accessSecretKey, accessExpiration);
+        return generateToken(username, roles, tokenVersion, accessSecretKey, this.access.expiration);
     }
 
     public String generateRefreshToken(String username, List<String> roles, Long tokenVersion) {
-        return generateToken(username, roles, tokenVersion, refreshSecretKey, refreshExpiration);
+        return generateToken(username, roles, tokenVersion, refreshSecretKey, this.refresh.expiration);
     }
 
     private Optional<Jws<Claims>> validateToken(String token, SecretKey secretKey) {

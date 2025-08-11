@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @ConditionalOnProperty(prefix = "spring.cache", name = "type", havingValue = "redis")
-public class CacheConfig {
+public class RedisCacheConfig {
     /**
      * cache redis 配置
      * @param cacheProperties cache配置

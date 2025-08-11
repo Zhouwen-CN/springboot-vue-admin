@@ -46,7 +46,8 @@ public class WebSecurityConfig {
             "/js/**.js",
             "/css/**.css",
             "/images/**",
-            "/assets/**"
+            "/assets/**",
+            "/actuator/**"
     };
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {

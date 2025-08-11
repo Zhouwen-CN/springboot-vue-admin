@@ -1,6 +1,7 @@
 spring:
   profiles:
     active: dev
+  # 事务
   transaction:
     default-timeout: 30s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
@@ -31,13 +32,13 @@ spring:
       read-enums-using-to-string: true
       read-unknown-enum-values-using-default-value: true
       fail-on-unknown-properties: false
-  # 缓存配置
+  # 缓存配置（默认放在内存）
   cache:
     type: simple
     redis:
       key-prefix: "sv-admin::" #缓存key前缀
       time-to-live: 1h #缓存过期时间
-      cache-null-values: false #是否存储空指
+      cache-null-values: true #是否存储空值
       use-key-prefix: true #是否使用key前缀
   # redis配置
   data:
@@ -86,7 +87,6 @@ http:
     max-total: 100 #最大连接数
     max-per-route: 10 #每个路由最大连接数
     obtain-connection-timeout: 5s #获取连接超时
-    validate-after-inactivity: 30s #空闲连接检查间隔
   connect:
     connect-timeout: 5s #连接超时
     socket-timeout: 60s #读取超时
@@ -98,3 +98,18 @@ mybatis-plus:
     db-config:
       column-format: "`%s`" #数据库字段关键字处理
       table-format: "`%s`" #表名关键字处理
+
+management:
+  health:
+    redis:
+      enabled: false #禁用redis健康检查，redis不一定启用
+  endpoints:
+    web:
+      exposure:
+#        include: "*"
+        include: prometheus
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 set -x
-app_name='admin-backend-1.0.0-SNAPSHOT-exec.jar'
+app_name='admin-backend-1.0.0-SNAPSHOT.jar'
 active_profile='prod'
 
 function start_app(){
@@ -32,6 +32,7 @@ case $1 in
 ;;
 'restart' )
     stop_app
+    sleep 2
     start_app
 ;;
 * )

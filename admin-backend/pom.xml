@@ -61,6 +61,16 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+        <!-- actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- jwt -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -110,6 +120,13 @@
             <artifactId>p6spy-spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- configuration-processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -136,11 +153,11 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                         </exclude>
+                        <exclude>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                        </exclude>
                     </excludes>
-                    <!-- 打包是否包含 system scope -->
-                    <includeSystemScope>true</includeSystemScope>
-                    <!-- mvn package 生成的原始 jar包不被 repackage 目标重命名，可执行jar包的名称变为*-exec.jar。原始 jar包就可以被其他项目依赖了 -->
-                    <classifier>exec</classifier>
                 </configuration>
                 <executions>
                     <execution>

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.vo.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -42,8 +42,8 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
     @GetMapping("/{size}/{current}")
     public R<Page<D>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                               @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                              HttpServletRequest request) {
-        val page = service.page(new Page<>(current, size), pageHelper(request));
+                              @RequestParam Map<String,String> params) {
+        val page = service.page(new Page<>(current, size), pageHelper(params));
         return R.ok(page);
     }
 
