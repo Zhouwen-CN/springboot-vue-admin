@@ -100,6 +100,9 @@ mybatis-plus:
       table-format: "`%s`" #表名关键字处理
 
 management:
+  observations:
+    annotations:
+      enabled: true
   health:
     redis:
       enabled: false #禁用redis健康检查，redis不一定启用
@@ -108,8 +111,3 @@ management:
       exposure:
 #        include: "*"
         include: prometheus
-  info:
-    java:
-      enabled: true
-    os:
-      enabled: true
