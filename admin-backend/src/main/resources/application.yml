@@ -3,7 +3,7 @@ spring:
     active: dev
   # 事务
   transaction:
-    default-timeout: 30s #事务超时时间
+    default-timeout: 1s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
   # 数据源
   datasource:
@@ -62,6 +62,8 @@ decorator:
   datasource:
     p6spy:
       log-format: "Execute SQL in %(executionTime)ms: %(sqlSingleLine)"
+      logging: custom
+      custom-appender-class: com.yeeiee.config.P6spySqlFormatConfig
 
 # 关闭 swagger-ui，前端已经整合
 springdoc:

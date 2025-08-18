@@ -6,13 +6,6 @@ spring:
         cachecontrol:
           max-age: 1d
 
-# 控制台打印 sql
-decorator:
-  datasource:
-    p6spy:
-      # 日志类
-      logging: slf4j
-
 # 日志
 logging:
   level:
@@ -23,4 +16,4 @@ logging:
     dateformat: yyyy-MM-dd HH:mm:ss
   logback:
     rollingpolicy:
-      total-size-cap: 500MB
+      total-size-cap: 50MB
