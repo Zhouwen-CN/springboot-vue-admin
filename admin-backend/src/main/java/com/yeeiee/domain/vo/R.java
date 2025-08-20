@@ -50,6 +50,10 @@ public final class R<T> {
         return new R<>(false, null, httpStatus.value(), ExceptionUtils.getRootCauseMessage(e));
     }
 
+    public static R<Void> error(int httpStatus, String message){
+        return new R<>(false, null, httpStatus, message);
+    }
+
     public static R<Void> error(HttpStatus httpStatus, String message) {
         return new R<>(false, null, httpStatus.value(), message);
     }

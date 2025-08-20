@@ -1,3 +1,4 @@
 logging:
   level:
-    org.springframework.jdbc.support.JdbcTransactionManager: debug #事务debug日志
+    org.springframework.jdbc.support.JdbcTransactionManager: info #事务debug日志
+    org.apache.hc.client5.http.impl: debug

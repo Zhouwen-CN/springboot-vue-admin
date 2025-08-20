@@ -1,5 +1,6 @@
 package com.yeeiee.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
@@ -62,7 +63,8 @@ public class JacksonConfiguration {
 
     @Bean("redisObjectMapper")
     public ObjectMapper redisObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        val objectMapper =  builder.createXmlMapper(false).build();
+        val objectMapper = builder.createXmlMapper(false).build();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         // https://juejin.cn/post/7161704792723554341
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         return objectMapper;

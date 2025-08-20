@@ -122,6 +122,17 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.REQUEST_TIMEOUT, ExceptionUtils.getRootCauseMessage(e));
     }
 
+
+    /**
+     * restClient 响应状态码异常处理器
+     * @param e 响应状态码异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(HttpStatusException.class)
+    public R<Void> httpStatusExceptionHandler(HttpStatusException e) {
+        return R.error(e.getHttpStatus(), e.getMessage());
+    }
+
     /**
      * 默认异常处理
      * @param e 默认异常

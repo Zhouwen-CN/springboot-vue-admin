@@ -38,7 +38,7 @@ spring:
     redis:
       key-prefix: "sv-admin::" #缓存key前缀
       time-to-live: 1h #缓存过期时间
-      cache-null-values: true #是否存储空值
+      cache-null-values: false #是否存储空值
       use-key-prefix: true #是否使用key前缀
   # redis配置
   data:
