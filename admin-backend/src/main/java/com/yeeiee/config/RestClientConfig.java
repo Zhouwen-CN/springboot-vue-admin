@@ -9,8 +9,8 @@ import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
-import org.apache.hc.client5.http.io.HttpClientConnectionManager;
 import org.apache.hc.client5.http.socket.LayeredConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
@@ -100,14 +100,13 @@ public class RestClientConfig {
                 .build();
     }
 
-
     /**
      * http连接池
      *
      * @return 连接池
      */
     @Bean
-    public HttpClientConnectionManager httpClientConnectionManager(LayeredConnectionSocketFactory sslSocketFactory) {
+    public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager(LayeredConnectionSocketFactory sslSocketFactory) {
         val manager = PoolingHttpClientConnectionManagerBuilder.create()
                 .setSSLSocketFactory(sslSocketFactory)
                 .build();
@@ -146,16 +145,16 @@ public class RestClientConfig {
     /**
      * http客户端
      *
-     * @param httpClientConnectionManager 客户端连接池
-     * @param requestConfig               请求配置
+     * @param poolingHttpClientConnectionManager 客户端连接池
+     * @param requestConfig 请求配置
      * @return 客户端
      * 设置默认请求头,拦截器啥的
      */
     @Bean
-    public HttpClient httpClient(HttpClientConnectionManager httpClientConnectionManager, RequestConfig requestConfig) {
+    public HttpClient httpClient(PoolingHttpClientConnectionManager poolingHttpClientConnectionManager, RequestConfig requestConfig) {
         return HttpClientBuilder.create()
                 .setDefaultRequestConfig(requestConfig)
-                .setConnectionManager(httpClientConnectionManager)
+                .setConnectionManager(poolingHttpClientConnectionManager)
                 // 定时清除过期的连接（线程默认休眠5秒）
                 .evictExpiredConnections()
                 // 禁用一些用不到的模块
