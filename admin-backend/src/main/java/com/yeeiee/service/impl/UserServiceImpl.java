@@ -44,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserMapper userMapper;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Value("${user.default-password}")
+    @Value("${custom.user.default-password}")
     private String defaultPassword;
 
     @Override

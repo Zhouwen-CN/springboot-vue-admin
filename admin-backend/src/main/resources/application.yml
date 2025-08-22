@@ -5,7 +5,7 @@ spring:
   transaction:
     default-timeout: 1s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
-  # 数据源
+  # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
@@ -44,7 +44,7 @@ spring:
   data:
     redis:
       database: 0
-#      password: hb56.#sllF
+#      password: 123456
       host: 127.0.0.1
       port: 6379
       connect-timeout: 5s #连接超时
@@ -70,37 +70,14 @@ springdoc:
   swagger-ui:
     enabled: false
 
-# 重置默认密码
-user:
-  default-password: 123456
-
-# jwt相关
-jwt:
-  access:
-    key: LyGR^*tpCYA&c#HMeJDndUKPShTrX%F!
-    expiration: 1d
-  refresh:
-    key: Y$tDyV!Sx&XZMnqT^AEpkQ#Wgvcs%F@w
-    expiration: 7d
-
-# http相关
-http:
-  pool:
-    max-total: 100 #最大连接数
-    max-per-route: 10 #每个路由最大连接数
-    obtain-connection-timeout: 5s #获取连接超时
-  connect:
-    connect-timeout: 5s #连接超时
-    socket-timeout: 60s #读取超时
-    default-keep-alive: 60s #默认保活时间
-
-# mybatis-plus相关
+# mybatis-plus
 mybatis-plus:
   global-config:
     db-config:
       column-format: "`%s`" #数据库字段关键字处理
       table-format: "`%s`" #表名关键字处理
 
+# 指标监控
 management:
   observations:
     annotations:
@@ -113,3 +90,27 @@ management:
       exposure:
 #        include: "*"
         include: prometheus
+
+# 自定义配置
+custom:
+  # 重置默认密码
+  user:
+    default-password: 123456
+  # jwt配置
+  jwt:
+    access:
+      key: LyGR^*tpCYA&c#HMeJDndUKPShTrX%F!
+      expiration: 1d
+    refresh:
+      key: Y$tDyV!Sx&XZMnqT^AEpkQ#Wgvcs%F@w
+      expiration: 7d
+  # http连接池配置
+  http:
+    pool:
+      max-total: 100 #最大连接数
+      max-per-route: 10 #每个路由最大连接数
+      obtain-connection-timeout: 5s #获取连接超时
+    connect:
+      connect-timeout: 5s #连接超时
+      socket-timeout: 60s #读取超时
+      default-keep-alive: 60s #默认保活时间

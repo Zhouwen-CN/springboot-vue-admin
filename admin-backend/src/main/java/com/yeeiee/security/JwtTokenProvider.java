@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-@ConfigurationProperties(prefix = "jwt")
+@ConfigurationProperties(prefix = "custom.jwt")
 public class JwtTokenProvider implements InitializingBean {
     @Setter
     @Getter

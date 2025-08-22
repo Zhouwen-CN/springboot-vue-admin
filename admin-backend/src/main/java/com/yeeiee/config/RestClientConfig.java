@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "http")
+@ConfigurationProperties(prefix = "custom.http")
 public class RestClientConfig {
     private PoolConfig pool = new PoolConfig();
     private ConnectConfig connect = new ConnectConfig();
