@@ -28,7 +28,7 @@ public interface RoleService extends IService<Role> {
      * @param searchName 搜索关键词
      * @return 分页结果
      */
-    IPage<RoleMenuVo> getRolePages(Page<RoleMenuVo> page, String searchName);
+    IPage<RoleMenuVo> getRolePage(Page<RoleMenuVo> page, String searchName);
 
     /**
      * 添加角色 和 菜单ids

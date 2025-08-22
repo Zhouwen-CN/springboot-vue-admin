@@ -39,7 +39,7 @@ public class RoleController {
     public R<PageVo<RoleMenuVo>> getRolePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
                                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
                                              @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-        val page = roleService.getRolePages(Page.of(current, size), searchName);
+        val page = roleService.getRolePage(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(page));
     }
 

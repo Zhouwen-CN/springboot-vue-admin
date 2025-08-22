@@ -19,7 +19,7 @@
     <sql id="Base_Column_List">
         id, role_name, create_time, update_time
     </sql>
-    <select id="selectRolePages" resultMap="BaseResultMap">
+    <select id="selectRolePage" resultMap="BaseResultMap">
         select /*+ UseLimitPushDown */
             a.id,
             a.role_name,

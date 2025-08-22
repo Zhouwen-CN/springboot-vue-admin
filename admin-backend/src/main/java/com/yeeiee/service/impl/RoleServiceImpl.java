@@ -40,8 +40,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private final RoleMapper roleMapper;
 
     @Override
-    public IPage<RoleMenuVo> getRolePages(Page<RoleMenuVo> page, String searchName) {
-        return roleMapper.selectRolePages(page, searchName);
+    public IPage<RoleMenuVo> getRolePage(Page<RoleMenuVo> page, String searchName) {
+        return roleMapper.selectRolePage(page, searchName);
     }
 
     @Override
