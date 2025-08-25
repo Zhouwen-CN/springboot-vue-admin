@@ -37,9 +37,9 @@ export interface MenuForm {
  */
 export function reqSaveMenu(menuForm: MenuForm) {
   if (menuForm.id) {
-    return request.put<any, MenuForm>('/menu', menuForm)
+    return request.put<void, MenuForm>('/menu', menuForm)
   } else {
-    return request.post<any, MenuForm>('/menu', menuForm)
+    return request.post<void, MenuForm>('/menu', menuForm)
   }
 }
 
@@ -49,5 +49,5 @@ export function reqSaveMenu(menuForm: MenuForm) {
  * @returns
  */
 export function reqDeleteMenu(id: number) {
-  return request.delete(`/menu/${id}`)
+  return request.delete<void>(`/menu/${id}`)
 }

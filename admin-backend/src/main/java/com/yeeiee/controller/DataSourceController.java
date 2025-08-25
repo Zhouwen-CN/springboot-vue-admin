@@ -51,10 +51,10 @@ public class DataSourceController {
     public R<PageVo<DataSourceVo>> page(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-            @RequestParam(value = "name", required = false) @Parameter(description = "数据源名称") String name
+            @RequestParam(value = "searchName", required = false) @Parameter(description = "数据源名称") String searchName
     ) {
 
-        IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), name);
+        IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(list));
     }
 

@@ -87,7 +87,7 @@ class Request {
    * @param config 请求参数
    * @returns
    */
-  public post<T, D = unknown>(
+  public post<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig
@@ -102,7 +102,7 @@ class Request {
    * @param config 请求参数
    * @returns
    */
-  public put<T, D = unknown>(
+  public put<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig
@@ -116,14 +116,14 @@ class Request {
    * @param config 请求参数
    * @returns
    */
-  public delete<T, D = unknown>(
+  public delete<T = unknown, D = unknown>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<ResultData<T>> {
     return this.instance.delete(url, config)
   }
 
-  public patch<T, D = unknown>(
+  public patch<T = unknown, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig
@@ -136,7 +136,7 @@ class Request {
    * @param config 请求配置
    * @returns
    */
-  public request<T, D = unknown>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
+  public request<T, D>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
     return this.instance.request(config)
   }
 
