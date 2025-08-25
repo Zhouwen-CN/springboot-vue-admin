@@ -3,6 +3,7 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
+import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.UserRoleVo;
@@ -51,14 +52,14 @@ public class UserController {
 
     @Operation(summary = "新增用户")
     @PostMapping
-    public R<Void> addUser(@Validated(UserForm.Create.class) @RequestBody UserForm userForm) {
+    public R<Void> addUser(@Validated(GroupingValidate.Create.class) @RequestBody UserForm userForm) {
         userService.addUser(userForm);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping
-    public R<Void> modifyUser(@Validated(UserForm.Update.class) @RequestBody UserForm userForm) {
+    public R<Void> modifyUser(@Validated(GroupingValidate.Update.class) @RequestBody UserForm userForm) {
         userService.modifyUser(userForm);
         return R.ok();
     }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictTypeForm;
+import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.DictTypeService;
@@ -16,7 +17,15 @@ import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -53,15 +62,15 @@ public class DictTypeController {
 
     @Operation(summary = "新增字典类型")
     @PostMapping
-    public R<Void> addDictType(@Validated(DictTypeForm.Create.class) @RequestBody DictTypeForm dictTypeForm) {
+    public R<Void> addDictType(@Validated(GroupingValidate.Create.class) @RequestBody DictTypeForm dictTypeForm) {
         dictTypeService.addDictType(dictTypeForm);
         return R.ok();
     }
 
     @Operation(summary = "更新字典类型")
     @PutMapping
-    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#dictTypeForm.id")
-    public R<Void> modifyDictType(@Validated(DictTypeForm.Update.class) @RequestBody DictTypeForm dictTypeForm) {
+    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.id")
+    public R<Void> modifyDictType(@Validated(GroupingValidate.Update.class) @RequestBody DictTypeForm dictTypeForm) {
         dictTypeService.updateById(dictTypeForm.toBean());
         return R.ok();
     }

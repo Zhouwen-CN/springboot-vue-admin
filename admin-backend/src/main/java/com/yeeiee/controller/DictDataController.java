@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.form.DictDataForm;
+import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.DictDataVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
@@ -59,15 +60,15 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    public R<Void> addDictData(@Validated(DictDataForm.Create.class) @RequestBody DictDataForm dictDataForm) {
+    public R<Void> addDictData(@Validated(GroupingValidate.Create.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.addDictData(dictDataForm);
         return R.ok();
     }
 
     @Operation(summary = "修改字典数据")
     @PutMapping
-    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#dictDataForm.typeId")
-    public R<Void> modifyDictData(@Validated(DictDataForm.Update.class) @RequestBody DictDataForm dictDataForm) {
+    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.typeId")
+    public R<Void> modifyDictData(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.updateById(dictDataForm.toBean());
         return R.ok();
     }

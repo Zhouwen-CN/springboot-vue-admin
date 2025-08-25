@@ -23,7 +23,7 @@ public class DataSourceVo {
     private Long id;
     @Schema(description = "数据源名称")
     private String name;
-    @Schema(description = "数据源连接")
+    @Schema(description = "url")
     private String url;
     @Schema(description = "用户名")
     private String username;

@@ -1,6 +1,7 @@
 package com.yeeiee.controller;
 
 import com.yeeiee.domain.form.MenuForm;
+import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.MenuVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.VerifyTokenException;
@@ -56,14 +57,14 @@ public class MenuController {
 
     @Operation(summary = "新增菜单")
     @PostMapping
-    public R<Void> addMenu(@Validated(MenuForm.Create.class) @RequestBody MenuForm menuForm) {
+    public R<Void> addMenu(@Validated(GroupingValidate.Create.class) @RequestBody MenuForm menuForm) {
         menuService.addMenu(menuForm);
         return R.ok();
     }
 
     @Operation(summary = "更新菜单")
     @PutMapping
-    public R<Void> modifyMenu(@Validated(MenuForm.Update.class) @RequestBody MenuForm menuForm) {
+    public R<Void> modifyMenu(@Validated(GroupingValidate.Update.class) @RequestBody MenuForm menuForm) {
         menuService.updateById(menuForm.toBean());
         return R.ok();
     }

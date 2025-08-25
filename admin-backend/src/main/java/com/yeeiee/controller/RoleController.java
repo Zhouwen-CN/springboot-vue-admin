@@ -2,6 +2,7 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.form.RoleForm;
+import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.RoleMenuVo;
@@ -54,14 +55,14 @@ public class RoleController {
 
     @Operation(summary = "新增角色")
     @PostMapping
-    public R<Void> addRole(@Validated(RoleForm.Create.class) @RequestBody RoleForm roleForm) {
+    public R<Void> addRole(@Validated(GroupingValidate.Create.class) @RequestBody RoleForm roleForm) {
         roleService.addRole(roleForm);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
     @PutMapping
-    public R<Void> modifyRole(@Validated(RoleForm.Update.class) @RequestBody RoleForm roleForm) {
+    public R<Void> modifyRole(@Validated(GroupingValidate.Update.class) @RequestBody RoleForm roleForm) {
         roleService.modifyRole(roleForm);
         return R.ok();
     }
