@@ -139,13 +139,14 @@ create table t_dict_data(
 drop table if exists `t_data_source`;
 create table `t_data_source`  (
   `id` bigint primary key auto_increment comment '主键',
-  `name` varchar(100) not null comment '数据源名称',
-  `url` varchar(1024) not null comment '数据源连接',
-  `username` varchar(255) not null comment '用户名',
-  `password` varchar(255) not null comment '密码',
+  `name` varchar(50) not null comment '数据源名称',
+  `url` varchar(500) not null comment '数据源连接',
+  `username` varchar(50) not null comment '用户名',
+  `password` varchar(50) not null comment '密码',
   `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
-) comment = '数据源配置表';
+  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  constraint uniq_name unique (name)
+) auto_increment=2 comment = '数据源配置表';
 
 # 尚未用到
 DROP TABLE IF EXISTS `t_codegen_table`;
