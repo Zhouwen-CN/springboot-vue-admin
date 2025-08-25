@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.DriverManager;
 import java.util.Collection;
 
 /**
@@ -51,10 +54,10 @@ public class DataSourceController {
     public R<PageVo<DataSourceVo>> page(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-            @RequestParam(value = "name", required = false) @Parameter(description = "数据源名称") String name
+            @RequestParam(value = "searchName", required = false) @Parameter(description = "数据源名称") String searchName
     ) {
 
-        IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), name);
+        IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(list));
     }
 
@@ -91,8 +94,25 @@ public class DataSourceController {
 
     @Operation(summary = "批量删除数据源配置")
     @DeleteMapping
-    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "数据源id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dataSourceService.removeByIds(ids);
         return R.ok();
+    }
+
+    @Operation(summary = "测试数据源连接")
+    @GetMapping("/check/{id}")
+    public R<Void> checkConnection(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
+        val dataSource = dataSourceService.getById(id);
+        // 测试jdbc连接
+        try (val conn = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
+            val valid = conn.isValid(2);
+            if (valid) {
+                return R.ok();
+            }
+        } catch (Exception e) {
+            return R.error(HttpStatus.BAD_REQUEST, ExceptionUtils.getMessage(e));
+        }
+
+        return R.error(HttpStatus.BAD_REQUEST, "测试连接失败");
     }
 }

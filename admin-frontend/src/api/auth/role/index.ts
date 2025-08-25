@@ -42,9 +42,9 @@ export interface RoleMenuForm {
  */
 export function reqSaveRoleMenu(roleMenuForm: RoleMenuForm) {
   if (roleMenuForm.id) {
-    return request.put<any, RoleMenuForm>('/role', roleMenuForm)
+    return request.put<void, RoleMenuForm>('/role', roleMenuForm)
   } else {
-    return request.post<any, RoleMenuForm>('/role', roleMenuForm)
+    return request.post<void, RoleMenuForm>('/role', roleMenuForm)
   }
 }
 
@@ -54,7 +54,7 @@ export function reqSaveRoleMenu(roleMenuForm: RoleMenuForm) {
  * @returns
  */
 export function reqDeleteRole(id: number) {
-  return request.delete(`/role/${id}`)
+  return request.delete<void>(`/role/${id}`)
 }
 
 /**
@@ -63,5 +63,5 @@ export function reqDeleteRole(id: number) {
  * @returns
  */
 export function reqDeleteRoles(ids: number[]) {
-  return request.delete<any, number[]>('/role', { params: { ids: ids + '' } })
+  return request.delete<void>('/role', { params: { ids: ids.join() } })
 }

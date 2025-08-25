@@ -20,20 +20,20 @@ export function reqGetDictTypePage() {
 export function reqSaveDictType(dictTypeForm: DictTypeForm) {
   // 存在id则更新
   if (dictTypeForm.id) {
-    return request.put<string, DictTypeForm>('/dict/type', dictTypeForm)
+    return request.put<void, DictTypeForm>('/dict/type', dictTypeForm)
   } else {
-    return request.post<string, DictTypeForm>('/dict/type', dictTypeForm)
+    return request.post<void, DictTypeForm>('/dict/type', dictTypeForm)
   }
 }
 
 // 删除字典类型
 export function reqRemoveDictTypeById(id: number) {
-  return request.delete<string, number>(`/dict/type/${id}`)
+  return request.delete<void>(`/dict/type/${id}`)
 }
 
 // 批量删除字典类型
 export function reqRemoveDictTypeByIds(ids: number[]) {
-  return request.delete<string, number[]>('/dict/type', {
+  return request.delete<void>('/dict/type', {
     params: { ids: ids + '' }
   })
 }
@@ -57,25 +57,24 @@ export function reqGetDictDataPageByTypeId() {
 // 新增或者更新字典数据
 export function reqSaveDictData(dictDataForm: DictDataForm) {
   if (dictDataForm.id) {
-    return request.put<string, DictDataForm>('/dict/data', dictDataForm)
+    return request.put<void, DictDataForm>('/dict/data', dictDataForm)
   } else {
-    return request.post<string, DictDataForm>('/dict/data', dictDataForm)
+    return request.post<void, DictDataForm>('/dict/data', dictDataForm)
   }
 }
 
 // 删除字典数据
 export function reqRemoveDictDataById(id: number) {
-  return request.delete<string, number>(`/dict/data/${id}`)
+  return request.delete<void>(`/dict/data/${id}`)
 }
 
 // 批量删除字典数据
 export function reqRemoveDictDataByIds(ids: number[]) {
-  return request.delete<string, number[]>('/dict/data', { params: { ids: ids + '' } })
+  return request.delete<void>('/dict/data', { params: { ids: ids.join() } })
 }
 
-// 根据字典类型查询字典列表
+// 根据字典类型 id 查询字典列表
 export type LabelValueVo = Pick<DictDataVo, 'label' | 'value'>
-
 export function reqGetDictDataListByTypeId(typeId: number) {
   return request.get<LabelValueVo[]>(`/dict/data/${typeId}`)
 }

@@ -1,10 +1,10 @@
 package com.yeeiee.meter;
 
-import io.micrometer.common.lang.Nullable;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.aop.MeterTag;
 import io.micrometer.core.aop.MeterTagAnnotationHandler;
+import jakarta.annotation.Nullable;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,7 @@
 package com.yeeiee.domain.form;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yeeiee.config.EncryptSerializer;
 import com.yeeiee.domain.entity.DataSource;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,6 +35,7 @@ public class DataSourceForm implements FormToBeanHelper<DataSource> {
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
     @Schema(description = "用户名")
     private String username;
+    @JsonSerialize(using = EncryptSerializer.class)
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
     @Schema(description = "密码")
     private String password;

@@ -39,7 +39,7 @@ export function reqRefreshToken(refreshToken: string) {
 }
 
 export function reqLogout(id: number) {
-  return request.get<string>(`/user/logout/${id}`)
+  return request.get<void>(`/user/logout/${id}`)
 }
 
 export interface UserRoleVo extends CreateAndUpdateTime {
@@ -71,10 +71,10 @@ export interface UserRoleForm {
 export function reqSaveUserRole(userRoleForm: UserRoleForm) {
   if (userRoleForm.id) {
     // 修改
-    return request.put<any, UserRoleForm>('/user', userRoleForm)
+    return request.put<void, UserRoleForm>('/user', userRoleForm)
   } else {
     // 新增
-    return request.post<any, UserRoleForm>('/user', userRoleForm)
+    return request.post<void, UserRoleForm>('/user', userRoleForm)
   }
 }
 
@@ -84,7 +84,7 @@ export function reqSaveUserRole(userRoleForm: UserRoleForm) {
  * @returns
  */
 export function reqResetPassword(id: number) {
-  return request.patch<any>(`/user/pwd/reset/${id}`)
+  return request.patch<void>(`/user/pwd/reset/${id}`)
 }
 
 export interface ChangePwdForm {
@@ -100,7 +100,7 @@ export interface ChangePwdForm {
  * @returns
  */
 export function reqChangePassword(changePwdForm: ChangePwdForm) {
-  return request.patch<any, ChangePwdForm>('/user/pwd/change', changePwdForm)
+  return request.patch<void, ChangePwdForm>('/user/pwd/change', changePwdForm)
 }
 
 /**
@@ -109,7 +109,7 @@ export function reqChangePassword(changePwdForm: ChangePwdForm) {
  * @returns
  */
 export function reqDeleteUser(id: number) {
-  return request.delete(`/user/${id}`)
+  return request.delete<void>(`/user/${id}`)
 }
 
 /**
@@ -118,5 +118,5 @@ export function reqDeleteUser(id: number) {
  * @returns
  */
 export function reqDeleteUsers(ids: number[]) {
-  return request.delete<any, number[]>('/user', { params: { ids: ids + '' } })
+  return request.delete<void>('/user', { params: { ids: ids.join() } })
 }

@@ -118,15 +118,12 @@ function clean() {
   <div class="container">
     <div class="left">
       <!-- 展开收起按钮 -->
-      <el-icon :size="20" style="margin-right: 10px"
-        @click="changeCollapse">
-        <component :is="settingStore.collapse ? 'Expand' : 'Fold'">
-        </component>
+      <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
+        <component :is="settingStore.collapse ? 'Expand' : 'Fold'"> </component>
       </el-icon>
       <!-- 左侧面包屑 -->
       <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item v-for="(item, index) in routeInfo"
-          :key="index" :to="item.path">
+        <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
           <el-icon>
             <component :is="item.meta.icon"></component>
           </el-icon>
@@ -137,10 +134,8 @@ function clean() {
     <!-- 右侧头像等图标 -->
     <div>
       <el-space size="large">
-        <el-button :icon="FullScreen" circle size="default"
-          @click="toggleFullScreen"></el-button>
-        <el-avatar shape="square" size="default"
-          :src="settingStore.avatarUrl"> </el-avatar>
+        <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
+        <el-avatar shape="square" size="default" :src="settingStore.avatarUrl"> </el-avatar>
 
         <el-dropdown>
           <span>
@@ -151,10 +146,8 @@ function clean() {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="changePassword">修改密码
-              </el-dropdown-item>
-              <el-dropdown-item @click="logout">退出登入
-              </el-dropdown-item>
+              <el-dropdown-item @click="changePassword">修改密码 </el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登入 </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -162,28 +155,42 @@ function clean() {
     </div>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="dialogVisible" title="修改密码" width="40%"
-      @close="clean">
-      <el-form ref="formRef" :model="changePwdForm" :rules="rules"
-        label-width="auto" style="padding: 0 20px"
-        @submit.prevent="onSubmit(formRef)">
+    <el-dialog v-model="dialogVisible" title="修改密码" width="40%" @close="clean">
+      <el-form
+        ref="formRef"
+        :model="changePwdForm"
+        :rules="rules"
+        label-width="auto"
+        style="padding: 0 20px"
+        @submit.prevent="onSubmit(formRef)"
+      >
         <el-form-item label="旧密码" prop="oldPwd">
-          <el-input v-model="changePwdForm.oldPwd" placeholder="旧密码"
-            show-password type="password"></el-input>
+          <el-input
+            v-model="changePwdForm.oldPwd"
+            placeholder="旧密码"
+            show-password
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPwd">
-          <el-input v-model="changePwdForm.newPwd" placeholder="新密码"
-            show-password type="password"></el-input>
+          <el-input
+            v-model="changePwdForm.newPwd"
+            placeholder="新密码"
+            show-password
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPwd">
-          <el-input v-model="changePwdForm.confirmPwd"
+          <el-input
+            v-model="changePwdForm.confirmPwd"
             placeholder="确认密码"
-            show-password type="password"></el-input>
+            show-password
+            type="password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="dialogVisible = false">取消 </el-button>
-          <el-button :loading="saveLoading" native-type="submit"
-            type="primary">确认 </el-button>
+          <el-button :loading="saveLoading" native-type="submit" type="primary">确认 </el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
