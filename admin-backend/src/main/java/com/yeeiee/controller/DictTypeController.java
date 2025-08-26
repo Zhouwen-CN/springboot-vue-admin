@@ -77,14 +77,14 @@ public class DictTypeController {
 
     @Operation(summary = "删除字典类型")
     @DeleteMapping("/{id}")
-    public R<Void> removeDictTypeById(@PathVariable("id") Long id) {
+    public R<Void> removeDictTypeById(@PathVariable("id") @Parameter(description = "字典类型id") Long id) {
         dictTypeService.removeDictTypeByIds(Collections.singleton(id));
         return R.ok();
     }
 
     @Operation(summary = "批量删除字典类型")
     @DeleteMapping
-    public R<Void> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+    public R<Void> removeDictTypeByIds(@RequestParam("ids") @Parameter(description = "字典类型id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictTypeService.removeDictTypeByIds(ids);
         return R.ok();
     }

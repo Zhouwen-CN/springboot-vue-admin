@@ -45,7 +45,7 @@ public class UserController {
 
     @Operation(summary = "退出登入")
     @GetMapping("/logout/{id}")
-    public R<Void> logout(@PathVariable("id") Long id) {
+    public R<Void> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.logout(id);
         return R.ok();
     }
@@ -66,14 +66,14 @@ public class UserController {
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<Void> removeUserById(@PathVariable("id") Long id) {
+    public R<Void> removeUserById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.removeUserById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping
-    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "需要删除的用户id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "用户id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }
@@ -87,7 +87,7 @@ public class UserController {
 
     @Operation(summary = "重置用户密码")
     @PatchMapping("/pwd/reset/{id}")
-    public R<Void> resetUserPwdById(@PathVariable("id") Long id) {
+    public R<Void> resetUserPwdById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.modifyUserResetPwd(id);
         return R.ok();
     }

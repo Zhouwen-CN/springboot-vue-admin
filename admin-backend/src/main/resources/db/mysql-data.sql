@@ -43,39 +43,39 @@ VALUES (1, 1, 1, '2024-05-06 13:47:16', '2024-05-06 13:47:16'),
 
 delete from `t_menu`;
 INSERT INTO `t_menu`
-VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, '2024-05-06 13:46:48', '2024-05-16 04:04:36'),
-       (2, '用户管理', '/auth/user', '/auth/user/index.vue', 'User', 1, 0, '2024-05-06 13:46:48',
+VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, 0, '2024-05-06 13:46:48', '2024-05-16 04:04:36'),
+       (2, '用户管理', '/auth/user', '/auth/user/index.vue', 'User', 1, 0, 1, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
-       (3, '角色管理', '/auth/role', '/auth/role/index.vue', 'Avatar', 1, 0, '2024-05-06 13:46:48',
+       (3, '角色管理', '/auth/role', '/auth/role/index.vue', 'Avatar', 1, 0, 1, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
-       (4, '菜单管理', '/auth/menu', '/auth/menu/index.vue', 'Grid', 1, 0, '2024-05-06 13:46:48',
+       (4, '菜单管理', '/auth/menu', '/auth/menu/index.vue', 'Grid', 1, 0, 1, '2024-05-06 13:46:48',
         '2024-05-06 13:46:48'),
-       (5, '系统工具', '/tool', NULL, 'Tools', 0, 0, '2025-01-17 00:00:00',
+       (5, '系统工具', '/tool', NULL, 'Tools', 0, 0, 0, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (6, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 5, 1, '2025-01-17 00:00:00',
+       (6, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 5, 1, 1, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (7, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 5, 0, '2025-01-17 00:00:00',
+       (7, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 5, 0, 1, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (8, '数据源管理', '/tool/datasource', '/tool/datasource/index.vue', 'SetUp', 5, 0, '2025-01-17 00:00:00',
+       (8, '数据源管理', '/tool/datasource', '/tool/datasource/index.vue', 'SetUp', 5, 0, 1, '2025-01-17 00:00:00',
         '2025-01-17 00:00:00'),
-       (9, '日志管理', '/log', NULL, 'Management', 0, 0, '2025-01-15 00:00:00',
+       (9, '日志管理', '/log', NULL, 'Management', 0, 0, 0, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (10, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 9, 0, '2025-01-15 00:00:00',
+       (10, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 9, 0, 1, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (11, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 9, 0, '2025-01-15 00:00:00',
+       (11, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 9, 0, 1, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (12, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 9, 0, '2025-01-15 00:00:00',
+       (12, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 9, 0, 1, '2025-01-15 00:00:00',
         '2025-01-15 00:00:00'),
-       (13, '菜单测试', '/test', NULL, 'CameraFilled', 0, 0, '2024-05-13 00:50:29', '2024-05-13 00:50:29'),
-       (14, '菜单测试-sub1', '/test/sub1', NULL, 'Platform', 13, 0, '2024-05-13 00:50:29',
+       (13, '菜单测试', '/test', NULL, 'CameraFilled', 0, 0, 0, '2024-05-13 00:50:29', '2024-05-13 00:50:29'),
+       (14, '菜单测试-sub1', '/test/sub1', NULL, 'Platform', 13, 0, 0, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29'),
-       (15, '菜单测试-sub2', '/test/sub2', '/test/sub1.vue', 'SwitchFilled', 14, 0, '2024-05-13 00:50:29',
+       (15, '菜单测试-sub2', '/test/sub2', '/test/sub1.vue', 'SwitchFilled', 14, 0, 1, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29'),
-       (16, '菜单测试-sub3', '/test/sub3', '/test/sub2.vue', 'PictureFilled', 13, 0, '2024-05-13 00:50:29',
+       (16, '菜单测试-sub3', '/test/sub3', '/test/sub2.vue', 'PictureFilled', 13, 0, 1, '2024-05-13 00:50:29',
         '2024-05-13 00:50:29');
 
 delete from `t_dict_type`;
-insert into t_dict_type(id, type, name) values(1,'gender','性别');
+insert into t_dict_type(id, type, name) values(1,'menu_type','菜单类型');
 
 delete from `t_dict_data`;
-insert into t_dict_data(id, type_id, label, value, sort) values(1,1,'女',0,0),(2,1,'男',1,1),(3,1,'保密',2,2);
+insert into t_dict_data(id, type_id, label, value, sort) values(1,1,'目录',0,0),(2,1,'菜单',1,1);

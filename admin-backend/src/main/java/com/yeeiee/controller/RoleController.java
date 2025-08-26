@@ -69,7 +69,7 @@ public class RoleController {
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
-    public R<Void> removeRoleById(@PathVariable("id") Long id) {
+    public R<Void> removeRoleById(@PathVariable("id") @Parameter(description = "角色id") Long id) {
         roleService.removeRoleById(id);
         return R.ok();
     }
@@ -77,7 +77,7 @@ public class RoleController {
 
     @Operation(summary = "批量删除角色")
     @DeleteMapping
-    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "需要删除的角色id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "角色id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
     }

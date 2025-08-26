@@ -9,6 +9,7 @@ export interface MenuVo extends CreateAndUpdateTime {
   icon: string
   keepAlive: boolean
   pid: number
+  type: number
   children: MenuVo[]
 }
 
@@ -28,6 +29,7 @@ export interface MenuForm {
   icon: string
   keepAlive: boolean
   pid: number
+  type: number
 }
 
 /**

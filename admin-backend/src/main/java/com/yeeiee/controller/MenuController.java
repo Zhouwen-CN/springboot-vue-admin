@@ -9,6 +9,7 @@ import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.utils.RequestObjectUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +72,7 @@ public class MenuController {
 
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
-    public R<Void> removeMenuById(@PathVariable("id") Long id) {
+    public R<Void> removeMenuById(@PathVariable("id") @Parameter(description = "菜单id") Long id) {
         menuService.removeMenu(id);
         return R.ok();
     }

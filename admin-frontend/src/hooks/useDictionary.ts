@@ -11,9 +11,10 @@ export interface UseDictResult {
  * 有下拉菜单表单提交，才会使用字典
  * 像日志管理，有下拉列表，没有表单提交，这种最好不使用字典
  * @param typeId 字典类型Id
+ * @param useMap 是否使用字典映射
  * @returns 字典
  */
-function useDict(typeId: number): UseDictResult {
+function useDict(typeId: number, useMap = true): UseDictResult {
   const dictData = ref<LabelValueVo[]>([])
   const dictMap = ref<Map<number, string>>(new Map<number, string>())
 
@@ -21,10 +22,11 @@ function useDict(typeId: number): UseDictResult {
     reqGetDictDataListByTypeId(typeId)
       .then((res) => {
         dictData.value = res.data
-
-        res.data.forEach((item) => {
-          dictMap.value.set(item.value, item.label)
-        })
+        if (useMap) {
+          res.data.forEach((item) => {
+            dictMap.value.set(item.value, item.label)
+          })
+        }
       })
       .catch((error) => {
         console.warn(error)

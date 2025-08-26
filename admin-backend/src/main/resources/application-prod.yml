@@ -17,3 +17,10 @@ logging:
   logback:
     rollingpolicy:
       total-size-cap: 50MB
+
+# 关闭监控，公网容易被搞
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: "*"

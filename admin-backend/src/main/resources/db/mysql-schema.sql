@@ -2,55 +2,50 @@ create database if not exists springboot_vue_admin;
 use springboot_vue_admin;
 
 DROP TABLE IF EXISTS `t_user`;
-create table t_user
-(
+create table `t_user`(
     `id`            bigint primary key auto_increment comment '主键',
     `username`      varchar(15)      not null comment '用户名',
     `password`      varchar(60)      not null comment '密码',
     `token_version` bigint default 0 not null comment 'token版本',
-    `create_time`   timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time`   timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    `create_time` datetime not null default current_timestamp comment '创建时间',
+    `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
     constraint uniq_username unique (username)
 ) comment '用户表';
 
 
 DROP TABLE IF EXISTS `t_user_role`;
-create table t_user_role
-(
+create table `t_user_role`(
     `id`          bigint primary key auto_increment comment '主键',
     `user_id`     bigint not null comment '用户id',
     `role_id`     bigint not null comment '角色id',
-    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `create_time` datetime not null default current_timestamp comment '创建时间',
+    `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间'
 ) comment '用户角色关系表';
 
 
 DROP TABLE IF EXISTS `t_role`;
-create table t_role
-(
+create table `t_role`(
     `id`          bigint primary key auto_increment comment '主键',
     `role_name` varchar(15) not null comment '角色名称',
     `desc`    varchar(40) not null comment '角色说明',
-    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    `create_time` datetime not null default current_timestamp comment '创建时间',
+    `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
     constraint uniq_role_name unique (role_name)
 ) comment '角色表';
 
 
 DROP TABLE IF EXISTS `t_role_menu`;
-create table t_role_menu
-(
+create table `t_role_menu`(
     `id`          bigint primary key auto_increment comment '主键',
     `role_id`     bigint not null comment '角色id',
     `menu_id`     bigint not null comment '菜单id',
-    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
+    `create_time` datetime not null default current_timestamp comment '创建时间',
+    `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间'
 ) comment '用户菜单关系表';
 
 
 DROP TABLE IF EXISTS `t_menu`;
-create table t_menu
-(
+create table `t_menu`(
     `id`          bigint primary key auto_increment comment '主键',
     `title`       varchar(15) not null comment '标题',
     `access_path` varchar(40) not null comment '访问路径',
@@ -58,29 +53,28 @@ create table t_menu
     `icon`        varchar(15) not null comment '图标',
     `pid`         bigint      not null comment '父级菜单id',
     `is_keep_alive` tinyint(1) default 0 null comment '是否缓存',
-    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-    `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+    `type`   tinyint not null comment '菜单类型：0-目录，1-菜单',
+    `create_time` datetime not null default current_timestamp comment '创建时间',
+    `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
     constraint uniq_access_path unique (access_path)
 ) comment '菜单表';
 
 
-drop table if exists t_login_log;
-create table t_login_log
-(
+drop table if exists `t_login_log`;
+create table `t_login_log`(
     `id`          bigint primary key auto_increment comment '主键',
     `username`    varchar(15)  not null comment '用户名',
     `operation`   tinyint not null comment '操作类型',
     `status`      tinyint not null comment '操作状态',
     `ip`          varchar(32)  not null comment 'ip地址',
     `user_agent`  varchar(255) not null comment '用户代理',
-    `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+    `create_time` datetime not null default current_timestamp comment '创建时间',
     index idx_create_time(`create_time` desc)
 ) comment '登录日志表';
 
 
-drop table if exists t_operation_log;
-create table t_operation_log
-(
+drop table if exists `t_operation_log`;
+create table `t_operation_log`(
     `id`        bigint primary key auto_increment comment '主键',
     `username`  varchar(15)  not null comment '用户名',
     `operation` varchar(10) not null comment '操作',
@@ -91,14 +85,13 @@ create table t_operation_log
     `status`      tinyint not null comment '操作状态',
     `ip`          varchar(32)  not null comment 'ip地址',
     `user_agent`  varchar(255) not null comment '用户代理',
-    `create_time` timestamp    default CURRENT_TIMESTAMP comment '创建时间',
+    `create_time` datetime not null default current_timestamp comment '创建时间',
     index idx_create_time (`create_time` desc)
 ) comment '操作日志表';
 
 
-drop table if exists t_error_log;
-create table t_error_log
-(
+drop table if exists `t_error_log`;
+create table `t_error_log`(
     `id`          bigint primary key auto_increment comment '主键',
     `username`    varchar(15)  not null comment '用户名',
     `url`         varchar(50) not null comment '请求地址',
@@ -112,61 +105,53 @@ create table t_error_log
 ) comment '错误日志表';
 
 
-drop table if exists t_dict_type;
-create table t_dict_type(
+drop table if exists `t_dict_type`;
+create table `t_dict_type`(
   `id` bigint primary key auto_increment comment '主键',
   `type` varchar(50) not null comment '字典类型',
   `name` varchar(50) not null comment '字典名称',
-  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  `create_time` datetime not null default current_timestamp comment '创建时间',
+  `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
   constraint uniq_type unique (type)
 ) comment '字典类型表';
 
 
-drop table if exists t_dict_data;
-create table t_dict_data(
+drop table if exists `t_dict_data`;
+create table `t_dict_data`(
   `id` bigint primary key auto_increment comment '主键',
   `type_id` bigint not null comment '字典类型id',
   `label` varchar(50) not null comment '字典键',
   `value` int not null comment '字典值',
   `sort` int default 0 comment '字典排序',
-  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  `create_time` datetime not null default current_timestamp comment '创建时间',
+  `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
   constraint uniq_type_label unique (type_id, label)
 ) comment '字典数据表';
 
 
 drop table if exists `t_data_source`;
-create table `t_data_source`  (
+create table `t_data_source`(
   `id` bigint primary key auto_increment comment '主键',
   `name` varchar(50) not null comment '数据源名称',
   `url` varchar(500) not null comment '数据源连接',
   `username` varchar(50) not null comment '用户名',
   `password` varchar(50) not null comment '密码',
-  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间',
+  `create_time` datetime not null default current_timestamp comment '创建时间',
+  `update_time` datetime not null default current_timestamp on update current_timestamp comment '更新时间',
   constraint uniq_name unique (name)
 ) auto_increment=2 comment = '数据源配置表';
 
 # 尚未用到
 DROP TABLE IF EXISTS `t_codegen_table`;
 CREATE TABLE `t_codegen_table`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `data_source_config_id` bigint NOT NULL COMMENT '数据源配置的编号',
-  `scene` tinyint NOT NULL DEFAULT 1 COMMENT '生成场景',
-  `table_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '表名称',
-  `table_comment` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '表描述',
-  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `module_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模块名',
-  `business_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '业务名',
-  `class_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '类名称',
-  `class_comment` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '类描述',
-  `author` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '作者',
-  `template_type` tinyint NOT NULL DEFAULT 1 COMMENT '模板类型',
-  `front_type` tinyint NOT NULL COMMENT '前端类型',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+  `id` bigint primary key auto_increment comment '主键',
+  `data_source_id` bigint NOT NULL COMMENT '数据源配置的编号',
+  `table_name` varchar(200) NOT NULL COMMENT '表名称',
+  `table_comment` varchar(500) NOT NULL COMMENT '表描述',
+  `module_name` varchar(30) NOT NULL COMMENT '模块名',
+  `class_name` varchar(100) NOT NULL DEFAULT '' COMMENT '类名称',
+  `create_time` timestamp default CURRENT_TIMESTAMP comment '创建时间',
+  `update_time` timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) COMMENT = '代码生成表定义';
 
 # 尚未用到

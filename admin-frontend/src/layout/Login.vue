@@ -42,7 +42,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     }
     await router.replace(redirect as string)
     ElMessage.success('登入成功')
-  } catch (e: any) {
+  } catch (error) {
     // do nothing
   } finally {
     loading.value = false

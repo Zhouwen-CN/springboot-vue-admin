@@ -104,9 +104,8 @@ public class DataSourceController {
     public R<Void> checkConnection(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         val dataSource = dataSourceService.getById(id);
         // 测试jdbc连接
-        try (val conn = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
-            val valid = conn.isValid(2);
-            if (valid) {
+        try (val connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
+            if (connection.isValid(2)) {
                 return R.ok();
             }
         } catch (Exception e) {

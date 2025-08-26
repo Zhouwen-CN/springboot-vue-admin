@@ -5,21 +5,23 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.vo.MenuVo">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="access_path" property="accessPath"/>
-        <result column="file_path" property="filePath"/>
-        <result column="icon" property="icon"/>
-        <result column="pid" property="pid"/>
-        <result column="is_keep_alive" property="keepAlive"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="access_path" property="accessPath" />
+        <result column="file_path" property="filePath" />
+        <result column="icon" property="icon" />
+        <result column="pid" property="pid" />
+        <result column="is_keep_alive" property="keepAlive" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, access_path, file_path, icon, pid, is_keep_alive, create_time, update_time
+        id, title, access_path, file_path, icon, pid, is_keep_alive, type, create_time, update_time
     </sql>
+
     <select id="selectMenusByRoleNames" resultMap="BaseResultMap">
         select
             a.id,
@@ -29,6 +31,7 @@
             a.icon,
             a.pid,
             a.is_keep_alive,
+            a.type,
             a.create_time,
             a.update_time
         from t_menu a
@@ -37,7 +40,7 @@
                 b.menu_id
             from (
                 select
-                id
+                    id
                 from t_role a
                 <where>
                     <choose>
@@ -60,6 +63,4 @@
         on a.id = b.menu_id
         order by a.id
     </select>
-
-
 </mapper>

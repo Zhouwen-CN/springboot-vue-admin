@@ -59,7 +59,7 @@ class SpringbootVueAdminTests {
 
         // 特殊：SQLServer jdbc 非标准，参见 https://github.com/baomidou/mybatis-plus/issues/5419
         val dbType = JdbcUtils.getDbType(url);
-        if(DbType.SQL_SERVER == dbType ||  DbType.SQL_SERVER2005 == dbType){
+        if(DbType.SQL_SERVER == dbType || DbType.SQL_SERVER2005 == dbType){
             dataSourceConfigBuilder.databaseQueryClass(SQLQuery.class);
 
         }

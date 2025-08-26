@@ -26,27 +26,25 @@ const vCopy: Directive<HTMLElement, string> = {
       return
     }
 
-    function handleClick() {
+    function copyHandler() {
       copyText(value)
       ElMessage.success('复制成功')
     }
 
     // 绑定点击事件
-    el.addEventListener('click', handleClick)
+    el.addEventListener('click', copyHandler)
     // 保存处理函数到元素，以便卸载时移除
     // @ts-ignore
-    el._handleClick = handleClick
+    el._copyHandler = copyHandler
   },
-
-  // 指令从元素卸载时触发（类似 Vue2 的 unmounted）
-  unmounted(el) {
+  beforeUpdate(el) {
     // 移除事件监听，避免内存泄漏
     // @ts-ignore
-    const handleClick = el._handleClick
-    if (handleClick) {
-      el.removeEventListener('click', handleClick)
+    const copyHandler = el._copyHandler
+    if (copyHandler) {
+      el.removeEventListener('click', copyHandler)
       // @ts-ignore
-      delete el._handleClick // 清理引用
+      delete el._copyHandler // 清理引用
     }
   }
 }

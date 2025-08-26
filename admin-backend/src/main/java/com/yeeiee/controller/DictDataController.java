@@ -75,7 +75,7 @@ public class DictDataController {
 
     @Operation(summary = "删除字典数据")
     @DeleteMapping("/{id}")
-    public R<Void> removeDictDataById(@PathVariable("id") Long id) {
+    public R<Void> removeDictDataById(@PathVariable("id") @Parameter(description = "字典数据id") Long id) {
         dictCacheManager.evictByDataIds(Collections.singleton(id));
         dictDataService.removeById(id);
         return R.ok();
@@ -83,7 +83,7 @@ public class DictDataController {
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "需要删除的id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "字典数据id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictCacheManager.evictByDataIds(ids);
         dictDataService.removeByIds(ids);
         return R.ok();

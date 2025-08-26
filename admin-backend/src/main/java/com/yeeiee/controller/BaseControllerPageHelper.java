@@ -15,7 +15,7 @@ import java.util.Map;
  * @since 2025-06-06
  */
 @Deprecated
-public interface BaseControllerHelper<D> {
+public interface BaseControllerPageHelper<D> {
     /**
      * 分页条件
      *

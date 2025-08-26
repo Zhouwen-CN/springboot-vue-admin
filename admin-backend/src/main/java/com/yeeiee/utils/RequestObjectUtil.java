@@ -2,6 +2,7 @@ package com.yeeiee.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,9 +20,6 @@ import java.util.Objects;
  * @since 2025-05-29
  */
 public final class RequestObjectUtil {
-    private static final String HEADER_STRING = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
-
     /**
      * 从请求头中获取token
      *
@@ -29,8 +27,8 @@ public final class RequestObjectUtil {
      * @return token
      */
     public static String getTokenFromRequest(HttpServletRequest request) {
-        val bearerToken = request.getHeader(HEADER_STRING);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+        val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;

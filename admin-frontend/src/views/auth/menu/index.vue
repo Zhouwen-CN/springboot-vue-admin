@@ -5,9 +5,12 @@ import useUserStore from '@/stores/user'
 import type { MenuVo } from '@/api/auth/menu'
 import { type MenuForm, reqDeleteMenu, reqSaveMenu } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type PopoverInstance } from 'element-plus'
+import useDict from '@/hooks/useDictionary'
 
 const userStore = useUserStore()
-const router = useRouter()
+
+// 获取字典
+const { dictData, run } = useDict(1, false)
 
 // 对话框
 const toggleDialog = reactive({
@@ -23,14 +26,12 @@ const menuForm = reactive<MenuForm>({
   filePath: undefined,
   icon: '',
   keepAlive: false,
-  pid: 0
+  pid: 0,
+  type: 0
 })
 
 // 保存菜单按钮loading
 const saveLoading = ref(false)
-
-// 是否存在子节点
-const hasChildren = ref(false)
 
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
@@ -58,17 +59,10 @@ const rules = reactive<FormRules<typeof menuForm>>({
   icon: [{ required: true, message: '请输入菜单图标', trigger: 'submit' }]
 })
 
-// 添加主菜单
-function addMainMenu() {
+// 添加菜单
+function addMenu() {
   toggleDialog.show = true
-  toggleDialog.title = '添加主菜单'
-}
-
-// 添加子菜单
-function addSubmenu(pid: number) {
-  toggleDialog.show = true
-  toggleDialog.title = '添加子菜单'
-  menuForm.pid = pid
+  toggleDialog.title = '添加菜单'
 }
 
 // 更新菜单
@@ -82,14 +76,13 @@ function updateMenu(row: MenuVo) {
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
-  hasChildren.value = row.children.length > 0
+  menuForm.type = row.type
 }
 
 // 删除菜单
 async function deleteMenu(menu: MenuVo) {
   await reqDeleteMenu(menu.id)
   await userStore.getMenuInfo()
-  router.removeRoute(menu.accessPath)
   ElMessage.success('操作成功')
 }
 
@@ -111,6 +104,22 @@ async function onSubmit(formEl: FormInstance | undefined) {
   }
 }
 
+// 树形选择器
+const menuInfo = computed(() => {
+  return [
+    {
+      id: 0,
+      title: '主类目',
+      accessPath: '',
+      filePath: '',
+      icon: '',
+      keepAlive: false,
+      pid: 0,
+      children: userStore.menuInfo.filter((menu) => menu.title !== '首页')
+    }
+  ]
+})
+
 // 打开对话框前的清理操作
 function clean() {
   toggleDialog.title = ''
@@ -121,7 +130,7 @@ function clean() {
   menuForm.icon = ''
   menuForm.keepAlive = false
   menuForm.pid = 0
-  hasChildren.value = false
+  menuForm.type = 0
   ruleFormRef.value?.clearValidate()
   // 关闭图标选择器
   iconPopoverRef.value?.hide()
@@ -148,13 +157,17 @@ function selectIcon(icon: string) {
   menuForm.icon = icon
   iconPopoverRef.value?.hide()
 }
+
+onMounted(() => {
+  run()
+})
 </script>
 <template>
   <div>
     <!-- 表格上面的按钮 -->
     <el-card>
       <div>
-        <el-button :icon="Plus" type="primary" @click="addMainMenu">新建 </el-button>
+        <el-button :icon="Plus" type="primary" @click="addMenu">新建</el-button>
       </div>
       <!-- 表格 -->
       <el-table
@@ -192,7 +205,6 @@ function selectIcon(icon: string) {
         <el-table-column label="操作">
           <template #default="{ row }: { row: MenuVo }">
             <el-button-group>
-              <el-button :icon="Plus" type="primary" @click="addSubmenu(row.id)" />
               <el-button :icon="Edit" type="primary" @click="updateMenu(row)" />
               <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
                 <template #reference>
@@ -216,13 +228,34 @@ function selectIcon(icon: string) {
           style="padding: 0 20px"
           @submit.prevent="onSubmit(ruleFormRef)"
         >
+          <el-form-item label="上级菜单" prop="pid">
+            <el-tree-select
+              v-model="menuForm.pid"
+              node-key="id"
+              :props="{ value: 'id', label: 'title', children: 'children' }"
+              :data="menuInfo"
+              :default-expanded-keys="[0]"
+              check-strictly
+              filterable
+            />
+          </el-form-item>
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title" placeholder="菜单名称"></el-input>
+          </el-form-item>
+          <el-form-item label="菜单类型" prop="type">
+            <el-radio-group v-model="menuForm.type">
+              <el-radio-button
+                v-for="dict in dictData"
+                :label="dict.label"
+                :value="dict.value"
+                :key="dict.value"
+              />
+            </el-radio-group>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径" prop="filePath" v-if="!hasChildren && menuForm.pid !== 0">
+          <el-form-item label="文件路径" prop="filePath" v-if="menuForm.type">
             <el-input v-model="menuForm.filePath" placeholder="文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
@@ -252,10 +285,9 @@ function selectIcon(icon: string) {
               </el-scrollbar>
             </el-popover>
           </el-form-item>
-          <el-form-item label="是否缓存" prop="keepAlive">
+          <el-form-item label="是否缓存" prop="keepAlive" v-if="menuForm.type">
             <el-switch
               v-model="menuForm.keepAlive"
-              :disabled="hasChildren || menuForm.pid === 0"
               active-icon="Check"
               inactive-icon="Close"
               inline-prompt

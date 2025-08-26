@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.Menu;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.MenuVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,10 +13,9 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-02-11
+ * @since 2025-08-26
  */
 public interface MenuMapper extends BaseMapper<Menu> {
-
     /**
      * 根据角色列表查询拥有权限的菜单，一个用户可能有多个角色
      *

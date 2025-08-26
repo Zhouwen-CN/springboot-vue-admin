@@ -1,7 +1,6 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.domain.form.MenuForm;
@@ -9,6 +8,7 @@ import com.yeeiee.domain.vo.MenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.service.MenuService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.utils.CollectionUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-08-26
  */
 @RequiredArgsConstructor
 @Service
@@ -42,12 +42,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new DmlOperationException("菜单访问路径已经存在");
         }
 
-        this.save(menuForm.toBean());
+        val bean = menuForm.toBean();
+        this.save(bean);
 
-        // 每次添加菜单，都会赋予admin菜单权限
+        // todo: 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
-        roleMenu.setMenuId(menuForm.getId());
+        roleMenu.setMenuId(bean.getId());
 
         roleMenuService.save(roleMenu);
     }

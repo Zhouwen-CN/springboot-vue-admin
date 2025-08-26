@@ -2,6 +2,7 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @since 2024-04-27
  */
 @Deprecated
-public abstract class BaseController<I extends Serializable, D, S extends IService<D>> implements BaseControllerHelper<D> {
+public abstract class BaseController<I extends Serializable, D, S extends IService<D>> implements BaseControllerPageHelper<D> {
     protected S service;
 
     public BaseController(S service) {
@@ -40,11 +41,11 @@ public abstract class BaseController<I extends Serializable, D, S extends IServi
 
     @Operation(summary = "查询分页")
     @GetMapping("/{size}/{current}")
-    public R<Page<D>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                              @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                              @RequestParam Map<String,String> params) {
+    public R<PageVo<D>> getPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                @RequestParam Map<String,String> params) {
         val page = service.page(new Page<>(current, size), pageHelper(params));
-        return R.ok(page);
+        return R.ok(PageVo.fromPage(page));
     }
 
     @Operation(summary = "查询列表")

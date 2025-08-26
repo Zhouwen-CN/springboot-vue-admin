@@ -52,17 +52,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val user = this.getById(id);
 
         // 更新token version
-        if (user != null) {
-            // 退出登入日志
-            val request = RequestObjectUtil.getHttpServletRequest();
-            val loginLog = new LoginLog();
-            loginLog.setUsername(user.getUsername());
-            loginLog.setOperation(LoginOperationEnum.LOGOUT);
-            loginLog.setStatus(OperationStatusEnum.SUCCESS);
-            loginLog.setIp(IPUtil.getClientIP(request));
-            loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-            loginLogService.save(loginLog);
-        }
+        this.lambdaUpdate()
+                .setIncrBy(User::getTokenVersion, 1)
+                .eq(User::getId, id)
+                .update();
+
+        // 退出登入日志
+        val request = RequestObjectUtil.getHttpServletRequest();
+        val loginLog = new LoginLog();
+        loginLog.setUsername(user.getUsername());
+        loginLog.setOperation(LoginOperationEnum.LOGOUT);
+        loginLog.setStatus(OperationStatusEnum.SUCCESS);
+        loginLog.setIp(IPUtil.getClientIP(request));
+        loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+        loginLogService.save(loginLog);
     }
 
     @Override
