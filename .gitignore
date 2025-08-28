@@ -38,7 +38,5 @@ build/
 .DS_Store
 .idea
 static
-admin-frontend/auto-imports.d.ts
-admin-frontend/components.d.ts
 node_modules
 dist
