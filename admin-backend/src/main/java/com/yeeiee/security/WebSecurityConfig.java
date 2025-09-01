@@ -6,15 +6,20 @@ import com.yeeiee.security.handler.LoginFailureHandler;
 import com.yeeiee.security.handler.LoginSuccessHandler;
 import com.yeeiee.security.jwt.JwtAuthenticationFilter;
 import com.yeeiee.security.refresh.RefreshAuthenticationProcessingFilter;
-import com.yeeiee.security.refresh.RefreshAuthenticationProvider;
 import com.yeeiee.security.user.UserAuthenticationProcessingFilter;
-import com.yeeiee.security.user.UserAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.context.ShutdownEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,8 +38,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserAuthenticationProvider userAuthenticationProvider;
-    private final RefreshAuthenticationProvider refreshAuthenticationProvider;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -46,8 +49,7 @@ public class WebSecurityConfig {
             "/js/**.js",
             "/css/**.css",
             "/images/**",
-            "/assets/**",
-            "/actuator/**"
+            "/assets/**"
     };
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {
@@ -60,7 +62,6 @@ public class WebSecurityConfig {
                 .anonymous(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
-
 
         http.exceptionHandling(exception -> {
                     // 未认证处理
@@ -80,7 +81,7 @@ public class WebSecurityConfig {
      */
     @Bean
     @Order(1)
-    public SecurityFilterChain loginApiFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain loginApiFilterChain(HttpSecurity http, ProviderManager providerManager) throws Exception {
         this.commonHttpSetting(http);
         // 使用 securityMatcher 限定当前配置作用的路径
         http.securityMatcher("/login/*")
@@ -89,7 +90,7 @@ public class WebSecurityConfig {
         // 用户名密码登入
         val userAuthenticationFilter = new UserAuthenticationProcessingFilter(
                 new AntPathRequestMatcher("/login/user", HttpMethod.POST.name()),
-                userAuthenticationProvider,
+                providerManager,
                 loginSuccessHandler,
                 loginFailureHandler
         );
@@ -98,7 +99,7 @@ public class WebSecurityConfig {
         // 刷新token登入
         val refreshAuthenticationFilter = new RefreshAuthenticationProcessingFilter(
                 new AntPathRequestMatcher("/login/refresh", HttpMethod.GET.name()),
-                refreshAuthenticationProvider,
+                providerManager,
                 loginSuccessHandler,
                 loginFailureHandler
         );
@@ -126,6 +127,9 @@ public class WebSecurityConfig {
                         authorize
                                 // 静态资源
                                 .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
+                                // actuator 端点
+                                .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
+                                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理
@@ -138,5 +142,28 @@ public class WebSecurityConfig {
                 // 在账号密码认证之前，先进行jwt校验
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    /**
+     * provider 管理者
+     * @param authenticationProviders 认证提供者列表
+     * @param defaultAuthenticationEventPublishers 默认事件发布
+     * @return provider manager
+     */
+    @Bean
+    public ProviderManager providerManager(
+            ObjectProvider<AuthenticationProvider> authenticationProviders,
+            ObjectProvider<DefaultAuthenticationEventPublisher> defaultAuthenticationEventPublishers
+    ) {
+        val providerList = authenticationProviders.orderedStream().toList();
+        val providerManager = new ProviderManager(providerList);
+        val authenticationEventPublisher = defaultAuthenticationEventPublishers.getIfAvailable();
+
+        if (authenticationEventPublisher != null) {
+            authenticationEventPublisher.setDefaultAuthenticationFailureEvent(AuthenticationFailureBadCredentialsEvent.class);
+            providerManager.setAuthenticationEventPublisher(authenticationEventPublisher);
+        }
+
+        return providerManager;
     }
 }

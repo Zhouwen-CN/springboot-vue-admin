@@ -27,11 +27,11 @@ public class UserAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return super.isAuthenticated() ? null : password;
+        return super.isAuthenticated() ? user : password;
     }
 
     @Override
     public Object getPrincipal() {
-        return super.isAuthenticated() ? user : username;
+        return super.isAuthenticated() ? user.getUsername() : username;
     }
 }

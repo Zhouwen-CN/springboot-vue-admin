@@ -35,7 +35,7 @@ public class UserForm {
     private String username;
     @JsonSerialize(using = EncryptSerializer.class)
     @NotBlank(groups = {GroupingValidate.Create.class})
-    @Length(groups = {GroupingValidate.Create.class}, min = 5)
+    @Length(groups = {GroupingValidate.Create.class}, min = 5, max = 15)
     @Schema(description = "用户密码")
     private String password;
     @Schema(description = "角色id列表")

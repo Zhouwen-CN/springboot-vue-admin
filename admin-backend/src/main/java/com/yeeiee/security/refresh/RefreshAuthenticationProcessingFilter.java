@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,10 +28,10 @@ import java.io.IOException;
 public class RefreshAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     public RefreshAuthenticationProcessingFilter(RequestMatcher requiresAuthenticationRequestMatcher,
-                                                 AuthenticationProvider authenticationProvider,
+                                                 ProviderManager providerManager,
                                                  AuthenticationSuccessHandler authenticationSuccessHandler,
                                                  AuthenticationFailureHandler authenticationFailureHandler) {
-        super(requiresAuthenticationRequestMatcher, new ProviderManager(authenticationProvider));
+        super(requiresAuthenticationRequestMatcher, providerManager);
         super.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         super.setAuthenticationFailureHandler(authenticationFailureHandler);
     }

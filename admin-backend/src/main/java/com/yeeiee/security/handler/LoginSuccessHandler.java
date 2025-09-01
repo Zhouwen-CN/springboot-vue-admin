@@ -43,7 +43,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        val user = (User) authentication.getPrincipal();
+        val user = (User) authentication.getCredentials();
 
         // 根据userId获取角色名列表
         val roles = roleService.getRoleNamesByUserId(user.getId());

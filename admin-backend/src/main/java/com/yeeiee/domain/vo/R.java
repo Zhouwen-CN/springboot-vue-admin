@@ -39,7 +39,7 @@ public final class R<T> {
     private String message;
 
     public static R<Void> ok() {
-        return new R<>(true, null, 200, null);
+        return ok(null);
     }
 
     public static <T> R<T> ok(T data) {
@@ -47,14 +47,14 @@ public final class R<T> {
     }
 
     public static R<Void> error(HttpStatus httpStatus, Exception e) {
-        return new R<>(false, null, httpStatus.value(), ExceptionUtils.getRootCauseMessage(e));
-    }
-
-    public static R<Void> error(int httpStatus, String message){
-        return new R<>(false, null, httpStatus, message);
+        return error(httpStatus.value(), ExceptionUtils.getRootCauseMessage(e));
     }
 
     public static R<Void> error(HttpStatus httpStatus, String message) {
-        return new R<>(false, null, httpStatus.value(), message);
+        return error(httpStatus.value(), message);
+    }
+
+    public static R<Void> error(int code, String message) {
+        return new R<>(false, null, code, message);
     }
 }

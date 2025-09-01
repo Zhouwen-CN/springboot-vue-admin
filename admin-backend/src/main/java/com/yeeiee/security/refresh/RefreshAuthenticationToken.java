@@ -24,11 +24,11 @@ public class RefreshAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return super.isAuthenticated() ? null : refreshToken;
+        return super.isAuthenticated() ? user : refreshToken;
     }
 
     @Override
     public Object getPrincipal() {
-        return super.isAuthenticated() ? user : refreshToken;
+        return super.isAuthenticated() ? user.getUsername() : null;
     }
 }
