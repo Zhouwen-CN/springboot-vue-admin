@@ -43,7 +43,7 @@ public class IdTypeEnvironmentPostProcessor implements EnvironmentPostProcessor 
         // 解密key
         val mpwKey = environment.getProperty(MPW_KEY);
         var url = environment.getProperty(DATASOURCE_URL_KEY, String.class);
-        Assert.notNull(url, "spring.datasource.url is null");
+        Assert.notNull(url, DATASOURCE_URL_KEY + " is null");
         if (url.startsWith(NPW_PREFIX) && StringUtils.hasText(mpwKey)) {
             url = AES.decrypt(url.replaceFirst(NPW_PREFIX, ""), mpwKey);
         }
