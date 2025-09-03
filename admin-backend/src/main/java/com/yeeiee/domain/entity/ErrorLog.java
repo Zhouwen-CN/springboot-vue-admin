@@ -32,34 +32,34 @@ public class ErrorLog {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username", keepGlobalFormat = true)
+    @TableField(value = "username")
     private String username;
 
     @Schema(description = "请求地址")
-    @TableField(value = "url", keepGlobalFormat = true)
+    @TableField(value = "url")
     private String url;
 
     @Schema(description = "请求方式")
-    @TableField(value = "method", keepGlobalFormat = true)
+    @TableField(value = "method")
     private RequestMethodEnum method;
 
     @Schema(description = "请求参数")
-    @TableField(value = "params", keepGlobalFormat = true)
+    @TableField(value = "params")
     private String params;
 
     @Schema(description = "ip地址")
-    @TableField(value = "ip", keepGlobalFormat = true)
+    @TableField(value = "ip")
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField(value = "user_agent", keepGlobalFormat = true)
+    @TableField(value = "user_agent")
     private String userAgent;
 
     @Schema(description = "错误信息")
-    @TableField(value = "error_msg", keepGlobalFormat = true)
+    @TableField(value = "error_msg")
     private String errorMsg;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }

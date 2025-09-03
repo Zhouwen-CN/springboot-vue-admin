@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.vo.RoleMenuVo">
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
-        <result column="desc" property="desc"/>
+        <result column="description" property="description"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <collection column="menu_id" property="menuIds" ofType="java.lang.Long">
@@ -17,13 +17,14 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role_name, create_time, update_time
+        id, role_name, description, create_time, update_time
     </sql>
+
     <select id="selectRolePage" resultMap="BaseResultMap">
         select /*+ UseLimitPushDown */
             a.id,
             a.role_name,
-            a.`desc`,
+            a.description,
             a.create_time,
             a.update_time,
             b.menu_id

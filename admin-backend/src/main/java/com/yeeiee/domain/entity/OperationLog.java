@@ -33,42 +33,42 @@ public class OperationLog {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username", keepGlobalFormat = true)
+    @TableField(value = "username")
     private String username;
 
     @Schema(description = "操作")
-    @TableField(value = "operation", keepGlobalFormat = true)
+    @TableField(value = "operation")
     private String operation;
 
     @Schema(description = "请求地址")
-    @TableField(value = "url", keepGlobalFormat = true)
+    @TableField(value = "url")
     private String url;
 
     @Schema(description = "请求方式")
-    @TableField(value = "method", keepGlobalFormat = true)
+    @TableField(value = "method")
     private RequestMethodEnum method;
 
     @Schema(description = "请求参数")
-    @TableField(value = "params", keepGlobalFormat = true)
+    @TableField(value = "params")
     private String params;
 
     @Schema(description = "请求耗时")
-    @TableField(value = "time", keepGlobalFormat = true)
+    @TableField(value = "time")
     private Long time;
 
     @Schema(description = "操作状态")
-    @TableField(value = "status", keepGlobalFormat = true)
+    @TableField(value = "status")
     private OperationStatusEnum status;
 
     @Schema(description = "ip地址")
-    @TableField(value = "ip", keepGlobalFormat = true)
+    @TableField(value = "ip")
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField(value = "user_agent", keepGlobalFormat = true)
+    @TableField(value = "user_agent")
     private String userAgent;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }

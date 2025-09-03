@@ -55,9 +55,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new DmlOperationException("角色名已经存在");
         }
 
-        val role = new Role();
-        role.setRoleName(roleForm.getRoleName());
-        role.setDesc(roleForm.getDesc());
+        val role = roleForm.toBean();
         this.save(role);
 
         val roleMenuList = roleForm.getMenuIds().stream().map(id -> {
@@ -80,10 +78,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         // 修改角色
-        val role = new Role();
-        role.setId(roleId);
-        role.setRoleName(roleForm.getRoleName());
-        role.setDesc(roleForm.getDesc());
+        val role = roleForm.toBean();
         this.updateById(role);
 
         // 获取 role menu 关系

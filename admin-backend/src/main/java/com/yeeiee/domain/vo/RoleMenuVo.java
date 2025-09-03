@@ -26,7 +26,7 @@ public class RoleMenuVo {
     @Schema(description = "角色名称")
     private String roleName;
     @Schema(description = "角色描述")
-    private String desc;
+    private String description;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
     @Schema(description = "更新时间")

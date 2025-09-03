@@ -2,6 +2,7 @@ package com.yeeiee.domain.form;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yeeiee.config.EncryptSerializer;
+import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +26,7 @@ import java.util.List;
 @Setter
 @ToString
 @Schema(name = "UserForm", description = "用户表单")
-public class UserForm {
+public class UserForm implements FormToBeanHelper<User> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "用户id")
     private Long id;

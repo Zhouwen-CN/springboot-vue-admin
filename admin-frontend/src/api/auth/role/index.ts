@@ -16,7 +16,7 @@ export function reqGetRoles() {
 }
 
 export interface RoleMenuVo extends RoleVo, CreateAndUpdateTime {
-  desc: string
+  description: string
   menuIds: number[]
 }
 
@@ -31,7 +31,7 @@ export function reqGetRolePage() {
 export interface RoleMenuForm {
   id?: number
   roleName: string
-  desc: string
+  description: string
   menuIds: number[]
 }
 

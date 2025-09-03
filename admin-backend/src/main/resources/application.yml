@@ -74,9 +74,10 @@ springdoc:
 mybatis-plus:
   global-config:
     db-config:
-      column-format: "`%s`" #数据库字段关键字处理
-      table-format: "`%s`" #表名关键字处理
-      id-type: none #由 IdTypeEnvironmentPostProcessor 动态设置
+      id-type: none #由 IdTypeEnvironmentPostProcessor 动态设置，AUTO或者INPUT模式
+#      id-type: auto #自增ID，适合 MySQL 等直接自增的数据库
+#      id-type: input #用户输入ID，适合 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库
+#      id-type: assign_id #分配ID，默认使用雪花算法。注意，Oracle、PostgreSQL、Kingbase、DB2、H2 数据库时，需要去除实体类上的 @KeySequence 注解
 
 # 指标监控
 management:

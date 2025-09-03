@@ -31,26 +31,26 @@ public class DataSource {
     private Long id;
 
     @Schema(description = "数据源名称")
-    @TableField(value = "name", keepGlobalFormat = true)
+    @TableField(value = "name")
     private String name;
 
     @Schema(description = "数据源连接")
-    @TableField(value = "url", keepGlobalFormat = true)
+    @TableField(value = "url")
     private String url;
 
     @Schema(description = "用户名")
-    @TableField(value = "username", keepGlobalFormat = true)
+    @TableField(value = "username")
     private String username;
 
     @Schema(description = "密码")
-    @TableField(value = "password", keepGlobalFormat = true)
+    @TableField(value = "password")
     private String password;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE, keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

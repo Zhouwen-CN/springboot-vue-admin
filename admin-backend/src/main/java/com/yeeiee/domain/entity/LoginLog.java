@@ -33,26 +33,26 @@ public class LoginLog {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username", keepGlobalFormat = true)
+    @TableField(value = "username")
     private String username;
 
     @Schema(description = "操作类型")
-    @TableField(value = "operation", keepGlobalFormat = true)
+    @TableField(value = "operation")
     private LoginOperationEnum operation;
 
     @Schema(description = "操作状态")
-    @TableField(value = "status", keepGlobalFormat = true)
+    @TableField(value = "status")
     private OperationStatusEnum status;
 
     @Schema(description = "ip地址")
-    @TableField(value = "ip", keepGlobalFormat = true)
+    @TableField(value = "ip")
     private String ip;
 
     @Schema(description = "用户代理")
-    @TableField(value = "user_agent", keepGlobalFormat = true)
+    @TableField(value = "user_agent")
     private String userAgent;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }

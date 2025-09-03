@@ -31,18 +31,18 @@ public class UserRole {
     private Long id;
 
     @Schema(description = "用户id")
-    @TableField(value = "user_id", keepGlobalFormat = true)
+    @TableField(value = "user_id")
     private Long userId;
 
     @Schema(description = "角色id")
-    @TableField(value = "role_id", keepGlobalFormat = true)
+    @TableField(value = "role_id")
     private Long roleId;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE, keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

@@ -31,22 +31,22 @@ public class User {
     private Long id;
 
     @Schema(description = "用户名")
-    @TableField(value = "username", keepGlobalFormat = true)
+    @TableField(value = "username")
     private String username;
 
     @Schema(description = "密码")
-    @TableField(value = "password", keepGlobalFormat = true)
+    @TableField(value = "password")
     private String password;
 
     @Schema(description = "token版本")
-    @TableField(value = "token_version", keepGlobalFormat = true)
+    @TableField(value = "token_version")
     private Long tokenVersion;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE, keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

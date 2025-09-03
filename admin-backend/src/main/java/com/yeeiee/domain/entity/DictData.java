@@ -31,26 +31,26 @@ public class DictData {
     private Long id;
 
     @Schema(description = "字典类型id")
-    @TableField(value = "type_id",keepGlobalFormat = true)
+    @TableField(value = "type_id")
     private Long typeId;
 
     @Schema(description = "字典键")
-    @TableField(value = "label",keepGlobalFormat = true)
+    @TableField(value = "label")
     private String label;
 
     @Schema(description = "字典值")
-    @TableField(value = "value",keepGlobalFormat = true)
+    @TableField(value = "value")
     private Integer value;
 
     @Schema(description = "字典排序")
-    @TableField(value = "sort",keepGlobalFormat = true)
+    @TableField(value = "sort")
     private Integer sort;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE,keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

@@ -31,38 +31,38 @@ public class Menu {
     private Long id;
 
     @Schema(description = "标题")
-    @TableField(value = "title", keepGlobalFormat = true)
+    @TableField(value = "title")
     private String title;
 
     @Schema(description = "访问路径")
-    @TableField(value = "access_path", keepGlobalFormat = true)
+    @TableField(value = "access_path")
     private String accessPath;
 
     @Schema(description = "文件路径")
-    @TableField(value = "file_path", keepGlobalFormat = true)
+    @TableField(value = "file_path")
     private String filePath;
 
     @Schema(description = "图标")
-    @TableField(value = "icon", keepGlobalFormat = true)
+    @TableField(value = "icon")
     private String icon;
 
     @Schema(description = "父级菜单id")
-    @TableField(value = "pid", keepGlobalFormat = true)
+    @TableField(value = "pid")
     private Long pid;
 
     @Schema(description = "是否缓存")
-    @TableField(value = "is_keep_alive", keepGlobalFormat = true)
+    @TableField(value = "is_keep_alive")
     private Boolean keepAlive;
 
     @Schema(description = "菜单类型：0-目录，1-菜单")
-    @TableField(value = "type", keepGlobalFormat = true)
+    @TableField(value = "type")
     private Integer type;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT, keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE, keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

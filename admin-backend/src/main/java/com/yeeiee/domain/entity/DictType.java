@@ -31,18 +31,18 @@ public class DictType {
     private Long id;
 
     @Schema(description = "字典名称")
-    @TableField(value = "name",keepGlobalFormat = true)
+    @TableField(value = "name")
     private String name;
 
     @Schema(description = "字典类型")
-    @TableField(value = "type",keepGlobalFormat = true)
+    @TableField(value = "type")
     private String type;
 
     @Schema(description = "创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT,keepGlobalFormat = true)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE,keepGlobalFormat = true)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 }

@@ -75,21 +75,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void addUser(UserForm userForm) {
-        val username = userForm.getUsername();
-        val password = userForm.getPassword();
+        val user = userForm.toBean();
 
         val exists = this.exists(Wrappers.<User>lambdaQuery()
-                .eq(User::getUsername, username)
+                .eq(User::getUsername, user.getUsername())
         );
 
         if (exists) {
             throw new DmlOperationException("用户名已经存在");
         }
 
-        val user = new User();
-        user.setUsername(username);
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         this.save(user);
 
         if (!userForm.getRoleIds().isEmpty()) {

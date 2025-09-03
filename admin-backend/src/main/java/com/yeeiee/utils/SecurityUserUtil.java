@@ -20,7 +20,7 @@ public class SecurityUserUtil {
      */
     public static User getSecurityUser() {
         val authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
+        if (authentication != null && authentication.getCredentials() instanceof User) {
             return (User) authentication.getCredentials();
         }
 

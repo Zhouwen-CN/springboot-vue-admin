@@ -18,7 +18,7 @@ const userStore = useUserStore()
 const roleMenuForm = reactive<RoleMenuForm>({
   id: undefined,
   roleName: '',
-  desc: '',
+  description: '',
   menuIds: []
 })
 
@@ -63,7 +63,7 @@ function updateRole(row: RoleMenuVo) {
   toggleDialog.title = '修改角色'
   roleMenuForm.id = row.id
   roleMenuForm.roleName = row.roleName
-  roleMenuForm.desc = row.desc
+  roleMenuForm.description = row.description
   const menuIds = row.menuIds
   roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], menuIds)
 }
@@ -99,7 +99,7 @@ const rules = reactive<FormRules<typeof roleMenuForm>>({
     { required: true, message: '请输入角色名称', trigger: 'blur' },
     { min: 3, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
   ],
-  desc: [
+  description: [
     { required: true, message: '角色说明', trigger: 'blur' },
     { min: 1, max: 40, message: '长度不能大于 40 个字符', trigger: 'blur' }
   ]
@@ -155,7 +155,7 @@ function clean() {
   toggleDialog.title = ''
   roleMenuForm.id = undefined
   roleMenuForm.roleName = ''
-  roleMenuForm.desc = ''
+  roleMenuForm.description = ''
   roleMenuForm.menuIds = []
   ruleFormRef.value?.clearValidate()
   menuTreeRef.value?.setCheckedKeys([])
@@ -206,7 +206,7 @@ onMounted(() => {
         <el-table-column type="selection" width="45" />
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
-        <el-table-column label="说明" prop="desc"></el-table-column>
+        <el-table-column label="说明" prop="description"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
@@ -251,8 +251,8 @@ onMounted(() => {
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="roleMenuForm.roleName" placeholder="角色名称"></el-input>
           </el-form-item>
-          <el-form-item label="角色说明" prop="desc">
-            <el-input v-model="roleMenuForm.desc" placeholder="角色说明"></el-input>
+          <el-form-item label="角色说明" prop="description">
+            <el-input v-model="roleMenuForm.description" placeholder="角色说明"></el-input>
           </el-form-item>
           <!-- 树形控件 -->
           <el-form-item label="菜单权限">

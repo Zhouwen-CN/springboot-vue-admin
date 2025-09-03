@@ -37,11 +37,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return super.isAuthenticated() ? null : accessToken;
+        return super.isAuthenticated() ? user : accessToken;
     }
 
     @Override
     public Object getPrincipal() {
-        return super.isAuthenticated() ? user : accessToken;
+        return super.isAuthenticated() ? user.getUsername() : null;
     }
 }
