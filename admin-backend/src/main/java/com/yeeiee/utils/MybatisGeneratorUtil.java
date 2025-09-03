@@ -1,7 +1,6 @@
 package com.yeeiee.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
@@ -95,7 +94,7 @@ public final class MybatisGeneratorUtil {
 
                     builder.entityBuilder()
                             .javaTemplate("/templates/entity.java")
-                            .idType(IdType.AUTO)
+                            // .idType(IdType.AUTO)
                             .enableRemoveIsPrefix()
                             .enableTableFieldAnnotation()
                             .enableLombok()

@@ -76,6 +76,7 @@ mybatis-plus:
     db-config:
       column-format: "`%s`" #数据库字段关键字处理
       table-format: "`%s`" #表名关键字处理
+      id-type: none #由 IdTypeEnvironmentPostProcessor 动态设置
 
 # 指标监控
 management:
