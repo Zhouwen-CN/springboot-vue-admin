@@ -42,19 +42,10 @@
                 select
                     id
                 from t_role a
-                <where>
-                    <choose>
-                        <when test="roles != null and roles.size() > 0">
-                            role_name in
-                            <foreach collection="roles" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
-                        </when>
-                        <otherwise>
-                            1!=1
-                        </otherwise>
-                    </choose>
-                </where>
+                where role_name in
+                <foreach collection="roles" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             ) a
             join t_role_menu b
             on a.id = b.role_id

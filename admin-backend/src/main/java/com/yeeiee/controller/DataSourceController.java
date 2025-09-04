@@ -51,7 +51,7 @@ public class DataSourceController {
 
     @Operation(summary = "查询数据源配置分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DataSourceVo>> page(
+    public R<PageVo<DataSourceVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(value = "searchName", required = false) @Parameter(description = "数据源名称") String searchName

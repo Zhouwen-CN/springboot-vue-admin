@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class MenuController {
 
     @Operation(summary = "查询菜单列表")
     @GetMapping
-    public R<List<MenuVo>> getMenuList(HttpServletRequest request) {
+    public R<List<MenuVo>> getList(HttpServletRequest request) {
         val token = RequestObjectUtil.getTokenFromRequest(request);
 
         val payload = jwtTokenProvider.parseAccessToken(token)
@@ -52,34 +53,37 @@ public class MenuController {
                 .getPayload();
 
         val roles = jwtTokenProvider.getRoles(payload);
+        if(CollectionUtils.isEmpty(roles)){
+            return R.ok(List.of());
+        }
         val menuList = menuService.getMenuListByRoleNames(roles);
         return R.ok(menuList);
     }
 
     @Operation(summary = "新增菜单")
     @PostMapping
-    public R<Void> addMenu(@Validated(GroupingValidate.Create.class) @RequestBody MenuForm menuForm) {
+    public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody MenuForm menuForm) {
         menuService.addMenu(menuForm);
         return R.ok();
     }
 
     @Operation(summary = "更新菜单")
     @PutMapping
-    public R<Void> modifyMenu(@Validated(GroupingValidate.Update.class) @RequestBody MenuForm menuForm) {
+    public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody MenuForm menuForm) {
         menuService.updateById(menuForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
-    public R<Void> removeMenuById(@PathVariable("id") @Parameter(description = "菜单id") Long id) {
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "菜单id") Long id) {
         menuService.removeMenu(id);
         return R.ok();
     }
 
     @Operation(summary = "根据角色id，查询菜单id列表")
     @GetMapping("/{roleId}")
-    public R<List<Long>> getMenuIdsByRoleId(@PathVariable("roleId") @Parameter(description = "角色id") Long roleId){
+    public R<List<Long>> getIdsByRoleId(@PathVariable("roleId") @Parameter(description = "角色id") Long roleId){
         val menuIds = menuService.getMenuIdsByRoleId(roleId);
         return R.ok(menuIds);
     }

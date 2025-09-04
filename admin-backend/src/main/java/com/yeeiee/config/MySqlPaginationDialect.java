@@ -29,6 +29,7 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
  * @author chen
  * @since 2025-01-19
  */
+@Deprecated
 public class MySqlPaginationDialect implements IDialect {
     public static final String HINT_VALUE = "UseLimitPushDown";
 

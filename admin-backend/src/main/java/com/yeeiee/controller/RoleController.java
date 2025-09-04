@@ -46,9 +46,11 @@ public class RoleController {
 
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<Role>> getRolePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                       @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                       @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+    public R<PageVo<Role>> getPage(
+            @PathVariable("size") @Parameter(description = "页面大小") Integer size,
+            @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+            @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName
+    ) {
         val page = roleService.lambdaQuery()
                 .like(StringUtils.hasText(searchName), Role::getRoleName, searchName)
                 .page(Page.of(current, size));
@@ -58,27 +60,27 @@ public class RoleController {
 
     @Operation(summary = "查询角色列表")
     @GetMapping
-    public R<List<RoleSelectorVo>> getRoleList() {
+    public R<List<RoleSelectorVo>> getList() {
         return R.ok(roleService.getRoleVoList());
     }
 
     @Operation(summary = "新增角色")
     @PostMapping
-    public R<Void> addRole(@Validated(GroupingValidate.Create.class) @RequestBody RoleForm roleForm) {
+    public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody RoleForm roleForm) {
         roleService.addRole(roleForm);
         return R.ok();
     }
 
     @Operation(summary = "更新角色")
     @PutMapping
-    public R<Void> modifyRole(@Validated(GroupingValidate.Update.class) @RequestBody RoleForm roleForm) {
+    public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody RoleForm roleForm) {
         roleService.modifyRole(roleForm);
         return R.ok();
     }
 
     @Operation(summary = "删除角色")
     @DeleteMapping("/{id}")
-    public R<Void> removeRoleById(@PathVariable("id") @Parameter(description = "角色id") Long id) {
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "角色id") Long id) {
         roleService.removeRoleById(id);
         return R.ok();
     }
@@ -86,14 +88,14 @@ public class RoleController {
 
     @Operation(summary = "批量删除角色")
     @DeleteMapping
-    public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "角色id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "角色id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
     }
 
     @Operation(summary = "根据用户id，查询角色列表")
     @GetMapping("/{userId}")
-    public R<List<RoleSelectorVo>> getRoleVoListByUserId(@PathVariable("userId") @Parameter(description = "用户id") Long userId){
+    public R<List<RoleSelectorVo>> getListByUserId(@PathVariable("userId") @Parameter(description = "用户id") Long userId) {
         List<RoleSelectorVo> list = roleService.getRoleSelectorVoListByUserId(userId);
         return R.ok(list);
     }

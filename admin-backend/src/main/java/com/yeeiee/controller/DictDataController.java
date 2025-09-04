@@ -43,7 +43,7 @@ public class DictDataController {
 
     @Operation(summary = "查询字典数据分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DictData>> getDictDataPageByTypeId(
+    public R<PageVo<DictData>> getPageByTypeId(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
@@ -60,7 +60,7 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    public R<Void> addDictData(@Validated(GroupingValidate.Create.class) @RequestBody DictDataForm dictDataForm) {
+    public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.addDictData(dictDataForm);
         return R.ok();
     }
@@ -68,14 +68,14 @@ public class DictDataController {
     @Operation(summary = "修改字典数据")
     @PutMapping
     @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.typeId")
-    public R<Void> modifyDictData(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
+    public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.updateById(dictDataForm.toBean());
         return R.ok();
     }
 
     @Operation(summary = "删除字典数据")
     @DeleteMapping("/{id}")
-    public R<Void> removeDictDataById(@PathVariable("id") @Parameter(description = "字典数据id") Long id) {
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "字典数据id") Long id) {
         dictCacheManager.evictByDataIds(Collections.singleton(id));
         dictDataService.removeById(id);
         return R.ok();
@@ -83,7 +83,7 @@ public class DictDataController {
 
     @Operation(summary = "批量删除字典数据")
     @DeleteMapping
-    public R<Void> removeDictDataByIds(@RequestParam("ids") @Parameter(description = "字典数据id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "字典数据id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictCacheManager.evictByDataIds(ids);
         dictDataService.removeByIds(ids);
         return R.ok();
@@ -91,7 +91,7 @@ public class DictDataController {
 
     @Operation(summary = "根据类型id字典列表")
     @GetMapping("/{typeId}")
-    public R<List<DictDataVo>> getDictDataListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
+    public R<List<DictDataVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
         val list = dictCacheManager.getDictByTypeId(typeId);
         return R.ok(list);
     }

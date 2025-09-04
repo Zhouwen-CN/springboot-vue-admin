@@ -39,11 +39,10 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         val interceptor = new MybatisPlusInterceptor();
 
+        // 分页插件
         val paginationInnerInterceptor = new PaginationInnerInterceptor();
         // 数据库类型，如果有多数据源可以不配具体类型 否则都建议配上具体的DbType
-        paginationInnerInterceptor.setDbType(DbType.MYSQL);
-        // 方言实现类
-        paginationInnerInterceptor.setDialect(new MySqlPaginationDialect());
+        paginationInnerInterceptor.setDbType(DbType.ORACLE);
         // 溢出总页数后是否进行处理
         paginationInnerInterceptor.setOverflow(true);
         // 单页分页条数限制，不会报错，会修正成 size=20

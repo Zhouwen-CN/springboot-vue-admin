@@ -36,9 +36,11 @@ public class UserController {
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<UserVo>> getUserPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                         @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                         @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+    public R<PageVo<UserVo>> getPage(
+            @PathVariable("size") @Parameter(description = "页面大小") Integer size,
+            @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+            @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName
+    ) {
         val page = userService.getUserPages(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(page));
     }
@@ -52,42 +54,42 @@ public class UserController {
 
     @Operation(summary = "新增用户")
     @PostMapping
-    public R<Void> addUser(@Validated(GroupingValidate.Create.class) @RequestBody UserForm userForm) {
+    public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody UserForm userForm) {
         userService.addUser(userForm);
         return R.ok();
     }
 
     @Operation(summary = "更新用户")
     @PutMapping
-    public R<Void> modifyUser(@Validated(GroupingValidate.Update.class) @RequestBody UserForm userForm) {
+    public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody UserForm userForm) {
         userService.modifyUser(userForm);
         return R.ok();
     }
 
     @Operation(summary = "删除用户")
     @DeleteMapping("/{id}")
-    public R<Void> removeUserById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.removeUserById(id);
         return R.ok();
     }
 
     @Operation(summary = "批量删除用户")
     @DeleteMapping
-    public R<Void> removeUserByIds(@RequestParam("ids") @Parameter(description = "用户id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "用户id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }
 
     @Operation(summary = "修改用户密码")
     @PatchMapping("/pwd/change")
-    public R<Void> changeUserPwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
+    public R<Void> changePwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
         userService.modifyUserChangePwd(changePwdForm);
         return R.ok();
     }
 
     @Operation(summary = "重置用户密码")
     @PatchMapping("/pwd/reset/{id}")
-    public R<Void> resetUserPwdById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
+    public R<Void> resetPwdById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.modifyUserResetPwd(id);
         return R.ok();
     }
