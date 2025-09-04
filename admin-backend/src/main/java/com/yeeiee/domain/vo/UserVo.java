@@ -5,29 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 角色视图对象
+ * 用户视图对象
  * </p>
  *
  * @author chen
- * @since 2025-11-12
+ * @since 2024-05-13
  */
 @Getter
 @Setter
 @ToString
-@Schema(name = "UserVo", description = "用户视图对象")
+@Schema(name = "UserVo", description = "用户角色视图对象")
 public class UserVo {
     @Schema(description = "用户id")
     private Long id;
     @Schema(description = "用户名称")
     private String username;
-    @Schema(description = "访问 token")
-    private String accessToken;
-    @Schema(description = "刷新 token")
-    private String refreshToken;
-    @Schema(description = "用户角色列表")
-    private List<String> roles;
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
 }

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import type { CreateAndUpdateTime } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
-export interface RoleVo {
+export interface RoleSelectorVo {
   id: number
   roleName: string
 }
@@ -12,12 +12,11 @@ export interface RoleVo {
  * @returns
  */
 export function reqGetRoles() {
-  return request.get<RoleVo[]>('/role')
+  return request.get<RoleSelectorVo[]>('/role')
 }
 
-export interface RoleMenuVo extends RoleVo, CreateAndUpdateTime {
+export interface RoleVo extends RoleSelectorVo, CreateAndUpdateTime {
   description: string
-  menuIds: number[]
 }
 
 /**
@@ -25,7 +24,7 @@ export interface RoleMenuVo extends RoleVo, CreateAndUpdateTime {
  * @returns
  */
 export function reqGetRolePage() {
-  return usePagination<RoleMenuVo>('/role')
+  return usePagination<RoleVo>('/role')
 }
 
 export interface RoleMenuForm {
@@ -64,4 +63,13 @@ export function reqDeleteRole(id: number) {
  */
 export function reqDeleteRoles(ids: number[]) {
   return request.delete<void>('/role', { params: { ids: ids.join() } })
+}
+
+/**
+ * 根据用户id，查询角色列表
+ * @param userId 用户id
+ * @returns
+ */
+export function reqGetRoleSelectorVoByUserId(userId: number) {
+  return request.get<RoleSelectorVo[]>(`/role/${userId}`)
 }

@@ -47,5 +47,5 @@ public class MenuForm implements FormToBeanHelper<Menu> {
     private Boolean keepAlive;
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "菜单类型")
-    private Integer type;
+    private Integer menuType;
 }

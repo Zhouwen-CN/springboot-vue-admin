@@ -27,7 +27,7 @@ const menuForm = reactive<MenuForm>({
   icon: '',
   keepAlive: false,
   pid: 0,
-  type: 0
+  menuType: 0
 })
 
 // 保存菜单按钮loading
@@ -76,7 +76,7 @@ function updateMenu(row: MenuVo) {
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
-  menuForm.type = row.type
+  menuForm.menuType = row.menuType
 }
 
 // 删除菜单
@@ -130,7 +130,7 @@ function clean() {
   menuForm.icon = ''
   menuForm.keepAlive = false
   menuForm.pid = 0
-  menuForm.type = 0
+  menuForm.menuType = 0
   ruleFormRef.value?.clearValidate()
   // 关闭图标选择器
   iconPopoverRef.value?.hide()
@@ -242,20 +242,20 @@ onMounted(() => {
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title" placeholder="菜单名称"></el-input>
           </el-form-item>
-          <el-form-item label="菜单类型" prop="type">
-            <el-radio-group v-model="menuForm.type">
+          <el-form-item label="菜单类型" prop="menuType">
+            <el-radio-group v-model="menuForm.menuType">
               <el-radio-button
                 v-for="dict in dictData"
                 :label="dict.label"
-                :value="dict.value"
-                :key="dict.value"
+                :value="dict.data"
+                :key="dict.data"
               />
             </el-radio-group>
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
-          <el-form-item label="文件路径" prop="filePath" v-if="menuForm.type">
+          <el-form-item label="文件路径" prop="filePath" v-if="menuForm.menuType">
             <el-input v-model="menuForm.filePath" placeholder="文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
@@ -285,7 +285,7 @@ onMounted(() => {
               </el-scrollbar>
             </el-popover>
           </el-form-item>
-          <el-form-item label="是否缓存" prop="keepAlive" v-if="menuForm.type">
+          <el-form-item label="是否缓存" prop="keepAlive" v-if="menuForm.menuType">
             <el-switch
               v-model="menuForm.keepAlive"
               active-icon="Check"

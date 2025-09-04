@@ -4,37 +4,26 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="UserRoleVo" type="com.yeeiee.domain.vo.UserRoleVo">
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="token_version" property="tokenVersion"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <collection property="roleList" ofType="com.yeeiee.domain.vo.RoleVo">
-            <id column="role_id" property="id"/>
-            <result column="role_name" property="roleName"/>
-        </collection>
     </resultMap>
 
-    <select id="selectUserPages" resultMap="UserRoleVo">
+    <select id="selectUserPages" resultType="com.yeeiee.domain.vo.UserVo">
         select /*+ UseLimitPushDown */
-            a.id,
-            a.username,
-            a.create_time,
-            a.update_time,
-            b.role_id,
-            c.role_name
-        from (
-            select
-                *
-            from t_user
+            id,
+            username,
+            create_time,
+            update_time
+        from t_user
+        <where>
             <if test="searchName != null and searchName.trim() != ''">
-                where username like concat('%',#{searchName},'%')
+                and username like concat('%',#{searchName},'%')
             </if>
-        ) a
-        left join t_user_role b
-        on a.id = b.user_id
-        left join t_role c
-        on b.role_id = c.id
+        </where>
     </select>
-
 </mapper>

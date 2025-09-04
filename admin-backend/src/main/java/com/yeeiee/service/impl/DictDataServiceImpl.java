@@ -45,7 +45,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
                 Wrappers.<DictData>lambdaQuery()
                         .eq(DictData::getTypeId, dictDataForm.getTypeId())
                         .and(c1 -> c1.eq(DictData::getLabel, dictDataForm.getLabel())
-                                .or(c2 -> c2.eq(DictData::getValue, dictDataForm.getValue()))
+                                .or(c2 -> c2.eq(DictData::getData, dictDataForm.getData()))
                         )
         );
 

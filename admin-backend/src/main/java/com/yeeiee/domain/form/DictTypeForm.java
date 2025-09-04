@@ -33,5 +33,5 @@ public class DictTypeForm implements FormToBeanHelper<DictType> {
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
     @Schema(description = "字典类型")
-    private String type;
+    private String dictType;
 }

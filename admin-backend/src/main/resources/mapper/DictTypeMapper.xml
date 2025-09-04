@@ -6,15 +6,15 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.DictType">
         <id column="id" property="id" />
+        <result column="dict_type" property="dictType" />
         <result column="name" property="name" />
-        <result column="type" property="type" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, type, create_time, update_time
+        id, dict_type, name, create_time, update_time
     </sql>
 
 </mapper>

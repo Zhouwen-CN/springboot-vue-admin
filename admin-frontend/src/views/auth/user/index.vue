@@ -7,11 +7,12 @@ import {
   reqResetPassword,
   reqSaveUserRole,
   type UserRoleForm,
-  type UserRoleVo
+  type UserVo
 } from '@/api/auth/user'
+import { reqGetRoleSelectorVoByUserId } from '@/api/auth/role'
 import type { CheckboxValueType } from 'element-plus'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { reqGetRoles, type RoleVo } from '@/api/auth/role'
+import { reqGetRoles, type RoleSelectorVo } from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import { deleteAsyncRoutes } from '@/router/asyncRoutes'
 import useTagViewStore from '@/stores/tagView'
@@ -41,7 +42,7 @@ const pwdVisible = ref(false)
 const saveLoading = ref(false)
 
 // 角色列表数据
-const roleData = ref<RoleVo[]>([])
+const roleData = ref<RoleSelectorVo[]>([])
 
 // 获取分页数据
 const searchName = ref('')
@@ -89,12 +90,14 @@ function addUser() {
 }
 
 // 更新用户
-function updateUser(row: UserRoleVo) {
+async function updateUser(row: UserVo) {
+  const id = row.id
+  const reuslt = await reqGetRoleSelectorVoByUserId(id)
   toggleDialog.show = true
   toggleDialog.title = '修改用户'
-  userRoleForm.id = row.id
+  userRoleForm.id = id
   userRoleForm.username = row.username
-  userRoleForm.roleIds = row.roleList.map((role) => role.id)
+  userRoleForm.roleIds = reuslt.data?.map((role) => role.id)
   pwdVisible.value = false
 }
 
@@ -116,7 +119,7 @@ async function deleteUser(id: number) {
 
 // 批量删除
 const deleteIds = ref<number[]>([])
-function handleSelectionChange(users: UserRoleVo[]) {
+function handleSelectionChange(users: UserVo[]) {
   deleteIds.value = users.map((user) => user.id)
 }
 async function deleteUsers() {
@@ -237,15 +240,10 @@ onMounted(() => {
         <el-table-column type="selection" width="45" />
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="用户名称" prop="username"></el-table-column>
-        <el-table-column label="角色名称" prop="roleIds">
-          <template #default="{ row }: { row: UserRoleVo }">
-            {{ row.roleList.map((role) => role.roleName).join(',') }}
-          </template>
-        </el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: UserRoleVo }">
+          <template #default="{ row }: { row: UserVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary" @click="updateUser(row)"></el-button>
               <el-popconfirm title="是否重置密码？" @confirm="resetPassword(row.id)">

@@ -40,3 +40,6 @@ build/
 static
 node_modules
 dist
+
+admin-frontend/auto-imports.d.ts
+admin-frontend/components.d.ts

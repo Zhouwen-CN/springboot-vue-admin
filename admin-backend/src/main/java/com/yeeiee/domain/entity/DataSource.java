@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @TableName("t_data_source")
+@KeySequence("t_data_source_seq")
 @Schema(name = "DataSource", description = "数据源配置表")
 public class DataSource {
 

@@ -21,5 +21,5 @@ public class DictDataVo {
     @Schema(description = "标签建")
     private String label;
     @Schema(description = "标签值")
-    private Integer value;
+    private Integer data;
 }

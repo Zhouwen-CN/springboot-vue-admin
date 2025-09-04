@@ -90,8 +90,8 @@ CREATE TABLE t_menu (
     file_path     VARCHAR2(60),
     icon          VARCHAR2(15) NOT NULL,
     pid           NUMBER(20) NOT NULL,
-    is_keep_alive NUMBER(1) DEFAULT 0,
-    type          NUMBER(1) NOT NULL,
+    keep_alive NUMBER(1) DEFAULT 0,
+    menu_type          NUMBER(1) NOT NULL,
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
     CONSTRAINT uniq_access_path UNIQUE (access_path)
@@ -104,8 +104,8 @@ COMMENT ON COLUMN t_menu.access_path IS '访问路径';
 COMMENT ON COLUMN t_menu.file_path IS '文件路径';
 COMMENT ON COLUMN t_menu.icon IS '图标';
 COMMENT ON COLUMN t_menu.pid IS '父级菜单id';
-COMMENT ON COLUMN t_menu.is_keep_alive IS '是否缓存';
-COMMENT ON COLUMN t_menu.type IS '菜单类型：0-目录，1-菜单';
+COMMENT ON COLUMN t_menu.keep_alive IS '是否缓存';
+COMMENT ON COLUMN t_menu.menu_type IS '菜单类型：0-目录，1-菜单';
 COMMENT ON COLUMN t_menu.create_time IS '创建时间';
 COMMENT ON COLUMN t_menu.update_time IS '更新时间';
 
@@ -170,6 +170,10 @@ COMMENT ON COLUMN t_operation_log.ip IS 'ip地址';
 COMMENT ON COLUMN t_operation_log.user_agent IS '用户代理';
 COMMENT ON COLUMN t_operation_log.create_time IS '创建时间';
 
+CREATE SEQUENCE t_operation_log_seq
+START WITH 1
+INCREMENT BY 1;
+
 -- 错误日志表
 CREATE TABLE t_error_log (
     id            NUMBER(20) PRIMARY KEY,
@@ -204,16 +208,16 @@ INCREMENT BY 1;
 -- 字典类型表
 CREATE TABLE t_dict_type (
     id            NUMBER(20) PRIMARY KEY,
-    type          VARCHAR2(50) NOT NULL,
+    dict_type          VARCHAR2(50) NOT NULL,
     name          VARCHAR2(50) NOT NULL,
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
-    CONSTRAINT uniq_dict_type UNIQUE (type)
+    CONSTRAINT uniq_dict_type UNIQUE (dict_type)
 );
 
 COMMENT ON TABLE t_dict_type IS '字典类型表';
 COMMENT ON COLUMN t_dict_type.id IS '主键';
-COMMENT ON COLUMN t_dict_type.type IS '字典类型';
+COMMENT ON COLUMN t_dict_type.dict_type IS '字典类型';
 COMMENT ON COLUMN t_dict_type.name IS '字典名称';
 COMMENT ON COLUMN t_dict_type.create_time IS '创建时间';
 COMMENT ON COLUMN t_dict_type.update_time IS '更新时间';
@@ -228,7 +232,7 @@ CREATE TABLE t_dict_data (
     id            NUMBER(20) PRIMARY KEY,
     type_id       NUMBER(20) NOT NULL,
     label         VARCHAR2(50) NOT NULL,
-    "value"         NUMBER(10) NOT NULL,
+    data         NUMBER(10) NOT NULL,
     sort          NUMBER(10) DEFAULT 0,
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
@@ -239,7 +243,7 @@ COMMENT ON TABLE t_dict_data IS '字典数据表';
 COMMENT ON COLUMN t_dict_data.id IS '主键';
 COMMENT ON COLUMN t_dict_data.type_id IS '字典类型id';
 COMMENT ON COLUMN t_dict_data.label IS '字典键';
-COMMENT ON COLUMN t_dict_data."value" IS '字典值';
+COMMENT ON COLUMN t_dict_data.data IS '字典值';
 COMMENT ON COLUMN t_dict_data.sort IS '字典排序';
 COMMENT ON COLUMN t_dict_data.create_time IS '创建时间';
 COMMENT ON COLUMN t_dict_data.update_time IS '更新时间';
@@ -270,5 +274,5 @@ COMMENT ON COLUMN t_data_source.create_time IS '创建时间';
 COMMENT ON COLUMN t_data_source.update_time IS '更新时间';
 
 CREATE SEQUENCE t_data_source_seq
-START WITH 2
+START WITH 1
 INCREMENT BY 1;

@@ -36,7 +36,7 @@ public class MenuVo {
     @Schema(description = "是否缓存")
     private Boolean keepAlive;
     @Schema(description = "菜单类型")
-    private Integer type;
+    private Integer menuType;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
     @Schema(description = "更新时间")

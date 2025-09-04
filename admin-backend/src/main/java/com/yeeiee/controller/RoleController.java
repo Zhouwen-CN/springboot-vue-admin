@@ -1,12 +1,12 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.domain.entity.Role;
 import com.yeeiee.domain.form.RoleForm;
 import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.domain.vo.RoleMenuVo;
-import com.yeeiee.domain.vo.RoleVo;
+import com.yeeiee.domain.vo.RoleSelectorVo;
 import com.yeeiee.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,8 +14,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,19 +46,19 @@ public class RoleController {
 
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<RoleMenuVo>> getRolePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
-        val page = roleService.getRolePage(Page.of(current, size), searchName);
+    public R<PageVo<Role>> getRolePage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                       @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                       @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+        val page = roleService.lambdaQuery()
+                .like(StringUtils.hasText(searchName), Role::getRoleName, searchName)
+                .page(Page.of(current, size));
+
         return R.ok(PageVo.fromPage(page));
     }
 
-    /**
-     * 默认不会查询出admin角色
-     */
     @Operation(summary = "查询角色列表")
     @GetMapping
-    public R<List<RoleVo>> getRoleList() {
+    public R<List<RoleSelectorVo>> getRoleList() {
         return R.ok(roleService.getRoleVoList());
     }
 
@@ -80,6 +89,13 @@ public class RoleController {
     public R<Void> removeRoleByIds(@RequestParam("ids") @Parameter(description = "角色id列表") @Size(min = 1,max = 10) Collection<Long> ids) {
         roleService.removeRoleByIds(ids);
         return R.ok();
+    }
+
+    @Operation(summary = "根据用户id，查询角色列表")
+    @GetMapping("/{userId}")
+    public R<List<RoleSelectorVo>> getRoleVoListByUserId(@PathVariable("userId") @Parameter(description = "用户id") Long userId){
+        List<RoleSelectorVo> list = roleService.getRoleSelectorVoListByUserId(userId);
+        return R.ok(list);
     }
 }
 

@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.DictData;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.DictDataVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-02-13
+ * @since 2025-09-04
  */
 public interface DictDataMapper extends BaseMapper<DictData> {
     List<DictDataVo> selectListByTypeId(@Param("typeId") Long typeId);

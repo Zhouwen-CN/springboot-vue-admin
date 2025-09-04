@@ -3,7 +3,8 @@ package com.yeeiee.security.handler;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.domain.vo.UserVo;
+import com.yeeiee.domain.vo.RoleSelectorVo;
+import com.yeeiee.domain.vo.UserLoginVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.security.JwtTokenProvider;
@@ -46,19 +47,22 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         val user = (User) authentication.getCredentials();
 
         // 根据userId获取角色名列表
-        val roles = roleService.getRoleNamesByUserId(user.getId());
+        val roles = roleService.getRoleSelectorVoListByUserId(user.getId())
+                .stream()
+                .map(RoleSelectorVo::getRoleName)
+                .toList();
 
         // 封装 LoginUserVo
-        val loginUserVo = new UserVo();
-        loginUserVo.setId(user.getId());
-        loginUserVo.setUsername(user.getUsername());
-        loginUserVo.setRoles(roles);
+        val userLoginVo = new UserLoginVo();
+        userLoginVo.setId(user.getId());
+        userLoginVo.setUsername(user.getUsername());
+        userLoginVo.setRoles(roles);
 
         // 生成token
         val accessToken = jwtTokenProvider.generateAccessToken(user.getUsername(), roles, user.getTokenVersion());
-        loginUserVo.setAccessToken(accessToken);
+        userLoginVo.setAccessToken(accessToken);
         val refreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername(), roles, user.getTokenVersion());
-        loginUserVo.setRefreshToken(refreshToken);
+        userLoginVo.setRefreshToken(refreshToken);
 
         // 更新 token version
         userService.modifyTokenVersionByUser(user);
@@ -75,6 +79,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         // 写出响应
-        ResponseObjectUtil.writeResponse(response, R.ok(loginUserVo));
+        ResponseObjectUtil.writeResponse(response, R.ok(userLoginVo));
     }
 }

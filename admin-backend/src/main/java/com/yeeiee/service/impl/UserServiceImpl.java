@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
-import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public IPage<UserRoleVo> getUserPages(Page<UserRoleVo> page, String searchName) {
+    public IPage<UserVo> getUserPages(Page<UserVo> page, String searchName) {
         return userMapper.selectUserPages(page, searchName);
     }
 

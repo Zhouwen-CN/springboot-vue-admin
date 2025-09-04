@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @TableName("t_user_role")
+@KeySequence("t_user_role_seq")
 @Schema(name = "UserRole", description = "用户角色关系表")
 public class UserRole {
 

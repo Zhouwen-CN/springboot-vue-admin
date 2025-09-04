@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
-import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 
 import java.util.Collection;
 
@@ -33,7 +33,7 @@ public interface UserService extends IService<User> {
      * @param searchName 搜索关键词
      * @return 分页结果
      */
-    IPage<UserRoleVo> getUserPages(Page<UserRoleVo> page, String searchName);
+    IPage<UserVo> getUserPages(Page<UserVo> page, String searchName);
 
 
     /**

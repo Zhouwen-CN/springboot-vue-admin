@@ -9,7 +9,7 @@ export interface MenuVo extends CreateAndUpdateTime {
   icon: string
   keepAlive: boolean
   pid: number
-  type: number
+  menuType: number
   children: MenuVo[]
 }
 
@@ -29,7 +29,7 @@ export interface MenuForm {
   icon: string
   keepAlive: boolean
   pid: number
-  type: number
+  menuType: number
 }
 
 /**
@@ -52,4 +52,13 @@ export function reqSaveMenu(menuForm: MenuForm) {
  */
 export function reqDeleteMenu(id: number) {
   return request.delete<void>(`/menu/${id}`)
+}
+
+/**
+ * 根据角色id，查询菜单id列表
+ * @param roleId 角色id
+ * @returns
+ */
+export function reqGetMenuIdsByRoleId(roleId: number) {
+  return request.get<number[]>(`/menu/${roleId}`)
 }

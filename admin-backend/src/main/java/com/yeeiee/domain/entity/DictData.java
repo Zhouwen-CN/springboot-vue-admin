@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,12 +18,13 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-02-14
+ * @since 2025-09-04
  */
 @Getter
 @Setter
 @ToString
 @TableName("t_dict_data")
+@KeySequence("t_dict_data_seq")
 @Schema(name = "DictData", description = "字典数据表")
 public class DictData {
 
@@ -39,8 +41,8 @@ public class DictData {
     private String label;
 
     @Schema(description = "字典值")
-    @TableField(value = "value")
-    private Integer value;
+    @TableField(value = "data")
+    private Integer data;
 
     @Schema(description = "字典排序")
     @TableField(value = "sort")

@@ -54,7 +54,7 @@ public class DictTypeController {
         val page = dictTypeService.lambdaQuery()
                 .like(StringUtils.hasText(keyword), DictType::getName, keyword)
                 .or()
-                .like(StringUtils.hasText(keyword), DictType::getType, keyword)
+                .like(StringUtils.hasText(keyword), DictType::getDictType, keyword)
                 .page(Page.of(current, size));
 
         return R.ok(PageVo.fromPage(page));

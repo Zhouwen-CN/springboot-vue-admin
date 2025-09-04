@@ -11,15 +11,15 @@
         <result column="file_path" property="filePath" />
         <result column="icon" property="icon" />
         <result column="pid" property="pid" />
-        <result column="is_keep_alive" property="keepAlive" />
-        <result column="type" property="type" />
+        <result column="keep_alive" property="keepAlive" />
+        <result column="menu_type" property="menuType" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, access_path, file_path, icon, pid, is_keep_alive, type, create_time, update_time
+        id, title, access_path, file_path, icon, pid, keep_alive, menu_type, create_time, update_time
     </sql>
 
     <select id="selectMenusByRoleNames" resultMap="BaseResultMap">
@@ -30,8 +30,8 @@
             a.file_path,
             a.icon,
             a.pid,
-            a.is_keep_alive,
-            a.type,
+            a.keep_alive,
+            a.menu_type,
             a.create_time,
             a.update_time
         from t_menu a
@@ -62,5 +62,12 @@
         ) b
         on a.id = b.menu_id
         order by a.id
+    </select>
+
+    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
+        select
+            menu_id
+        from t_role_menu
+        where role_id = #{roleId}
     </select>
 </mapper>

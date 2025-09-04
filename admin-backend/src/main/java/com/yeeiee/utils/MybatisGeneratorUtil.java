@@ -1,6 +1,7 @@
 package com.yeeiee.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
@@ -94,9 +95,9 @@ public final class MybatisGeneratorUtil {
 
                     builder.entityBuilder()
                             .javaTemplate("/templates/entity.java")
-                            // .idType(IdType.AUTO)
+                            .idType(IdType.AUTO)
                             .enableRemoveIsPrefix()
-                            .enableTableFieldAnnotation()
+                            // .enableTableFieldAnnotation()
                             .enableLombok()
                             .disableSerialVersionUID()
                             .addTableFills(
@@ -117,7 +118,7 @@ public final class MybatisGeneratorUtil {
                             .serviceTemplate("/templates/service.java")
                             .serviceImplTemplate("/templates/serviceImpl.java")
                             .formatServiceFileName("%sService")
-                           .enableFileOverride()
+                           // .enableFileOverride()
                     ;
 
                     builder.mapperBuilder()
@@ -145,7 +146,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_role");
+        generator(args[0], "t_dict_data");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

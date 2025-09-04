@@ -35,7 +35,7 @@ VALUES (1, 1, 1),
        (16, 1, 16);
 
 -- 菜单表
-INSERT INTO t_menu(id, title, access_path, file_path, icon, pid, is_keep_alive, type)
+INSERT INTO t_menu(id, title, access_path, file_path, icon, pid, keep_alive, menu_type)
 VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, 0),
        (2, '用户管理', '/auth/user', '/auth/user/index.vue', 'User', 1, 0, 1),
        (3, '角色管理', '/auth/role', '/auth/role/index.vue', 'Avatar', 1, 0, 1),
@@ -54,10 +54,10 @@ VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, 0),
        (16, '菜单测试-sub3', '/test/sub3', '/test/sub2.vue', 'PictureFilled', 13, 0, 1);
 
 -- 字典类型表
-insert into t_dict_type(id, type, name)
+insert into t_dict_type(id, dict_type, name)
 values (1,'menu_type','菜单类型');
 
 -- 字典数据表
-insert into t_dict_data(id, type_id, label, "value", sort)
+insert into t_dict_data(id, type_id, label, data, sort)
 values (1,1,'目录',0,0),
        (2,1,'菜单',1,1);

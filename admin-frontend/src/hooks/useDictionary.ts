@@ -24,7 +24,7 @@ function useDict(typeId: number, useMap = true): UseDictResult {
         dictData.value = res.data
         if (useMap) {
           res.data.forEach((item) => {
-            dictMap.value.set(item.value, item.label)
+            dictMap.value.set(item.data, item.label)
           })
         }
       })

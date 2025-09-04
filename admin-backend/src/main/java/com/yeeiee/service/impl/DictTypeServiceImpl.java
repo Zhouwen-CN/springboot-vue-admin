@@ -32,7 +32,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     @Override
     public void addDictType(DictTypeForm dictTypeForm) {
         val exists = this.lambdaQuery()
-                .eq(DictType::getType, dictTypeForm.getType())
+                .eq(DictType::getDictType, dictTypeForm.getDictType())
                 .exists();
 
         if (exists) {

@@ -1,11 +1,8 @@
 package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.Role;
-import com.yeeiee.domain.vo.RoleMenuVo;
-import com.yeeiee.domain.vo.RoleVo;
+import com.yeeiee.domain.vo.RoleSelectorVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,10 +16,7 @@ import java.util.List;
  * @since 2024-05-09
  */
 public interface RoleMapper extends BaseMapper<Role> {
+    List<RoleSelectorVo> selectRoleVoList();
 
-    IPage<RoleMenuVo> selectRolePage(Page<RoleMenuVo> page, @Param("searchName") String searchName);
-
-    List<RoleVo> selectRoleVoList();
-
-    List<String> selectRoleNamesByUserId(@Param("userId") Long id);
+    List<RoleSelectorVo> selectRoleSelectorVoListByUserId(@Param("userId") Long userId);
 }

@@ -86,4 +86,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 MenuVo::setChildren,
                 (id) -> id == 0L);
     }
+
+    @Override
+    public List<Long> getMenuIdsByRoleId(Long roleId) {
+        return menuMapper.selectMenuIdsByRoleId(roleId);
+    }
 }

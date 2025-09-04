@@ -6,10 +6,14 @@ import { type CreateAndUpdateTime } from '@/utils/requestTypes'
 export interface DictTypeVo extends CreateAndUpdateTime {
   id: number
   name: string
-  type: string
+  dictType: string
 }
 
-export type DictTypeForm = Omit<DictTypeVo, 'id' | 'createTime' | 'updateTime'> & { id?: number }
+export interface DictTypeForm {
+  id?: number
+  name: string
+  dictType: string
+}
 
 // 获取字典类型分页
 export function reqGetDictTypePage() {
@@ -43,7 +47,7 @@ export interface DictDataVo extends CreateAndUpdateTime {
   id: number
   typeId: number
   label: string
-  value: number
+  data: number
   sort: number
 }
 
@@ -74,7 +78,7 @@ export function reqRemoveDictDataByIds(ids: number[]) {
 }
 
 // 根据字典类型 id 查询字典列表
-export type LabelValueVo = Pick<DictDataVo, 'label' | 'value'>
+export type LabelValueVo = Pick<DictDataVo, 'label' | 'data'>
 export function reqGetDictDataListByTypeId(typeId: number) {
   return request.get<LabelValueVo[]>(`/dict/data/${typeId}`)
 }

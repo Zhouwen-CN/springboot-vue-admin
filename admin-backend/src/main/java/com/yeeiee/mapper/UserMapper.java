@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.User;
-import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -22,5 +22,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @param page 分页对象
      * @return 用户分页对象
      */
-    IPage<UserRoleVo> selectUserPages(Page<UserRoleVo> page, @Param("searchName") String searchName);
+    IPage<UserVo> selectUserPages(Page<UserVo> page, @Param("searchName") String searchName);
 }

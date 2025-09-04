@@ -1,15 +1,12 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Role;
 import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.domain.entity.UserRole;
 import com.yeeiee.domain.form.RoleForm;
-import com.yeeiee.domain.vo.RoleMenuVo;
-import com.yeeiee.domain.vo.RoleVo;
+import com.yeeiee.domain.vo.RoleSelectorVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.RoleMapper;
 import com.yeeiee.service.RoleMenuService;
@@ -38,11 +35,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private final UserRoleService userRoleService;
     private final RoleMenuService roleMenuService;
     private final RoleMapper roleMapper;
-
-    @Override
-    public IPage<RoleMenuVo> getRolePage(Page<RoleMenuVo> page, String searchName) {
-        return roleMapper.selectRolePage(page, searchName);
-    }
 
     @Override
     public void addRole(RoleForm roleForm) {
@@ -151,12 +143,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<RoleVo> getRoleVoList() {
+    public List<RoleSelectorVo> getRoleVoList() {
         return roleMapper.selectRoleVoList();
     }
 
     @Override
-    public List<String> getRoleNamesByUserId(Long id) {
-        return roleMapper.selectRoleNamesByUserId(id);
+    public List<RoleSelectorVo> getRoleSelectorVoListByUserId(Long userId) {
+        return roleMapper.selectRoleSelectorVoListByUserId(userId);
     }
 }

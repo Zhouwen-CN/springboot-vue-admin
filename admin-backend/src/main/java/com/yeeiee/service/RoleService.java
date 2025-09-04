@@ -1,12 +1,9 @@
 package com.yeeiee.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.Role;
 import com.yeeiee.domain.form.RoleForm;
-import com.yeeiee.domain.vo.RoleMenuVo;
-import com.yeeiee.domain.vo.RoleVo;
+import com.yeeiee.domain.vo.RoleSelectorVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,16 +17,6 @@ import java.util.List;
  * @since 2024-05-09
  */
 public interface RoleService extends IService<Role> {
-
-    /**
-     * 获取角色分页（包含菜单ids）
-     *
-     * @param page       分页配置对象
-     * @param searchName 搜索关键词
-     * @return 分页结果
-     */
-    IPage<RoleMenuVo> getRolePage(Page<RoleMenuVo> page, String searchName);
-
     /**
      * 添加角色 和 菜单ids
      *
@@ -59,17 +46,16 @@ public interface RoleService extends IService<Role> {
     void removeRoleByIds(Collection<Long> ids);
 
     /**
-     * 获取用户列表
+     * 获取角色列表
      *
-     * @return 用户列表
+     * @return 角色列表
      */
-    List<RoleVo> getRoleVoList();
+    List<RoleSelectorVo> getRoleVoList();
 
     /**
-     * 根据用户id获取角色名列表
-     *
-     * @param id user id
-     * @return role names
+     * 根据用户id获取角色列表
+     * @param userId 用户id
+     * @return 角色列表
      */
-    List<String> getRoleNamesByUserId(Long id);
+    List<RoleSelectorVo> getRoleSelectorVoListByUserId(Long userId);
 }

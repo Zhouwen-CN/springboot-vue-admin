@@ -4,15 +4,12 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.domain.vo.RoleMenuVo">
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.Role">
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
         <result column="description" property="description"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <collection column="menu_id" property="menuIds" ofType="java.lang.Long">
-            <id column="menu_id"/>
-        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -20,43 +17,24 @@
         id, role_name, description, create_time, update_time
     </sql>
 
-    <select id="selectRolePage" resultMap="BaseResultMap">
-        select /*+ UseLimitPushDown */
-            a.id,
-            a.role_name,
-            a.description,
-            a.create_time,
-            a.update_time,
-            b.menu_id
-        from (
-            select
-                *
-            from t_role
-            <if test="searchName != null and searchName.trim() != ''">
-                where t_role.role_name like concat('%',#{searchName},'%')
-            </if>
-        ) a
-        left join t_role_menu b
-        on a.id=b.role_id
-    </select>
-
-    <select id="selectRoleVoList" resultType="com.yeeiee.domain.vo.RoleVo">
+    <select id="selectRoleVoList" resultType="com.yeeiee.domain.vo.RoleSelectorVo">
         select
             id,
             role_name as roleName
         from t_role
     </select>
 
-    <select id="selectRoleNamesByUserId" resultType="java.lang.String">
-        select
-            b.role_name
+    <select id="selectRoleSelectorVoListByUserId" resultType="com.yeeiee.domain.vo.RoleSelectorVo">
+         select
+            b.id,
+            b.role_name as roleName
         from (
             select
                 *
             from t_user_role
             where user_id = #{userId}
         ) a
-        left join t_role b
+        join t_role b
         on a.role_id = b.id
     </select>
 </mapper>

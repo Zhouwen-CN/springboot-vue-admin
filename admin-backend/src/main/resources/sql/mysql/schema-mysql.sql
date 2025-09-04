@@ -52,8 +52,8 @@ create table t_menu(
     file_path   varchar(60) null comment '文件路径',
     icon        varchar(15) not null comment '图标',
     pid         bigint      not null comment '父级菜单id',
-    is_keep_alive tinyint(1) default 0 null comment '是否缓存',
-    type   tinyint not null comment '菜单类型：0-目录，1-菜单',
+    keep_alive tinyint(1) default 0 null comment '是否缓存',
+    menu_type   tinyint not null comment '菜单类型：0-目录，1-菜单',
     create_time datetime not null default current_timestamp comment '创建时间',
     update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
     constraint uniq_access_path unique (access_path)
@@ -100,46 +100,46 @@ create table t_error_log(
     ip          varchar(32)  not null comment 'ip地址',
     user_agent  varchar(255) not null comment '用户代理',
     error_msg   text         not null comment '错误信息',
-    create_time timestamp    default CURRENT_TIMESTAMP comment '创建时间',
+    create_time timestamp    default current_timestamp comment '创建时间',
     index idx_create_time (create_time desc)
 ) comment '错误日志表';
 
 
 drop table if exists t_dict_type;
 create table t_dict_type(
-  id bigint primary key auto_increment comment '主键',
-  type varchar(50) not null comment '字典类型',
-  name varchar(50) not null comment '字典名称',
-  create_time datetime not null default current_timestamp comment '创建时间',
-  update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
-  constraint uniq_type unique (type)
+    id bigint primary key auto_increment comment '主键',
+    dict_type varchar(50) not null comment '字典类型',
+    name varchar(50) not null comment '字典名称',
+    create_time datetime not null default current_timestamp comment '创建时间',
+    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    constraint uniq_type unique (dict_type)
 ) comment '字典类型表';
 
 
 drop table if exists t_dict_data;
 create table t_dict_data(
-  id bigint primary key auto_increment comment '主键',
-  type_id bigint not null comment '字典类型id',
-  label varchar(50) not null comment '字典键',
-  value int not null comment '字典值',
-  sort int default 0 comment '字典排序',
-  create_time datetime not null default current_timestamp comment '创建时间',
-  update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
-  constraint uniq_type_label unique (type_id, label)
+    id bigint primary key auto_increment comment '主键',
+    type_id bigint not null comment '字典类型id',
+    label varchar(50) not null comment '字典键',
+    data int not null comment '字典值',
+    sort int default 0 comment '字典排序',
+    create_time datetime not null default current_timestamp comment '创建时间',
+    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    constraint uniq_type_label unique (type_id, data)
 ) comment '字典数据表';
-
 
 drop table if exists t_data_source;
 create table t_data_source(
-  id bigint primary key auto_increment comment '主键',
-  name varchar(50) not null comment '数据源名称',
-  url varchar(500) not null comment '数据源连接',
-  username varchar(50) not null comment '用户名',
-  password varchar(50) not null comment '密码',
-  create_time datetime not null default current_timestamp comment '创建时间',
-  update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
-  constraint uniq_name unique (name)
+    id bigint primary key auto_increment comment '主键',
+    name varchar(50) not null comment '数据源名称',
+    url varchar(500) not null comment '数据源连接',
+    username varchar(50) not null comment '用户名',
+    password varchar(50) not null comment '密码',
+    create_time datetime not null default current_timestamp comment '创建时间',
+    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    constraint uniq_name unique (name)
 ) auto_increment=2 comment = '数据源配置表';
+
 
 # 尚未用到
 DROP TABLE IF EXISTS t_codegen_table;
@@ -154,7 +154,6 @@ CREATE TABLE t_codegen_table  (
   update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) COMMENT = '代码生成表定义';
 
-# 尚未用到
 drop table if exists t_codegen_column;
 create table t_codegen_column  (
   id bigint primary key auto_increment comment '主键',

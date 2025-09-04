@@ -6,7 +6,7 @@ import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.domain.vo.UserRoleVo;
+import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,9 +36,9 @@ public class UserController {
 
     @Operation(summary = "查询用户分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<UserRoleVo>> getUserPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
-                                             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-                                             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
+    public R<PageVo<UserVo>> getUserPage(@PathVariable("size") @Parameter(description = "页面大小") Integer size,
+                                         @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+                                         @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName) {
         val page = userService.getUserPages(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(page));
     }

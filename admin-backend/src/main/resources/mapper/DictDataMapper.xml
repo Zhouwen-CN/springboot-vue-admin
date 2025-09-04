@@ -8,7 +8,7 @@
         <id column="id" property="id" />
         <result column="type_id" property="typeId" />
         <result column="label" property="label" />
-        <result column="value" property="value" />
+        <result column="data" property="data" />
         <result column="sort" property="sort" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -16,16 +16,16 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type_id, label, value, sort, create_time, update_time
+        id, type_id, label, data, sort, create_time, update_time
     </sql>
 
     <select id="selectListByTypeId" resultType="com.yeeiee.domain.vo.DictDataVo">
         select
             label,
-            `value`
+            data
         from t_dict_data
         where type_id=#{typeId}
-        order by `sort`
+        order by sort
     </select>
     <select id="selectTypeIdByDataIds" resultType="java.lang.Long">
         select
@@ -39,6 +39,4 @@
         </where>
         group by type_id
     </select>
-
-
 </mapper>

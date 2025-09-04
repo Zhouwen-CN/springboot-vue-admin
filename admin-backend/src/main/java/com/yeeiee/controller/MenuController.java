@@ -76,5 +76,12 @@ public class MenuController {
         menuService.removeMenu(id);
         return R.ok();
     }
+
+    @Operation(summary = "根据角色id，查询菜单id列表")
+    @GetMapping("/{roleId}")
+    public R<List<Long>> getMenuIdsByRoleId(@PathVariable("roleId") @Parameter(description = "角色id") Long roleId){
+        val menuIds = menuService.getMenuIdsByRoleId(roleId);
+        return R.ok(menuIds);
+    }
 }
 

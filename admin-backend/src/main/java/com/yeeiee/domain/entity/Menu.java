@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,12 +18,13 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-08-26
+ * @since 2025-09-04
  */
 @Getter
 @Setter
 @ToString
 @TableName("t_menu")
+@KeySequence("t_menu_seq")
 @Schema(name = "Menu", description = "菜单表")
 public class Menu {
 
@@ -51,12 +53,12 @@ public class Menu {
     private Long pid;
 
     @Schema(description = "是否缓存")
-    @TableField(value = "is_keep_alive")
+    @TableField(value = "keep_alive")
     private Boolean keepAlive;
 
     @Schema(description = "菜单类型：0-目录，1-菜单")
-    @TableField(value = "type")
-    private Integer type;
+    @TableField(value = "menu_type")
+    private Integer menuType;
 
     @Schema(description = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)

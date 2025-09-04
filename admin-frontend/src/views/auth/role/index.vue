@@ -6,8 +6,9 @@ import {
   reqGetRolePage,
   reqSaveRoleMenu,
   type RoleMenuForm,
-  type RoleMenuVo
+  type RoleVo
 } from '@/api/auth/role'
+import { reqGetMenuIdsByRoleId } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type TreeInstance } from 'element-plus'
 import useUserStore from '@/stores/user'
 import type { MenuVo } from '@/api/auth/menu'
@@ -58,14 +59,15 @@ function addRole() {
 }
 
 // 更新角色
-function updateRole(row: RoleMenuVo) {
+async function updateRole(row: RoleVo) {
+  const id = row.id
+  const result = await reqGetMenuIdsByRoleId(id)
   toggleDialog.show = true
   toggleDialog.title = '修改角色'
   roleMenuForm.id = row.id
   roleMenuForm.roleName = row.roleName
   roleMenuForm.description = row.description
-  const menuIds = row.menuIds
-  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], menuIds)
+  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], result.data)
 }
 
 // 删除角色
@@ -78,7 +80,7 @@ async function deleteRole(id: number) {
 // 批量删除
 const deleteIds = ref<number[]>([])
 
-function handleSelectionChange(roles: RoleMenuVo[]) {
+function handleSelectionChange(roles: RoleVo[]) {
   deleteIds.value = roles.map((role) => role.id)
 }
 
@@ -210,7 +212,7 @@ onMounted(() => {
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: RoleMenuVo }">
+          <template #default="{ row }: { row: RoleVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
               <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">

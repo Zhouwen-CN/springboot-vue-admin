@@ -1,14 +1,13 @@
 import request from '@/utils/request'
 import type { CreateAndUpdateTime } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
-import { type RoleVo } from '../role'
 
 export interface LoginForm {
   username: string
   password: string
 }
 
-export interface UserVo {
+export interface UserLoginVo {
   id: number
   username: string
   accessToken: string
@@ -22,7 +21,7 @@ export interface UserVo {
  * @returns
  */
 export function reqLogin(loginForm: LoginForm) {
-  return request.post<UserVo, LoginForm>('/login/user', loginForm)
+  return request.post<UserLoginVo, LoginForm>('/login/user', loginForm)
 }
 
 /**
@@ -31,7 +30,7 @@ export function reqLogin(loginForm: LoginForm) {
  * @returns
  */
 export function reqRefreshToken(refreshToken: string) {
-  return request.get<UserVo>('/login/refresh', {
+  return request.get<UserLoginVo>('/login/refresh', {
     headers: {
       Authorization: `Bearer ${refreshToken}`
     }
@@ -42,10 +41,9 @@ export function reqLogout(id: number) {
   return request.get<void>(`/user/logout/${id}`)
 }
 
-export interface UserRoleVo extends CreateAndUpdateTime {
+export interface UserVo extends CreateAndUpdateTime {
   id: number
   username: string
-  roleList: Array<RoleVo>
 }
 
 /**
@@ -53,7 +51,7 @@ export interface UserRoleVo extends CreateAndUpdateTime {
  * @returns
  */
 export function reqGetUserRolePage() {
-  return usePagination<UserRoleVo>('/user')
+  return usePagination<UserVo>('/user')
 }
 
 export interface UserRoleForm {

@@ -22,6 +22,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
@@ -42,7 +43,7 @@ public class WebSecurityConfig {
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String[] WHITE_LIST = new String[]{
+    private static final String[] STATIC_LIST = new String[]{
             "/",
             "/index.html",
             "/favicon.ico",
@@ -51,6 +52,9 @@ public class WebSecurityConfig {
             "/images/**",
             "/assets/**"
     };
+
+    private static final String H2_CONSOLE_PATH = "/h2/**";
+
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {
         // 关闭一些不需要的
@@ -119,14 +123,19 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain defaultApiFilterChain(HttpSecurity http) throws Exception {
         this.commonHttpSetting(http);
-        // 启用 XSS 过滤。如果检测到攻击，浏览器将不会清除页面，而是阻止页面加载（默认是0）
-        http.headers(headers -> headers.xssProtection(
-                xssProtection -> xssProtection.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+        http.headers(headers -> {
+                    // 启用 XSS 过滤。如果检测到攻击，浏览器将不会清除页面，而是阻止页面加载（默认是0）
+                    headers.xssProtection(xssProtection -> xssProtection.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK));
+                    // 默认DENY，h2 控制台会打不开
+                    headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin);
+                }
         );
         http.authorizeHttpRequests(authorize ->
                         authorize
                                 // 静态资源
-                                .requestMatchers(HttpMethod.GET, WHITE_LIST).permitAll()
+                                .requestMatchers(HttpMethod.GET, STATIC_LIST).permitAll()
+                                // h2 console
+                                .requestMatchers(H2_CONSOLE_PATH).permitAll()
                                 // actuator 端点
                                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
                                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
@@ -146,7 +155,8 @@ public class WebSecurityConfig {
 
     /**
      * provider 管理者
-     * @param authenticationProviders 认证提供者列表
+     *
+     * @param authenticationProviders              认证提供者列表
      * @param defaultAuthenticationEventPublishers 默认事件发布
      * @return provider manager
      */

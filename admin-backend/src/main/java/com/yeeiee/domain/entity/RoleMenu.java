@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @TableName("t_role_menu")
+@KeySequence("t_role_menu_seq")
 @Schema(name = "RoleMenu", description = "用户权限关系表")
 public class RoleMenu {
 

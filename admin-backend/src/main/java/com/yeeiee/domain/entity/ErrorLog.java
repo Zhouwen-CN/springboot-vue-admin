@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @TableName("t_error_log")
+@KeySequence("t_error_log_seq")
 @Schema(name = "ErrorLog", description = "错误日志表")
 public class ErrorLog {
 

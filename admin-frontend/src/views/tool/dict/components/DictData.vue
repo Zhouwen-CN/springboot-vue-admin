@@ -21,7 +21,7 @@ const dictDataForm = reactive<DictDataForm>({
   id: undefined,
   typeId: -1,
   label: '',
-  value: 0,
+  data: 0,
   sort: 0
 })
 // 字典数据弹窗
@@ -84,7 +84,7 @@ function modifyDictData(row: DictDataVo) {
   dictDataForm.id = row.id
   dictDataForm.typeId = row.typeId
   dictDataForm.label = row.label
-  dictDataForm.value = row.value
+  dictDataForm.data = row.data
   dictDataForm.sort = row.sort
 }
 
@@ -92,7 +92,7 @@ function modifyDictData(row: DictDataVo) {
 const dictDataFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictDataForm>>({
   label: [{ required: true, message: '请输入标签键', trigger: 'blur' }],
-  value: [{ required: true, message: '请输入标签值', trigger: 'blur' }],
+  data: [{ required: true, message: '请输入标签值', trigger: 'blur' }],
   sort: [{ required: true, message: '请输入排序值', trigger: 'blur' }]
 })
 
@@ -118,7 +118,7 @@ function dictDataDialogClean() {
   dictDataForm.id = undefined
   dictDataForm.typeId = typeId.value
   dictDataForm.label = ''
-  dictDataForm.value = 0
+  dictDataForm.data = 0
   dictDataForm.sort = 0
   dictDataFormRef.value?.clearValidate()
 }
@@ -176,7 +176,7 @@ defineExpose({
       >
         <el-table-column type="selection" width="45" />
         <el-table-column label="标签键" min-width="40px" prop="label"> </el-table-column>
-        <el-table-column label="标签值" min-width="40px" prop="value"></el-table-column>
+        <el-table-column label="标签值" min-width="40px" prop="data"></el-table-column>
         <el-table-column label="排序" min-width="40px" prop="sort"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
@@ -231,8 +231,8 @@ defineExpose({
           <el-form-item label="标签键" prop="label">
             <el-input v-model="dictDataForm.label" placeholder="标签键"></el-input>
           </el-form-item>
-          <el-form-item label="标签值" prop="value">
-            <el-input v-model="dictDataForm.value" type="number" placeholder="标签值"></el-input>
+          <el-form-item label="标签值" prop="data">
+            <el-input v-model="dictDataForm.data" type="number" placeholder="标签值"></el-input>
           </el-form-item>
           <el-form-item label="排序" prop="sort">
             <el-input v-model="dictDataForm.sort" type="number"></el-input>

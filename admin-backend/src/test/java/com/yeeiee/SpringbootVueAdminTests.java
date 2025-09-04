@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.query.SQLQuery;
 import com.yeeiee.service.DataSourceService;
+import com.yeeiee.service.MenuService;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(args = {"--mpw.key=18mTlw4bqrAmvNXB"})
 class SpringbootVueAdminTests {
     @Autowired
     ApplicationContext context;
@@ -76,5 +77,13 @@ class SpringbootVueAdminTests {
         List<TableInfo> tables = builder.getTableInfoList();
         tables.sort(Comparator.comparing(TableInfo::getName));
         return tables;
+    }
+
+    @Autowired
+    MenuService menuService;
+    @Test
+    void getMenuIdsTest(){
+        val menuIdsByRoleIds = menuService.getMenuIdsByRoleId(1L);
+        System.out.println("menuIdsByRoleIds = " + menuIdsByRoleIds);
     }
 }

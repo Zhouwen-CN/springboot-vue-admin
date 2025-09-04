@@ -1,4 +1,4 @@
-import type { LoginForm, UserVo } from '@/api/auth/user'
+import type { LoginForm, UserLoginVo } from '@/api/auth/user'
 import { reqLogin, reqLogout, reqRefreshToken } from '@/api/auth/user'
 import { type MenuVo, reqGetMenuList } from '@/api/auth/menu'
 import { deleteAsyncRoutes, getAsyncRoutes } from '@/router/asyncRoutes'
@@ -11,7 +11,7 @@ export const storeName = 'PINIA:USER-STORE'
 const useUserStore = defineStore(
   storeName,
   () => {
-    const userInfo = ref<UserVo>({} as UserVo)
+    const userInfo = ref<UserLoginVo>({} as UserLoginVo)
     const menuInfo = ref<MenuVo[]>([])
     let refreshTokenPromise: Promise<boolean> | null = null
 
@@ -69,7 +69,7 @@ const useUserStore = defineStore(
 
     // 重置仓库
     function $reset() {
-      userInfo.value = {} as UserVo
+      userInfo.value = {} as UserLoginVo
       menuInfo.value = []
     }
 

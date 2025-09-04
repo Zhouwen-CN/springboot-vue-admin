@@ -22,7 +22,7 @@ const toggleDialog = reactive({
 const dictTypeForm = reactive<DictTypeForm>({
   id: undefined,
   name: '',
-  type: ''
+  dictType: ''
 })
 
 // 保存字典按钮loading
@@ -76,7 +76,7 @@ function modifyDictType(row: DictTypeVo) {
   toggleDialog.show = true
   toggleDialog.title = '更新字典类型'
   dictTypeForm.id = row.id
-  dictTypeForm.type = row.type
+  dictTypeForm.dictType = row.dictType
   dictTypeForm.name = row.name
 }
 
@@ -84,7 +84,7 @@ function modifyDictType(row: DictTypeVo) {
 const dictTypeFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictTypeForm>>({
   name: [{ required: true, message: '请输入字典类型', trigger: 'blur' }],
-  type: [{ required: true, message: '请输入字典名称', trigger: 'blur' }]
+  dictType: [{ required: true, message: '请输入字典名称', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -108,7 +108,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
 function dialogClean() {
   toggleDialog.title = ''
   dictTypeForm.id = undefined
-  dictTypeForm.type = ''
+  dictTypeForm.dictType = ''
   dictTypeForm.name = ''
   dictTypeFormRef.value?.clearValidate()
 }
@@ -165,9 +165,9 @@ onMounted(() => {
       >
         <el-table-column type="selection" width="45" />
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="字典类型" prop="type">
+        <el-table-column label="字典类型" prop="dictType">
           <template #default="{ row }: { row: DictTypeVo }">
-            <span class="dict-type" @click="openDrawer(row.id)">{{ row.type }}</span>
+            <span class="dict-type" @click="openDrawer(row.id)">{{ row.dictType }}</span>
           </template>
         </el-table-column>
         <el-table-column label="字典名称" prop="name"></el-table-column>
@@ -217,8 +217,8 @@ onMounted(() => {
           style="padding: 0 20px"
           @submit.prevent="onSubmit(dictTypeFormRef)"
         >
-          <el-form-item label="字典类型" prop="type">
-            <el-input v-model="dictTypeForm.type" placeholder="字典类型"></el-input>
+          <el-form-item label="字典类型" prop="dictType">
+            <el-input v-model="dictTypeForm.dictType" placeholder="字典类型"></el-input>
           </el-form-item>
           <el-form-item label="字典名称" prop="name">
             <el-input v-model="dictTypeForm.name" placeholder="字典名称"></el-input>

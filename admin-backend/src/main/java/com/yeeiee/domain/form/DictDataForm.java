@@ -35,7 +35,7 @@ public class DictDataForm implements FormToBeanHelper<DictData> {
     private String label;
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典值")
-    private Integer value;
+    private Integer data;
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典排序")
     private Integer sort;

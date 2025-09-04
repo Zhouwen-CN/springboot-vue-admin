@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-08-26
+ * @since 2025-09-04
  */
 public interface MenuMapper extends BaseMapper<Menu> {
     /**
@@ -23,4 +23,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return 菜单列表
      */
     List<MenuVo> selectMenusByRoleNames(@Param("roles") List<String> roles);
+
+    List<Long> selectMenuIdsByRoleId(@Param("roleId") Long roleId);
 }
