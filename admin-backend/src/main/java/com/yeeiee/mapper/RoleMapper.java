@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.Role;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.RoleSelectorVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-09-05
  */
 public interface RoleMapper extends BaseMapper<Role> {
     List<RoleSelectorVo> selectRoleVoList();

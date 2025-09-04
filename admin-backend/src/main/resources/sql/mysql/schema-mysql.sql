@@ -7,8 +7,10 @@ create table t_user(
     username      varchar(15)      not null comment '用户名',
     password      varchar(60)      not null comment '密码',
     token_version bigint default 0 not null comment 'token版本',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_username unique (username)
 ) comment '用户表';
 
@@ -18,8 +20,10 @@ create table t_user_role(
     id          bigint primary key auto_increment comment '主键',
     user_id     bigint not null comment '用户id',
     role_id     bigint not null comment '角色id',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间'
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间'
 ) comment '用户角色关系表';
 
 
@@ -28,8 +32,10 @@ create table t_role(
     id          bigint primary key auto_increment comment '主键',
     role_name varchar(15) not null comment '角色名称',
     description varchar(40) not null comment '角色说明',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_role_name unique (role_name)
 ) comment '角色表';
 
@@ -39,9 +45,11 @@ create table t_role_menu(
     id          bigint primary key auto_increment comment '主键',
     role_id     bigint not null comment '角色id',
     menu_id     bigint not null comment '菜单id',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间'
-) comment '用户菜单关系表';
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间'
+) comment '角色菜单关系表';
 
 
 DROP TABLE IF EXISTS t_menu;
@@ -54,8 +62,10 @@ create table t_menu(
     pid         bigint      not null comment '父级菜单id',
     keep_alive tinyint(1) default 0 null comment '是否缓存',
     menu_type   tinyint not null comment '菜单类型：0-目录，1-菜单',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_access_path unique (access_path)
 ) comment '菜单表';
 
@@ -63,12 +73,12 @@ create table t_menu(
 drop table if exists t_login_log;
 create table t_login_log(
     id          bigint primary key auto_increment comment '主键',
-    username    varchar(15)  not null comment '用户名',
     operation   tinyint not null comment '操作类型',
     status      tinyint not null comment '操作状态',
     ip          varchar(32)  not null comment 'ip地址',
-    user_agent  varchar(255) not null comment '用户代理',
-    create_time datetime not null default current_timestamp comment '创建时间',
+    user_agent  varchar(200) not null comment '用户代理',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
     index idx_create_time(create_time desc)
 ) comment '登录日志表';
 
@@ -76,7 +86,6 @@ create table t_login_log(
 drop table if exists t_operation_log;
 create table t_operation_log(
     id        bigint primary key auto_increment comment '主键',
-    username  varchar(15)  not null comment '用户名',
     operation varchar(10) not null comment '操作',
     url         varchar(50) not null comment '请求地址',
     method      tinyint not null comment '请求方式',
@@ -84,8 +93,9 @@ create table t_operation_log(
     time        bigint          not null comment '请求耗时',
     status      tinyint not null comment '操作状态',
     ip          varchar(32)  not null comment 'ip地址',
-    user_agent  varchar(255) not null comment '用户代理',
-    create_time datetime not null default current_timestamp comment '创建时间',
+    user_agent  varchar(200) not null comment '用户代理',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
     index idx_create_time (create_time desc)
 ) comment '操作日志表';
 
@@ -93,14 +103,14 @@ create table t_operation_log(
 drop table if exists t_error_log;
 create table t_error_log(
     id          bigint primary key auto_increment comment '主键',
-    username    varchar(15)  not null comment '用户名',
     url         varchar(50) not null comment '请求地址',
     method      tinyint not null comment '请求方式',
     params      varchar(500) default null comment '请求参数',
     ip          varchar(32)  not null comment 'ip地址',
-    user_agent  varchar(255) not null comment '用户代理',
+    user_agent  varchar(200) not null comment '用户代理',
     error_msg   text         not null comment '错误信息',
-    create_time timestamp    default current_timestamp comment '创建时间',
+    create_user varchar(15) default null comment '创建者',
+    create_time timestamp default current_timestamp comment '创建时间',
     index idx_create_time (create_time desc)
 ) comment '错误日志表';
 
@@ -108,10 +118,12 @@ create table t_error_log(
 drop table if exists t_dict_type;
 create table t_dict_type(
     id bigint primary key auto_increment comment '主键',
-    dict_type varchar(50) not null comment '字典类型',
-    name varchar(50) not null comment '字典名称',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    dict_type varchar(15) not null comment '字典类型',
+    name varchar(40) not null comment '字典名称',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_type unique (dict_type)
 ) comment '字典类型表';
 
@@ -120,25 +132,29 @@ drop table if exists t_dict_data;
 create table t_dict_data(
     id bigint primary key auto_increment comment '主键',
     type_id bigint not null comment '字典类型id',
-    label varchar(50) not null comment '字典键',
+    label varchar(15) not null comment '字典键',
     data int not null comment '字典值',
     sort int default 0 comment '字典排序',
+    create_user varchar(15) default null comment '创建者',
     create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_type_label unique (type_id, data)
 ) comment '字典数据表';
 
 drop table if exists t_data_source;
 create table t_data_source(
     id bigint primary key auto_increment comment '主键',
-    name varchar(50) not null comment '数据源名称',
-    url varchar(500) not null comment '数据源连接',
-    username varchar(50) not null comment '用户名',
-    password varchar(50) not null comment '密码',
-    create_time datetime not null default current_timestamp comment '创建时间',
-    update_time datetime not null default current_timestamp on update current_timestamp comment '更新时间',
+    name varchar(15) not null comment '数据源名称',
+    url varchar(200) not null comment '数据源连接',
+    username varchar(15) not null comment '用户名',
+    password varchar(15) not null comment '密码',
+    create_user varchar(15) default null comment '创建者',
+    create_time datetime default current_timestamp comment '创建时间',
+    update_user varchar(15) default null comment '更新者',
+    update_time datetime default current_timestamp comment '更新时间',
     constraint uniq_name unique (name)
-) auto_increment=2 comment = '数据源配置表';
+) comment = '数据源配置表';
 
 
 # 尚未用到

@@ -4,6 +4,7 @@ package ${package.Entity};
 <#list table.importPackages as pkg>
 import ${pkg};
 </#list>
+import com.baomidou.mybatisplus.annotation.KeySequence;
 <#if springdoc>
 import io.swagger.v3.oas.annotations.media.Schema;
 <#elseif swagger>
@@ -37,6 +38,7 @@ import lombok.experimental.Accessors;
 </#if>
 <#if table.convert>
 @TableName("${schemaName}${table.name}")
+@KeySequence("${table.name}_seq")
 </#if>
 <#if springdoc>
 @Schema(name = "${entity}", description = "${table.comment!}")
@@ -76,7 +78,8 @@ public class ${entity} {
     <#if field.keyFlag>
         <#-- 主键 -->
         <#if field.keyIdentityFlag>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
+<#--    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)-->
+    @TableId(value = "${field.annotationColumnName}")
         <#elseif idType??>
     @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
         <#elseif field.convert>

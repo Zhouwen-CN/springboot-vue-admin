@@ -5,16 +5,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.UserRole">
-        <id column="id" property="id"/>
-        <result column="user_id" property="userId"/>
-        <result column="role_id" property="roleId"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="role_id" property="roleId" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, role_id, create_time, update_time
+        id, user_id, role_id, create_user, create_time, update_user, update_time
     </sql>
 
 </mapper>

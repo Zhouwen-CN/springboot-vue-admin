@@ -37,8 +37,12 @@ public class MenuVo {
     private Boolean keepAlive;
     @Schema(description = "菜单类型")
     private Integer menuType;
+    @Schema(description = "创建者")
+    private String createUser;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
+    @Schema(description = "更新者")
+    private String updateUser;
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
     @Schema(description = "子菜单列表")

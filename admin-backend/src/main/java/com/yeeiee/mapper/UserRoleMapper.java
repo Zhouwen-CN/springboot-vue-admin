@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.UserRole;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.UserRole;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-09-05
  */
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 

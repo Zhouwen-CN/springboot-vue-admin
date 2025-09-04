@@ -14,8 +14,10 @@ export interface ResultData<T = unknown> {
   message: string
 }
 
-export interface CreateAndUpdateTime {
+export interface BaseVo {
+  createUser?: string
   createTime?: string
+  updateUser?: string
   updateTime?: string
 }
 

@@ -80,7 +80,6 @@ public class OperationLogAspect {
 
         val user = SecurityUserUtil.getSecurityUser();
         val operationLog = new OperationLog();
-        operationLog.setUsername(user.getUsername());
         operationLog.setOperation(operation.summary());
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(RequestMethodEnum.from(httpServletRequest.getMethod()));
@@ -90,6 +89,7 @@ public class OperationLogAspect {
         operationLog.setStatus(operationStatusEnum);
         operationLog.setIp(IPUtil.getClientIP(httpServletRequest));
         operationLog.setUserAgent(httpServletRequest.getHeader(HttpHeaders.USER_AGENT));
+        operationLog.setCreateUser(user.getUsername());
 
         operationLogService.save(operationLog);
     }

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { CreateAndUpdateTime } from '@/utils/requestTypes'
+import type { BaseVo } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
 export interface LoginForm {
@@ -41,7 +41,7 @@ export function reqLogout(id: number) {
   return request.get<void>(`/user/logout/${id}`)
 }
 
-export interface UserVo extends CreateAndUpdateTime {
+export interface UserVo extends BaseVo {
   id: number
   username: string
 }

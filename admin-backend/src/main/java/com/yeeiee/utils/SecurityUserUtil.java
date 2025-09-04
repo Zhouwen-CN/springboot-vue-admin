@@ -4,6 +4,8 @@ import com.yeeiee.domain.entity.User;
 import lombok.val;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 /**
  * <p>
  * security user工具
@@ -27,5 +29,15 @@ public class SecurityUserUtil {
         val user = new User();
         user.setUsername("未知用户");
         return user;
+    }
+
+    /**
+     * 获取用户名
+     * @return 用户名
+     */
+    public static Optional<String> getPrincipal(){
+        val authentication = SecurityContextHolder.getContext().getAuthentication();
+        return Optional.ofNullable(authentication)
+                .map(auth -> String.valueOf(auth.getPrincipal()));
     }
 }

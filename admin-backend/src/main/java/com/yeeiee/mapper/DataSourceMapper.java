@@ -13,9 +13,9 @@ import org.apache.ibatis.annotations.Param;
  * </p>
  *
  * @author chen
- * @since 2025-08-22
+ * @since 2025-09-05
  */
 public interface DataSourceMapper extends BaseMapper<DataSource> {
 
-    IPage<DataSourceVo> selectDataSourcePage(Page<DataSourceVo> page,@Param("searchName") String searchName);
+    IPage<DataSourceVo> selectDataSourcePage(Page<DataSourceVo> page, @Param("searchName") String searchName);
 }

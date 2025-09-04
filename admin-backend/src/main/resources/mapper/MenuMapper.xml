@@ -4,7 +4,7 @@
     <!--@formatter:off-->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yeeiee.domain.vo.MenuVo">
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.Menu">
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="access_path" property="accessPath" />
@@ -13,27 +13,31 @@
         <result column="pid" property="pid" />
         <result column="keep_alive" property="keepAlive" />
         <result column="menu_type" property="menuType" />
+        <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, access_path, file_path, icon, pid, keep_alive, menu_type, create_time, update_time
+        id, title, access_path, file_path, icon, pid, keep_alive, menu_type, create_user, create_time, update_user, update_time
     </sql>
 
-    <select id="selectMenusByRoleNames" resultMap="BaseResultMap">
+    <select id="selectMenusByRoleNames" resultType="com.yeeiee.domain.vo.MenuVo">
         select
             a.id,
             a.title,
-            a.access_path,
-            a.file_path,
+            a.access_path as accessPath,
+            a.file_path as filePath,
             a.icon,
             a.pid,
-            a.keep_alive,
-            a.menu_type,
-            a.create_time,
-            a.update_time
+            a.keep_alive as keepAlive,
+            a.menu_type as menuType,
+            a.create_user as createUser,
+            a.create_time as createTime,
+            a.update_user as updateUser,
+            a.update_time as updateTime
         from t_menu a
         join (
             select

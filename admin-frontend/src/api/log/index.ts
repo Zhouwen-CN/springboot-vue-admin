@@ -1,22 +1,20 @@
 import usePagination from '@/hooks/usePagination'
+import type { BaseVo } from '@/utils/requestTypes'
 
-export interface LoginLogVo {
+export interface LoginLogVo extends BaseVo {
   id: number
-  username: string
   operation: string
   status: string
   ip: string
   userAgent: string
-  createTime: string
 }
 
 export function reqGetLoginLogPage() {
   return usePagination<LoginLogVo>('/log/login')
 }
 
-export interface OperationLogVo {
+export interface OperationLogVo extends BaseVo {
   id: number
-  username: string
   operation: string
   url: string
   method: string
@@ -31,16 +29,14 @@ export function reqGetOperationLogPage() {
   return usePagination<OperationLogVo>('/log/ops')
 }
 
-export interface ErrorLogVo {
+export interface ErrorLogVo extends BaseVo {
   id: number
-  username: string
   url: string
   method: string
   params: string
   ip: string
   userAgent: string
   errorMsg: string
-  createTime: string
 }
 
 export function reqGetErrorLogPage() {

@@ -42,16 +42,16 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 
         if (exception instanceof NamedAuthenticationException namedAuthenticationException) {
             val exceptionUsername = namedAuthenticationException.getUsername();
-            if(exceptionUsername != null) username = exceptionUsername;
+            if (exceptionUsername != null) username = exceptionUsername;
         }
 
         // 2.写入日志
         val loginLog = new LoginLog();
-        loginLog.setUsername(username);
         loginLog.setOperation(LoginOperationEnum.LOGIN);
         loginLog.setStatus(OperationStatusEnum.FIELD);
         loginLog.setIp(IPUtil.getClientIP(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+        loginLog.setCreateUser(username);
         loginLogService.save(loginLog);
 
         // 3.写出响应

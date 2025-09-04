@@ -70,11 +70,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 写入登入成功日志（刷新token不需要写）
         if (authentication instanceof UserAuthenticationToken) {
             val loginLog = new LoginLog();
-            loginLog.setUsername(user.getUsername());
             loginLog.setOperation(LoginOperationEnum.LOGIN);
             loginLog.setStatus(OperationStatusEnum.SUCCESS);
             loginLog.setIp(IPUtil.getClientIP(request));
             loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+            loginLog.setCreateUser(user.getUsername());
             loginLogService.save(loginLog);
         }
 

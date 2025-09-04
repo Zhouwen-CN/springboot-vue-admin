@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-06-27
+ * @since 2025-09-05
  */
 @Getter
 @Setter
@@ -33,10 +33,6 @@ public class OperationLog {
     @Schema(description = "主键")
     @TableId(value = "id")
     private Long id;
-
-    @Schema(description = "用户名")
-    @TableField(value = "username")
-    private String username;
 
     @Schema(description = "操作")
     @TableField(value = "operation")
@@ -69,6 +65,10 @@ public class OperationLog {
     @Schema(description = "用户代理")
     @TableField(value = "user_agent")
     private String userAgent;
+
+    @Schema(description = "创建者")
+    @TableField(value = "create_user", fill = FieldFill.INSERT)
+    private String createUser;
 
     @Schema(description = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)

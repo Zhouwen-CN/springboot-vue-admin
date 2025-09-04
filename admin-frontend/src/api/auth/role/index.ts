@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { CreateAndUpdateTime } from '@/utils/requestTypes'
+import type { BaseVo } from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
 export interface RoleSelectorVo {
@@ -15,7 +15,7 @@ export function reqGetRoles() {
   return request.get<RoleSelectorVo[]>('/role')
 }
 
-export interface RoleVo extends RoleSelectorVo, CreateAndUpdateTime {
+export interface RoleVo extends RoleSelectorVo, BaseVo {
   description: string
 }
 

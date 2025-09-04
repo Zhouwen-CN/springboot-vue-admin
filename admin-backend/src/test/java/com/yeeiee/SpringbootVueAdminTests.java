@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-@SpringBootTest(args = {"--mpw.key=18mTlw4bqrAmvNXB"})
+@SpringBootTest
 class SpringbootVueAdminTests {
     @Autowired
     ApplicationContext context;

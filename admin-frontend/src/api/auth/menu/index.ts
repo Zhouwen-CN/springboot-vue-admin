@@ -1,7 +1,7 @@
 import request from '@/utils/request'
-import { type CreateAndUpdateTime } from '@/utils/requestTypes'
+import { type BaseVo } from '@/utils/requestTypes'
 
-export interface MenuVo extends CreateAndUpdateTime {
+export interface MenuVo extends BaseVo {
   id: number
   title: string
   accessPath: string

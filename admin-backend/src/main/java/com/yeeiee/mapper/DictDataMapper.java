@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-09-04
+ * @since 2025-09-05
  */
 public interface DictDataMapper extends BaseMapper<DictData> {
     List<DictDataVo> selectListByTypeId(@Param("typeId") Long typeId);

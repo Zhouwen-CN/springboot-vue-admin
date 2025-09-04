@@ -148,7 +148,6 @@ public class GlobalExceptionHandler {
         val request = RequestObjectUtil.getHttpServletRequest();
         val user = SecurityUserUtil.getSecurityUser();
         val errorLog = new ErrorLog();
-        errorLog.setUsername(user.getUsername());
         errorLog.setUrl(request.getRequestURI());
         errorLog.setMethod(RequestMethodEnum.from(request.getMethod()));
         val parameterMap = RequestObjectUtil.getParameterMap(request);
@@ -156,6 +155,7 @@ public class GlobalExceptionHandler {
         errorLog.setIp(IPUtil.getClientIP(request));
         errorLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         errorLog.setErrorMsg(ExceptionUtils.getStackTrace(e));
+        errorLog.setCreateUser(user.getUsername());
 
         errorLogService.save(errorLog);
     }

@@ -10,13 +10,15 @@
         <result column="label" property="label" />
         <result column="data" property="data" />
         <result column="sort" property="sort" />
+        <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, type_id, label, data, sort, create_time, update_time
+        id, type_id, label, data, sort, create_user, create_time, update_user, update_time
     </sql>
 
     <select id="selectListByTypeId" resultType="com.yeeiee.domain.vo.DictDataVo">
@@ -29,7 +31,7 @@
     </select>
     <select id="selectTypeIdByDataIds" resultType="java.lang.Long">
         select
-            type_id
+        type_id
         from t_dict_data
         <where>
             id in

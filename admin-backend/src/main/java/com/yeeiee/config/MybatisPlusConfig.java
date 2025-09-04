@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.incrementer.PostgreKeyGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.yeeiee.utils.SecurityUserUtil;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,13 +37,19 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
      */
     @Bean
-    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+    public MybatisPlusInterceptor mybatisPlusInterceptor(ConfigurableEnvironment environment) {
+        val dbType = IdTypeEnvironmentPostProcessor.getDbType(environment);
         val interceptor = new MybatisPlusInterceptor();
 
         // 分页插件
         val paginationInnerInterceptor = new PaginationInnerInterceptor();
-        // 数据库类型，如果有多数据源可以不配具体类型 否则都建议配上具体的DbType
-        paginationInnerInterceptor.setDbType(DbType.ORACLE);
+        // todo: h2 默认是 postgresql 分页，这里h2用的oracle模式
+        if (dbType == DbType.H2) {
+            paginationInnerInterceptor.setDbType(DbType.ORACLE);
+        }else{
+            paginationInnerInterceptor.setDbType(dbType);
+        }
+
         // 溢出总页数后是否进行处理
         paginationInnerInterceptor.setOverflow(true);
         // 单页分页条数限制，不会报错，会修正成 size=20
@@ -60,6 +67,11 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
+        val principal = SecurityUserUtil.getPrincipal();
+        principal.ifPresent(username -> {
+            this.strictInsertFill(metaObject, "createUser", String.class, username);
+            this.strictInsertFill(metaObject, "updateUser", String.class, username);
+        });
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
     }
@@ -69,10 +81,17 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
+        val principal = SecurityUserUtil.getPrincipal();
+        principal.ifPresent(username -> this.strictUpdateFill(metaObject, "updateUser", String.class, username));
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
     }
 
 
+    /**
+     * 当 idType 为 input 时，需要提供一个 IKeyGenerator
+     * @param environment 环境配置对象
+     * @return IKeyGenerator
+     */
     @Bean
     @ConditionalOnProperty(prefix = "mybatis-plus.global-config.db-config", name = "id-type", havingValue = "INPUT")
     public IKeyGenerator keyGenerator(ConfigurableEnvironment environment) {

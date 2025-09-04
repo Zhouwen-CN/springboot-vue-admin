@@ -40,7 +40,6 @@ public class IdTypeEnvironmentPostProcessor implements EnvironmentPostProcessor 
     );
 
     public static DbType getDbType(ConfigurableEnvironment environment) {
-        // 解密key
         val mpwKey = environment.getProperty(MPW_KEY);
         var url = environment.getProperty(DATASOURCE_URL_KEY, String.class);
         Assert.notNull(url, DATASOURCE_URL_KEY + " is null");

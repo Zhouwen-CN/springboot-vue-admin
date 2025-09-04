@@ -49,7 +49,7 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格 -->
       <el-table :border="true" :data="data" show-overflow-tooltip>
-        <el-table-column label="用户名称" prop="username"></el-table-column>
+        <el-table-column label="用户名称" prop="createUser"></el-table-column>
         <el-table-column label="请求地址" prop="url"></el-table-column>
         <el-table-column label="请求方式" prop="method"></el-table-column>
         <el-table-column label="请求参数" prop="params"></el-table-column>

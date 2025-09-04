@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-09-05
  */
 @Getter
 @Setter
@@ -40,11 +40,19 @@ public class UserRole {
     @TableField(value = "role_id")
     private Long roleId;
 
+    @Schema(description = "创建者")
+    @TableField(value = "create_user", fill = FieldFill.INSERT)
+    private String createUser;
+
     @Schema(description = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @Schema(description = "更新者")
+    @TableField(value = "update_user", fill = FieldFill.INSERT_UPDATE)
+    private String updateUser;
+
     @Schema(description = "更新时间")
-    @TableField(value = "update_time", fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 }

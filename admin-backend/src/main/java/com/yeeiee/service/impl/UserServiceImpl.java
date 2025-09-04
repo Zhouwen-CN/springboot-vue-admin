@@ -60,11 +60,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 退出登入日志
         val request = RequestObjectUtil.getHttpServletRequest();
         val loginLog = new LoginLog();
-        loginLog.setUsername(user.getUsername());
         loginLog.setOperation(LoginOperationEnum.LOGOUT);
         loginLog.setStatus(OperationStatusEnum.SUCCESS);
         loginLog.setIp(IPUtil.getClientIP(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
+        loginLog.setCreateUser(user.getUsername());
         loginLogService.save(loginLog);
     }
 

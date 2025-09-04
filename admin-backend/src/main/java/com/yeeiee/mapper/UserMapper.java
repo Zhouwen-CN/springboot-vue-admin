@@ -1,9 +1,9 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.User;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * </p>
  *
  * @author chen
- * @since 2024-05-09
+ * @since 2025-09-05
  */
 public interface UserMapper extends BaseMapper<User> {
     /**

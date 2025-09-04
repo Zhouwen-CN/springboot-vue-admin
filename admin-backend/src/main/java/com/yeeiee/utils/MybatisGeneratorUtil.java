@@ -1,7 +1,6 @@
 package com.yeeiee.utils;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
@@ -55,7 +54,7 @@ public final class MybatisGeneratorUtil {
      */
     public static void generator(String key, String... tableName) {
         val factoryBean = new YamlPropertiesFactoryBean();
-        val resource = new ClassPathResource("application.yml");
+        val resource = new ClassPathResource("application-dev.yml");
         factoryBean.setResources(resource);
 
         Properties properties = factoryBean.getObject();
@@ -95,14 +94,16 @@ public final class MybatisGeneratorUtil {
 
                     builder.entityBuilder()
                             .javaTemplate("/templates/entity.java")
-                            .idType(IdType.AUTO)
+                            // .idType(IdType.AUTO)
                             .enableRemoveIsPrefix()
-                            // .enableTableFieldAnnotation()
+                            .enableTableFieldAnnotation()
                             .enableLombok()
                             .disableSerialVersionUID()
                             .addTableFills(
+                                    new Column("create_user", FieldFill.INSERT),
                                     new Column("create_time", FieldFill.INSERT),
-                                    new Column("update_time", FieldFill.UPDATE)
+                                    new Column("update_user", FieldFill.INSERT_UPDATE),
+                                    new Column("update_time", FieldFill.INSERT_UPDATE)
                             )
                             .enableFileOverride()
                     ;
@@ -146,7 +147,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_dict_data");
+        generator(args[0], "t_data_source");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

@@ -10,13 +10,15 @@
         <result column="url" property="url" />
         <result column="username" property="username" />
         <result column="password" property="password" />
+        <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, url, username, password, create_time, update_time
+        id, name, url, username, password, create_user, create_time, update_user, update_time
     </sql>
 
     <select id="selectDataSourcePage" resultType="com.yeeiee.domain.vo.DataSourceVo">
@@ -25,7 +27,9 @@
             name,
             url,
             username,
+            create_user as createUser,
             create_time as createTime,
+            update_user as updateUser,
             update_time as updateTime
         from t_data_source
         <where>

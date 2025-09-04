@@ -47,7 +47,7 @@ public class LogController {
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
         val page = loginLogService.lambdaQuery()
-                .like(StringUtils.hasText(username), LoginLog::getUsername, username)
+                .like(StringUtils.hasText(username), LoginLog::getCreateUser, username)
                 .eq(Objects.nonNull(operation), LoginLog::getOperation, operation)
                 .eq(Objects.nonNull(status), LoginLog::getStatus, status)
                 .orderByDesc(LoginLog::getCreateTime)
@@ -65,7 +65,7 @@ public class LogController {
             @RequestParam(required = false, name = "status") @Parameter(description = "状态") Integer status
     ) {
         val page = operationLogService.lambdaQuery()
-                .like(StringUtils.hasText(username), OperationLog::getUsername, username)
+                .like(StringUtils.hasText(username), OperationLog::getCreateUser, username)
                 .eq(Objects.nonNull(status), OperationLog::getStatus, status)
                 .orderByDesc(OperationLog::getCreateTime)
                 .page(Page.of(current, size));
@@ -81,7 +81,7 @@ public class LogController {
             @RequestParam(required = false, name = "username") @Parameter(description = "用户名称") String username
     ) {
         val page = errorLogService.lambdaQuery()
-                .like(StringUtils.hasText(username), ErrorLog::getUsername, username)
+                .like(StringUtils.hasText(username), ErrorLog::getCreateUser, username)
                 .orderByDesc(ErrorLog::getCreateTime)
                 .page(Page.of(current, size));
 

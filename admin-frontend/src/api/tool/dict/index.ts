@@ -1,9 +1,9 @@
 import usePagination from '@/hooks/usePagination'
 import request from '@/utils/request'
-import { type CreateAndUpdateTime } from '@/utils/requestTypes'
+import { type BaseVo } from '@/utils/requestTypes'
 
 // 字典类型
-export interface DictTypeVo extends CreateAndUpdateTime {
+export interface DictTypeVo extends BaseVo {
   id: number
   name: string
   dictType: string
@@ -43,7 +43,7 @@ export function reqRemoveDictTypeByIds(ids: number[]) {
 }
 
 // 字典数据
-export interface DictDataVo extends CreateAndUpdateTime {
+export interface DictDataVo extends BaseVo {
   id: number
   typeId: number
   label: string

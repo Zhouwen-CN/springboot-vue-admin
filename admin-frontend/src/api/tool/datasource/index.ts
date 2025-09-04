@@ -1,17 +1,19 @@
 import usePagination from '@/hooks/usePagination'
 import request from '@/utils/request'
+import type { BaseVo } from '@/utils/requestTypes'
 
-export interface DataSourceVo {
+export interface DataSourceVo extends BaseVo {
   id: number
   name: string
   url: string
   username: string
-  createTime: string
-  updateTime: string
 }
 
-export type DataSourceForm = Omit<DataSourceVo, 'id' | 'createTime' | 'updateTime'> & {
+export interface DataSourceForm {
   id?: number
+  name: string
+  url: string
+  username: string
   password: string
 }
 
