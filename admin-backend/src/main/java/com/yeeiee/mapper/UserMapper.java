@@ -16,11 +16,5 @@ import org.apache.ibatis.annotations.Param;
  * @since 2025-09-05
  */
 public interface UserMapper extends BaseMapper<User> {
-    /**
-     * 查询用户列表
-     *
-     * @param page 分页对象
-     * @return 用户分页对象
-     */
     IPage<UserVo> selectUserPages(Page<UserVo> page, @Param("searchName") String searchName);
 }

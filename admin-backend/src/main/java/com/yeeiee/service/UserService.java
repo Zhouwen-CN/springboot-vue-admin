@@ -35,7 +35,6 @@ public interface UserService extends IService<User> {
      */
     IPage<UserVo> getUserPages(Page<UserVo> page, String searchName);
 
-
     /**
      * 新增用户和角色关系
      *

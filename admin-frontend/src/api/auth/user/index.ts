@@ -54,25 +54,25 @@ export function reqGetUserRolePage() {
   return usePagination<UserVo>('/user')
 }
 
-export interface UserRoleForm {
+export interface UserForm {
   id?: number
   username: string
-  password?: string
+  password: string
   roleIds: number[]
 }
 
 /**
  * 新增用户和角色关系
- * @param userRoleForm 用户和角色关系
+ * @param userForm 用户和角色关系
  * @returns
  */
-export function reqSaveUserRole(userRoleForm: UserRoleForm) {
-  if (userRoleForm.id) {
+export function reqSaveUserRole(userForm: UserForm) {
+  if (userForm.id) {
     // 修改
-    return request.put<void, UserRoleForm>('/user', userRoleForm)
+    return request.put<void, UserForm>('/user', userForm)
   } else {
     // 新增
-    return request.post<void, UserRoleForm>('/user', userRoleForm)
+    return request.post<void, UserForm>('/user', userForm)
   }
 }
 

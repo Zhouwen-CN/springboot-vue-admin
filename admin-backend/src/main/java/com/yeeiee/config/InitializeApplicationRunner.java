@@ -23,6 +23,7 @@ public class InitializeApplicationRunner implements ApplicationRunner {
 
     private final DataSourceService dataSourceService;
     private final DataSourceProperties dataSourceProperties;
+    private static final String CURRENT_DATASOURCE_NAME = "master";
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -33,11 +34,25 @@ public class InitializeApplicationRunner implements ApplicationRunner {
      * 初始化当前数据源配置
      */
     private void initDataSourceConfig(){
-        val dataSource = new DataSource();
-        dataSource.setName("master");
+        var dataSource = dataSourceService.lambdaQuery()
+                .eq(DataSource::getName, CURRENT_DATASOURCE_NAME)
+                .one();
+
+        val notExists = dataSource == null;
+
+        if(notExists){
+            dataSource = new DataSource();
+            dataSource.setName(CURRENT_DATASOURCE_NAME);
+        }
+
         dataSource.setUrl(dataSourceProperties.getUrl());
         dataSource.setUsername(dataSourceProperties.getUsername());
         dataSource.setPassword(dataSourceProperties.getPassword());
-        dataSourceService.saveOrUpdate(dataSource);
+
+        if(notExists){
+            dataSourceService.save(dataSource);
+        }else{
+            dataSourceService.updateById(dataSource);
+        }
     }
 }

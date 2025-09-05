@@ -27,7 +27,7 @@ export function reqGetRolePage() {
   return usePagination<RoleVo>('/role')
 }
 
-export interface RoleMenuForm {
+export interface RoleForm {
   id?: number
   roleName: string
   description: string
@@ -36,14 +36,14 @@ export interface RoleMenuForm {
 
 /**
  * 添加或者更新角色信息
- * @param roleMenuForm 角色表单
+ * @param roleForm 角色表单
  * @returns
  */
-export function reqSaveRoleMenu(roleMenuForm: RoleMenuForm) {
-  if (roleMenuForm.id) {
-    return request.put<void, RoleMenuForm>('/role', roleMenuForm)
+export function reqSaveRoleMenu(roleForm: RoleForm) {
+  if (roleForm.id) {
+    return request.put<void, RoleForm>('/role', roleForm)
   } else {
-    return request.post<void, RoleMenuForm>('/role', roleMenuForm)
+    return request.post<void, RoleForm>('/role', roleForm)
   }
 }
 

@@ -37,7 +37,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        // 1.获取登入用户名
+        // 获取登入用户名
         var username = "未知用户";
 
         if (exception instanceof NamedAuthenticationException namedAuthenticationException) {
@@ -45,7 +45,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             if (exceptionUsername != null) username = exceptionUsername;
         }
 
-        // 2.写入日志
+        // 写入日志
         val loginLog = new LoginLog();
         loginLog.setOperation(LoginOperationEnum.LOGIN);
         loginLog.setStatus(OperationStatusEnum.FIELD);
@@ -54,7 +54,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         loginLog.setCreateUser(username);
         loginLogService.save(loginLog);
 
-        // 3.写出响应
+        // 写出响应
         ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 }

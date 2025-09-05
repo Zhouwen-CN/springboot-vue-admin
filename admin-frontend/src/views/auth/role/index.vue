@@ -5,7 +5,7 @@ import {
   reqDeleteRoles,
   reqGetRolePage,
   reqSaveRoleMenu,
-  type RoleMenuForm,
+  type RoleForm,
   type RoleVo
 } from '@/api/auth/role'
 import { reqGetMenuIdsByRoleId } from '@/api/auth/menu'
@@ -16,7 +16,7 @@ import type { MenuVo } from '@/api/auth/menu'
 const userStore = useUserStore()
 
 // 表单数据
-const roleMenuForm = reactive<RoleMenuForm>({
+const roleForm = reactive<RoleForm>({
   id: undefined,
   roleName: '',
   description: '',
@@ -64,10 +64,10 @@ async function updateRole(row: RoleVo) {
   const result = await reqGetMenuIdsByRoleId(id)
   toggleDialog.show = true
   toggleDialog.title = '修改角色'
-  roleMenuForm.id = row.id
-  roleMenuForm.roleName = row.roleName
-  roleMenuForm.description = row.description
-  roleMenuForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], result.data)
+  roleForm.id = row.id
+  roleForm.roleName = row.roleName
+  roleForm.description = row.description
+  roleForm.menuIds = getSelectKeys(userStore.menuInfo as MenuVo[], result.data)
 }
 
 // 删除角色
@@ -96,7 +96,7 @@ async function deleteRoles() {
 
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules<typeof roleMenuForm>>({
+const rules = reactive<FormRules<typeof roleForm>>({
   roleName: [
     { required: true, message: '请输入角色名称', trigger: 'blur' },
     { min: 3, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
@@ -116,8 +116,8 @@ async function onSubmit(formEl: FormInstance | undefined) {
     // 选中的 和 半选中的菜单
     const checkedKeys = menuTreeRef.value?.getCheckedKeys() || []
     const halfCheckedKeys = menuTreeRef.value?.getHalfCheckedKeys() || []
-    roleMenuForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
-    await reqSaveRoleMenu(roleMenuForm)
+    roleForm.menuIds = checkedKeys.concat(halfCheckedKeys).map((key) => Number(key))
+    await reqSaveRoleMenu(roleForm)
     pageRefresh({ params: { searchName: searchName.value } })
     toggleDialog.show = false
     ElMessage.success('操作成功')
@@ -155,10 +155,10 @@ function getSelectKeys(menus: MenuVo[], menuIds: number[], selectedKeys: number[
 // 对话框关闭时清空数据 和 错误提示样式
 function clean() {
   toggleDialog.title = ''
-  roleMenuForm.id = undefined
-  roleMenuForm.roleName = ''
-  roleMenuForm.description = ''
-  roleMenuForm.menuIds = []
+  roleForm.id = undefined
+  roleForm.roleName = ''
+  roleForm.description = ''
+  roleForm.menuIds = []
   ruleFormRef.value?.clearValidate()
   menuTreeRef.value?.setCheckedKeys([])
 }
@@ -244,24 +244,24 @@ onMounted(() => {
       <template #footer>
         <el-form
           ref="ruleFormRef"
-          :model="roleMenuForm"
+          :model="roleForm"
           :rules="rules"
           label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="onSubmit(ruleFormRef)"
         >
           <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="roleMenuForm.roleName" placeholder="角色名称"></el-input>
+            <el-input v-model="roleForm.roleName" placeholder="角色名称"></el-input>
           </el-form-item>
           <el-form-item label="角色说明" prop="description">
-            <el-input v-model="roleMenuForm.description" placeholder="角色说明"></el-input>
+            <el-input v-model="roleForm.description" placeholder="角色说明"></el-input>
           </el-form-item>
           <!-- 树形控件 -->
           <el-form-item label="菜单权限">
             <el-tree
               ref="menuTreeRef"
               :data="userStore.menuInfo"
-              :default-checked-keys="roleMenuForm.menuIds"
+              :default-checked-keys="roleForm.menuIds"
               :props="defaultProps"
               node-key="id"
               show-checkbox

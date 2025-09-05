@@ -3,6 +3,7 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
+#    url: jdbc:h2:file:./springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
     username: sa
     password: 123
   h2:
@@ -15,7 +16,7 @@ spring:
     init:
       schema-locations: classpath:sql/h2/schema-h2.sql
       data-locations: classpath:sql/h2/data-h2.sql
-      mode: always
+      mode: embedded #h2内存模式才会进行初始化
       encoding: utf-8
 
 # 指标监控

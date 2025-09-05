@@ -102,15 +102,19 @@ async function deleteDataSources() {
 
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
+const validateUrl = (rule: any, value: any, callback: any) => {
+  if (value && value.startsWith('jdbc:')) {
+    callback()
+  } else {
+    callback(new Error('url 须以 jdbc: 开头'))
+  }
+}
 const rules = reactive<FormRules<typeof dataSourceForm>>({
   name: [
     { required: true, message: '请输入数据源配置名称', trigger: 'blur' },
     { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
   ],
-  url: [
-    { required: true, message: '请输入数据源配置 url', trigger: 'blur' },
-    { min: 1, max: 500, message: '长度在 1 到 500 个字符', trigger: 'blur' }
-  ],
+  url: [{ validator: validateUrl, trigger: 'blur' }],
   username: [
     { required: true, message: '请输入数据源配置用户名', trigger: 'blur' },
     { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }

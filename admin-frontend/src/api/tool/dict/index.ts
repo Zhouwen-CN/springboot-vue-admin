@@ -51,7 +51,13 @@ export interface DictDataVo extends BaseVo {
   sort: number
 }
 
-export type DictDataForm = Omit<DictDataVo, 'id' | 'createTime' | 'updateTime'> & { id?: number }
+export interface DictDataForm {
+  id?: number
+  typeId: number
+  label: string
+  data: number
+  sort: number
+}
 
 // 获取字典数据分页
 export function reqGetDictDataPageByTypeId() {
@@ -78,7 +84,7 @@ export function reqRemoveDictDataByIds(ids: number[]) {
 }
 
 // 根据字典类型 id 查询字典列表
-export type LabelValueVo = Pick<DictDataVo, 'label' | 'data'>
+export type DictDataSelectorVo = Pick<DictDataVo, 'label' | 'data'>
 export function reqGetDictDataListByTypeId(typeId: number) {
-  return request.get<LabelValueVo[]>(`/dict/data/${typeId}`)
+  return request.get<DictDataSelectorVo[]>(`/dict/data/${typeId}`)
 }

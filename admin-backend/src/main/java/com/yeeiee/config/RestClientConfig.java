@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
@@ -179,7 +180,7 @@ public class RestClientConfig {
                             val httpStatus = response.getStatusCode().value();
                             throw new HttpStatusException(httpStatus, new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
                         })
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=utf-8")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .build();
     }
 }

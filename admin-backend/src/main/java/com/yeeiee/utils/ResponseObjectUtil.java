@@ -3,6 +3,7 @@ package com.yeeiee.utils;
 import com.yeeiee.domain.vo.R;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public final class ResponseObjectUtil {
      */
     public static <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
         val resultAsJson = JsonUtil.toJsonString(result);
-        response.setContentType("application/json;charset=UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().println(resultAsJson);
     }
 }

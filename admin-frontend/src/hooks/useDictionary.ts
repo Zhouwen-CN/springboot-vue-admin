@@ -1,8 +1,8 @@
-import { type LabelValueVo, reqGetDictDataListByTypeId } from '@/api/tool/dict'
+import { type DictDataSelectorVo, reqGetDictDataListByTypeId } from '@/api/tool/dict'
 import { type Ref } from 'vue'
 
 export interface UseDictResult {
-  dictData: Ref<LabelValueVo[]>
+  dictData: Ref<DictDataSelectorVo[]>
   dictMap: Ref<Map<number, string>>
   run: Function
 }
@@ -15,7 +15,7 @@ export interface UseDictResult {
  * @returns 字典
  */
 function useDict(typeId: number, useMap = true): UseDictResult {
-  const dictData = ref<LabelValueVo[]>([])
+  const dictData = ref<DictDataSelectorVo[]>([])
   const dictMap = ref<Map<number, string>>(new Map<number, string>())
 
   function run() {

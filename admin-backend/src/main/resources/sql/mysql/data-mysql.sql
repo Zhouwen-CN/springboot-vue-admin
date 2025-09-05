@@ -14,9 +14,7 @@ INSERT INTO t_role(id, role_name, description)
 VALUES (1, 'admin', '超级管理员'),
        (2, 'test', '测试'),
        (3, 'dev', '开发'),
-       (4, 'frontend', '前端'),
-       (5, 'backend', '后端'),
-       (6, 'bigdata', '大数据');
+       (4, 'product', '产品');
 
 -- 用户菜单关系表
 delete from t_role_menu where true;

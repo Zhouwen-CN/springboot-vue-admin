@@ -63,11 +63,6 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
-    @ExceptionHandler(PaginationSqlParseException.class)
-    public R<Void> paginationSqlParseExceptionHandler(PaginationSqlParseException e) {
-        return R.error(HttpStatus.BAD_REQUEST, String.format("分页SQL解析错误: %s", ExceptionUtils.getRootCauseMessage(e)));
-    }
-
     /**
      * body 参数校验
      * @param e 参数校验异常

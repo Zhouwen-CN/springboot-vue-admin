@@ -20,15 +20,7 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.DriverManager;
 import java.util.Collection;
@@ -87,7 +79,7 @@ public class DataSourceController {
 
     @Operation(summary = "删除数据源配置")
     @DeleteMapping("/{id}")
-    public R<Void> removeByid(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         dataSourceService.removeById(id);
         return R.ok();
     }
@@ -103,7 +95,6 @@ public class DataSourceController {
     @GetMapping("/check/{id}")
     public R<Void> checkConnection(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         val dataSource = dataSourceService.getById(id);
-        // 测试jdbc连接
         try (val connection = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
             if (connection.isValid(2)) {
                 return R.ok();

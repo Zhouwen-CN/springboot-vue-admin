@@ -11,9 +11,8 @@ create table t_user(
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_username unique (username)
+    constraint uniq_user_name unique (username)
 ) comment '用户表';
-
 
 DROP TABLE IF EXISTS t_user_role;
 create table t_user_role(
@@ -25,7 +24,6 @@ create table t_user_role(
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间'
 ) comment '用户角色关系表';
-
 
 DROP TABLE IF EXISTS t_role;
 create table t_role(
@@ -39,7 +37,6 @@ create table t_role(
     constraint uniq_role_name unique (role_name)
 ) comment '角色表';
 
-
 DROP TABLE IF EXISTS t_role_menu;
 create table t_role_menu(
     id          bigint primary key auto_increment comment '主键',
@@ -50,7 +47,6 @@ create table t_role_menu(
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间'
 ) comment '角色菜单关系表';
-
 
 DROP TABLE IF EXISTS t_menu;
 create table t_menu(
@@ -66,9 +62,8 @@ create table t_menu(
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_access_path unique (access_path)
+    constraint uniq_enum_title unique (title)
 ) comment '菜单表';
-
 
 drop table if exists t_login_log;
 create table t_login_log(
@@ -79,9 +74,8 @@ create table t_login_log(
     user_agent  varchar(200) not null comment '用户代理',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
-    index idx_create_time(create_time desc)
+    index idx_login_create_time(create_time desc)
 ) comment '登录日志表';
-
 
 drop table if exists t_operation_log;
 create table t_operation_log(
@@ -96,9 +90,8 @@ create table t_operation_log(
     user_agent  varchar(200) not null comment '用户代理',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
-    index idx_create_time (create_time desc)
+    index idx_ops_create_time (create_time desc)
 ) comment '操作日志表';
-
 
 drop table if exists t_error_log;
 create table t_error_log(
@@ -111,9 +104,8 @@ create table t_error_log(
     error_msg   text         not null comment '错误信息',
     create_user varchar(15) default null comment '创建者',
     create_time timestamp default current_timestamp comment '创建时间',
-    index idx_create_time (create_time desc)
+    index idx_error_create_time (create_time desc)
 ) comment '错误日志表';
-
 
 drop table if exists t_dict_type;
 create table t_dict_type(
@@ -124,9 +116,8 @@ create table t_dict_type(
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_type unique (dict_type)
+    constraint uniq_dict_type unique (dict_type)
 ) comment '字典类型表';
-
 
 drop table if exists t_dict_data;
 create table t_dict_data(
@@ -139,7 +130,7 @@ create table t_dict_data(
     create_time datetime not null default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_type_label unique (type_id, data)
+    constraint uniq_dict_type_label unique (type_id, label)
 ) comment '字典数据表';
 
 drop table if exists t_data_source;
@@ -153,8 +144,16 @@ create table t_data_source(
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_name unique (name)
+    constraint uniq_datasource_name unique (name)
 ) comment = '数据源配置表';
+
+
+
+
+
+
+
+
 
 
 # 尚未用到

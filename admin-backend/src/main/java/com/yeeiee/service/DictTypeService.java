@@ -15,7 +15,6 @@ import java.util.Collection;
  * @since 2025-02-13
  */
 public interface DictTypeService extends IService<DictType> {
-
     /**
      * 新增字典类型
      * @param dictTypeForm 字典类型表单

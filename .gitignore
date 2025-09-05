@@ -41,5 +41,9 @@ static
 node_modules
 dist
 
+# auto import plugin
 admin-frontend/auto-imports.d.ts
 admin-frontend/components.d.ts
+
+# h2
+*.db

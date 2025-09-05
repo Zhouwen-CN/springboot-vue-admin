@@ -6,7 +6,7 @@ import {
   reqGetUserRolePage,
   reqResetPassword,
   reqSaveUserRole,
-  type UserRoleForm,
+  type UserForm,
   type UserVo
 } from '@/api/auth/user'
 import { reqGetRoleSelectorVoByUserId } from '@/api/auth/role'
@@ -22,10 +22,10 @@ const userStore = useUserStore()
 const router = useRouter()
 
 // 表单数据
-const userRoleForm = reactive<UserRoleForm>({
+const userForm = reactive<UserForm>({
   id: undefined,
   username: '',
-  password: undefined,
+  password: '',
   roleIds: []
 })
 
@@ -64,9 +64,9 @@ const isIndeterminate = ref(true)
 
 const handleCheckAllChange = (val: CheckboxValueType) => {
   if (val) {
-    userRoleForm.roleIds = roleData.value?.map((role) => role.id) || []
+    userForm.roleIds = roleData.value?.map((role) => role.id) || []
   } else {
-    userRoleForm.roleIds = []
+    userForm.roleIds = []
   }
   isIndeterminate.value = false
 }
@@ -95,9 +95,9 @@ async function updateUser(row: UserVo) {
   const reuslt = await reqGetRoleSelectorVoByUserId(id)
   toggleDialog.show = true
   toggleDialog.title = '修改用户'
-  userRoleForm.id = id
-  userRoleForm.username = row.username
-  userRoleForm.roleIds = reuslt.data?.map((role) => role.id)
+  userForm.id = id
+  userForm.username = row.username
+  userForm.roleIds = reuslt.data?.map((role) => role.id)
   pwdVisible.value = false
 }
 
@@ -134,7 +134,7 @@ async function deleteUsers() {
 
 // 表单校验
 const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules<typeof userRoleForm>>({
+const rules = reactive<FormRules<typeof userForm>>({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 5, max: 15, message: '长度在 5 到 15 个字符', trigger: 'blur' }
@@ -164,11 +164,11 @@ async function onSubmit(formEl: FormInstance | undefined) {
   saveLoading.value = true
   try {
     await formEl.validate()
-    await reqSaveUserRole(userRoleForm)
+    await reqSaveUserRole(userForm)
     toggleDialog.show = false
 
     // 如果修改的是当前用户，则退出重新登入
-    if (isCurrentUser(userRoleForm.id as number)) {
+    if (isCurrentUser(userForm.id as number)) {
       return
     }
 
@@ -184,10 +184,10 @@ async function onSubmit(formEl: FormInstance | undefined) {
 // 对话框关闭时清空数据 和 错误提示样式
 function clean() {
   toggleDialog.title = ''
-  userRoleForm.id = undefined
-  userRoleForm.username = ''
-  userRoleForm.password = undefined
-  userRoleForm.roleIds = []
+  userForm.id = undefined
+  userForm.username = ''
+  userForm.password = ''
+  userForm.roleIds = []
   checkAll.value = false
   isIndeterminate.value = true
   ruleFormRef.value?.clearValidate()
@@ -280,18 +280,17 @@ onMounted(() => {
       <template #footer>
         <el-form
           ref="ruleFormRef"
-          :model="userRoleForm"
+          :model="userForm"
           :rules="rules"
           label-width="auto"
           style="padding: 0 20px"
           @submit.prevent="onSubmit(ruleFormRef)"
         >
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="userRoleForm.username" placeholder="用户名"></el-input>
+            <el-input v-model="userForm.username" placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item v-if="pwdVisible" label="密码" prop="password">
-            <el-input v-model="userRoleForm.password" placeholder="密码" type="password">
-            </el-input>
+            <el-input v-model="userForm.password" placeholder="密码" type="password"> </el-input>
           </el-form-item>
           <!-- 多选框组 -->
           <el-form-item label="角色列表" prop="roleIds">
@@ -303,7 +302,7 @@ onMounted(() => {
               >
                 全选
               </el-checkbox>
-              <el-checkbox-group v-model="userRoleForm.roleIds" @change="handleCheckedCitiesChange">
+              <el-checkbox-group v-model="userForm.roleIds" @change="handleCheckedCitiesChange">
                 <el-checkbox
                   v-for="role in roleData"
                   :key="role.id"

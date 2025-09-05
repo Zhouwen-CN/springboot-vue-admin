@@ -3,12 +3,7 @@ package com.yeeiee.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.DB2KeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.DmKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.KingbaseKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.OracleKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.PostgreKeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.*;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
 import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -39,7 +34,7 @@ import java.time.LocalDateTime;
 public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
 
     @Value("${custom.jsql-parser.cache.spec}")
-    private String jsqlParserCacheSpec;
+    private String jSqlParserCacheSpec;
 
     /**
      * mybatis plus插件
@@ -132,9 +127,9 @@ public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // jsqlParser cache，mybatis一些插件会使用 jsqlParser 解析 sql，比如分页
+        // jSqlParser cache，mybatis一些插件会使用 jSqlParser 解析 sql，比如分页
         JsqlParserGlobal.setJsqlParseCache(new JdkSerialCaffeineJsqlParseCache(
-                Caffeine.from(jsqlParserCacheSpec).build()
+                Caffeine.from(jSqlParserCacheSpec).build()
         ));
     }
 }

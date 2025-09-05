@@ -1,6 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.domain.form.MenuForm;
@@ -8,7 +9,6 @@ import com.yeeiee.domain.vo.MenuVo;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.service.MenuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.utils.CollectionUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void addMenu(MenuForm menuForm) {
         val exists = this.exists(
                 Wrappers.<Menu>lambdaQuery()
+                        .eq(Menu::getTitle, menuForm.getTitle())
+                        .or()
                         .eq(Menu::getAccessPath, menuForm.getAccessPath())
         );
 
         if (exists) {
-            throw new DmlOperationException("菜单访问路径已经存在");
+            throw new DmlOperationException("菜单标题 或 访问路径已经存在");
         }
 
         val bean = menuForm.toBean();

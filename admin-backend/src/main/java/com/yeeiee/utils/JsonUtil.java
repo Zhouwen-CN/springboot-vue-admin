@@ -28,7 +28,6 @@ import java.time.format.DateTimeFormatter;
 public final class JsonUtil {
     public static final ObjectMapper OBJECT_MAPPER;
 
-
     static {
         // JSR 310日期时间处理
         JavaTimeModule javaTimeModule = new JavaTimeModule();

@@ -8,7 +8,7 @@ CREATE TABLE t_user (
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_user   varchar(15) DEFAULT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
-    CONSTRAINT uniq_username UNIQUE (username)
+    CONSTRAINT uniq_user_name UNIQUE (username)
 );
 
 COMMENT ON TABLE t_user IS '用户表';
@@ -112,7 +112,7 @@ CREATE TABLE t_menu (
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_user   varchar(15) DEFAULT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
-    CONSTRAINT uniq_access_path UNIQUE (access_path)
+    CONSTRAINT uniq_enum_title UNIQUE (title)
 );
 
 COMMENT ON TABLE t_menu IS '菜单表';
@@ -175,7 +175,7 @@ CREATE TABLE t_operation_log (
     create_time   DATE DEFAULT SYSDATE NOT NULL
 );
 
-CREATE INDEX idx_op_create_time ON t_operation_log(create_time DESC);
+CREATE INDEX idx_ops_create_time ON t_operation_log(create_time DESC);
 
 COMMENT ON TABLE t_operation_log IS '操作日志表';
 COMMENT ON COLUMN t_operation_log.id IS '主键';
@@ -291,7 +291,7 @@ CREATE TABLE t_data_source (
     create_time   DATE DEFAULT SYSDATE NOT NULL,
     update_user   varchar(15) DEFAULT NULL,
     update_time   DATE DEFAULT SYSDATE NOT NULL,
-    CONSTRAINT uniq_data_source_name UNIQUE (name)
+    CONSTRAINT uniq_datasource_name UNIQUE (name)
 );
 
 COMMENT ON TABLE t_data_source IS '数据源配置表';
