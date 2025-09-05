@@ -9,12 +9,17 @@ import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.KingbaseKeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.OracleKeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.PostgreKeyGenerator;
+import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
+import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yeeiee.utils.SecurityUserUtil;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +36,11 @@ import java.time.LocalDateTime;
  * @since 2024-04-27
  */
 @Configuration
-public class MybatisPlusConfig implements MetaObjectHandler {
+public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
+
+    @Value("${custom.jsql-parser.cache.spec}")
+    private String jsqlParserCacheSpec;
+
     /**
      * mybatis plus插件
      * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
@@ -119,5 +128,13 @@ public class MybatisPlusConfig implements MetaObjectHandler {
             }
         }
         throw new IllegalArgumentException(String.format("Cannot find a suitable IKeyGenerator implementation class for [%s]", dbType));
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // jsqlParser cache，mybatis一些插件会使用 jsqlParser 解析 sql，比如分页
+        JsqlParserGlobal.setJsqlParseCache(new JdkSerialCaffeineJsqlParseCache(
+                Caffeine.from(jsqlParserCacheSpec).build()
+        ));
     }
 }
