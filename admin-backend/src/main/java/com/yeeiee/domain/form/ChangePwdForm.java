@@ -1,7 +1,7 @@
 package com.yeeiee.domain.form;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yeeiee.config.EncryptSerializer;
+import com.yeeiee.domain.serde.EncryptSerializer;
 import com.yeeiee.domain.validate.FieldMatch;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

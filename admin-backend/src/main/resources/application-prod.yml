@@ -1,4 +1,10 @@
 spring:
+  # 静态资源缓存
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 1d
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -14,12 +20,6 @@ spring:
       keepalive-time: 300000 #保活时间，5分钟
       idle-timeout: 900000 #空闲时间，15分钟
       max-lifetime: 1800000 #最大存活时间，30分钟
-  # 静态资源缓存
-  web:
-    resources:
-      cache:
-        cachecontrol:
-          max-age: 1d
 
 # 日志
 logging:
@@ -38,4 +38,5 @@ management:
   endpoints:
     web:
       exposure:
+#        include: prometheus
         exclude: "*"

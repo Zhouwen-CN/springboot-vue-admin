@@ -1,4 +1,4 @@
-package com.yeeiee.config;
+package com.yeeiee.domain.serde;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

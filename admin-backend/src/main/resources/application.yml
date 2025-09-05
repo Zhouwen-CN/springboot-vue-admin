@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: dev
-  # 事务
+  # 事务配置
   transaction:
     default-timeout: 1s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
@@ -17,19 +17,21 @@ spring:
       read-enums-using-to-string: true
       read-unknown-enum-values-using-default-value: true
       fail-on-unknown-properties: false
-  # 缓存配置（默认放在内存）
+  # 缓存配置（如果要启用redis缓存，需要修改redis配置）
   cache:
-    type: simple
+    type: caffeine
     redis:
       key-prefix: "sv-admin::" #缓存key前缀
       time-to-live: 1h #缓存过期时间
       cache-null-values: false #是否存储空值
       use-key-prefix: true #是否使用key前缀
+    caffeine:
+      spec: initialCapacity=20,maximumSize=200,expireAfterWrite=5m
   # redis配置
   data:
     redis:
       database: 0
-#      password: 123456
+      password: 123456
       host: 127.0.0.1
       port: 6379
       connect-timeout: 5s #连接超时
@@ -72,11 +74,6 @@ management:
   health:
     redis:
       enabled: false #禁用redis健康检查，redis不一定启用
-  endpoints:
-    web:
-      exposure:
-#        include: "*"
-        include: prometheus
 
 # 自定义配置
 custom:

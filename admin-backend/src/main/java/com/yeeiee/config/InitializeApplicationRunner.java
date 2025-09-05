@@ -34,12 +34,10 @@ public class InitializeApplicationRunner implements ApplicationRunner {
      */
     private void initDataSourceConfig(){
         val dataSource = new DataSource();
-        dataSource.setId(1L);
         dataSource.setName("master");
         dataSource.setUrl(dataSourceProperties.getUrl());
         dataSource.setUsername(dataSourceProperties.getUsername());
         dataSource.setPassword(dataSourceProperties.getPassword());
-
         dataSourceService.saveOrUpdate(dataSource);
     }
 }
