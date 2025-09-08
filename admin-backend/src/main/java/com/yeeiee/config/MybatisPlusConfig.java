@@ -42,15 +42,15 @@ public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(ConfigurableEnvironment environment) {
-        val dbType = IdTypeEnvironmentPostProcessor.getDbType(environment);
+        val dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
         val interceptor = new MybatisPlusInterceptor();
 
         // 分页插件
         val paginationInnerInterceptor = new PaginationInnerInterceptor();
-        // todo: h2 默认是 postgresql 分页，这里h2用的oracle模式
+        // TODO: h2 默认是 postgresql 分页，这里h2用的oracle模式
         if (dbType == DbType.H2) {
             paginationInnerInterceptor.setDbType(DbType.ORACLE);
-        }else{
+        } else {
             paginationInnerInterceptor.setDbType(dbType);
         }
 
@@ -93,13 +93,14 @@ public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
 
     /**
      * 当 idType 为 input 时，需要提供一个 IKeyGenerator
+     *
      * @param environment 环境配置对象
      * @return IKeyGenerator
      */
     @Bean
     @ConditionalOnProperty(prefix = "mybatis-plus.global-config.db-config", name = "id-type", havingValue = "INPUT")
     public IKeyGenerator keyGenerator(ConfigurableEnvironment environment) {
-        DbType dbType = IdTypeEnvironmentPostProcessor.getDbType(environment);
+        DbType dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
         if (dbType != null) {
             switch (dbType) {
                 case DB2 -> {

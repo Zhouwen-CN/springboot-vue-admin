@@ -64,7 +64,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public void modifyRole(RoleForm roleForm) {
         val roleId = roleForm.getId();
 
-        // todo: ① 号角色不能修改
+        // TODO: ① 号角色不能修改
         if (roleId == 1L) {
             throw new DmlOperationException("① 号角色不能修改");
         }

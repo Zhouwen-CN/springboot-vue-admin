@@ -47,7 +47,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         val bean = menuForm.toBean();
         this.save(bean);
 
-        // todo: 每次添加菜单，都会赋予admin菜单权限
+        // TODO: 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
         roleMenu.setMenuId(bean.getId());
@@ -66,7 +66,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new DmlOperationException("删除失败，尚有子菜单依赖：" + parentMenuIds);
         }
 
-        // todo: 演示项目禁止删除功能菜单
+        // TODO: 演示项目禁止删除功能菜单
         if (id <= 16L) {
             throw new DmlOperationException("删除失败，演示项目不能删除功能菜单");
         }

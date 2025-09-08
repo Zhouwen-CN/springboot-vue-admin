@@ -43,6 +43,17 @@ spring:
           min-idle: 1 #最小空闲连接数
           max-wait: 5s #从连接池获取连接超时时间
           time-between-eviction-runs: 5m #空闲连接检查间隔
+  # 线程池配置，默认配置 org.springframework.boot.autoconfigure.task.TaskExecutorConfigurations
+  task:
+    execution:
+      pool:
+        core-size: 1
+        max-size: 5
+        queue-capacity: 50
+        keep-alive: 60s
+      shutdown:
+        await-termination: true
+        await-termination-period: 30s
 
 # 控制台打印sql
 decorator:
@@ -61,7 +72,7 @@ springdoc:
 mybatis-plus:
   global-config:
     db-config:
-      id-type: none #由 IdTypeEnvironmentPostProcessor 动态设置，AUTO或者INPUT模式
+      id-type: none #由 MybatisIdTypeConfigInitializer 动态设置成 AUTO 或者 INPUT 模式
 #      id-type: auto #自增ID，适合 MySQL 等直接自增的数据库
 #      id-type: input #用户输入ID，适合 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库
 #      id-type: assign_id #分配ID，默认使用雪花算法。注意，Oracle、PostgreSQL、Kingbase、DB2、H2 数据库时，需要去除实体类上的 @KeySequence 注解

@@ -1,2 +1,2 @@
-org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.yeeiee.config.IdTypeEnvironmentPostProcessor
+org.springframework.context.ApplicationContextInitializer=\
+  com.yeeiee.config.MybatisIdTypeConfigInitializer

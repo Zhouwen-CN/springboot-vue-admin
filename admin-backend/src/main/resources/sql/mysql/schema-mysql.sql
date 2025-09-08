@@ -149,25 +149,24 @@ create table t_data_source(
 
 
 
-
-
-
-
-
-
-
 # 尚未用到
 DROP TABLE IF EXISTS t_codegen_table;
 CREATE TABLE t_codegen_table  (
   id bigint primary key auto_increment comment '主键',
-  data_source_id bigint NOT NULL COMMENT '数据源配置的编号',
-  table_name varchar(200) NOT NULL COMMENT '表名称',
-  table_comment varchar(500) NOT NULL COMMENT '表描述',
-  module_name varchar(30) NOT NULL COMMENT '模块名',
-  class_name varchar(100) NOT NULL DEFAULT '' COMMENT '类名称',
-  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
-) COMMENT = '代码生成表定义';
+  data_source_id bigint not null comment '数据源配置的编号',
+  table_name varchar(50) not null comment '表名称',
+  table_comment varchar(100) not null comment '表描述',
+  class_name varchar(100) not null comment '类名称',
+  author varchar(20) not null comment '作者',
+  parent_menu_id bigint not null comment '父级菜单编号',
+  ignore_table_prefix varchar(20) default null comment '忽略表前缀',
+  ignore_column_prefix varchar(20) default null comment '忽略字段前缀',
+  output_dir varchar(100) not null comment '生成路径',
+  create_user varchar(15) default null comment '创建者',
+  create_time datetime default current_timestamp comment '创建时间',
+  update_user varchar(15) default null comment '更新者',
+  update_time datetime default current_timestamp comment '更新时间'
+) COMMENT = '代码生成表';
 
 drop table if exists t_codegen_column;
 create table t_codegen_column  (

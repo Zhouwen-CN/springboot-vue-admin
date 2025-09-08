@@ -2,15 +2,13 @@ package com.yeeiee.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
@@ -23,10 +21,7 @@ import java.util.Set;
  * @since 2025-09-03
  */
 @Slf4j
-public class IdTypeEnvironmentPostProcessor implements EnvironmentPostProcessor {
-
-    private static final String MPW_KEY = "mpw.key";
-    private static final String NPW_PREFIX = "mpw:";
+public class MybatisIdTypeConfigInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     private static final String ID_TYPE_KEY = "mybatis-plus.global-config.db-config.id-type";
     private static final String DATASOURCE_URL_KEY = "spring.datasource.url";
 
@@ -40,18 +35,24 @@ public class IdTypeEnvironmentPostProcessor implements EnvironmentPostProcessor 
     );
 
     public static DbType getDbType(ConfigurableEnvironment environment) {
-        val mpwKey = environment.getProperty(MPW_KEY);
         var url = environment.getProperty(DATASOURCE_URL_KEY, String.class);
         Assert.notNull(url, DATASOURCE_URL_KEY + " is null");
-        if (url.startsWith(NPW_PREFIX) && StringUtils.hasText(mpwKey)) {
-            url = AES.decrypt(url.replaceFirst(NPW_PREFIX, ""), mpwKey);
-        }
-
         return JdbcUtils.getDbType(url);
     }
 
+
+    private IdType getIdType(ConfigurableEnvironment environment) {
+        return environment.getProperty(ID_TYPE_KEY, IdType.class);
+    }
+
+    public void setIdType(ConfigurableEnvironment environment, IdType idType) {
+        environment.getSystemProperties().put(ID_TYPE_KEY, idType);
+        log.warn("Set mybatis idType to [{}]", idType);
+    }
+
     @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+    public void initialize(ConfigurableApplicationContext context) {
+        val environment = context.getEnvironment();
         // 如果非none，则不处理
         IdType idType = this.getIdType(environment);
         if (idType != IdType.NONE) {
@@ -66,14 +67,5 @@ public class IdTypeEnvironmentPostProcessor implements EnvironmentPostProcessor 
         }
 
         this.setIdType(environment, IdType.AUTO);
-    }
-
-    private IdType getIdType(ConfigurableEnvironment environment) {
-        return environment.getProperty(ID_TYPE_KEY, IdType.class);
-    }
-
-    public void setIdType(ConfigurableEnvironment environment, IdType idType) {
-        environment.getSystemProperties().put(ID_TYPE_KEY, idType);
-        log.warn("Set mybatis idType to [{}]", idType);
     }
 }
