@@ -7,7 +7,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 字典数据视图对象
+ * 字典数据视图
  * </p>
  *
  * @author chen
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DictDataVo", description = "字典数据视图对象")
+@Schema(name = "DictDataVo", description = "字典数据视图")
 public class DictDataVo {
     @Schema(description = "标签建")
     private String label;

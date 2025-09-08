@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户视图对象
+ * 用户视图
  * </p>
  *
  * @author chen
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "UserVo", description = "用户角色视图对象")
+@Schema(name = "UserVo", description = "用户视图")
 public class UserVo {
     @Schema(description = "用户id")
     private Long id;

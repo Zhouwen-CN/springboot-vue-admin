@@ -109,6 +109,7 @@ custom:
       connect-timeout: 5s #连接超时
       socket-timeout: 60s #读取超时
       default-keep-alive: 60s #默认保活时间
-  jsql-parser: #jsqlParser解析缓存
+  # jsqlParser解析缓存
+  jsql-parser:
     cache:
       spec: initialCapacity=10,maximumSize=100,expireAfterAccess=1m

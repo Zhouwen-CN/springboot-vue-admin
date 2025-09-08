@@ -147,27 +147,22 @@ create table t_data_source(
     constraint uniq_datasource_name unique (name)
 ) comment = '数据源配置表';
 
-
-
-# 尚未用到
-DROP TABLE IF EXISTS t_codegen_table;
-CREATE TABLE t_codegen_table  (
+drop table if exists t_codegen_table;
+create table t_codegen_table  (
   id bigint primary key auto_increment comment '主键',
   data_source_id bigint not null comment '数据源配置的编号',
   table_name varchar(50) not null comment '表名称',
   table_comment varchar(100) not null comment '表描述',
   class_name varchar(100) not null comment '类名称',
   author varchar(20) not null comment '作者',
-  parent_menu_id bigint not null comment '父级菜单编号',
-  ignore_table_prefix varchar(20) default null comment '忽略表前缀',
-  ignore_column_prefix varchar(20) default null comment '忽略字段前缀',
-  output_dir varchar(100) not null comment '生成路径',
   create_user varchar(15) default null comment '创建者',
   create_time datetime default current_timestamp comment '创建时间',
   update_user varchar(15) default null comment '更新者',
-  update_time datetime default current_timestamp comment '更新时间'
-) COMMENT = '代码生成表';
+  update_time datetime default current_timestamp comment '更新时间',
+  constraint uniq_table_name unique (table_name)
+) comment = '代码生成表';
 
+# 尚未用到
 drop table if exists t_codegen_column;
 create table t_codegen_column  (
   id bigint primary key auto_increment comment '主键',

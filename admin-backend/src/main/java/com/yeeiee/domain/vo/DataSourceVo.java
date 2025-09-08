@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 数据源视图对象
+ * 数据源配置视图
  * </p>
  *
  * @author chen
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Schema(name = "DataSourceVo", description = "数据源配置视图")
 public class DataSourceVo {
     @Schema(description = "主键")
     private Long id;

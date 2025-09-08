@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * <p>
- * 统一响应对象
+ * 响应视图
  * </p>
  *
  * @author chen
@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-@Schema(title = "R", description = "响应视图对象")
+@Schema(title = "R", description = "响应视图")
 public final class R<T> {
 
     @Schema(title = "是否成功")

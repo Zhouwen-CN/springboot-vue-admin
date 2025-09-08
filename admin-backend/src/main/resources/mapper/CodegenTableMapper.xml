@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.mapper.CodegenTableMapper">
+    <!--@formatter:off-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.CodegenTable">
+        <id column="id" property="id" />
+        <result column="data_source_id" property="dataSourceId" />
+        <result column="table_name" property="tableName" />
+        <result column="table_comment" property="tableComment" />
+        <result column="class_name" property="className" />
+        <result column="author" property="author" />
+        <result column="parent_menu_id" property="parentMenuId" />
+        <result column="ignore_table_prefix" property="ignoreTablePrefix" />
+        <result column="ignore_column_prefix" property="ignoreColumnPrefix" />
+        <result column="output_dir" property="outputDir" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, data_source_id, table_name, table_comment, class_name, author, parent_menu_id, ignore_table_prefix, ignore_column_prefix, output_dir, create_user, create_time, update_user, update_time
+    </sql>
+
+    <select id="getExistsTableNameList" resultType="java.lang.String">
+        select
+            table_name
+        from t_codegen_table
+        where data_source_id=#{dataSourceId}
+    </select>
+
+</mapper>

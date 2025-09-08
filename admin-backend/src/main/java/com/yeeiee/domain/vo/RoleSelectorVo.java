@@ -7,7 +7,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 角色选择器视图对象
+ * 角色选择器视图
  * </p>
  *
  * @author chen
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "RoleSelectorVo", description = "角色视图对象")
+@Schema(name = "RoleSelectorVo", description = "角色选择器视图")
 public class RoleSelectorVo {
     @Schema(description = "角色id")
     private Long id;

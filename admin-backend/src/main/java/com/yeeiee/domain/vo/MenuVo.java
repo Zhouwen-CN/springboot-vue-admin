@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- * 菜单视图对象
+ * 菜单视图
  * </p>
  *
  * @author chen
@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "MenuVo", description = "菜单视图对象")
+@Schema(name = "MenuVo", description = "菜单视图")
 public class MenuVo {
     @Schema(description = "菜单id")
     private Long id;

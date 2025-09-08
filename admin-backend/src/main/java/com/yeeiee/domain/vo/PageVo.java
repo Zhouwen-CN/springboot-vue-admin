@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- * 分页视图对象
+ * 分页视图
  * </p>
  *
  * @author chen
@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "PageVo", description = "分页视图对象")
+@Schema(name = "PageVo", description = "分页视图")
 public class PageVo<T> {
     @Schema(description = "数据列表")
     private List<T> records;

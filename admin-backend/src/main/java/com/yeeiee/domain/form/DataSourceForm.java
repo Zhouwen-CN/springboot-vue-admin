@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * <p>
- *
+ * 数据源配置表单对象
  * </p>
  *
  * @author chen
@@ -22,6 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
+@Schema(name = "DataSourceForm", description = "数据源配置表单")
 public class DataSourceForm implements FormToBeanHelper<DataSource> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "主键")
