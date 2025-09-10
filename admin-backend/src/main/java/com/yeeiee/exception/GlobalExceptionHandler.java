@@ -63,6 +63,11 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
+    @ExceptionHandler(DataSourceConnectException.class)
+    public R<Void> dataSourceConnectExceptionHandler(DataSourceConnectException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e);
+    }
+
     /**
      * body 参数校验
      * @param e 参数校验异常

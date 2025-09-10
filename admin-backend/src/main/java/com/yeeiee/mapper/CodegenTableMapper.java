@@ -12,7 +12,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-09-08
+ * @since 2025-09-10
  */
 public interface CodegenTableMapper extends BaseMapper<CodegenTable> {
 

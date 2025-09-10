@@ -22,6 +22,16 @@ export function reqGetDataSourcePage() {
   return usePagination<DataSourceVo>('/datasource')
 }
 
+export interface DataSourceSelectorVo {
+  id: number
+  name: string
+}
+
+// 查询数据源配置选择器
+export function reqGetDataSourceSelectorList() {
+  return request.get<DataSourceSelectorVo[]>('/datasource')
+}
+
 // 新增｜修改数据源配置
 export function reqSaveDataSource(dataSourceForm: DataSourceForm) {
   if (dataSourceForm.id) {

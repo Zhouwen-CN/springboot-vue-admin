@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <p>
- *
+ * 代码生成导入表单
  * </p>
  *
  * @author chen
@@ -22,8 +22,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableForm", description = "代码生成表单")
-public class CodegenTableForm {
+@Schema(name = "CodegenTableImportForm", description = "代码生成导入表单")
+public class CodegenTableImportForm {
     @NotNull
     @Schema(description = "数据源配置的编号")
     private Long dataSourceId;

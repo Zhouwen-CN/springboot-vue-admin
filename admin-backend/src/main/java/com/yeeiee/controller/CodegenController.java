@@ -1,7 +1,7 @@
 package com.yeeiee.controller;
 
-import com.yeeiee.domain.form.CodegenTableForm;
-import com.yeeiee.domain.vo.CodegenTableVo;
+import com.yeeiee.domain.form.CodegenTableImportForm;
+import com.yeeiee.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.CodegenTableService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,19 +35,18 @@ public class CodegenController {
 
     @Operation(summary = "获取代码生成表列表")
     @GetMapping
-    public R<List<CodegenTableVo>> getTableList(
-            @RequestParam("dataSourceId") @Parameter(description = "数据源编号") Long dataSourceId,
-            @RequestParam(value = "name", required = false) @Parameter(description = "表名") String name,
-            @RequestParam(value = "comment", required = false) @Parameter(description = "表描述") String comment
+    public R<List<CodegenTableSelectorVo>> getTableList(
+            @RequestParam("dataSourceId") @Parameter(description = "数据源编号") Long dataSourceId
     ) {
-        val codegenTableVoList = codegenTableService.getTableList(dataSourceId, name, comment);
+        val codegenTableVoList = codegenTableService.getTableList(dataSourceId);
         return R.ok(codegenTableVoList);
     }
 
 
-    @Operation(summary = "同步代码生成表")
+    @Operation(summary = "导入代码生成表")
     @PostMapping
-    public void syncTable(@RequestBody @Validated CodegenTableForm codegenTableForm){
-        codegenTableService.saveCodegenTable(codegenTableForm);
+    public R<Void> importCodegenTable(@RequestBody @Validated CodegenTableImportForm codegenTableImportForm){
+        codegenTableService.addCodegenTable(codegenTableImportForm);
+        return R.ok();
     }
 }

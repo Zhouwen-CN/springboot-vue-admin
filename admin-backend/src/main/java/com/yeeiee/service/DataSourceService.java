@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.DataSource;
+import com.yeeiee.domain.vo.DataSourceSelectorVo;
 import com.yeeiee.domain.vo.DataSourceVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,4 +26,10 @@ public interface DataSourceService extends IService<DataSource> {
      * @return 数据源配置分页
      */
     IPage<DataSourceVo> getDataSourcePage(Page<DataSourceVo> page, String searchName);
+
+    /**
+     * 获取数据源选择器列表
+     * @return 数据源选择器列表
+     */
+    List<DataSourceSelectorVo> getDataSourceSelectorList();
 }

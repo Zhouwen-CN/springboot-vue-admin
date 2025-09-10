@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DataSource;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yeeiee.domain.vo.DataSourceSelectorVo;
 import com.yeeiee.domain.vo.DataSourceVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,6 @@ import org.apache.ibatis.annotations.Param;
 public interface DataSourceMapper extends BaseMapper<DataSource> {
 
     IPage<DataSourceVo> selectDataSourcePage(Page<DataSourceVo> page, @Param("searchName") String searchName);
+
+    List<DataSourceSelectorVo> selectDataSourceSelectorList();
 }

@@ -7,7 +7,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * 代码生成表视图
+ * 代码生成表选择器视图
  * </p>
  *
  * @author chen
@@ -16,8 +16,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableVo", description = "代码生成表视图")
-public class CodegenTableVo {
+@Schema(name = "CodegenTableSelectorVo", description = "代码生成表选择器视图")
+public class CodegenTableSelectorVo {
     @Schema(description = "表名称")
     private String name;
 

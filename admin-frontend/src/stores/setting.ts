@@ -11,11 +11,19 @@ const useSettingStore = defineStore(
       VITE_APP_AVATAR_URL: avatarUrl
     } = import.meta.env
 
+    // 代码生成默认配置
+    const codegenConfig = {
+      author: 'chen',
+      ignoreTablePrefix: 't_',
+      ignoreColumnPrefix: undefined,
+      basePackage: 'com.yeeiee'
+    }
+
     function $reset() {
       collapse.value = false
     }
 
-    return { collapse, appName, appShortName, giteeLink, avatarUrl, $reset }
+    return { codegenConfig, collapse, appName, appShortName, giteeLink, avatarUrl, $reset }
   },
   {
     persist: {

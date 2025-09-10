@@ -7,26 +7,27 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
-import com.baomidou.mybatisplus.generator.config.po.LikeTable;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.query.SQLQuery;
 import com.yeeiee.domain.entity.CodegenTable;
 import com.yeeiee.domain.entity.DataSource;
-import com.yeeiee.domain.form.CodegenTableForm;
-import com.yeeiee.domain.vo.CodegenTableVo;
+import com.yeeiee.domain.form.CodegenTableImportForm;
+import com.yeeiee.domain.vo.CodegenTableSelectorVo;
+import com.yeeiee.exception.DataSourceConnectException;
 import com.yeeiee.mapper.CodegenTableMapper;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.DataSourceService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Comparator;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * <p>
@@ -44,58 +45,48 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     private final CodegenTableMapper codegenTableMapper;
 
     @Override
-    public List<CodegenTableVo> getTableList(Long dataSourceId, String name, String comment) {
+    public List<CodegenTableSelectorVo> getTableList(Long dataSourceId) {
         val dataSourceConfig = dataSourceService.getById(dataSourceId);
+        val existsTableNameList = codegenTableMapper.getExistsTableNameList(dataSourceId);
+        try (val connection = DriverManager.getConnection(dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword())) {
 
-        // 移除在 Codegen 中，已经存在的
-        List<String> existsTables = codegenTableMapper.getExistsTableNameList(dataSourceId);
+            val metaData = connection.getMetaData();
+            val resultSet = metaData.getTables(
+                    connection.getCatalog(),
+                    connection.getSchema(),
+                    null,
+                    new String[]{"TABLE"}
+            );
 
-        val tableInfoList = this.getTableList(dataSourceConfig, (strategyConfigBuilder) -> {
-            if (!CollectionUtils.isEmpty(existsTables)) {
-                strategyConfigBuilder.addExclude(existsTables);
+            val codegenTableVoList = new ArrayList<CodegenTableSelectorVo>();
+            while (resultSet.next()) {
+                val tableName = resultSet.getString("TABLE_NAME");
+                val tableComment = resultSet.getString("REMARKS");
+                if (existsTableNameList.contains(tableName)) {
+                    continue;
+                }
+                val codegenTableSelectorVo = new CodegenTableSelectorVo();
+                codegenTableSelectorVo.setName(tableName);
+                codegenTableSelectorVo.setComment(tableComment);
+                codegenTableVoList.add(codegenTableSelectorVo);
             }
-            if (StringUtils.hasText(name)) {
-                strategyConfigBuilder.likeTable(new LikeTable(name));
-            }
-        });
-
-        return tableInfoList.stream().filter(tableInfo ->
-                        (!StringUtils.hasText(comment) || tableInfo.getComment().contains(comment))
-                )
-                .map(tableInfo -> {
-                    val codegenTableVo = new CodegenTableVo();
-                    codegenTableVo.setName(tableInfo.getName());
-                    codegenTableVo.setComment(tableInfo.getComment());
-                    return codegenTableVo;
-                })
-                .sorted(Comparator.comparing(CodegenTableVo::getName))
-                .toList();
+            return codegenTableVoList;
+        } catch (SQLException e) {
+            throw new DataSourceConnectException(ExceptionUtils.getRootCauseMessage(e));
+        }
     }
 
     @Override
-    public void saveCodegenTable(CodegenTableForm codegenTableForm) {
-        val dataSourceId = codegenTableForm.getDataSourceId();
+    public void addCodegenTable(CodegenTableImportForm codegenTableImportForm) {
+        val dataSourceId = codegenTableImportForm.getDataSourceId();
         val dataSourceConfig = dataSourceService.getById(dataSourceId);
 
-        val tableInfoList = this.getTableList(dataSourceConfig, (strategyConfigBuilder) -> {
-            val tableNames = codegenTableForm.getTableNames();
-            strategyConfigBuilder.addInclude(tableNames);
-
-            val ignoreTablePrefix = codegenTableForm.getIgnoreTablePrefix();
-            if (StringUtils.hasText(ignoreTablePrefix)) {
-                strategyConfigBuilder.addTablePrefix(ignoreTablePrefix);
-            }
-
-            val ignoreColumnPrefix = codegenTableForm.getIgnoreColumnPrefix();
-            if (StringUtils.hasText(ignoreColumnPrefix)) {
-                strategyConfigBuilder.addFieldPrefix(ignoreColumnPrefix);
-            }
-        });
+        val tableInfoList = this.getTableList(dataSourceConfig, codegenTableImportForm);
 
         System.out.println("tableInfoList = " + tableInfoList);
     }
 
-    private List<TableInfo> getTableList(DataSource dataSource, Consumer<StrategyConfig.Builder> consumer) {
+    private List<TableInfo> getTableList(DataSource dataSource, CodegenTableImportForm codegenTableImportForm) {
         val url = dataSource.getUrl();
         val username = dataSource.getUsername();
         val password = dataSource.getPassword();
@@ -105,7 +96,6 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
                 username,
                 password
         );
-
         // 特殊：SQLServer jdbc 非标准，参见 https://github.com/baomidou/mybatis-plus/issues/5419
         val dbType = JdbcUtils.getDbType(url);
         if (DbType.SQL_SERVER == dbType || DbType.SQL_SERVER2005 == dbType) {
@@ -115,13 +105,23 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
         val strategyConfigBuilder = new StrategyConfig.Builder();
         // 忽略视图
         strategyConfigBuilder.enableSkipView();
+        // 过滤表名
+        val tableNames = codegenTableImportForm.getTableNames();
+        strategyConfigBuilder.addInclude(tableNames);
+        // 忽略表前缀
+        val ignoreTablePrefix = codegenTableImportForm.getIgnoreTablePrefix();
+        if (StringUtils.hasText(ignoreTablePrefix)) {
+            strategyConfigBuilder.addTablePrefix(ignoreTablePrefix);
+        }
+        // 忽略字段前缀
+        val ignoreColumnPrefix = codegenTableImportForm.getIgnoreColumnPrefix();
+        if (StringUtils.hasText(ignoreColumnPrefix)) {
+            strategyConfigBuilder.addFieldPrefix(ignoreColumnPrefix);
+        }
 
         val globalConfigBuilder = new GlobalConfig.Builder();
         // 只使用 LocalDateTime 类型
         globalConfigBuilder.dateType(DateType.TIME_PACK).build();
-
-        // 额外策略
-        consumer.accept(strategyConfigBuilder);
 
         ConfigBuilder builder = new ConfigBuilder(
                 null,

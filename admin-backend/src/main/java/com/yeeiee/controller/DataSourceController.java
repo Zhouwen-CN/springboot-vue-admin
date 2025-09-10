@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DataSource;
 import com.yeeiee.domain.form.DataSourceForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.DataSourceSelectorVo;
 import com.yeeiee.domain.vo.DataSourceVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
@@ -20,10 +21,20 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -41,7 +52,7 @@ public class DataSourceController {
 
     private final DataSourceService dataSourceService;
 
-    @Operation(summary = "查询数据源配置分页")
+    @Operation(summary = "查询数据源分页")
     @GetMapping("/{size}/{current}")
     public R<PageVo<DataSourceVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -53,7 +64,14 @@ public class DataSourceController {
         return R.ok(PageVo.fromPage(list));
     }
 
-    @Operation(summary = "新增数据源配置")
+    @Operation(summary = "查询数据源选择器")
+    @GetMapping
+    public R<List<DataSourceSelectorVo>> getSelectorList() {
+        List<DataSourceSelectorVo> dataSourceSelectorVoList = dataSourceService.getDataSourceSelectorList();
+        return R.ok(dataSourceSelectorVoList);
+    }
+
+    @Operation(summary = "新增数据源")
     @PostMapping
     public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DataSourceForm dataSourceForm) {
         val name = dataSourceForm.getName();
@@ -69,7 +87,7 @@ public class DataSourceController {
         return R.ok();
     }
 
-    @Operation(summary = "更新数据源配置")
+    @Operation(summary = "更新数据源")
     @PutMapping
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DataSourceForm dataSourceForm) {
         dataSourceService.updateById(dataSourceForm.toBean());
@@ -77,14 +95,14 @@ public class DataSourceController {
     }
 
 
-    @Operation(summary = "删除数据源配置")
+    @Operation(summary = "删除数据源")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         dataSourceService.removeById(id);
         return R.ok();
     }
 
-    @Operation(summary = "批量删除数据源配置")
+    @Operation(summary = "批量删除数据源")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "数据源id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dataSourceService.removeByIds(ids);
@@ -99,7 +117,7 @@ public class DataSourceController {
             if (connection.isValid(2)) {
                 return R.ok();
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return R.error(HttpStatus.BAD_REQUEST, ExceptionUtils.getMessage(e));
         }
 

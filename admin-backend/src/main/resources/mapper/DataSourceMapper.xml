@@ -38,4 +38,11 @@
             </if>
         </where>
     </select>
+
+    <select id="selectDataSourceSelectorList" resultType="com.yeeiee.domain.vo.DataSourceSelectorVo">
+        select
+            id,
+            name
+        from t_data_source
+    </select>
 </mapper>
