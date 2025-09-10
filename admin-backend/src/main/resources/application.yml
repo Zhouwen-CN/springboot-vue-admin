@@ -3,7 +3,7 @@ spring:
     active: dev
   # 事务配置
   transaction:
-    default-timeout: 1s #事务超时时间
+    default-timeout: 60s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
   # jackson配置
   jackson:

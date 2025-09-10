@@ -147,7 +147,7 @@ public final class MybatisGeneratorUtil {
     }
 
     public static void main(String[] args) {
-        generator(args[0], "t_codegen_table");
+        generator(args[0], "t_codegen_column");
         // val key = args[0];
         // val factoryBean = new YamlPropertiesFactoryBean();
         // val resource = new ClassPathResource("application-dev.yml");

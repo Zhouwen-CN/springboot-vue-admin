@@ -4,12 +4,12 @@ import lombok.experimental.StandardException;
 
 /**
  * <p>
- * 数据源连接异常
+ * 代码生成失败异常
  * </p>
  *
  * @author chen
  * @since 2025-09-10
  */
 @StandardException
-public class DataSourceConnectException extends RuntimeException {
+public class CodegenFailedException extends RuntimeException {
 }

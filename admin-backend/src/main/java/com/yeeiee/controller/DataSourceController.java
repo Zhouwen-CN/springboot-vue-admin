@@ -59,7 +59,6 @@ public class DataSourceController {
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(value = "searchName", required = false) @Parameter(description = "数据源名称") String searchName
     ) {
-
         IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), searchName);
         return R.ok(PageVo.fromPage(list));
     }

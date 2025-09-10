@@ -165,31 +165,31 @@ create table t_codegen_table  (
   constraint uniq_table_name unique (table_name)
 ) comment = '代码生成表';
 
-# 尚未用到
+
 drop table if exists t_codegen_column;
 create table t_codegen_column  (
   id bigint primary key auto_increment comment '主键',
-  table_id bigint NOT NULL COMMENT '表编号',
-  column_name varchar(200) NOT NULL COMMENT '字段名',
-  data_type varchar(100) NOT NULL COMMENT '字段类型',
-  column_comment varchar(500) NOT NULL COMMENT '字段描述',
-  nullable tinyint NOT NULL COMMENT '是否允许为空',
-  primary_key tinyint NOT NULL COMMENT '是否主键',
-  ordinal_position int NOT NULL COMMENT '排序',
-  java_type varchar(32) NOT NULL COMMENT 'Java 属性类型',
-  java_field varchar(64) NOT NULL COMMENT 'Java 属性名',
-  dict_type varchar(200) NULL DEFAULT '' COMMENT '字典类型',
-  example varchar(64) NULL DEFAULT NULL COMMENT '数据示例',
-  create_operation tinyint NOT NULL COMMENT '是否为 Create 创建操作的字段',
-  update_operation tinyint NOT NULL COMMENT '是否为 Update 更新操作的字段',
-  list_operation tinyint NOT NULL COMMENT '是否为 List 查询操作的字段',
-  list_operation_condition varchar(32) NOT NULL DEFAULT '=' COMMENT 'List 查询操作的条件类型',
-  list_operation_result tinyint NOT NULL COMMENT '是否为 List 查询操作的返回字段',
-  html_type varchar(32) NOT NULL COMMENT '显示类型',
-  create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
-  update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
-) COMMENT = '代码生成表字段定义';
+  table_id bigint not null comment '代码生成表编号',
+  column_name varchar(50) not null comment '字段名',
+  column_comment varchar(100) not null comment '字段描述',
+  data_type varchar(20) not null comment '字段类型',
+  column_length int default null comment '字段长度',
+  nullable bit(1) not null comment '是否允许为空',
+  primary_key bit(1) not null comment '是否主键',
+  ordinal_position int not null comment '排序',
+  java_type varchar(20) not null comment 'java 属性类型',
+  java_field varchar(50) not null comment 'java 属性名',
+  create_operation bit(1) not null comment '是否为insert字段',
+  update_operation bit(1) not null comment '是否为update字段',
+  list_operation bit(1) not null comment '是否为list字段',
+  create_user varchar(15) default null comment '创建者',
+  create_time datetime default current_timestamp comment '创建时间',
+  update_user varchar(15) default null comment '更新者',
+  update_time datetime default current_timestamp comment '更新时间'
+) comment = '代码生成字段表';
 
+
+# 尚未用到
 create table t_endpoint(
     id bigint primary key auto_increment comment '主键',
 	service_id bigint not null comment '服务ID',

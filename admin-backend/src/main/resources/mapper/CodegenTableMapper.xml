@@ -31,4 +31,17 @@
         from t_codegen_table
         where data_source_id=#{dataSourceId}
     </select>
+
+    <select id="selectCodegenTablePage" resultType="com.yeeiee.domain.vo.CodegenTableVo">
+        select
+            a.id,
+            b.name as dataSource,
+            a.table_name as tableName,
+            a.table_comment as tableComment,
+            a.create_time as createTime,
+            a.update_time as updateTime
+        from t_codegen_table a
+        left join t_data_source b
+        on a.data_source_id = b.id
+    </select>
 </mapper>
