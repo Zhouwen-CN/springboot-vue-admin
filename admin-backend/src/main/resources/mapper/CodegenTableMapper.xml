@@ -40,7 +40,18 @@
             a.table_comment as tableComment,
             a.create_time as createTime,
             a.update_time as updateTime
-        from t_codegen_table a
+        from (
+          select *
+          from t_codegen_table
+          <where>
+              <if test="keyword != null and keyword.trim() != ''">
+                  and (
+                      table_name like concat('%', #{keyword}, '%')
+                      or table_comment like concat('%', #{keyword}, '%')
+                  )
+              </if>
+          </where>
+        ) a
         left join t_data_source b
         on a.data_source_id = b.id
     </select>

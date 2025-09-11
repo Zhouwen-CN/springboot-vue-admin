@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.CodegenColumn;
  * </p>
  *
  * @author chen
- * @since 2025-09-10
+ * @since 2025-09-11
  */
 public interface CodegenColumnMapper extends BaseMapper<CodegenColumn> {
 

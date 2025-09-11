@@ -26,12 +26,14 @@ public class DictTypeForm implements FormToBeanHelper<DictType> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "字典类型id")
     private Long id;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 40)
     @Schema(description = "字典名称")
     private String name;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
     @Schema(description = "字典类型")
     private String dictType;
 }

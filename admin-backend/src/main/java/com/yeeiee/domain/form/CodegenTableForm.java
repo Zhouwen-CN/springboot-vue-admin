@@ -13,20 +13,35 @@ import java.util.List;
 
 /**
  * <p>
- * 代码生成导入表单
+ * 代码生成表单
  * </p>
  *
  * @author chen
- * @since 2025-09-08
+ * @since 2025-09-11
  */
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableImportForm", description = "代码生成导入表单")
-public class CodegenTableImportForm {
+@Schema(name = "CodegenTableForm", description = "代码生成表单")
+public class CodegenTableForm {
     @NotNull
-    @Schema(description = "数据源配置的编号")
-    private Long dataSourceId;
+    @Schema(description = "主键")
+    private Long id;
+
+    @NotBlank
+    @Length(max = 50)
+    @Schema(description = "表名称")
+    private String tableName;
+
+    @NotBlank
+    @Length(max = 100)
+    @Schema(description = "表描述")
+    private String tableComment;
+
+    @NotBlank
+    @Length(max = 100)
+    @Schema(description = "类名称")
+    private String className;
 
     @NotBlank
     @Length(max = 20)
@@ -46,8 +61,9 @@ public class CodegenTableImportForm {
     @Schema(description = "忽略字段前缀")
     private String ignoreColumnPrefix;
 
+    // 字段列表最多100
     @NotNull
-    @Size(min = 1, max = 20)
-    @Schema(description = "表名")
-    private List<String> tableNames;
+    @Size(min = 1, max = 100)
+    @Schema(description = "字段列表")
+    private List<CodegenColumnForm> columnList;
 }

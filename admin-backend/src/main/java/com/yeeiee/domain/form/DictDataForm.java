@@ -26,16 +26,20 @@ public class DictDataForm implements FormToBeanHelper<DictData> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "字典数据主键")
     private Long id;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典类型id")
     private Long typeId;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 50)
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
     @Schema(description = "字典键")
     private String label;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典值")
     private Integer data;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典排序")
     private Integer sort;

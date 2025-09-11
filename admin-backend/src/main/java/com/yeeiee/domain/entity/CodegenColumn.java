@@ -1,6 +1,10 @@
 package com.yeeiee.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-10
+ * @since 2025-09-11
  */
 @Getter
 @Setter
@@ -67,6 +71,10 @@ public class CodegenColumn {
     @Schema(description = "java 属性名")
     @TableField(value = "java_field")
     private String javaField;
+
+    @Schema(description = "js 类型")
+    @TableField(value = "js_type")
+    private String jsType;
 
     @Schema(description = "是否为insert字段")
     @TableField(value = "create_operation")

@@ -148,8 +148,8 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     }
 
     @Override
-    public IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String searchName) {
-        return codegenTableMapper.selectCodegenTablePage(page, searchName);
+    public IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword) {
+        return codegenTableMapper.selectCodegenTablePage(page, keyword);
     }
 
     /**

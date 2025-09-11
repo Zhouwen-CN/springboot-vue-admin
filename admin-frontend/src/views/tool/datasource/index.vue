@@ -93,8 +93,6 @@ function handleSelectionChange(dataSourceList: DataSourceVo[]) {
   deleteIds.value = dataSourceList.map((dataSource) => dataSource.id)
 }
 async function deleteDataSources() {
-  console.log(1111)
-
   await reqRemoveDataSourceByIds(deleteIds.value)
   refresh({ params: { searchName: searchName.value } })
   ElMessage.success('操作成功')

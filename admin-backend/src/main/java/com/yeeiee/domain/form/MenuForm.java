@@ -27,24 +27,34 @@ public class MenuForm implements FormToBeanHelper<Menu> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "菜单id")
     private Long id;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 4, max = 15)
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
     @Schema(description = "菜单标题")
     private String title;
+
+    @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 40)
     @Pattern(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, regexp = "^/.*$")
     @Schema(description = "菜单访问路径")
     private String accessPath;
+
     @Schema(description = "菜单文件路径")
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 60)
     private String filePath;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "菜单图标")
     private String icon;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "父级菜单id")
     private Long pid;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "是否缓存")
     private Boolean keepAlive;
+
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "菜单类型")
     private Integer menuType;

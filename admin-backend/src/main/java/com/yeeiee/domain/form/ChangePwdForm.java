@@ -31,14 +31,20 @@ public class ChangePwdForm {
     @NotNull
     @Schema(description = "用户id")
     private Long id;
+
+    @NotNull
     @Length(min = 5, max = 15)
     @Schema(description = "旧密码")
     private String oldPwd;
+
     @JsonSerialize(using = EncryptSerializer.class)
+    @NotNull
     @Length(min = 5, max = 15)
     @Schema(description = "新密码")
     private String newPwd;
+
     @JsonSerialize(using = EncryptSerializer.class)
+    @NotNull
     @Length(min = 5, max = 15)
     @Schema(description = "确认密码")
     private String confirmPwd;

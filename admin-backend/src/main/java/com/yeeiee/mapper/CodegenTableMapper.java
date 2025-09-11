@@ -21,5 +21,5 @@ public interface CodegenTableMapper extends BaseMapper<CodegenTable> {
 
     List<String> getExistsTableNameList(@Param("dataSourceId") Long dataSourceId);
 
-    IPage<CodegenTableVo> selectCodegenTablePage(Page<CodegenTableVo> page, @Param("searchName") String searchName);
+    IPage<CodegenTableVo> selectCodegenTablePage(Page<CodegenTableVo> page, @Param("keyword") String keyword);
 }

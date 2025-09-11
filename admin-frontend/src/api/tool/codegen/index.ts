@@ -1,4 +1,7 @@
 import request from '@/utils/request'
+import type { BaseVo } from '@/utils/requestTypes'
+import usePagination from '@/hooks/usePagination'
+
 export interface CodegenTableSelectorVo {
   name: string
   comment: string
@@ -26,4 +29,35 @@ export interface CodegenTableImportForm {
 // 代码生成表导入
 export function reqImportCodegenTable(CodegenTableImportForm: CodegenTableImportForm) {
   return request.post<void, CodegenTableImportForm>('/codegen', CodegenTableImportForm)
+}
+
+export interface CodegenTableVo extends BaseVo {
+  id: number
+  dataSource: string
+  tableName: string
+  tableComment: string
+}
+
+// 代码生成表分页
+export function reqGetCodegenTablePage() {
+  return usePagination<CodegenTableVo>('/codegen')
+}
+
+// 同步代码生成表字段
+export function reqSyncCodegenColumnList(id: number) {
+  return request.get<void>(`/codegen/sync/${id}`)
+}
+
+// 删除代码生成表
+export function reqRemoveCodegenTableById(id: number) {
+  return request.delete<void>(`/codegen/${id}`)
+}
+
+// 批量删除代码生成表
+export function reqRemoveCodegenTableByIds(ids: number[]) {
+  return request.delete<void>(`/codegen`, {
+    params: {
+      ids: ids.join()
+    }
+  })
 }

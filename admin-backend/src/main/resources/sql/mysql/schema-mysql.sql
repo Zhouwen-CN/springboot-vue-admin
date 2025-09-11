@@ -53,10 +53,10 @@ create table t_menu(
     id          bigint primary key auto_increment comment '主键',
     title       varchar(15) not null comment '标题',
     access_path varchar(40) not null comment '访问路径',
-    file_path   varchar(60) null comment '文件路径',
+    file_path   varchar(60) default null comment '文件路径',
     icon        varchar(15) not null comment '图标',
     pid         bigint      not null comment '父级菜单id',
-    keep_alive tinyint(1) default 0 null comment '是否缓存',
+    keep_alive  bit(1) default 0 null comment '是否缓存',
     menu_type   tinyint not null comment '菜单类型：0-目录，1-菜单',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
@@ -165,7 +165,6 @@ create table t_codegen_table  (
   constraint uniq_table_name unique (table_name)
 ) comment = '代码生成表';
 
-
 drop table if exists t_codegen_column;
 create table t_codegen_column  (
   id bigint primary key auto_increment comment '主键',
@@ -179,6 +178,7 @@ create table t_codegen_column  (
   ordinal_position int not null comment '排序',
   java_type varchar(20) not null comment 'java 属性类型',
   java_field varchar(50) not null comment 'java 属性名',
+  js_type varchar(20) not null comment 'js 类型',
   create_operation bit(1) not null comment '是否为insert字段',
   update_operation bit(1) not null comment '是否为update字段',
   list_operation bit(1) not null comment '是否为list字段',

@@ -16,6 +16,7 @@
         <result column="ordinal_position" property="ordinalPosition" />
         <result column="java_type" property="javaType" />
         <result column="java_field" property="javaField" />
+        <result column="js_type" property="jsType" />
         <result column="create_operation" property="createOperation" />
         <result column="update_operation" property="updateOperation" />
         <result column="list_operation" property="listOperation" />
@@ -27,7 +28,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, table_id, column_name, column_comment, data_type, column_length, nullable, primary_key, ordinal_position, java_type, java_field, create_operation, update_operation, list_operation, create_user, create_time, update_user, update_time
+        id, table_id, column_name, column_comment, data_type, column_length, nullable, primary_key, ordinal_position, java_type, java_field, js_type, create_operation, update_operation, list_operation, create_user, create_time, update_user, update_time
     </sql>
 
 </mapper>

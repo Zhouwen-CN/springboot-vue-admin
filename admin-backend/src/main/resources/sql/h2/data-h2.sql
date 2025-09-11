@@ -42,14 +42,14 @@ VALUES (1, '权限管理', '/auth', NULL, 'Lock', 0, 0, 0),
        (6, '接口文档', '/tool/swagger', '/tool/swagger/index.vue', 'Document', 5, 1, 1),
        (7, '字典管理', '/tool/dict', '/tool/dict/index.vue', 'Collection', 5, 0, 1),
        (8, '数据源管理', '/tool/datasource', '/tool/datasource/index.vue', 'SetUp', 5, 0, 1),
-       (9, '日志管理', '/log', NULL, 'Management', 0, 0, 0),
-       (10, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 9, 0, 1),
-       (11, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 9, 0, 1),
-       (12, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 9, 0, 1),
-       (13, '菜单测试', '/test', NULL, 'CameraFilled', 0, 0, 0),
-       (14, '菜单测试-sub1', '/test/sub1', NULL, 'Platform', 13, 0, 0),
+       (9, '代码生成', '/tool/codegen', '/tool/codegen/index.vue', 'Coffee', 5, 0, 1),
+       (10, '日志管理', '/log', NULL, 'Management', 0, 0, 0),
+       (11, '登入日志', '/log/login', '/log/login/index.vue', 'Checked', 10, 0, 1),
+       (12, '操作日志', '/log/ops', '/log/ops/index.vue', 'List', 10, 0, 1),
+       (13, '异常日志', '/log/error', '/log/error/index.vue', 'Failed', 10, 0, 1),
+       (14, '菜单测试', '/test', NULL, 'CameraFilled', 0, 0, 0),
        (15, '菜单测试-sub2', '/test/sub2', '/test/sub1.vue', 'SwitchFilled', 14, 0, 1),
-       (16, '菜单测试-sub3', '/test/sub3', '/test/sub2.vue', 'PictureFilled', 13, 0, 1);
+       (16, '菜单测试-sub3', '/test/sub3', '/test/sub2.vue', 'PictureFilled', 14, 0, 1);
 
 -- 字典类型表
 insert into t_dict_type(id, dict_type, name)

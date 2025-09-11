@@ -28,14 +28,17 @@ public class RoleForm implements FormToBeanHelper<Role> {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "角色id")
     private Long id;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 3, max = 15)
     @Schema(description = "角色名称")
     private String roleName;
+
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, min = 1, max = 40)
     @Schema(description = "角色描述")
     private String description;
+
     @Schema(description = "菜单id列表")
     private List<Long> menuIds;
 }

@@ -26,6 +26,14 @@ import java.util.Set;
 public final class CodegenUtil {
     private static final Set<String> IGNORE_CREATE_UPDATE_FIELDS = Set.of("createTime", "updateTime", "createUser", "updateUser");
     private static final Set<String> IGNORE_QUERY_FIELDS = Set.of("createUser", "updateUser");
+    private static final Set<String> JS_NUMBER_TYPE = Set.of(
+            DbColumnType.BYTE.getType(),
+            DbColumnType.SHORT.getType(),
+            DbColumnType.INTEGER.getType(),
+            DbColumnType.LONG.getType(),
+            DbColumnType.FLOAT.getType(),
+            DbColumnType.DOUBLE.getType()
+    );
 
     /**
      * 建构代码生成表
@@ -72,6 +80,8 @@ public final class CodegenUtil {
                 codegenColumn.setColumnLength(tableField.getMetaInfo().getLength());
             }
             codegenColumn.setJavaField(tableField.getPropertyName());
+            // js类型
+            codegenColumn.setJsType(getJsType(javaType));
             codegenColumn.setCreateOperation(isCreateOpsFiled(tableField));
             codegenColumn.setUpdateOperation(isUpdateOpsFiled(tableField));
             codegenColumn.setListOperation(isQueryField(tableField));
@@ -137,5 +147,17 @@ public final class CodegenUtil {
                 throw new CodegenFailedException("字段没有备注: " + tableName + "." + fieldName);
             }
         });
+    }
+
+    public static String getJsType(String javaType) {
+        if (DbColumnType.BOOLEAN.getType().equals(javaType)) {
+            return "boolean";
+        }
+
+        if (JS_NUMBER_TYPE.contains(javaType)) {
+            return "number";
+        }
+
+        return "string";
     }
 }

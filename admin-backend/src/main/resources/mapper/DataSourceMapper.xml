@@ -33,7 +33,7 @@
             update_time as updateTime
         from t_data_source
         <where>
-            <if test="searchName != null and searchName != ''">
+            <if test="searchName != null and searchName.trim() != ''">
                 and name like concat('%',#{searchName},'%')
             </if>
         </where>

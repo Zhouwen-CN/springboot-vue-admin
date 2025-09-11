@@ -45,9 +45,9 @@ public interface CodegenTableService extends IService<CodegenTable> {
     /**
      * 获取代码生成表分页
      *
-     * @param page       分页参数
-     * @param searchName 代码生成表名称
+     * @param page    分页参数
+     * @param keyword 关键字
      * @return 代码生成表分页
      */
-    IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String searchName);
+    IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword);
 }
