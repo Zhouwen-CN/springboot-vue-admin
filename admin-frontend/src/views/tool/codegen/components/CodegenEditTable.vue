@@ -7,6 +7,10 @@ import {
   reqGetCodegenColumnList,
   reqUpdateCodegenTable
 } from '@/api/tool/codegen'
+import useSettingStore from '@/stores/setting'
+const {
+  codegenConfig: { jsTypeList, javaTypeList }
+} = useSettingStore()
 
 // 抽屉开关
 const drawerVisible = ref(false)
@@ -66,117 +70,112 @@ defineExpose({
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" size="60%" title="代码生成配置"
-    @closed="closeDrawer">
+  <el-drawer v-model="drawerVisible" size="60%" title="代码生成配置" @closed="closeDrawer">
     <el-form
       ref="formRef"
       :model="formData"
       :rules="rules"
       label-width="auto"
       style="padding: 0 20px"
-      @submit.prevent="onSubmit(formRef)">
+      @submit.prevent="onSubmit(formRef)"
+    >
       <el-tabs v-model="activeName">
         <el-tab-pane label="基础信息" name="basicInfo">
           <el-form-item label="数据源名称" prop="table.dataSource">
-            <el-input v-model="formData.table.dataSource" disabled>
-            </el-input>
+            <el-input v-model="formData.table.dataSource" disabled> </el-input>
           </el-form-item>
           <el-form-item label="表名称" prop="table.tableName">
-            <el-input v-model="formData.table.tableName"
-              placeholder="请输入表名称"> </el-input>
+            <el-input v-model="formData.table.tableName" placeholder="请输入表名称"> </el-input>
           </el-form-item>
           <el-form-item label="表描述" prop="table.tableComment">
-            <el-input v-model="formData.table.tableComment"
-              placeholder="请输入表描述"> </el-input>
+            <el-input v-model="formData.table.tableComment" placeholder="请输入表描述"> </el-input>
           </el-form-item>
           <el-form-item label="类名称" prop="table.className">
-            <el-input v-model="formData.table.className"
-              placeholder="请输入类名称"> </el-input>
+            <el-input v-model="formData.table.className" placeholder="请输入类名称"> </el-input>
           </el-form-item>
           <el-form-item label="作者" prop="table.author">
-            <el-input v-model="formData.table.author"
-              placeholder="请输入作者"> </el-input>
+            <el-input v-model="formData.table.author" placeholder="请输入作者"> </el-input>
           </el-form-item>
           <el-form-item label="基础包名" prop="table.basePackage">
-            <el-input v-model="formData.table.basePackage"
-              placeholder="请输入基础包名"> </el-input>
+            <el-input v-model="formData.table.basePackage" placeholder="请输入基础包名"> </el-input>
           </el-form-item>
           <el-form-item label="忽略表前缀" prop="table.ignoreTablePrefix">
-            <el-input v-model="formData.table.ignoreTablePrefix"
-              placeholder="请输入忽略表前缀">
+            <el-input v-model="formData.table.ignoreTablePrefix" placeholder="请输入忽略表前缀">
             </el-input>
           </el-form-item>
-          <el-form-item label="忽略字段前缀"
-            prop="table.ignoreColumnPrefix">
-            <el-input v-model="formData.table.ignoreColumnPrefix"
-              placeholder="请输入忽略字段前缀">
+          <el-form-item label="忽略字段前缀" prop="table.ignoreColumnPrefix">
+            <el-input v-model="formData.table.ignoreColumnPrefix" placeholder="请输入忽略字段前缀">
             </el-input>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="字段信息" name="colums">
           <el-table :data="formData.columns" show-overflow-tooltip>
-            <el-table-column label="字段名称" prop="columnName">
-            </el-table-column>
+            <el-table-column label="字段名称" prop="columnName"> </el-table-column>
             <el-table-column label="字段描述" prop="columnComment">
-              <template
-                #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
+              <template #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
                 <el-form-item
+                  style="margin-bottom: 0"
                   :prop="`columns[${$index}].columnComment`"
-                  :rules="{ required: true, message: '请输入字段描述', trigger: 'blur' }">
+                  :rules="{ required: true, message: '请输入字段描述', trigger: 'blur' }"
+                >
                   <el-input v-model="row.columnComment"> </el-input>
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="物理类型" prop="dbType">
-            </el-table-column>
+            <el-table-column label="物理类型" prop="dbType"> </el-table-column>
             <el-table-column label="属性名" prop="javaField">
-              <template
-                #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
+              <template #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
                 <el-form-item
+                  style="margin-bottom: 0"
                   :prop="`columns[${$index}].javaField`"
-                  :rules="{ required: true, message: '请输入属性名', trigger: 'blur' }">
+                  :rules="{ required: true, message: '请输入属性名', trigger: 'blur' }"
+                >
                   <el-input v-model="row.javaField"> </el-input>
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="Java类型" prop="javaType">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-input v-model="row.javaType"
-                  placeholder="请输入Java类型"> </el-input>
+                <el-select v-model="row.javaType">
+                  <el-option
+                    v-for="(item, index) in javaTypeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
               </template>
             </el-table-column>
             <el-table-column label="Js类型" prop="jsType">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-input v-model="row.jsType"
-                  placeholder="请输入Java类型"> </el-input>
+                <el-select v-model="row.jsType">
+                  <el-option
+                    v-for="(item, index) in jsTypeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="允许空" min-width="40px"
-              prop="javaField">
+            <el-table-column label="允许空" min-width="40px" prop="javaField">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.nullable"
-                  false-value="false" true-value="true" />
+                <el-checkbox v-model="row.nullable" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="列表" min-width="40px"
-              prop="selectField">
+            <el-table-column label="列表" min-width="40px" prop="selectField">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.selectField"
-                  false-value="false" true-value="true" />
+                <el-checkbox v-model="row.selectField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="新增" min-width="40px"
-              prop="insertField">
+            <el-table-column label="新增" min-width="40px" prop="insertField">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.insertField"
-                  false-value="false" true-value="true" />
+                <el-checkbox v-model="row.insertField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="编辑" min-width="40px"
-              prop="updateField">
+            <el-table-column label="编辑" min-width="40px" prop="updateField">
               <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.updateField"
-                  false-value="false" true-value="true" />
+                <el-checkbox v-model="row.updateField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
           </el-table>
@@ -184,8 +183,7 @@ defineExpose({
       </el-tabs>
       <el-form-item style="margin-top: 16px">
         <el-button @click="drawerVisible = false">取消</el-button>
-        <el-button :loading="saveLoading" native-type="submit"
-          type="primary">提交 </el-button>
+        <el-button :loading="saveLoading" native-type="submit" type="primary">提交</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

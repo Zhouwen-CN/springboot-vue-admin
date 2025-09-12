@@ -30,13 +30,13 @@ public class CodegenColumnVo {
     @Schema(description = "数据库类型")
     private String dbType;
 
-    @Schema(description = "java 属性名")
+    @Schema(description = "java属性名")
     private String javaField;
 
-    @Schema(description = "java 属性类型")
+    @Schema(description = "java类型")
     private String javaType;
 
-    @Schema(description = "js 类型")
+    @Schema(description = "js类型")
     private String jsType;
 
     @Schema(description = "是否允许为空")

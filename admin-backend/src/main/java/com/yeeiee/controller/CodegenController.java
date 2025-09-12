@@ -14,6 +14,7 @@ import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -42,6 +43,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/codegen")
+@Tag(name = "代码生成配置表 控制器")
 public class CodegenController {
 
     private final CodegenTableService codegenTableService;

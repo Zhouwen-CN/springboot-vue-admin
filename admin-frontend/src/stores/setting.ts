@@ -16,7 +16,17 @@ const useSettingStore = defineStore(
       author: 'chen',
       ignoreTablePrefix: 't_',
       ignoreColumnPrefix: undefined,
-      basePackage: 'com.yeeiee'
+      basePackage: 'com.yeeiee',
+      jsTypeList: ['string', 'number', 'boolean'],
+      javaTypeList: [
+        'Long',
+        'String',
+        'Integer',
+        'Double',
+        'BigDecimal',
+        'LocalDateTime',
+        'Boolean'
+      ]
     }
 
     function $reset() {

@@ -15,7 +15,9 @@ export interface ResultData<T = unknown> {
 }
 
 export interface BaseVo {
+  createUser?: string
   createTime?: string
+  updateUser?: string
   updateTime?: string
 }
 

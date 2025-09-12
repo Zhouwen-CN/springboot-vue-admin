@@ -188,6 +188,16 @@ create table t_codegen_column  (
   update_time datetime default current_timestamp comment '更新时间'
 ) comment = '代码生成字段表';
 
+create table t_student_test(
+  id bigint primary key auto_increment comment '主键',
+  name varchar(20)  not null comment '名称',
+  age int not null comment '年龄',
+  gender varchar(10) not null comment '性别',
+  create_user varchar(15) default null comment '创建者',
+  create_time datetime default current_timestamp comment '创建时间',
+  update_user varchar(15) default null comment '更新者',
+  update_time datetime default current_timestamp comment '更新时间'
+) comment = '学生表-代码生成测试';
 
 # 尚未用到
 create table t_endpoint(
@@ -206,7 +216,6 @@ create table t_endpoint(
     constraint uniq_name unique (name),
     constraint uniq_access_url unique (access_url)
 ) comment '接口配置表';
-
 
 create table t_server(
 	id bigint primary key auto_increment comment '主键',
