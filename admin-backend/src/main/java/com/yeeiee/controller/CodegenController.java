@@ -3,7 +3,9 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenColumn;
+import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
+import com.yeeiee.domain.vo.CodegenColumnVo;
 import com.yeeiee.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.domain.vo.CodegenTableVo;
 import com.yeeiee.domain.vo.PageVo;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,9 +60,7 @@ public class CodegenController {
 
     @Operation(summary = "查询代码生成表选择器")
     @GetMapping
-    public R<List<CodegenTableSelectorVo>> getSelectorList(
-            @RequestParam("dataSourceId") @Parameter(description = "数据源编号") Long dataSourceId
-    ) {
+    public R<List<CodegenTableSelectorVo>> getSelectorList(@RequestParam("dataSourceId") @Parameter(description = "数据源编号") Long dataSourceId) {
         val codegenTableVoList = codegenTableService.getCodegenTableSelector(dataSourceId);
         return R.ok(codegenTableVoList);
     }
@@ -69,6 +70,13 @@ public class CodegenController {
     @PostMapping
     public R<Void> addBatch(@RequestBody @Validated CodegenTableImportForm codegenTableImportForm) {
         codegenTableService.addBatchCodegenTable(codegenTableImportForm);
+        return R.ok();
+    }
+
+    @Operation(summary = "修改代码生成表")
+    @PutMapping
+    public R<Void> modify(@RequestBody @Validated CodegenTableColumnsForm codegenTableColumnsForm) {
+        codegenTableService.modifyCodegenConfig(codegenTableColumnsForm);
         return R.ok();
     }
 
@@ -99,5 +107,12 @@ public class CodegenController {
         );
         codegenTableService.removeByIds(ids);
         return R.ok();
+    }
+
+    @Operation(summary = "查询代码生成字段列表")
+    @GetMapping("/{id}")
+    public R<List<CodegenColumnVo>> getColumnListByTableId(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
+        val columnVoList = codegenColumnService.getListByTableId(id);
+        return R.ok(columnVoList);
     }
 }

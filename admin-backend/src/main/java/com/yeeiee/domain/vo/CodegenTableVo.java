@@ -31,6 +31,21 @@ public class CodegenTableVo {
     @Schema(description = "表描述")
     private String tableComment;
 
+    @Schema(description = "类名称")
+    private String className;
+
+    @Schema(description = "作者")
+    private String author;
+
+    @Schema(description = "基础包名")
+    private String basePackage;
+
+    @Schema(description = "忽略表前缀")
+    private String ignoreTablePrefix;
+
+    @Schema(description = "忽略字段前缀")
+    private String ignoreColumnPrefix;
+
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 

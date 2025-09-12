@@ -172,7 +172,7 @@ CREATE TABLE t_operation_log (
     operation     VARCHAR2(10) NOT NULL,
     url           VARCHAR2(50) NOT NULL,
     method        NUMBER(1) NOT NULL,
-    params        VARCHAR2(500) DEFAULT NULL,
+    params        CLOB DEFAULT NULL,
     time          NUMBER(18) NOT NULL,
     status        NUMBER(1) NOT NULL,
     ip            VARCHAR2(32) NOT NULL,
@@ -205,7 +205,7 @@ CREATE TABLE t_error_log (
     id            NUMBER(18) PRIMARY KEY,
     url           VARCHAR2(50) NOT NULL,
     method        NUMBER(1) NOT NULL,
-    params        VARCHAR2(500) DEFAULT NULL,
+    params        CLOB DEFAULT NULL,
     ip            VARCHAR2(32) NOT NULL,
     user_agent    VARCHAR2(200) NOT NULL,
     error_msg     CLOB NOT NULL,
@@ -358,17 +358,17 @@ create table t_codegen_column(
   table_id NUMBER(18) not null,
   column_name varchar2(50) not null,
   column_comment varchar2(100) not null,
-  data_type varchar2(20) not null,
+  db_type varchar2(20) not null,
   column_length NUMBER(9) default null,
-  nullable number(1) not null,
-  primary_key number(1) not null,
-  ordinal_position NUMBER(9) not null,
-  java_type varchar2(20) not null,
   java_field varchar2(50) not null,
+  java_type varchar2(20) not null,
   js_type varchar2(20) not null,
-  create_operation number(1) not null,
-  update_operation number(1) not null,
-  list_operation number(1) not null,
+  ordinal_position NUMBER(9) not null,
+  primary_key number(1) not null,
+  nullable number(1) not null,
+  insert_field number(1) not null,
+  update_field number(1) not null,
+  select_field number(1) not null,
   create_user varchar2(15) default null,
   create_time DATE default SYSDATE,
   update_user varchar2(15) default null,
@@ -380,17 +380,17 @@ COMMENT ON COLUMN t_codegen_column.id IS '主键';
 COMMENT ON COLUMN t_codegen_column.table_id IS '代码生成表编号';
 COMMENT ON COLUMN t_codegen_column.column_name IS '字段名';
 COMMENT ON COLUMN t_codegen_column.column_comment IS '字段描述';
-COMMENT ON COLUMN t_codegen_column.data_type IS '字段类型';
+COMMENT ON COLUMN t_codegen_column.db_type IS '数据库类型';
 COMMENT ON COLUMN t_codegen_column.column_length IS '字段长度';
-COMMENT ON COLUMN t_codegen_column.nullable IS '是否允许为空';
-COMMENT ON COLUMN t_codegen_column.primary_key IS '是否主键';
+COMMENT ON COLUMN t_codegen_column.java_field IS 'java属性名';
+COMMENT ON COLUMN t_codegen_column.java_type IS 'java类型';
+COMMENT ON COLUMN t_codegen_column.js_type IS 'js类型';
 COMMENT ON COLUMN t_codegen_column.ordinal_position IS '排序';
-COMMENT ON COLUMN t_codegen_column.java_type IS 'java 属性类型';
-COMMENT ON COLUMN t_codegen_column.java_field IS 'java 属性名';
-COMMENT ON COLUMN t_codegen_column.js_type IS 'js 类型';
-COMMENT ON COLUMN t_codegen_column.create_operation IS '是否为insert字段';
-COMMENT ON COLUMN t_codegen_column.update_operation IS '是否为update字段';
-COMMENT ON COLUMN t_codegen_column.list_operation IS '是否为list字段';
+COMMENT ON COLUMN t_codegen_column.primary_key IS '是否主键';
+COMMENT ON COLUMN t_codegen_column.nullable IS '是否允许为空';
+COMMENT ON COLUMN t_codegen_column.insert_field IS '是否为insert字段';
+COMMENT ON COLUMN t_codegen_column.update_field IS '是否为update字段';
+COMMENT ON COLUMN t_codegen_column.select_field IS '是否为select字段';
 COMMENT ON COLUMN t_codegen_column.create_user IS '创建者';
 COMMENT ON COLUMN t_codegen_column.create_time IS '创建时间';
 COMMENT ON COLUMN t_codegen_column.update_user IS '更新者';

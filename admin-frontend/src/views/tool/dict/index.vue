@@ -113,7 +113,7 @@ function dialogClean() {
   dictTypeFormRef.value?.clearValidate()
 }
 
-// 字典数据弹窗
+// 字典数据抽屉
 const dictData = ref<InstanceType<typeof DictData>>()
 
 // 打开抽屉
@@ -130,7 +130,7 @@ onMounted(() => {
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchByKeyword()" label-width="auto">
+      <el-form inline label-width="auto" @submit.prevent="searchByKeyword()">
         <el-form-item label="关键字">
           <el-input v-model="keyword" clearable placeholder="关键字"></el-input>
         </el-form-item>

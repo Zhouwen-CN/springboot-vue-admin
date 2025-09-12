@@ -1,15 +1,13 @@
 package com.yeeiee.domain.form;
 
+import com.yeeiee.domain.entity.CodegenTable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.List;
 
 /**
  * <p>
@@ -23,7 +21,7 @@ import java.util.List;
 @Setter
 @ToString
 @Schema(name = "CodegenTableForm", description = "代码生成表单")
-public class CodegenTableForm {
+public class CodegenTableForm implements FormToBeanHelper<CodegenTable>{
     @NotNull
     @Schema(description = "主键")
     private Long id;
@@ -60,10 +58,4 @@ public class CodegenTableForm {
     @Length(max = 20)
     @Schema(description = "忽略字段前缀")
     private String ignoreColumnPrefix;
-
-    // 字段列表最多100
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Schema(description = "字段列表")
-    private List<CodegenColumnForm> columnList;
 }

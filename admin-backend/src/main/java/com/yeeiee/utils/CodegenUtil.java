@@ -69,7 +69,7 @@ public final class CodegenUtil {
             codegenColumn.setTableId(id);
             codegenColumn.setColumnName(tableField.getColumnName());
             codegenColumn.setColumnComment(tableField.getComment());
-            codegenColumn.setDataType(String.valueOf(tableField.getMetaInfo().getJdbcType()));
+            codegenColumn.setDbType(String.valueOf(tableField.getMetaInfo().getJdbcType()));
             codegenColumn.setNullable(tableField.getMetaInfo().isNullable());
             codegenColumn.setPrimaryKey(tableField.isKeyFlag());
             codegenColumn.setOrdinalPosition(i);
@@ -82,9 +82,9 @@ public final class CodegenUtil {
             codegenColumn.setJavaField(tableField.getPropertyName());
             // js类型
             codegenColumn.setJsType(getJsType(javaType));
-            codegenColumn.setCreateOperation(isCreateOpsFiled(tableField));
-            codegenColumn.setUpdateOperation(isUpdateOpsFiled(tableField));
-            codegenColumn.setListOperation(isQueryField(tableField));
+            codegenColumn.setInsertField(isCreateOpsFiled(tableField));
+            codegenColumn.setUpdateField(isUpdateOpsFiled(tableField));
+            codegenColumn.setSelectField(isQueryField(tableField));
             codegenColumns.add(codegenColumn);
         }
         return codegenColumns;

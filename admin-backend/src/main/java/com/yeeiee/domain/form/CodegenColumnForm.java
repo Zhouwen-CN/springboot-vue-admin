@@ -1,5 +1,6 @@
 package com.yeeiee.domain.form;
 
+import com.yeeiee.domain.entity.CodegenColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "CodegenColumnForm", description = "代码生成字段表表单")
-public class CodegenColumnForm {
+public class CodegenColumnForm implements FormToBeanHelper<CodegenColumn> {
     @NotNull
     @Schema(description = "主键")
     private Long id;
@@ -31,18 +32,18 @@ public class CodegenColumnForm {
     private String columnComment;
 
     @NotBlank
-    @Length(max = 20)
-    @Schema(description = "java 属性类型")
-    private String javaType;
-
-    @NotBlank
     @Length(max = 50)
-    @Schema(description = "java 属性名")
+    @Schema(description = "java属性名")
     private String javaField;
 
     @NotBlank
     @Length(max = 20)
-    @Schema(description = "js 类型")
+    @Schema(description = "java类型")
+    private String javaType;
+
+    @NotBlank
+    @Length(max = 20)
+    @Schema(description = "js类型")
     private String jsType;
 
     @NotNull
@@ -51,13 +52,13 @@ public class CodegenColumnForm {
 
     @NotNull
     @Schema(description = "是否为insert字段")
-    private Boolean createOperation;
+    private Boolean insertField;
 
     @NotNull
     @Schema(description = "是否为update字段")
-    private Boolean updateOperation;
+    private Boolean updateField;
 
     @NotNull
-    @Schema(description = "是否为list字段")
-    private Boolean listOperation;
+    @Schema(description = "是否为select字段")
+    private Boolean selectField;
 }

@@ -9,17 +9,17 @@
         <result column="table_id" property="tableId" />
         <result column="column_name" property="columnName" />
         <result column="column_comment" property="columnComment" />
-        <result column="data_type" property="dataType" />
+        <result column="db_type" property="dbType" />
         <result column="column_length" property="columnLength" />
-        <result column="nullable" property="nullable" />
-        <result column="primary_key" property="primaryKey" />
-        <result column="ordinal_position" property="ordinalPosition" />
-        <result column="java_type" property="javaType" />
         <result column="java_field" property="javaField" />
+        <result column="java_type" property="javaType" />
         <result column="js_type" property="jsType" />
-        <result column="create_operation" property="createOperation" />
-        <result column="update_operation" property="updateOperation" />
-        <result column="list_operation" property="listOperation" />
+        <result column="ordinal_position" property="ordinalPosition" />
+        <result column="primary_key" property="primaryKey" />
+        <result column="nullable" property="nullable" />
+        <result column="insert_field" property="insertField" />
+        <result column="update_field" property="updateField" />
+        <result column="select_field" property="selectField" />
         <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
@@ -28,7 +28,24 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, table_id, column_name, column_comment, data_type, column_length, nullable, primary_key, ordinal_position, java_type, java_field, js_type, create_operation, update_operation, list_operation, create_user, create_time, update_user, update_time
+        id, table_id, column_name, column_comment, db_type, column_length, java_field, java_type, js_type, ordinal_position, primary_key, nullable, insert_field, update_field, select_field, create_user, create_time, update_user, update_time
     </sql>
 
+    <select id="selectListByTableId" resultType="com.yeeiee.domain.vo.CodegenColumnVo">
+        select
+            id,
+            column_name as columnName,
+            column_comment as columnComment,
+            db_type as dbType,
+            java_field as javaField,
+            java_type as javaType,
+            js_type as jsType,
+            nullable,
+            insert_field as insertField,
+            update_field as updateField,
+            select_field as selectField
+        from t_codegen_column
+        where table_id=#{tableId}
+        order by ordinal_position
+    </select>
 </mapper>

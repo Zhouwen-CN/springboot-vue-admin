@@ -36,6 +36,11 @@ export interface CodegenTableVo extends BaseVo {
   dataSource: string
   tableName: string
   tableComment: string
+  className: string
+  author: string
+  basePackage: string
+  ignoreTablePrefix: string
+  ignoreColumnPrefix: string
 }
 
 // 代码生成表分页
@@ -60,4 +65,33 @@ export function reqRemoveCodegenTableByIds(ids: number[]) {
       ids: ids.join()
     }
   })
+}
+
+export interface CodegenColumnVo {
+  id: number
+  columnName: string
+  columnComment: string
+  dbType: string
+  javaType: string
+  javaField: string
+  jsType: string
+  nullable: boolean
+  insertField: boolean
+  updateField: boolean
+  selectField: boolean
+}
+
+// 获取代码生成字段列表
+export function reqGetCodegenColumnList(id: number) {
+  return request.get<CodegenColumnVo[]>(`/codegen/${id}`)
+}
+
+export interface CodegenTableForm {
+  table: CodegenTableVo
+  columns: CodegenColumnVo[]
+}
+
+// 修改代码生成表
+export function reqUpdateCodegenTable(CodegenTableForm: CodegenTableForm) {
+  return request.put<void, CodegenTableForm>(`/codegen`, CodegenTableForm)
 }

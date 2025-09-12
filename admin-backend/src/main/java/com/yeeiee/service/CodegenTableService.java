@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.CodegenTable;
+import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
 import com.yeeiee.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.domain.vo.CodegenTableVo;
@@ -50,4 +51,10 @@ public interface CodegenTableService extends IService<CodegenTable> {
      * @return 代码生成表分页
      */
     IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword);
+
+    /**
+     * 修改代码生成配置
+      * @param codegenTableColumnsForm 代码生成配置表单
+     */
+    void modifyCodegenConfig(CodegenTableColumnsForm codegenTableColumnsForm);
 }

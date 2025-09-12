@@ -38,6 +38,11 @@
             b.name as dataSource,
             a.table_name as tableName,
             a.table_comment as tableComment,
+            a.class_name as className,
+            a.author,
+            a.base_package as basePackage,
+            a.ignore_table_prefix as ignoreTablePrefix,
+            a.ignore_column_prefix as ignoreColumnPrefix,
             a.create_time as createTime,
             a.update_time as updateTime
         from (

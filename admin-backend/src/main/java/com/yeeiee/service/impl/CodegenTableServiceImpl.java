@@ -14,9 +14,12 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.query.SQLQuery;
+import com.yeeiee.domain.dto.CodegenTableConfigDto;
 import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.entity.CodegenTable;
 import com.yeeiee.domain.entity.DataSource;
+import com.yeeiee.domain.form.CodegenColumnForm;
+import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
 import com.yeeiee.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.domain.vo.CodegenTableVo;
@@ -36,8 +39,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -92,21 +95,13 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     public void addBatchCodegenTable(CodegenTableImportForm codegenTableImportForm) {
         val dataSourceId = codegenTableImportForm.getDataSourceId();
         val dataSourceConfig = dataSourceService.getById(dataSourceId);
-        val tableInfoList = this.getTableList(dataSourceConfig, (strategyConfigBuilder) -> {
-            // 过滤表名
-            val tableNames = codegenTableImportForm.getTableNames();
-            strategyConfigBuilder.addInclude(tableNames);
-            // 忽略表前缀
-            val ignoreTablePrefix = codegenTableImportForm.getIgnoreTablePrefix();
-            if (StringUtils.hasText(ignoreTablePrefix)) {
-                strategyConfigBuilder.addTablePrefix(ignoreTablePrefix);
-            }
-            // 忽略字段前缀
-            val ignoreColumnPrefix = codegenTableImportForm.getIgnoreColumnPrefix();
-            if (StringUtils.hasText(ignoreColumnPrefix)) {
-                strategyConfigBuilder.addFieldPrefix(ignoreColumnPrefix);
-            }
-        });
+
+        val codegenTableConfigDto = new CodegenTableConfigDto();
+        codegenTableConfigDto.setIncludeTableNames(codegenTableImportForm.getTableNames());
+        codegenTableConfigDto.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());
+        codegenTableConfigDto.setIgnoreColumnPrefix(codegenTableImportForm.getIgnoreColumnPrefix());
+
+        val tableInfoList = this.getTableList(dataSourceConfig, codegenTableConfigDto);
 
         this.saveCodegenTable(
                 tableInfoList,
@@ -126,20 +121,12 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
             throw new CodegenFailedException("数据源不存在: " + codegenTable.getDataSourceId());
         }
 
-        val tableInfoList = this.getTableList(dataSourceConfig, (strategyConfigBuilder) -> {
-            // 过滤表名
-            strategyConfigBuilder.addInclude(codegenTable.getTableName());
-            // 忽略表前缀
-            val ignoreTablePrefix = codegenTable.getIgnoreTablePrefix();
-            if (StringUtils.hasText(ignoreTablePrefix)) {
-                strategyConfigBuilder.addTablePrefix(ignoreTablePrefix);
-            }
-            // 忽略字段前缀
-            val ignoreColumnPrefix = codegenTable.getIgnoreColumnPrefix();
-            if (StringUtils.hasText(ignoreColumnPrefix)) {
-                strategyConfigBuilder.addFieldPrefix(ignoreColumnPrefix);
-            }
-        });
+        val codegenTableConfigDto = new CodegenTableConfigDto();
+        codegenTableConfigDto.setIncludeTableNames(Collections.singletonList(codegenTable.getTableName()));
+        codegenTableConfigDto.setIgnoreTablePrefix(codegenTable.getIgnoreTablePrefix());
+        codegenTableConfigDto.setIgnoreColumnPrefix(codegenTable.getIgnoreColumnPrefix());
+
+        val tableInfoList = this.getTableList(dataSourceConfig, codegenTableConfigDto);
 
         this.saveCodegenTable(
                 tableInfoList,
@@ -150,6 +137,14 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     @Override
     public IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword) {
         return codegenTableMapper.selectCodegenTablePage(page, keyword);
+    }
+
+    @Override
+    public void modifyCodegenConfig(CodegenTableColumnsForm codegenTableColumnsForm) {
+        val codegenTable = codegenTableColumnsForm.getTable().toBean();
+        this.updateById(codegenTable);
+        val codegenColumnList = codegenTableColumnsForm.getColumns().stream().map(CodegenColumnForm::toBean).toList();
+        codegenColumnService.updateBatchById(codegenColumnList);
     }
 
     /**
@@ -186,11 +181,11 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     /**
      * 获取 table info list
      *
-     * @param dataSource 数据源配置
-     * @param consumer   自定义策略配置
+     * @param dataSource            数据源配置
+     * @param codegenTableConfigDto 代码生成配置dto
      * @return table info list
      */
-    private List<TableInfo> getTableList(DataSource dataSource, Consumer<StrategyConfig.Builder> consumer) {
+    private List<TableInfo> getTableList(DataSource dataSource, CodegenTableConfigDto codegenTableConfigDto) {
         val url = dataSource.getUrl();
         val username = dataSource.getUsername();
         val password = dataSource.getPassword();
@@ -221,8 +216,18 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
         val strategyConfigBuilder = new StrategyConfig.Builder();
         // 忽略视图
         strategyConfigBuilder.enableSkipView();
-        // 自定义策略
-        consumer.accept(strategyConfigBuilder);
+        // 过滤表名
+        strategyConfigBuilder.addInclude(codegenTableConfigDto.getIncludeTableNames());
+        // 忽略表前缀
+        val ignoreTablePrefix = codegenTableConfigDto.getIgnoreTablePrefix();
+        if (StringUtils.hasText(ignoreTablePrefix)) {
+            strategyConfigBuilder.addTablePrefix(ignoreTablePrefix);
+        }
+        // 忽略字段前缀
+        val ignoreColumnPrefix = codegenTableConfigDto.getIgnoreColumnPrefix();
+        if (StringUtils.hasText(ignoreColumnPrefix)) {
+            strategyConfigBuilder.addFieldPrefix(ignoreColumnPrefix);
+        }
 
         val globalConfigBuilder = new GlobalConfig.Builder();
         // 只使用 LocalDateTime 类型

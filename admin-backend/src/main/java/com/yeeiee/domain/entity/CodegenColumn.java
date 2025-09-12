@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-11
+ * @since 2025-09-12
  */
 @Getter
 @Setter
@@ -44,49 +44,49 @@ public class CodegenColumn {
     @TableField(value = "column_comment")
     private String columnComment;
 
-    @Schema(description = "字段类型")
-    @TableField(value = "data_type")
-    private String dataType;
+    @Schema(description = "数据库类型")
+    @TableField(value = "db_type")
+    private String dbType;
 
     @Schema(description = "字段长度")
     @TableField(value = "column_length")
     private Integer columnLength;
 
-    @Schema(description = "是否允许为空")
-    @TableField(value = "nullable")
-    private Boolean nullable;
+    @Schema(description = "java属性名")
+    @TableField(value = "java_field")
+    private String javaField;
 
-    @Schema(description = "是否主键")
-    @TableField(value = "primary_key")
-    private Boolean primaryKey;
+    @Schema(description = "java类型")
+    @TableField(value = "java_type")
+    private String javaType;
+
+    @Schema(description = "js类型")
+    @TableField(value = "js_type")
+    private String jsType;
 
     @Schema(description = "排序")
     @TableField(value = "ordinal_position")
     private Integer ordinalPosition;
 
-    @Schema(description = "java 属性类型")
-    @TableField(value = "java_type")
-    private String javaType;
+    @Schema(description = "是否主键")
+    @TableField(value = "primary_key")
+    private Boolean primaryKey;
 
-    @Schema(description = "java 属性名")
-    @TableField(value = "java_field")
-    private String javaField;
-
-    @Schema(description = "js 类型")
-    @TableField(value = "js_type")
-    private String jsType;
+    @Schema(description = "是否允许为空")
+    @TableField(value = "nullable")
+    private Boolean nullable;
 
     @Schema(description = "是否为insert字段")
-    @TableField(value = "create_operation")
-    private Boolean createOperation;
+    @TableField(value = "insert_field")
+    private Boolean insertField;
 
     @Schema(description = "是否为update字段")
-    @TableField(value = "update_operation")
-    private Boolean updateOperation;
+    @TableField(value = "update_field")
+    private Boolean updateField;
 
-    @Schema(description = "是否为list字段")
-    @TableField(value = "list_operation")
-    private Boolean listOperation;
+    @Schema(description = "是否为select字段")
+    @TableField(value = "select_field")
+    private Boolean selectField;
 
     @Schema(description = "创建者")
     @TableField(value = "create_user", fill = FieldFill.INSERT)

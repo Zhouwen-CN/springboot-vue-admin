@@ -3,7 +3,12 @@ package com.yeeiee.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.*;
+import com.baomidou.mybatisplus.extension.incrementer.DB2KeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.DmKeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.KingbaseKeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.OracleKeyGenerator;
+import com.baomidou.mybatisplus.extension.incrementer.PostgreKeyGenerator;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
 import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -14,6 +19,7 @@ import com.yeeiee.utils.SecurityUserUtil;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -32,17 +38,21 @@ import java.time.LocalDateTime;
  */
 @Configuration
 public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
-
     @Value("${custom.jsql-parser.cache.spec}")
     private String jSqlParserCacheSpec;
+    private final DbType dbType;
+
+    @Autowired
+    public MybatisPlusConfig(ConfigurableEnvironment environment) {
+        dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
+    }
 
     /**
      * mybatis plus插件
      * 总结：对 SQL 进行单次改造的插件应优先放入，不对 SQL 进行改造的插件最后放入。
      */
     @Bean
-    public MybatisPlusInterceptor mybatisPlusInterceptor(ConfigurableEnvironment environment) {
-        val dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
         val interceptor = new MybatisPlusInterceptor();
 
         // 分页插件
@@ -94,13 +104,11 @@ public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
     /**
      * 当 idType 为 input 时，需要提供一个 IKeyGenerator
      *
-     * @param environment 环境配置对象
      * @return IKeyGenerator
      */
     @Bean
     @ConditionalOnProperty(prefix = "mybatis-plus.global-config.db-config", name = "id-type", havingValue = "INPUT")
-    public IKeyGenerator keyGenerator(ConfigurableEnvironment environment) {
-        DbType dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
+    public IKeyGenerator keyGenerator() {
         if (dbType != null) {
             switch (dbType) {
                 case DB2 -> {
@@ -126,9 +134,13 @@ public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
         throw new IllegalArgumentException(String.format("Cannot find a suitable IKeyGenerator implementation class for [%s]", dbType));
     }
 
+    /**
+     * jSqlParser 缓存，mybatis一些插件会使用 jSqlParser 解析 sql，比如分页
+     *
+     * @throws Exception ex
+     */
     @Override
     public void afterPropertiesSet() throws Exception {
-        // jSqlParser cache，mybatis一些插件会使用 jSqlParser 解析 sql，比如分页
         JsqlParserGlobal.setJsqlParseCache(new JdkSerialCaffeineJsqlParseCache(
                 Caffeine.from(jSqlParserCacheSpec).build()
         ));

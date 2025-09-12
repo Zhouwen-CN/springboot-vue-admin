@@ -14,6 +14,7 @@ import {
   reqSyncCodegenColumnList
 } from '@/api/tool/codegen'
 import useSettingStore from '@/stores/setting'
+import CodegenEditTable from './components/CodegenEditTable.vue'
 
 const { codegenConfig } = useSettingStore()
 
@@ -117,13 +118,15 @@ async function deleteCodegenTableByIds() {
 }
 
 // 更新代码生成表
+const codegenEditTableRef = ref<InstanceType<typeof CodegenEditTable>>()
 function updateCodegenTable(row: CodegenTableVo) {
-  console.log('更新代码生成表')
+  codegenEditTableRef?.value?.showDrawer(row)
 }
 
 // 同步代码生成表字段
 async function syncCodegenColumnList(id: number) {
   await reqSyncCodegenColumnList(id)
+  ElMessage.success('操作成功')
 }
 
 // 清空表单
@@ -176,7 +179,7 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Download" native-type="submit" type="primary">导入</el-button>
+          <el-button :icon="Download" native-type="submit" type="primary">导入 </el-button>
         </el-form-item>
         <el-form-item>
           <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
@@ -251,7 +254,7 @@ onMounted(() => {
           @submit.prevent="onSubmit(formRef)"
         >
           <el-form-item label="作者" prop="author">
-            <el-input v-model="codegenTableImportForm.author" placeholder="作者"> </el-input>
+            <el-input v-model="codegenTableImportForm.author" placeholder="作者"></el-input>
           </el-form-item>
           <el-form-item label="基础包名" prop="basePackage">
             <el-input v-model="codegenTableImportForm.basePackage" placeholder="基础包名">
@@ -268,14 +271,13 @@ onMounted(() => {
             >
             </el-input>
           </el-form-item>
-
           <el-form-item label="表名" prop="tableNames">
             <el-select
               v-model="codegenTableImportForm.tableNames"
-              multiple
               collapse-tags
               collapse-tags-tooltip
               filterable
+              multiple
             >
               <el-option
                 v-for="(item, index) in codegenTableSelectorList"
@@ -291,11 +293,14 @@ onMounted(() => {
           </el-form-item>
           <el-form-item>
             <el-button @click="toggleDialog = false">取消</el-button>
-            <el-button :loading="saveLoading" native-type="submit" type="primary">确认</el-button>
+            <el-button :loading="saveLoading" native-type="submit" type="primary">确认 </el-button>
           </el-form-item>
         </el-form>
       </template>
     </el-dialog>
+
+    <!-- 代码生成编辑-抽屉 -->
+    <codegen-edit-table ref="codegenEditTableRef"></codegen-edit-table>
   </div>
 </template>
 
