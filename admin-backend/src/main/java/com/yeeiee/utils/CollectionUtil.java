@@ -30,28 +30,28 @@ public final class CollectionUtil {
      * @param getChildren 获取子节点列表
      * @param setChildren 设置子节点列表
      * @param checkRoot   判断当前节点是否根节点
-     * @param <I>         id类型
-     * @param <T>         列表项类型
+     * @param <ID>         id类型
+     * @param <E>         列表项类型
      * @return 树形结构
      */
-    public static <I, T> List<T> makeTree(Collection<T> list,
-                                          Function<T, I> getId,
-                                          Function<T, I> getPid,
-                                          Function<T, List<T>> getChildren,
-                                          BiConsumer<T, List<T>> setChildren,
-                                          Predicate<I> checkRoot) {
+    public static <ID, E> List<E> makeTree(Collection<E> list,
+                                          Function<E, ID> getId,
+                                          Function<E, ID> getPid,
+                                          Function<E, List<E>> getChildren,
+                                          BiConsumer<E, List<E>> setChildren,
+                                          Predicate<ID> checkRoot) {
         // 结果集
-        val result = new ArrayList<T>();
-        val map = new HashMap<I, T>();
+        val result = new ArrayList<E>();
+        val map = new HashMap<ID, E>();
 
         // 将所有节点添加到map中
-        for (T item : list) {
+        for (E item : list) {
             val id = getId.apply(item);
             setChildren.accept(item, new ArrayList<>());
             map.put(id, item);
         }
 
-        for (T item : list) {
+        for (E item : list) {
             // 获取当前节点的父节点ID
             val prentId = getPid.apply(item);
 

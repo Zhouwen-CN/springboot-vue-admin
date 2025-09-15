@@ -1,4 +1,8 @@
+server:
+  port: 8080
 spring:
+  application:
+    name: sv-admin
   profiles:
     active: dev
   # 事务配置
