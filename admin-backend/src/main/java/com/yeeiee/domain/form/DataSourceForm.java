@@ -1,7 +1,6 @@
 package com.yeeiee.domain.form;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yeeiee.domain.entity.DataSource;
 import com.yeeiee.domain.serde.EncryptSerializer;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +23,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "DataSourceForm", description = "数据源配置表单")
-public class DataSourceForm implements FormToBeanHelper<DataSource> {
+public class DataSourceForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "主键")
     private Long id;

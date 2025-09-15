@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-12
+ * @since 2025-09-15
  */
 @Getter
 @Setter
@@ -65,8 +65,8 @@ public class CodegenColumn {
     private String jsType;
 
     @Schema(description = "排序")
-    @TableField(value = "ordinal_position")
-    private Integer ordinalPosition;
+    @TableField(value = "sort_id")
+    private Integer sortId;
 
     @Schema(description = "是否主键")
     @TableField(value = "primary_key")

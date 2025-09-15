@@ -1,15 +1,12 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.entity.UserRole;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
-import com.yeeiee.domain.vo.UserVo;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
@@ -17,6 +14,7 @@ import com.yeeiee.mapper.UserMapper;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.UserRoleService;
 import com.yeeiee.service.UserService;
+import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.RequestObjectUtil;
@@ -41,7 +39,6 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     private final UserRoleService userRoleService;
-    private final UserMapper userMapper;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Value("${custom.user.default-password}")
@@ -69,13 +66,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public IPage<UserVo> getUserPages(Page<UserVo> page, String searchName) {
-        return userMapper.selectUserPages(page, searchName);
-    }
-
-    @Override
     public void addUser(UserForm userForm) {
-        val user = userForm.toBean();
+        val user = BeanUtil.toBean(userForm, User.class);
 
         val exists = this.exists(Wrappers.<User>lambdaQuery()
                 .eq(User::getUsername, user.getUsername())

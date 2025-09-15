@@ -5,10 +5,12 @@ import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.DictDataSelectorVo;
 import com.yeeiee.domain.vo.DictDataVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.DictDataService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +20,15 @@ import lombok.val;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +53,7 @@ public class DictDataController {
 
     @Operation(summary = "查询字典数据分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DictData>> getPageByTypeId(
+    public R<PageVo<DictDataVo>> getPageByTypeId(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
@@ -52,10 +62,10 @@ public class DictDataController {
         val page = dictDataService.lambdaQuery()
                 .eq(DictData::getTypeId, typeId)
                 .like(StringUtils.hasText(label), DictData::getLabel, label)
-                .orderByAsc(DictData::getSort)
+                .orderByAsc(DictData::getSortId)
                 .page(Page.of(current, size));
 
-        return R.ok(PageVo.fromPage(page));
+        return R.ok(PageVo.fromPage(page, DictDataVo.class));
     }
 
     @Operation(summary = "新增字典数据")
@@ -69,7 +79,8 @@ public class DictDataController {
     @PutMapping
     @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.typeId")
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
-        dictDataService.updateById(dictDataForm.toBean());
+        val dictData = BeanUtil.toBean(dictDataForm, DictData.class);
+        dictDataService.updateById(dictData);
         return R.ok();
     }
 
@@ -91,7 +102,8 @@ public class DictDataController {
 
     @Operation(summary = "根据类型id获取字典列表")
     @GetMapping("/{typeId}")
-    public R<List<DictDataVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
+    public R<List<DictDataSelectorVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
+
         val list = dictCacheManager.getDictByTypeId(typeId);
         return R.ok(list);
     }

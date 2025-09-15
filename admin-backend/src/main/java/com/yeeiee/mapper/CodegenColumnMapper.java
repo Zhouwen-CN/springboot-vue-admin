@@ -1,11 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.yeeiee.domain.entity.CodegenColumn;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yeeiee.domain.vo.CodegenColumnVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.yeeiee.domain.entity.CodegenColumn;
 
 /**
  * <p>
@@ -13,9 +9,8 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-09-12
+ * @since 2025-09-15
  */
 public interface CodegenColumnMapper extends BaseMapper<CodegenColumn> {
 
-    List<CodegenColumnVo> selectListByTableId(@Param("tableId") Long id);
 }

@@ -20,29 +20,4 @@
     <sql id="Base_Column_List">
         id, name, url, username, password, create_user, create_time, update_user, update_time
     </sql>
-
-    <select id="selectDataSourcePage" resultType="com.yeeiee.domain.vo.DataSourceVo">
-        select
-            id,
-            name,
-            url,
-            username,
-            create_user as createUser,
-            create_time as createTime,
-            update_user as updateUser,
-            update_time as updateTime
-        from t_data_source
-        <where>
-            <if test="searchName != null and searchName.trim() != ''">
-                and name like concat('%',#{searchName},'%')
-            </if>
-        </where>
-    </select>
-
-    <select id="selectDataSourceSelectorList" resultType="com.yeeiee.domain.vo.DataSourceSelectorVo">
-        select
-            id,
-            name
-        from t_data_source
-    </select>
 </mapper>

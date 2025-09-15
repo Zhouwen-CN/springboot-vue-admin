@@ -63,6 +63,6 @@ values (1,'menu_type','菜单类型');
 
 -- 字典数据表
 delete from t_dict_data where true;
-insert into t_dict_data(id, type_id, label, data, sort)
+insert into t_dict_data(id, type_id, label, data, sort_id)
 values (1,1,'目录',0,0),
        (2,1,'菜单',1,1);

@@ -12,6 +12,7 @@ import com.yeeiee.mapper.RoleMapper;
 import com.yeeiee.service.RoleMenuService;
 import com.yeeiee.service.RoleService;
 import com.yeeiee.service.UserRoleService;
+import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -47,7 +48,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new DmlOperationException("角色名已经存在");
         }
 
-        val role = roleForm.toBean();
+        val role = BeanUtil.toBean(roleForm, Role.class);
         this.save(role);
 
         val roleMenuList = roleForm.getMenuIds().stream().map(id -> {
@@ -70,7 +71,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         // 修改角色
-        val role = roleForm.toBean();
+        val role = BeanUtil.toBean(roleForm, Role.class);
         this.updateById(role);
 
         // 获取 role menu 关系
@@ -140,11 +141,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery()
                 .in(RoleMenu::getRoleId, ids)
         );
-    }
-
-    @Override
-    public List<RoleSelectorVo> getRoleVoList() {
-        return roleMapper.selectRoleVoList();
     }
 
     @Override

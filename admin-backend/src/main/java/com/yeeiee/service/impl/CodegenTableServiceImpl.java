@@ -18,7 +18,6 @@ import com.yeeiee.domain.dto.CodegenTableConfigDto;
 import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.entity.CodegenTable;
 import com.yeeiee.domain.entity.DataSource;
-import com.yeeiee.domain.form.CodegenColumnForm;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
 import com.yeeiee.domain.vo.CodegenTableSelectorVo;
@@ -28,6 +27,7 @@ import com.yeeiee.mapper.CodegenTableMapper;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.DataSourceService;
+import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CodegenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -62,7 +62,14 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     @Override
     public List<CodegenTableSelectorVo> getCodegenTableSelector(Long dataSourceId) {
         val dataSourceConfig = dataSourceService.getById(dataSourceId);
-        val existsTableNameList = codegenTableMapper.getExistsTableNameList(dataSourceId);
+        val existsTableNameList = this.lambdaQuery()
+                .select(CodegenTable::getTableName)
+                .eq(CodegenTable::getDataSourceId, dataSourceConfig.getId())
+                .list()
+                .stream()
+                .map(CodegenTable::getTableName)
+                .toList();
+
         try (val connection = DriverManager.getConnection(dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword())) {
 
             val metaData = connection.getMetaData();
@@ -141,9 +148,9 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
 
     @Override
     public void modifyCodegenConfig(CodegenTableColumnsForm codegenTableColumnsForm) {
-        val codegenTable = codegenTableColumnsForm.getTable().toBean();
+        val codegenTable = BeanUtil.toBean(codegenTableColumnsForm.getTable(), CodegenTable.class);
         this.updateById(codegenTable);
-        val codegenColumnList = codegenTableColumnsForm.getColumns().stream().map(CodegenColumnForm::toBean).toList();
+        val codegenColumnList = BeanUtil.toBean(codegenTableColumnsForm.getColumns(), CodegenColumn.class);
         codegenColumnService.updateBatchById(codegenColumnList);
     }
 

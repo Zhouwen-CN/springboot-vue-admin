@@ -58,11 +58,4 @@
         on a.id = b.menu_id
         order by a.id
     </select>
-
-    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
-        select
-            menu_id
-        from t_role_menu
-        where role_id = #{roleId}
-    </select>
 </mapper>

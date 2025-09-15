@@ -19,20 +19,4 @@
     <sql id="Base_Column_List">
         id, username, password, token_version, create_user, create_time, update_user, update_time
     </sql>
-
-    <select id="selectUserPages" resultType="com.yeeiee.domain.vo.UserVo">
-        select
-            id,
-            username,
-            create_user as createUser,
-            create_time as createTime,
-            update_user as updateUser,
-            update_time as updateTime
-        from t_user
-        <where>
-            <if test="searchName != null and searchName.trim() != ''">
-                and username like concat('%',#{searchName},'%')
-            </if>
-        </where>
-    </select>
 </mapper>

@@ -1,7 +1,7 @@
 package com.yeeiee.service;
 
-import com.yeeiee.domain.entity.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.vo.MenuVo;
 
@@ -36,11 +36,4 @@ public interface MenuService extends IService<Menu> {
      * @return 菜单列表
      */
     List<MenuVo> getMenuListByRoleNames(List<String> roles);
-
-    /**
-     * 根据角色id，查询菜单id列表
-     * @param roleId 角色id
-     * @return 菜单id列表
-     */
-    List<Long> getMenuIdsByRoleId(Long roleId);
 }

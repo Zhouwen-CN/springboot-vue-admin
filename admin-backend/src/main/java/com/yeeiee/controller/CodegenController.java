@@ -12,6 +12,7 @@ import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -114,7 +115,11 @@ public class CodegenController {
     @Operation(summary = "查询代码生成字段列表")
     @GetMapping("/{id}")
     public R<List<CodegenColumnVo>> getColumnListByTableId(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
-        val columnVoList = codegenColumnService.getListByTableId(id);
+        val list = codegenColumnService.lambdaQuery()
+                .eq(CodegenColumn::getTableId, id)
+                .orderByAsc(CodegenColumn::getSortId)
+                .list();
+        val columnVoList = BeanUtil.toBean(list, CodegenColumnVo.class);
         return R.ok(columnVoList);
     }
 }

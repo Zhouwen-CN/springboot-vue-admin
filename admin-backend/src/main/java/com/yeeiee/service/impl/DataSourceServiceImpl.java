@@ -1,17 +1,11 @@
 package com.yeeiee.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.DataSource;
-import com.yeeiee.domain.vo.DataSourceSelectorVo;
-import com.yeeiee.domain.vo.DataSourceVo;
 import com.yeeiee.mapper.DataSourceMapper;
 import com.yeeiee.service.DataSourceService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>
@@ -24,15 +18,4 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSource> implements DataSourceService {
-    private final DataSourceMapper dataSourceMapper;
-
-    @Override
-    public IPage<DataSourceVo> getDataSourcePage(Page<DataSourceVo> page, String searchName) {
-        return dataSourceMapper.selectDataSourcePage(page, searchName);
-    }
-
-    @Override
-    public List<DataSourceSelectorVo> getDataSourceSelectorList() {
-        return dataSourceMapper.selectDataSourceSelectorList();
-    }
 }

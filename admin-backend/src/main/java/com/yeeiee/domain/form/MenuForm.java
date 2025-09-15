@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.Menu;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "MenuForm", description = "菜单表单")
-public class MenuForm implements FormToBeanHelper<Menu> {
+public class MenuForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "菜单id")
     private Long id;

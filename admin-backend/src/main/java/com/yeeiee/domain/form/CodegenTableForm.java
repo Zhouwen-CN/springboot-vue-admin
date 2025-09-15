@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.CodegenTable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "CodegenTableForm", description = "代码生成表单")
-public class CodegenTableForm implements FormToBeanHelper<CodegenTable>{
+public class CodegenTableForm {
     @NotNull
     @Schema(description = "主键")
     private Long id;

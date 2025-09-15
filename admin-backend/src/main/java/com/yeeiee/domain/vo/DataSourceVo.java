@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 数据源配置视图
+ * 数据源配置表视图
  * </p>
  *
  * @author chen
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DataSourceVo", description = "数据源配置视图")
+@Schema(name = "DataSourceVo", description = "数据源配置表视图")
 public class DataSourceVo {
     @Schema(description = "主键")
     private Long id;
@@ -28,12 +28,8 @@ public class DataSourceVo {
     private String url;
     @Schema(description = "用户名")
     private String username;
-    @Schema(description = "创建者")
-    private String createUser;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
-    @Schema(description = "更新者")
-    private String updateUser;
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 }

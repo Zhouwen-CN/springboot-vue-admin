@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "DictTypeForm", description = "字典类型表单")
-public class DictTypeForm implements FormToBeanHelper<DictType> {
+public class DictTypeForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "字典类型id")
     private Long id;

@@ -14,7 +14,7 @@
         <result column="java_field" property="javaField" />
         <result column="java_type" property="javaType" />
         <result column="js_type" property="jsType" />
-        <result column="ordinal_position" property="ordinalPosition" />
+        <result column="sort_id" property="sortId" />
         <result column="primary_key" property="primaryKey" />
         <result column="nullable" property="nullable" />
         <result column="insert_field" property="insertField" />
@@ -28,24 +28,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, table_id, column_name, column_comment, db_type, column_length, java_field, java_type, js_type, ordinal_position, primary_key, nullable, insert_field, update_field, select_field, create_user, create_time, update_user, update_time
+        id, table_id, column_name, column_comment, db_type, column_length, java_field, java_type, js_type, sort_id, primary_key, nullable, insert_field, update_field, select_field, create_user, create_time, update_user, update_time
     </sql>
 
-    <select id="selectListByTableId" resultType="com.yeeiee.domain.vo.CodegenColumnVo">
-        select
-            id,
-            column_name as columnName,
-            column_comment as columnComment,
-            db_type as dbType,
-            java_field as javaField,
-            java_type as javaType,
-            js_type as jsType,
-            nullable,
-            insert_field as insertField,
-            update_field as updateField,
-            select_field as selectField
-        from t_codegen_column
-        where table_id=#{tableId}
-        order by ordinal_position
-    </select>
 </mapper>

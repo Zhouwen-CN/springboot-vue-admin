@@ -9,6 +9,7 @@ import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.DictTypeMapper;
 import com.yeeiee.service.DictDataService;
 import com.yeeiee.service.DictTypeService;
+import com.yeeiee.utils.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,9 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
         if (exists) {
             throw new DmlOperationException("字典类型已存在");
         }
-        this.save(dictTypeForm.toBean());
+
+        val dictType = BeanUtil.toBean(dictTypeForm, DictType.class);
+        this.save(dictType);
     }
 
     @Override

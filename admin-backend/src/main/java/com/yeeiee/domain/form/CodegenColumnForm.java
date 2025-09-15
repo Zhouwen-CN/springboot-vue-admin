@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.CodegenColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "CodegenColumnForm", description = "代码生成字段表表单")
-public class CodegenColumnForm implements FormToBeanHelper<CodegenColumn> {
+public class CodegenColumnForm {
     @NotNull
     @Schema(description = "主键")
     private Long id;

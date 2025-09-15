@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-05
+ * @since 2025-09-15
  */
 @Getter
 @Setter
@@ -45,8 +45,8 @@ public class DictData {
     private Integer data;
 
     @Schema(description = "字典排序")
-    @TableField(value = "sort")
-    private Integer sort;
+    @TableField(value = "sort_id")
+    private Integer sortId;
 
     @Schema(description = "创建者")
     @TableField(value = "create_user", fill = FieldFill.INSERT)

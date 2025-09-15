@@ -25,13 +25,6 @@
         id, data_source_id, table_name, table_comment, class_name, author, base_package, ignore_table_prefix, ignore_column_prefix, create_user, create_time, update_user, update_time
     </sql>
 
-    <select id="getExistsTableNameList" resultType="java.lang.String">
-        select
-            table_name
-        from t_codegen_table
-        where data_source_id=#{dataSourceId}
-    </select>
-
     <select id="selectCodegenTablePage" resultType="com.yeeiee.domain.vo.CodegenTableVo">
         select
             a.id,

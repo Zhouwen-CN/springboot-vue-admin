@@ -1,6 +1,7 @@
 package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
 import com.yeeiee.domain.validate.GroupingValidate;
@@ -14,8 +15,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -41,8 +52,10 @@ public class UserController {
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName
     ) {
-        val page = userService.getUserPages(Page.of(current, size), searchName);
-        return R.ok(PageVo.fromPage(page));
+        val page = userService.lambdaQuery()
+                .like(StringUtils.hasText(searchName), User::getUsername, searchName)
+                .page(Page.of(current, size));
+        return R.ok(PageVo.fromPage(page, UserVo.class));
     }
 
     @Operation(summary = "退出登入")

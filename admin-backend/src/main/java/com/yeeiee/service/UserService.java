@@ -1,12 +1,9 @@
 package com.yeeiee.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.domain.form.ChangePwdForm;
 import com.yeeiee.domain.form.UserForm;
-import com.yeeiee.domain.vo.UserVo;
 
 import java.util.Collection;
 
@@ -25,15 +22,6 @@ public interface UserService extends IService<User> {
      * @param id 用户 id
      */
     void logout(Long id);
-
-    /**
-     * 获取用户分页（包含角色ids）
-     *
-     * @param page       分页配置对象
-     * @param searchName 搜索关键词
-     * @return 分页结果
-     */
-    IPage<UserVo> getUserPages(Page<UserVo> page, String searchName);
 
     /**
      * 新增用户和角色关系

@@ -72,7 +72,7 @@ public final class CodegenUtil {
             codegenColumn.setDbType(String.valueOf(tableField.getMetaInfo().getJdbcType()));
             codegenColumn.setNullable(tableField.getMetaInfo().isNullable());
             codegenColumn.setPrimaryKey(tableField.isKeyFlag());
-            codegenColumn.setOrdinalPosition(i);
+            codegenColumn.setSortId(i);
             val javaType = tableField.getColumnType().getType();
             codegenColumn.setJavaType(javaType);
             // string类型记录长度

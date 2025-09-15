@@ -48,7 +48,7 @@ export interface DictDataVo extends BaseVo {
   typeId: number
   label: string
   data: number
-  sort: number
+  sortId: number
 }
 
 export interface DictDataForm {
@@ -56,7 +56,7 @@ export interface DictDataForm {
   typeId: number
   label: string
   data: number
-  sort: number
+  sortId: number
 }
 
 // 获取字典数据分页

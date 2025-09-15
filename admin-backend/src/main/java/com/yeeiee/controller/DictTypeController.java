@@ -5,9 +5,11 @@ import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictTypeForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.DictTypeVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.DictTypeService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +49,7 @@ public class DictTypeController {
 
     @Operation(summary = "查询字典类型分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<DictType>> getPage(
+    public R<PageVo<DictTypeVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword
@@ -58,7 +60,7 @@ public class DictTypeController {
                 .like(StringUtils.hasText(keyword), DictType::getDictType, keyword)
                 .page(Page.of(current, size));
 
-        return R.ok(PageVo.fromPage(page));
+        return R.ok(PageVo.fromPage(page, DictTypeVo.class));
     }
 
     @Operation(summary = "新增字典类型")
@@ -72,7 +74,8 @@ public class DictTypeController {
     @PutMapping
     @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.id")
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictTypeForm dictTypeForm) {
-        dictTypeService.updateById(dictTypeForm.toBean());
+        val dictType = BeanUtil.toBean(dictTypeForm, DictType.class);
+        dictTypeService.updateById(dictType);
         return R.ok();
     }
 

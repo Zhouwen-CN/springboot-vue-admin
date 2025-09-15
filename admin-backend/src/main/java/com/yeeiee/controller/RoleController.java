@@ -7,7 +7,9 @@ import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.domain.vo.RoleSelectorVo;
+import com.yeeiee.domain.vo.RoleVo;
 import com.yeeiee.service.RoleService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +48,7 @@ public class RoleController {
 
     @Operation(summary = "查询角色分页")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<Role>> getPage(
+    public R<PageVo<RoleVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(name = "searchName", required = false) @Parameter(description = "搜索用户名称") String searchName
@@ -55,13 +57,17 @@ public class RoleController {
                 .like(StringUtils.hasText(searchName), Role::getRoleName, searchName)
                 .page(Page.of(current, size));
 
-        return R.ok(PageVo.fromPage(page));
+        return R.ok(PageVo.fromPage(page, RoleVo.class));
     }
 
     @Operation(summary = "查询角色列表")
     @GetMapping
     public R<List<RoleSelectorVo>> getList() {
-        return R.ok(roleService.getRoleVoList());
+        val list = roleService.lambdaQuery()
+                .select(Role::getId, Role::getRoleName)
+                .list();
+        val roleSelectorVoList = BeanUtil.toBean(list, RoleSelectorVo.class);
+        return R.ok(roleSelectorVoList);
     }
 
     @Operation(summary = "新增角色")

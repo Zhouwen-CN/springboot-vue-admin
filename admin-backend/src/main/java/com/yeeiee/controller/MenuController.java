@@ -1,5 +1,7 @@
 package com.yeeiee.controller;
 
+import com.yeeiee.domain.entity.Menu;
+import com.yeeiee.domain.entity.RoleMenu;
 import com.yeeiee.domain.form.MenuForm;
 import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.MenuVo;
@@ -7,6 +9,8 @@ import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.VerifyTokenException;
 import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.MenuService;
+import com.yeeiee.service.RoleMenuService;
+import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.RequestObjectUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +45,7 @@ import java.util.List;
 @Tag(name = "菜单表 控制器")
 public class MenuController {
     private final MenuService menuService;
+    private final RoleMenuService roleMenuService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "查询菜单列表")
@@ -70,7 +75,8 @@ public class MenuController {
     @Operation(summary = "更新菜单")
     @PutMapping
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody MenuForm menuForm) {
-        menuService.updateById(menuForm.toBean());
+        val menu = BeanUtil.toBean(menuForm, Menu.class);
+        menuService.updateById(menu);
         return R.ok();
     }
 
@@ -83,8 +89,14 @@ public class MenuController {
 
     @Operation(summary = "根据角色id，查询菜单id列表")
     @GetMapping("/{roleId}")
-    public R<List<Long>> getIdsByRoleId(@PathVariable("roleId") @Parameter(description = "角色id") Long roleId){
-        val menuIds = menuService.getMenuIdsByRoleId(roleId);
+    public R<List<Long>> getIdsByRoleId(@PathVariable("roleId") @Parameter(description = "角色id") Long roleId) {
+        val menuIds = roleMenuService.lambdaQuery()
+                .select(RoleMenu::getMenuId)
+                .eq(RoleMenu::getRoleId, roleId)
+                .list()
+                .stream()
+                .map(RoleMenu::getMenuId)
+                .toList();
         return R.ok(menuIds);
     }
 }

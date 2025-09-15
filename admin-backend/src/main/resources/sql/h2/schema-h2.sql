@@ -263,7 +263,7 @@ CREATE TABLE t_dict_data (
     type_id       NUMBER(18) NOT NULL,
     label         VARCHAR2(15) NOT NULL,
     data          NUMBER(9) NOT NULL,
-    sort          NUMBER(9) DEFAULT 0,
+    sort_id       NUMBER(9) DEFAULT 0,
     create_user   VARCHAR2(15) DEFAULT NULL,
     create_time   DATE DEFAULT SYSDATE,
     update_user   VARCHAR2(15) DEFAULT NULL,
@@ -276,7 +276,7 @@ COMMENT ON COLUMN t_dict_data.id IS '主键';
 COMMENT ON COLUMN t_dict_data.type_id IS '字典类型id';
 COMMENT ON COLUMN t_dict_data.label IS '字典键';
 COMMENT ON COLUMN t_dict_data.data IS '字典值';
-COMMENT ON COLUMN t_dict_data.sort IS '字典排序';
+COMMENT ON COLUMN t_dict_data.sort_id IS '字典排序';
 COMMENT ON COLUMN t_dict_data.create_user IS '创建者';
 COMMENT ON COLUMN t_dict_data.create_time IS '创建时间';
 COMMENT ON COLUMN t_dict_data.update_user IS '更新者';
@@ -363,7 +363,7 @@ create table t_codegen_column(
   java_field varchar2(50) not null,
   java_type varchar2(20) not null,
   js_type varchar2(20) not null,
-  ordinal_position NUMBER(9) not null,
+  sort_id NUMBER(9) not null,
   primary_key number(1) not null,
   nullable number(1) not null,
   insert_field number(1) not null,
@@ -385,7 +385,7 @@ COMMENT ON COLUMN t_codegen_column.column_length IS '字段长度';
 COMMENT ON COLUMN t_codegen_column.java_field IS 'java属性名';
 COMMENT ON COLUMN t_codegen_column.java_type IS 'java类型';
 COMMENT ON COLUMN t_codegen_column.js_type IS 'js类型';
-COMMENT ON COLUMN t_codegen_column.ordinal_position IS '排序';
+COMMENT ON COLUMN t_codegen_column.sort_id IS '排序';
 COMMENT ON COLUMN t_codegen_column.primary_key IS '是否主键';
 COMMENT ON COLUMN t_codegen_column.nullable IS '是否允许为空';
 COMMENT ON COLUMN t_codegen_column.insert_field IS '是否为insert字段';

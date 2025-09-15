@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @ToString
 @Schema(name = "DictDataForm", description = "字典数据表单")
-public class DictDataForm implements FormToBeanHelper<DictData> {
+public class DictDataForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "字典数据主键")
     private Long id;
@@ -42,5 +41,5 @@ public class DictDataForm implements FormToBeanHelper<DictData> {
 
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "字典排序")
-    private Integer sort;
+    private Integer sortId;
 }

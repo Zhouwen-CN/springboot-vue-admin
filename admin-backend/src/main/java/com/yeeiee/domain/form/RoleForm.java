@@ -1,6 +1,5 @@
 package com.yeeiee.domain.form;
 
-import com.yeeiee.domain.entity.Role;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +23,7 @@ import java.util.List;
 @Setter
 @ToString
 @Schema(name = "RoleForm", description = "角色表单")
-public class RoleForm implements FormToBeanHelper<Role> {
+public class RoleForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "角色id")
     private Long id;

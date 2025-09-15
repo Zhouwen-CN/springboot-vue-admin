@@ -10,6 +10,7 @@ import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.mapper.MenuMapper;
 import com.yeeiee.service.MenuService;
 import com.yeeiee.service.RoleMenuService;
+import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,13 +45,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new DmlOperationException("菜单标题 或 访问路径已经存在");
         }
 
-        val bean = menuForm.toBean();
-        this.save(bean);
+        val menu = BeanUtil.toBean(menuForm, Menu.class);
+        this.save(menu);
 
         // TODO: 每次添加菜单，都会赋予admin菜单权限
         val roleMenu = new RoleMenu();
         roleMenu.setRoleId(1L);
-        roleMenu.setMenuId(bean.getId());
+        roleMenu.setMenuId(menu.getId());
 
         roleMenuService.save(roleMenu);
     }
@@ -87,10 +88,5 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 MenuVo::getChildren,
                 MenuVo::setChildren,
                 (id) -> id == 0L);
-    }
-
-    @Override
-    public List<Long> getMenuIdsByRoleId(Long roleId) {
-        return menuMapper.selectMenuIdsByRoleId(roleId);
     }
 }

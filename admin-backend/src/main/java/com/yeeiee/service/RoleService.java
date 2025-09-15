@@ -46,13 +46,6 @@ public interface RoleService extends IService<Role> {
     void removeRoleByIds(Collection<Long> ids);
 
     /**
-     * 获取角色列表
-     *
-     * @return 角色列表
-     */
-    List<RoleSelectorVo> getRoleVoList();
-
-    /**
      * 根据用户id获取角色列表
      * @param userId 用户id
      * @return 角色列表

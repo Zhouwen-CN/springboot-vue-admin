@@ -1,6 +1,5 @@
 package com.yeeiee.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.DataSource;
@@ -12,6 +11,7 @@ import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.service.DataSourceService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,14 +60,23 @@ public class DataSourceController {
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(value = "searchName", required = false) @Parameter(description = "数据源名称") String searchName
     ) {
-        IPage<DataSourceVo> list = dataSourceService.getDataSourcePage(Page.of(current, size), searchName);
-        return R.ok(PageVo.fromPage(list));
+        val page = dataSourceService.lambdaQuery()
+                .eq(StringUtils.hasText(searchName), DataSource::getName, searchName)
+                .page(Page.of(current, size));
+
+        return R.ok(PageVo.fromPage(page, DataSourceVo.class));
     }
 
     @Operation(summary = "查询数据源选择器")
     @GetMapping
     public R<List<DataSourceSelectorVo>> getSelectorList() {
-        List<DataSourceSelectorVo> dataSourceSelectorVoList = dataSourceService.getDataSourceSelectorList();
+        val list = dataSourceService.lambdaQuery()
+                .select(
+                        DataSource::getId,
+                        DataSource::getName
+                ).list();
+
+        val dataSourceSelectorVoList = BeanUtil.toBean(list, DataSourceSelectorVo.class);
         return R.ok(dataSourceSelectorVoList);
     }
 
@@ -78,18 +88,20 @@ public class DataSourceController {
                 Wrappers.<DataSource>lambdaQuery().eq(DataSource::getName, name)
         );
 
-        if(exists){
+        if (exists) {
             throw new DmlOperationException("数据源名称已经存在");
         }
 
-        dataSourceService.save(dataSourceForm.toBean());
+        val dataSource = BeanUtil.toBean(dataSourceForm, DataSource.class);
+        dataSourceService.save(dataSource);
         return R.ok();
     }
 
     @Operation(summary = "更新数据源")
     @PutMapping
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DataSourceForm dataSourceForm) {
-        dataSourceService.updateById(dataSourceForm.toBean());
+        val dataSource = BeanUtil.toBean(dataSourceForm, DataSource.class);
+        dataSourceService.updateById(dataSource);
         return R.ok();
     }
 

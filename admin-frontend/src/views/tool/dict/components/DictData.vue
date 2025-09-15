@@ -22,7 +22,7 @@ const dictDataForm = reactive<DictDataForm>({
   typeId: -1,
   label: '',
   data: 0,
-  sort: 0
+  sortId: 0
 })
 // 字典数据弹窗
 const toggleDialog = reactive({
@@ -85,7 +85,7 @@ function modifyDictData(row: DictDataVo) {
   dictDataForm.typeId = row.typeId
   dictDataForm.label = row.label
   dictDataForm.data = row.data
-  dictDataForm.sort = row.sort
+  dictDataForm.sortId = row.sortId
 }
 
 // 表单校验
@@ -93,7 +93,7 @@ const dictDataFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictDataForm>>({
   label: [{ required: true, message: '请输入标签键', trigger: 'blur' }],
   data: [{ required: true, message: '请输入标签值', trigger: 'blur' }],
-  sort: [{ required: true, message: '请输入排序值', trigger: 'blur' }]
+  sortId: [{ required: true, message: '请输入排序值', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -119,7 +119,7 @@ function dictDataDialogClean() {
   dictDataForm.typeId = typeId.value
   dictDataForm.label = ''
   dictDataForm.data = 0
-  dictDataForm.sort = 0
+  dictDataForm.sortId = 0
   dictDataFormRef.value?.clearValidate()
 }
 
@@ -141,7 +141,7 @@ defineExpose({
   <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
     <!-- 顶部搜索框 -->
     <el-card>
-      <el-form inline @submit.prevent="searchByLabel()" label-width="auto">
+      <el-form inline label-width="auto" @submit.prevent="searchByLabel()">
         <el-form-item label="标签键">
           <el-input v-model="searchLabel" clearable placeholder="标签键"></el-input>
         </el-form-item>
@@ -177,7 +177,7 @@ defineExpose({
         <el-table-column type="selection" width="45" />
         <el-table-column label="标签键" min-width="40px" prop="label"> </el-table-column>
         <el-table-column label="标签值" min-width="40px" prop="data"></el-table-column>
-        <el-table-column label="排序" min-width="40px" prop="sort"></el-table-column>
+        <el-table-column label="排序" min-width="40px" prop="sortId"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }: { row: DictDataVo }">
@@ -232,10 +232,10 @@ defineExpose({
             <el-input v-model="dictDataForm.label" placeholder="标签键"></el-input>
           </el-form-item>
           <el-form-item label="标签值" prop="data">
-            <el-input v-model="dictDataForm.data" type="number" placeholder="标签值"></el-input>
+            <el-input v-model="dictDataForm.data" placeholder="标签值" type="number"></el-input>
           </el-form-item>
-          <el-form-item label="排序" prop="sort">
-            <el-input v-model="dictDataForm.sort" type="number"></el-input>
+          <el-form-item label="排序" prop="sortId">
+            <el-input v-model="dictDataForm.sortId" type="number"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="toggleDialog.show = false">取消 </el-button>

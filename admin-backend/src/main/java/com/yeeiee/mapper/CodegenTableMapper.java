@@ -7,8 +7,6 @@ import com.yeeiee.domain.entity.CodegenTable;
 import com.yeeiee.domain.vo.CodegenTableVo;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * <p>
  * 代码生成表 Mapper 接口
@@ -18,8 +16,6 @@ import java.util.List;
  * @since 2025-09-10
  */
 public interface CodegenTableMapper extends BaseMapper<CodegenTable> {
-
-    List<String> getExistsTableNameList(@Param("dataSourceId") Long dataSourceId);
 
     IPage<CodegenTableVo> selectCodegenTablePage(Page<CodegenTableVo> page, @Param("keyword") String keyword);
 }
