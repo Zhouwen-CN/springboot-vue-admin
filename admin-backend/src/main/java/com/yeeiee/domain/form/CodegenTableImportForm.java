@@ -33,11 +33,6 @@ public class CodegenTableImportForm {
     @Schema(description = "作者")
     private String author;
 
-    @NotBlank
-    @Length(max = 50)
-    @Schema(description = "基础包名")
-    private String basePackage;
-
     @Length(max = 20)
     @Schema(description = "忽略表前缀")
     private String ignoreTablePrefix;

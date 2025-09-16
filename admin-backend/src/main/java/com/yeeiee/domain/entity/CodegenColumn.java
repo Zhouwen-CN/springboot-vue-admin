@@ -1,6 +1,7 @@
 package com.yeeiee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-15
+ * @since 2025-09-16
  */
 @Getter
 @Setter
@@ -64,9 +65,21 @@ public class CodegenColumn {
     @TableField(value = "js_type")
     private String jsType;
 
+    @Schema(description = "html类型")
+    @TableField(value = "html_type")
+    private String htmlType;
+
     @Schema(description = "排序")
     @TableField(value = "sort_id")
     private Integer sortId;
+
+    @Schema(description = "字典类型编号")
+    @TableField(value = "dict_type_id", updateStrategy = FieldStrategy.ALWAYS)
+    private Long dictTypeId;
+
+    @Schema(description = "select字段条件")
+    @TableField(value = "select_condition")
+    private String selectCondition;
 
     @Schema(description = "是否主键")
     @TableField(value = "primary_key")
@@ -76,6 +89,14 @@ public class CodegenColumn {
     @TableField(value = "nullable")
     private Boolean nullable;
 
+    @Schema(description = "是否为select条件字段")
+    @TableField(value = "select_condition_field")
+    private Boolean selectConditionField;
+
+    @Schema(description = "是否select查询结果字段")
+    @TableField(value = "select_result_field")
+    private Boolean selectResultField;
+
     @Schema(description = "是否为insert字段")
     @TableField(value = "insert_field")
     private Boolean insertField;
@@ -83,10 +104,6 @@ public class CodegenColumn {
     @Schema(description = "是否为update字段")
     @TableField(value = "update_field")
     private Boolean updateField;
-
-    @Schema(description = "是否为select字段")
-    @TableField(value = "select_field")
-    private Boolean selectField;
 
     @Schema(description = "创建者")
     @TableField(value = "create_user", fill = FieldFill.INSERT)

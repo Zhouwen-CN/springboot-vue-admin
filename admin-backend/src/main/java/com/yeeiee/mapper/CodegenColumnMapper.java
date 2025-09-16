@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.CodegenColumn;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.yeeiee.domain.entity.CodegenColumn;
  * </p>
  *
  * @author chen
- * @since 2025-09-15
+ * @since 2025-09-16
  */
 public interface CodegenColumnMapper extends BaseMapper<CodegenColumn> {
 

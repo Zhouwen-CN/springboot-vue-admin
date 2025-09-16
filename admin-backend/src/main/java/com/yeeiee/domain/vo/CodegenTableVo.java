@@ -37,8 +37,8 @@ public class CodegenTableVo {
     @Schema(description = "作者")
     private String author;
 
-    @Schema(description = "基础包名")
-    private String basePackage;
+    @Schema(description = "业务名称")
+    private String businessName;
 
     @Schema(description = "忽略表前缀")
     private String ignoreTablePrefix;

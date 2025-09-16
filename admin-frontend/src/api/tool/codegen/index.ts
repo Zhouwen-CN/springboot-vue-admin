@@ -22,7 +22,6 @@ export interface CodegenTableImportForm {
   author: string
   ignoreTablePrefix?: string
   ignoreColumnPrefix?: string
-  basePackage: string
   tableNames: string[]
 }
 
@@ -38,7 +37,7 @@ export interface CodegenTableVo extends BaseVo {
   tableComment: string
   className: string
   author: string
-  basePackage: string
+  businessName: string
   ignoreTablePrefix: string
   ignoreColumnPrefix: string
 }
@@ -72,13 +71,16 @@ export interface CodegenColumnVo {
   columnName: string
   columnComment: string
   dbType: string
-  javaType: string
   javaField: string
+  javaType: string
   jsType: string
-  nullable: boolean
+  htmlType: string
+  dictTypeId: number
+  selectCondition: string
+  selectConditionField: boolean
+  selectResultField: boolean
   insertField: boolean
   updateField: boolean
-  selectField: boolean
 }
 
 // 获取代码生成字段列表

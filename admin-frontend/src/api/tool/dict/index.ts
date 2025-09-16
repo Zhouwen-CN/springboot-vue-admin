@@ -88,3 +88,13 @@ export type DictDataSelectorVo = Pick<DictDataVo, 'label' | 'data'>
 export function reqGetDictDataListByTypeId(typeId: number) {
   return request.get<DictDataSelectorVo[]>(`/dict/data/${typeId}`)
 }
+
+export interface DictTypeSelectorVo {
+  id: number
+  name: string
+}
+
+// 获取字典类型选择器列表
+export function reqGetDictTypeSelectorList() {
+  return request.get<DictTypeSelectorVo[]>('/dict/type')
+}

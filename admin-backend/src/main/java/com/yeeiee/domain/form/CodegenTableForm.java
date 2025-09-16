@@ -47,8 +47,8 @@ public class CodegenTableForm {
 
     @NotBlank
     @Length(max = 50)
-    @Schema(description = "基础包名")
-    private String basePackage;
+    @Schema(description = "业务名称")
+    private String businessName;
 
     @Length(max = 20)
     @Schema(description = "忽略表前缀")

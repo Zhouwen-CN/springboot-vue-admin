@@ -5,6 +5,7 @@ import com.yeeiee.cache.DictCacheManager;
 import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictTypeForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.DictTypeSelectorVo;
 import com.yeeiee.domain.vo.DictTypeVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>
@@ -61,6 +63,18 @@ public class DictTypeController {
                 .page(Page.of(current, size));
 
         return R.ok(PageVo.fromPage(page, DictTypeVo.class));
+    }
+
+    @Operation(summary = "查询字典类型选择器")
+    @GetMapping
+    public R<List<DictTypeSelectorVo>> getSelector(){
+        val list = dictTypeService.lambdaQuery()
+                .select(
+                        DictType::getId,
+                        DictType::getName
+                ).list();
+        val dictTypeSelectorVoList = BeanUtil.toBean(list, DictTypeSelectorVo.class);
+        return R.ok(dictTypeSelectorVoList);
     }
 
     @Operation(summary = "新增字典类型")

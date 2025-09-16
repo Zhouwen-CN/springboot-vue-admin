@@ -16,7 +16,6 @@ const useSettingStore = defineStore(
       author: 'chen',
       ignoreTablePrefix: 't_',
       ignoreColumnPrefix: undefined,
-      basePackage: 'com.yeeiee',
       jsTypeList: ['string', 'number', 'boolean'],
       javaTypeList: [
         'Long',
@@ -26,7 +25,9 @@ const useSettingStore = defineStore(
         'BigDecimal',
         'LocalDateTime',
         'Boolean'
-      ]
+      ],
+      htmlTypeList: ['input', 'textarea', 'select', 'radio', 'checkbox', 'datetime'],
+      selectConditionList: ['=', '>', '>=', '<', '<=', 'like', 'between']
     }
 
     function $reset() {

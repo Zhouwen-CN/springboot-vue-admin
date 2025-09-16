@@ -45,9 +45,27 @@ public class CodegenColumnForm {
     @Schema(description = "js类型")
     private String jsType;
 
+    @NotBlank
+    @Length(max = 20)
+    @Schema(description = "html类型")
+    private String htmlType;
+
     @NotNull
-    @Schema(description = "是否允许为空")
-    private Boolean nullable;
+    @Schema(description = "字典类型编号")
+    private Long dictTypeId;
+
+    @NotBlank
+    @Length(max = 20)
+    @Schema(description = "select字段条件")
+    private String selectCondition;
+
+    @NotNull
+    @Schema(description = "是否为select条件字段")
+    private Boolean selectConditionField;
+
+    @NotNull
+    @Schema(description = "是否select查询结果字段")
+    private Boolean selectResultField;
 
     @NotNull
     @Schema(description = "是否为insert字段")
@@ -56,8 +74,4 @@ public class CodegenColumnForm {
     @NotNull
     @Schema(description = "是否为update字段")
     private Boolean updateField;
-
-    @NotNull
-    @Schema(description = "是否为select字段")
-    private Boolean selectField;
 }

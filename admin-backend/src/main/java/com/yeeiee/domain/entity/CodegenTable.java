@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-10
+ * @since 2025-09-16
  */
 @Getter
 @Setter
@@ -52,9 +52,9 @@ public class CodegenTable {
     @TableField(value = "author")
     private String author;
 
-    @Schema(description = "基础包名")
-    @TableField(value = "base_package")
-    private String basePackage;
+    @Schema(description = "业务名称")
+    @TableField(value = "business_name")
+    private String businessName;
 
     @Schema(description = "忽略表前缀")
     @TableField(value = "ignore_table_prefix")

@@ -7,9 +7,10 @@ import {
   reqGetCodegenColumnList,
   reqUpdateCodegenTable
 } from '@/api/tool/codegen'
+import { reqGetDictTypeSelectorList, type DictTypeSelectorVo } from '@/api/tool/dict'
 import useSettingStore from '@/stores/setting'
 const {
-  codegenConfig: { jsTypeList, javaTypeList }
+  codegenConfig: { jsTypeList, javaTypeList, htmlTypeList, selectConditionList }
 } = useSettingStore()
 
 // 抽屉开关
@@ -22,6 +23,7 @@ const formData = reactive<CodegenTableForm>({
   table: {} as CodegenTableVo,
   columns: []
 })
+const dictTypeSelectorList = ref<DictTypeSelectorVo[]>([])
 
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
@@ -46,7 +48,7 @@ const rules = reactive<FormRules<typeof formData>>({
   'table.tableComment': [{ required: true, message: '请输入类注释', trigger: 'blur' }],
   'table.className': [{ required: true, message: '请输入类名称', trigger: 'blur' }],
   'table.author': [{ required: true, message: '请输入作者', trigger: 'blur' }],
-  'table.basePackage': [{ required: true, message: '请输入基础包名', trigger: 'blur' }]
+  'table.businessName': [{ required: true, message: '请输入业务名称', trigger: 'blur' }]
 })
 
 // 打开抽屉
@@ -64,13 +66,26 @@ function closeDrawer() {
   formData.columns = []
 }
 
+// 当字典类型有值时，htmlType置为select
+function dictTypeChange(row: CodegenColumnVo) {
+  if (row.dictTypeId) {
+    row.htmlType = 'select'
+  }
+}
+
+onMounted(() => {
+  reqGetDictTypeSelectorList().then((result) => {
+    dictTypeSelectorList.value = result.data
+  })
+})
+
 defineExpose({
   showDrawer
 })
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" size="60%" title="代码生成配置" @closed="closeDrawer">
+  <el-drawer v-model="drawerVisible" size="70%" title="代码生成配置" @closed="closeDrawer">
     <el-form
       ref="formRef"
       :model="formData"
@@ -96,8 +111,13 @@ defineExpose({
           <el-form-item label="作者" prop="table.author">
             <el-input v-model="formData.table.author" placeholder="请输入作者"> </el-input>
           </el-form-item>
-          <el-form-item label="基础包名" prop="table.basePackage">
-            <el-input v-model="formData.table.basePackage" placeholder="请输入基础包名"> </el-input>
+          <el-form-item
+            label="业务名称"
+            prop="table.businessName"
+            v-tip="`作为url前缀 和 前端文件夹名称`"
+          >
+            <el-input v-model="formData.table.businessName" placeholder="请输入业务名称">
+            </el-input>
           </el-form-item>
           <el-form-item label="忽略表前缀" prop="table.ignoreTablePrefix">
             <el-input v-model="formData.table.ignoreTablePrefix" placeholder="请输入忽略表前缀">
@@ -158,16 +178,6 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="允许空" min-width="40px" prop="javaField">
-              <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.nullable" false-value="false" true-value="true" />
-              </template>
-            </el-table-column>
-            <el-table-column label="列表" min-width="40px" prop="selectField">
-              <template #default="{ row }: { row: CodegenColumnVo }">
-                <el-checkbox v-model="row.selectField" false-value="false" true-value="true" />
-              </template>
-            </el-table-column>
             <el-table-column label="新增" min-width="40px" prop="insertField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.insertField" false-value="false" true-value="true" />
@@ -176,6 +186,60 @@ defineExpose({
             <el-table-column label="编辑" min-width="40px" prop="updateField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.updateField" false-value="false" true-value="true" />
+              </template>
+            </el-table-column>
+            <el-table-column label="Html类型" prop="htmlType">
+              <template #default="{ row }: { row: CodegenColumnVo }">
+                <el-select v-model="row.htmlType">
+                  <el-option
+                    v-for="(item, index) in htmlTypeList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="列表" min-width="40px" prop="selectResultField">
+              <template #default="{ row }: { row: CodegenColumnVo }">
+                <el-checkbox
+                  v-model="row.selectResultField"
+                  false-value="false"
+                  true-value="true"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="查询" min-width="40px" prop="selectConditionField">
+              <template #default="{ row }: { row: CodegenColumnVo }">
+                <el-checkbox
+                  v-model="row.selectConditionField"
+                  false-value="false"
+                  true-value="true"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="查询条件" prop="selectCondition">
+              <template #default="{ row }: { row: CodegenColumnVo }">
+                <el-select v-model="row.selectCondition">
+                  <el-option
+                    v-for="(item, index) in selectConditionList"
+                    :key="index"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="字典类型" prop="dictTypeId">
+              <template #default="{ row }: { row: CodegenColumnVo }">
+                <el-select v-model="row.dictTypeId" clearable @change="dictTypeChange(row)">
+                  <el-option
+                    v-for="(item, index) in dictTypeSelectorList"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.id"
+                  />
+                </el-select>
               </template>
             </el-table-column>
           </el-table>

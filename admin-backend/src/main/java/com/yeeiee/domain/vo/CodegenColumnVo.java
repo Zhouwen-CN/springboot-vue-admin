@@ -18,6 +18,7 @@ import lombok.ToString;
 @ToString
 @Schema(name = "CodegenColumnVo", description = "代码生成字段表视图")
 public class CodegenColumnVo {
+
     @Schema(description = "主键")
     private Long id;
 
@@ -39,15 +40,24 @@ public class CodegenColumnVo {
     @Schema(description = "js类型")
     private String jsType;
 
-    @Schema(description = "是否允许为空")
-    private Boolean nullable;
+    @Schema(description = "html类型")
+    private String htmlType;
+
+    @Schema(description = "字典类型编号")
+    private Long dictTypeId;
+
+    @Schema(description = "select字段条件")
+    private String selectCondition;
+
+    @Schema(description = "是否为select条件字段")
+    private Boolean selectConditionField;
+
+    @Schema(description = "是否select查询结果字段")
+    private Boolean selectResultField;
 
     @Schema(description = "是否为insert字段")
     private Boolean insertField;
 
     @Schema(description = "是否为update字段")
     private Boolean updateField;
-
-    @Schema(description = "是否为select字段")
-    private Boolean selectField;
 }

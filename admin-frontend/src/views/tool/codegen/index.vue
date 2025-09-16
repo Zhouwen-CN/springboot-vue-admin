@@ -54,7 +54,6 @@ const codegenTableImportForm = reactive<CodegenTableImportForm>({
   author: codegenConfig.author,
   ignoreTablePrefix: codegenConfig.ignoreTablePrefix,
   ignoreColumnPrefix: codegenConfig.ignoreColumnPrefix,
-  basePackage: codegenConfig.basePackage,
   tableNames: []
 })
 
@@ -76,7 +75,6 @@ const rules = reactive<FormRules<typeof codegenTableImportForm>>({
     { required: true, message: '作者不能为空', trigger: 'blur' },
     { min: 1, max: 20, message: '长度 1-20 之间', trigger: 'blur' }
   ],
-  basePackage: [{ required: true, message: '基础包名不能为空', trigger: 'blur' }],
   tableNames: [{ required: true, message: '选择器不能为空', trigger: 'submit' }]
 })
 
@@ -134,7 +132,6 @@ function clean() {
   codegenTableImportForm.author = codegenConfig.author
   codegenTableImportForm.ignoreTablePrefix = codegenConfig.ignoreTablePrefix
   codegenTableImportForm.ignoreColumnPrefix = codegenConfig.ignoreColumnPrefix
-  codegenTableImportForm.basePackage = codegenConfig.basePackage
   codegenTableImportForm.tableNames = []
   formRef.value?.clearValidate()
 }
@@ -255,10 +252,6 @@ onMounted(() => {
         >
           <el-form-item label="作者" prop="author">
             <el-input v-model="codegenTableImportForm.author" placeholder="作者"></el-input>
-          </el-form-item>
-          <el-form-item label="基础包名" prop="basePackage">
-            <el-input v-model="codegenTableImportForm.basePackage" placeholder="基础包名">
-            </el-input>
           </el-form-item>
           <el-form-item label="忽略表前缀" prop="ignoreTablePrefix">
             <el-input v-model="codegenTableImportForm.ignoreTablePrefix" placeholder="忽略表前缀">

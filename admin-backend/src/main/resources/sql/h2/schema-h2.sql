@@ -363,12 +363,16 @@ create table t_codegen_column(
   java_field varchar2(50) not null,
   java_type varchar2(20) not null,
   js_type varchar2(20) not null,
+  html_type varchar2(20) not null,
   sort_id NUMBER(9) not null,
+  dict_type_id number(18) not null,
+  select_condition varchar2(20) default null,
   primary_key number(1) not null,
   nullable number(1) not null,
+  select_condition_field number(1) not null,
+  select_result_field number(1) not null,
   insert_field number(1) not null,
   update_field number(1) not null,
-  select_field number(1) not null,
   create_user varchar2(15) default null,
   create_time DATE default SYSDATE,
   update_user varchar2(15) default null,
@@ -385,12 +389,16 @@ COMMENT ON COLUMN t_codegen_column.column_length IS '字段长度';
 COMMENT ON COLUMN t_codegen_column.java_field IS 'java属性名';
 COMMENT ON COLUMN t_codegen_column.java_type IS 'java类型';
 COMMENT ON COLUMN t_codegen_column.js_type IS 'js类型';
+COMMENT ON COLUMN t_codegen_column.html_type IS 'html类型';
 COMMENT ON COLUMN t_codegen_column.sort_id IS '排序';
+COMMENT ON COLUMN t_codegen_column.dict_type_id IS '字典类型编号';
+COMMENT ON COLUMN t_codegen_column.select_condition IS '查询条件';
 COMMENT ON COLUMN t_codegen_column.primary_key IS '是否主键';
 COMMENT ON COLUMN t_codegen_column.nullable IS '是否允许为空';
+COMMENT ON COLUMN t_codegen_column.select_condition_field IS '是否为select条件字段';
+COMMENT ON COLUMN t_codegen_column.select_result_field IS '是否为select结果字段';
 COMMENT ON COLUMN t_codegen_column.insert_field IS '是否为insert字段';
 COMMENT ON COLUMN t_codegen_column.update_field IS '是否为update字段';
-COMMENT ON COLUMN t_codegen_column.select_field IS '是否为select字段';
 COMMENT ON COLUMN t_codegen_column.create_user IS '创建者';
 COMMENT ON COLUMN t_codegen_column.create_time IS '创建时间';
 COMMENT ON COLUMN t_codegen_column.update_user IS '更新者';
