@@ -9,10 +9,9 @@ import {
   type UserForm,
   type UserVo
 } from '@/api/auth/user'
-import { reqGetRoleSelectorVoByUserId } from '@/api/auth/role'
+import { reqGetRoles, reqGetRoleSelectorVoByUserId, type RoleSelectorVo } from '@/api/auth/role'
 import type { CheckboxValueType } from 'element-plus'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import { reqGetRoles, type RoleSelectorVo } from '@/api/auth/role'
 import useUserStore from '@/stores/user'
 import { deleteAsyncRoutes } from '@/router/asyncRoutes'
 import useTagViewStore from '@/stores/tagView'

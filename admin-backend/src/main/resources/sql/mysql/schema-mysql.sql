@@ -192,11 +192,13 @@ create table t_codegen_column  (
   update_time datetime default current_timestamp comment '更新时间'
 ) comment = '代码生成字段表';
 
+drop table if exists t_student_test;
 create table t_student_test(
   id bigint primary key auto_increment comment '主键',
   name varchar(20)  not null comment '名称',
-  age int not null comment '年龄',
-  gender varchar(10) not null comment '性别',
+  gender tinyint not null comment '性别',
+  birthday datetime not null comment '生日',
+  intro text comment '简介',
   create_user varchar(15) default null comment '创建者',
   create_time datetime default current_timestamp comment '创建时间',
   update_user varchar(15) default null comment '更新者',

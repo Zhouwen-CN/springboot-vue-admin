@@ -170,8 +170,11 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
             if (id == null) {
                 this.save(codegenTable);
 
-                // 如果是更新，需要删除之前的列
+                // 如果是更新，需要删除之前的列，更新时间
             } else {
+                val updateCodegenTable = new CodegenTable();
+                updateCodegenTable.setId(id);
+                this.updateById(updateCodegenTable);
                 codegenColumnService.remove(
                         Wrappers.<CodegenColumn>lambdaQuery()
                                 .eq(CodegenColumn::getTableId, id)

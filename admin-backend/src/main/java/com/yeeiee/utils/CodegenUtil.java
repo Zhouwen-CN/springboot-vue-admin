@@ -28,23 +28,8 @@ import java.util.Set;
  */
 public final class CodegenUtil {
 
-    @Getter
-    public enum CodegenColumnHtmlTypeEnum {
-
-        INPUT("input"), // 文本框
-        TEXTAREA("textarea"), // 文本域
-        SELECT("select"), // 下拉框
-        RADIO("radio"), // 单选框
-        CHECKBOX("checkbox"), // 复选框
-        DATETIME("datetime"), // 日期控件
-        ;
-
-        private final String type;
-
-        CodegenColumnHtmlTypeEnum(String type) {
-            this.type = type;
-        }
-    }
+    // 新增修改忽略字段
+    private static final Set<String> CREATE_UPDATE_IGNORE_FIELDS = Set.of("createTime", "updateTime", "createUser", "updateUser");
 
     @Getter
     public enum CodegenColumnConditionEnum {
@@ -62,11 +47,10 @@ public final class CodegenUtil {
             this.condition = condition;
         }
     }
-
-
-    private static final Set<String> IGNORE_CREATE_UPDATE_FIELDS = Set.of("createTime", "updateTime", "createUser", "updateUser");
-    private static final Set<String> IGNORE_SELECT_FIELDS = Set.of("createUser", "updateUser");
-    private static final Set<String> JS_NUMBER_TYPE = Set.of(
+    // 查询忽略字段
+    private static final Set<String> SELECT_IGNORE_FIELDS = Set.of("createUser", "updateUser");
+    // 前端 number 类型映射
+    private static final Set<String> JS_NUMBER_TYPE_MAPPING = Set.of(
             DbColumnType.BYTE.getType(),
             DbColumnType.SHORT.getType(),
             DbColumnType.INTEGER.getType(),
@@ -74,42 +58,20 @@ public final class CodegenUtil {
             DbColumnType.FLOAT.getType(),
             DbColumnType.DOUBLE.getType()
     );
-
-    private static final Map<String, CodegenColumnConditionEnum> COLUMN_SELECT_CONDITION_MAPPING = Map.of(
+    // 查询条件字段映射
+    private static final Map<String, CodegenColumnConditionEnum> SELECT_CONDITION_MAPPING = Map.of(
             "name", CodegenColumnConditionEnum.LIKE,
             "time", CodegenColumnConditionEnum.BETWEEN,
             "date", CodegenColumnConditionEnum.BETWEEN
     );
-
-    private static final Map<String, CodegenColumnHtmlTypeEnum> COLUMN_HTML_TYPE_MAPPING = Map.of(
+    // html 类型字段映射
+    private static final Map<String, CodegenColumnHtmlTypeEnum> HTML_TYPE_MAPPING = Map.of(
             "status", CodegenColumnHtmlTypeEnum.RADIO,
             "sex", CodegenColumnHtmlTypeEnum.RADIO,
             "type", CodegenColumnHtmlTypeEnum.SELECT,
             "time", CodegenColumnHtmlTypeEnum.DATETIME,
             "date", CodegenColumnHtmlTypeEnum.DATETIME
     );
-
-    /**
-     * 建构代码生成表
-     *
-     * @param tableInfo              table info
-     * @param codegenTableImportForm 导入代码生成表单
-     * @return table info
-     */
-    public static CodegenTable toCodegenTable(TableInfo tableInfo, CodegenTableImportForm codegenTableImportForm) {
-        val codegenTable = new CodegenTable();
-        codegenTable.setDataSourceId(codegenTableImportForm.getDataSourceId());
-        codegenTable.setTableName(tableInfo.getName());
-        codegenTable.setTableComment(tableInfo.getComment());
-        val entityName = tableInfo.getEntityName();
-        codegenTable.setClassName(entityName);
-        codegenTable.setAuthor(codegenTableImportForm.getAuthor());
-        // 业务名称
-        codegenTable.setBusinessName(getBusinessName(entityName));
-        codegenTable.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());
-        codegenTable.setIgnoreColumnPrefix(codegenTableImportForm.getIgnoreColumnPrefix());
-        return codegenTable;
-    }
 
     /**
      * 构建代码生成列
@@ -145,8 +107,8 @@ public final class CodegenUtil {
             codegenColumn.setSelectCondition(getSelectCondition(tableField));
             // 操作类型字段
             codegenColumn.setSelectConditionField(false);
-            codegenColumn.setSelectResultField(isSelectField(tableField));
-            codegenColumn.setInsertField(isCreateOpsFiled(tableField));
+            codegenColumn.setSelectResultField(isSelectResultField(tableField));
+            codegenColumn.setInsertField(isInsertOpsFiled(tableField));
             codegenColumn.setUpdateField(isUpdateOpsFiled(tableField));
             codegenColumns.add(codegenColumn);
         }
@@ -154,17 +116,25 @@ public final class CodegenUtil {
     }
 
     /**
-     * 获取业务名称，取第一个单词
-     * @param entityName 实体名称
-     * @return 业务名称
+     * 建构代码生成表
+     *
+     * @param tableInfo              table info
+     * @param codegenTableImportForm 导入代码生成表单
+     * @return table info
      */
-    public static String getBusinessName(String entityName){
-        val split = org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase(entityName);
-        if(split.length > 0){
-            return org.apache.commons.lang3.StringUtils.uncapitalize(split[0]);
-        }
-
-        return org.apache.commons.lang3.StringUtils.uncapitalize(entityName);
+    public static CodegenTable toCodegenTable(TableInfo tableInfo, CodegenTableImportForm codegenTableImportForm) {
+        val codegenTable = new CodegenTable();
+        codegenTable.setDataSourceId(codegenTableImportForm.getDataSourceId());
+        codegenTable.setTableName(tableInfo.getName());
+        codegenTable.setTableComment(tableInfo.getComment());
+        val entityName = tableInfo.getEntityName();
+        codegenTable.setClassName(entityName);
+        codegenTable.setAuthor(codegenTableImportForm.getAuthor());
+        // 业务名称
+        codegenTable.setBusinessName(getBusinessName(entityName));
+        codegenTable.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());
+        codegenTable.setIgnoreColumnPrefix(codegenTableImportForm.getIgnoreColumnPrefix());
+        return codegenTable;
     }
 
     /**
@@ -185,7 +155,7 @@ public final class CodegenUtil {
         }
 
         // 按照字段名称给默认值（后缀）
-        val entries = COLUMN_HTML_TYPE_MAPPING.entrySet();
+        val entries = HTML_TYPE_MAPPING.entrySet();
         for (Map.Entry<String, CodegenColumnHtmlTypeEnum> entry : entries) {
             val key = entry.getKey();
             if (tableField.getName().endsWith(key)) {
@@ -196,6 +166,19 @@ public final class CodegenUtil {
         return CodegenColumnHtmlTypeEnum.INPUT.getType();
     }
 
+    /**
+     * 获取业务名称，取第一个单词
+     * @param entityName 实体名称
+     * @return 业务名称
+     */
+    public static String getBusinessName(String entityName){
+        val split = org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase(entityName);
+        if(split.length > 0){
+            return org.apache.commons.lang3.StringUtils.uncapitalize(split[0]);
+        }
+
+        return org.apache.commons.lang3.StringUtils.uncapitalize(entityName);
+    }
 
     /**
      * 获取查询条件
@@ -204,7 +187,7 @@ public final class CodegenUtil {
      */
     private static String getSelectCondition(TableField tableField) {
         // 按照字段名称给默认值（后缀）
-        val entries = COLUMN_SELECT_CONDITION_MAPPING.entrySet();
+        val entries = SELECT_CONDITION_MAPPING.entrySet();
         for (Map.Entry<String, CodegenColumnConditionEnum> entry : entries) {
             val key = entry.getKey();
             if (tableField.getName().endsWith(key)) {
@@ -215,14 +198,14 @@ public final class CodegenUtil {
     }
 
     /**
-     * 是否查询操作展示字段
+     * 是否查询操作结果字段
      *
      * @param tableField table field
      * @return boolean
      */
-    private static boolean isSelectField(TableField tableField) {
+    private static boolean isSelectResultField(TableField tableField) {
         val javaField = tableField.getPropertyName();
-        return !IGNORE_SELECT_FIELDS.contains(javaField);
+        return !SELECT_IGNORE_FIELDS.contains(javaField);
     }
 
     /**
@@ -231,11 +214,11 @@ public final class CodegenUtil {
      * @param tableField table field
      * @return boolean
      */
-    private static boolean isCreateOpsFiled(TableField tableField) {
+    private static boolean isInsertOpsFiled(TableField tableField) {
         val isPrimaryKey = tableField.isKeyFlag();
         val javaField = tableField.getPropertyName();
 
-        return !isPrimaryKey && !IGNORE_CREATE_UPDATE_FIELDS.contains(javaField);
+        return !isPrimaryKey && !CREATE_UPDATE_IGNORE_FIELDS.contains(javaField);
     }
 
     /**
@@ -246,7 +229,19 @@ public final class CodegenUtil {
      */
     private static boolean isUpdateOpsFiled(TableField tableField) {
         val javaField = tableField.getPropertyName();
-        return !IGNORE_CREATE_UPDATE_FIELDS.contains(javaField);
+        return !CREATE_UPDATE_IGNORE_FIELDS.contains(javaField);
+    }
+
+    public static String getJsType(String javaType) {
+        if (DbColumnType.BOOLEAN.getType().equals(javaType)) {
+            return "boolean";
+        }
+
+        if (JS_NUMBER_TYPE_MAPPING.contains(javaType)) {
+            return "number";
+        }
+
+        return "string";
     }
 
 
@@ -278,15 +273,19 @@ public final class CodegenUtil {
         });
     }
 
-    public static String getJsType(String javaType) {
-        if (DbColumnType.BOOLEAN.getType().equals(javaType)) {
-            return "boolean";
-        }
+    @Getter
+    public enum CodegenColumnHtmlTypeEnum {
+        INPUT("input"), // 文本框
+        TEXTAREA("textarea"), // 文本域
+        SELECT("select"), // 下拉框
+        RADIO("radio"), // 单选框
+        CHECKBOX("checkbox"), // 复选框
+        DATETIME("datetime"); // 日期控件
 
-        if (JS_NUMBER_TYPE.contains(javaType)) {
-            return "number";
-        }
+        private final String type;
 
-        return "string";
+        CodegenColumnHtmlTypeEnum(String type) {
+            this.type = type;
+        }
     }
 }

@@ -7,8 +7,9 @@ import {
   reqGetCodegenColumnList,
   reqUpdateCodegenTable
 } from '@/api/tool/codegen'
-import { reqGetDictTypeSelectorList, type DictTypeSelectorVo } from '@/api/tool/dict'
+import { type DictTypeSelectorVo, reqGetDictTypeSelectorList } from '@/api/tool/dict'
 import useSettingStore from '@/stores/setting'
+
 const {
   codegenConfig: { jsTypeList, javaTypeList, htmlTypeList, selectConditionList }
 } = useSettingStore()

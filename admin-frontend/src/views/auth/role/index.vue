@@ -8,10 +8,10 @@ import {
   type RoleForm,
   type RoleVo
 } from '@/api/auth/role'
+import type { MenuVo } from '@/api/auth/menu'
 import { reqGetMenuIdsByRoleId } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type TreeInstance } from 'element-plus'
 import useUserStore from '@/stores/user'
-import type { MenuVo } from '@/api/auth/menu'
 
 const userStore = useUserStore()
 

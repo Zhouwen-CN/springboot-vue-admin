@@ -124,6 +124,7 @@ function updateCodegenTable(row: CodegenTableVo) {
 // 同步代码生成表字段
 async function syncCodegenColumnList(id: number) {
   await reqSyncCodegenColumnList(id)
+  refresh({ params: { keyword: keyword.value } })
   ElMessage.success('操作成功')
 }
 
