@@ -1,5 +1,5 @@
 <#--@formatter:off-->
-package com.yeeiee.domain.entity;
+package ${package.entity};
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -12,13 +12,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
-* <p>
-* ${table.tableComment}表
-* </p>
-*
-* @author ${table.author}
-* @since ${.now?string('yyyy-MM-dd')}
-*/
+ * <p>
+ * ${table.tableComment}
+ * </p>
+ *
+ * @author ${table.author}
+ * @since ${.now?string('yyyy-MM-dd')}
+ */
 @Getter
 @Setter
 @ToString
@@ -28,8 +28,8 @@ public class ${table.className} {
 
 <#list columns as column>
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     <#if column.primaryKey>
     @TableId(value = "${column.columnName}")
     <#elseif column.columnName='create_user' || column.columnName='create_time'>

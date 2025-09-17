@@ -1,7 +1,7 @@
 <#--@formatter:off-->
-package com.yeeiee.domain.form;
+package ${package.form};
 
-import com.yeeiee.domain.validate.GroupingValidate;
+import ${package.base}.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,13 +13,13 @@ import org.hibernate.validator.constraints.Length;
 import java.time.LocalDateTime;
 
 /**
-* <p>
-* ${table.tableComment?remove_ending('表')}表单
-* </p>
-*
-* @author ${table.author}
-* @since ${.now?string('yyyy-MM-dd')}
-*/
+ * <p>
+ * ${table.tableComment?remove_ending('表')}表单
+ * </p>
+ *
+ * @author ${table.author}
+ * @since ${.now?string('yyyy-MM-dd')}
+ */
 @Getter
 @Setter
 @ToString

@@ -1,5 +1,5 @@
 <#--@formatter:off-->
-package com.yeeiee.domain.vo;
+package ${package.vo};
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 /**
-* <p>
-* ${table.tableComment?remove_ending('表')}视图
-* </p>
-*
-* @author ${table.author}
-* @since ${.now?string('yyyy-MM-dd')}
-*/
+ * <p>
+ * ${table.tableComment?remove_ending('表')}视图
+ * </p>
+ *
+ * @author ${table.author}
+ * @since ${.now?string('yyyy-MM-dd')}
+ */
 @Getter
 @Setter
 @ToString
