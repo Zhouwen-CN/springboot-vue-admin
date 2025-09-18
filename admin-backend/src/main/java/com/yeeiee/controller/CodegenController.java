@@ -6,16 +6,21 @@ import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
 import com.yeeiee.domain.vo.CodegenColumnVo;
+import com.yeeiee.domain.vo.CodegenPreviewVo;
 import com.yeeiee.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.domain.vo.CodegenTableVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
+import com.yeeiee.service.freemarker.FreemarkerEngineService;
 import com.yeeiee.utils.BeanUtil;
+import com.yeeiee.utils.ResponseObjectUtil;
+import com.yeeiee.utils.ZipUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -30,6 +35,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,6 +58,7 @@ public class CodegenController {
 
     private final CodegenTableService codegenTableService;
     private final CodegenColumnService codegenColumnService;
+    private final FreemarkerEngineService freemarkerEngineService;
 
     @Operation(summary = "查询代码生成表分页")
     @GetMapping("/{size}/{current}")
@@ -121,5 +131,32 @@ public class CodegenController {
                 .list();
         val columnVoList = BeanUtil.toBean(list, CodegenColumnVo.class);
         return R.ok(columnVoList);
+    }
+
+    @Operation(summary = "代码生成预览")
+    @GetMapping("/preview/{id}")
+    public R<List<CodegenPreviewVo>> preview(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
+        val map = freemarkerEngineService.codegenById(id);
+        val previewVoList = CodegenPreviewVo.fromMap(map);
+        return R.ok(previewVoList);
+    }
+
+    @Operation(summary = "代码生成下载")
+    @GetMapping("/download/{id}")
+    public void download(
+            @PathVariable("id") @Parameter(description = "代码生成表id") Long id,
+            HttpServletResponse response
+    ) {
+        val map = freemarkerEngineService.codegenById(id);
+        val paths = new ArrayList<>(map.keySet());
+        val ins = map.values().stream()
+                .map(content -> {
+                    val bytes = content.getBytes(StandardCharsets.UTF_8);
+                    return new ByteArrayInputStream(bytes);
+                }).toList();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipUtil.zip(outputStream, paths, ins);
+
+        ResponseObjectUtil.writeAttachment(response, "codegen.zip", outputStream.toByteArray());
     }
 }

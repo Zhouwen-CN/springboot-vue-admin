@@ -1,11 +1,15 @@
 package com.yeeiee.utils;
 
 import com.yeeiee.domain.vo.R;
+import com.yeeiee.exception.IoRuntimeException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
@@ -28,5 +32,26 @@ public final class ResponseObjectUtil {
         val resultAsJson = JsonUtil.toJsonString(result);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().println(resultAsJson);
+    }
+
+    /**
+     * 文件下载
+     *
+     * @param response 响应
+     * @param filename 文件名
+     * @param content  附件内容
+     */
+    public static void writeAttachment(HttpServletResponse response, String filename, byte[] content) {
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+        // 获取 MIME 类型
+        String contentType = FileTypeUtils.getMineType(content, filename);
+        response.setContentType(contentType);
+
+        try {
+            val outputStream = response.getOutputStream();
+            outputStream.write(content);
+        } catch (IOException e) {
+            throw new IoRuntimeException("文件下载异常: " + ExceptionUtils.getRootCauseMessage(e));
+        }
     }
 }

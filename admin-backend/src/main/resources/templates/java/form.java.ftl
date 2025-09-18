@@ -28,16 +28,17 @@ public class ${table.className}Form {
 
 <#list columns as column>
 <#if column.insertField || column.updateField>
+    <#-- 分组校验 -->
     <#if column.insertField && column.updateField>
-        <#assign group = "(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})"/>
+        <#assign group = '(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})'/>
     <#elseif column.insertField>
-        <#assign group = "(groups = {GroupingValidate.Create.class})"/>
+        <#assign group = '(groups = {GroupingValidate.Create.class})'/>
     <#elseif column.updateField>
-        <#assign group = "(groups = {GroupingValidate.Update.class})"/>
+        <#assign group = '(groups = {GroupingValidate.Update.class})'/>
     </#if>
     <#if column.columnLength??>
     @NotBlank${group}
-    @Length${group?remove_ending(")")}, max = ${column.columnLength})
+    @Length${group?remove_ending(')')}, max = ${column.columnLength})
     <#else>
     @NotNull${group}
     </#if>

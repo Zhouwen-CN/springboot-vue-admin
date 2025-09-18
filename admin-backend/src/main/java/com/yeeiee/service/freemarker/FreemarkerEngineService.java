@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 /**
  * <p>
- *
+ * freemarker 引擎
  * </p>
  *
  * @author chen
@@ -69,13 +69,16 @@ public class FreemarkerEngineService implements InitializingBean {
         val packageInfo = packageConfig.getPackageInfo();
         bindingMap.put("package", packageInfo);
 
-        val entity = JavaTemplate.controller;
-        val ftlPath = entity.getFtlPath();
-        val filePath = entity.getFilePath(table.getClassName());
+        val values = JavaTemplate.values();
+        val result = new HashMap<String, String>();
+        for (JavaTemplate value : values) {
+            val ftlPath = value.getFtlPath();
+            val content = this.render(ftlPath, bindingMap);
+            val filePath = value.getFilePath(table.getClassName());
+            result.put(filePath, content);
+        }
 
-        val content = this.render(ftlPath, bindingMap);
-
-        return Map.of(filePath, content);
+        return result;
     }
 
     /**
@@ -97,7 +100,7 @@ public class FreemarkerEngineService implements InitializingBean {
     }
 
     /**
-     * java模板，获取模板文件地址和生成文件地址
+     * java模板，获取模板文件地址和生成文件地址（枚举名称为模板前缀）
      */
     public enum JavaTemplate {
         entity(className -> packageConfig.javaFilePath + "/domain/entity/" + className + ".java"),
@@ -130,7 +133,7 @@ public class FreemarkerEngineService implements InitializingBean {
     }
 
     /**
-     * js模板，获取模板文件地址和生成文件地址
+     * js模板，获取模板文件地址和生成文件地址（枚举名称为模板前缀）
      */
     public enum JsTemplate {
         index(businessName -> packageConfig.jsFilePath + "/views/" + businessName + "/index.vue"),

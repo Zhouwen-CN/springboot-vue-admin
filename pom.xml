@@ -30,6 +30,7 @@
         <jjwt.version>0.12.6</jjwt.version>
         <openapi.version>2.5.0</openapi.version>
         <p6spy.verison>1.10.0</p6spy.verison>
+        <tika.version>3.2.3</tika.version>
 
         <!-- maven plugin -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -106,6 +107,13 @@
                 <groupId>com.github.gavlyukovskiy</groupId>
                 <artifactId>p6spy-spring-boot-starter</artifactId>
                 <version>${p6spy.verison}</version>
+            </dependency>
+
+            <!-- tika: 根据文件头魔数和文件名获取 MIME 类型 -->
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${tika.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

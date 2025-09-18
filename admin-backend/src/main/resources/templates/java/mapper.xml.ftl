@@ -17,11 +17,9 @@
     </#if>
 </#list>
     </resultMap>
-    <#assign columnNames = columns?map(item -> item.columnName)>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ${columnNames?join(', ')}
+        ${columns?map(item -> item.columnName)?join(', ')}
     </sql>
-
 </mapper>

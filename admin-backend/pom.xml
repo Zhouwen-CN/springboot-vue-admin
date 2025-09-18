@@ -128,6 +128,12 @@
             <artifactId>httpclient5</artifactId>
         </dependency>
 
+        <!-- tika: 根据文件头魔数、文件名获取 MIME 类型 -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+        </dependency>
+
         <!-- sql print -->
         <dependency>
             <groupId>com.github.gavlyukovskiy</groupId>
