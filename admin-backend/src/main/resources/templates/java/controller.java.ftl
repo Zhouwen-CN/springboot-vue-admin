@@ -7,6 +7,7 @@ import ${package.form}.${table.className}Form;
 import ${package.basePackage}.domain.validate.GroupingValidate;
 import ${package.vo}.PageVo;
 import ${package.vo}.R;
+import ${package.vo}.${table.className}Vo;
 import ${package.service}.${table.className}Service;
 import ${package.basePackage}.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,7 +91,7 @@ public class ${table.className}Controller {
 
     @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
-    public R<PageVo<${table.className}>> getPage(
+    public R<PageVo<${table.className}Vo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size
             , @PathVariable("current") @Parameter(description = "当前页面") Integer current
         <#--
@@ -113,21 +114,23 @@ public class ${table.className}Controller {
     ) {
         val page = ${pageLambdaQuery}
                 .page(Page.of(current, size));
-        return R.ok(PageVo.fromPage(page));
+        return R.ok(PageVo.fromPage(page, ${table.className}Vo.class));
     }
 
     @Operation(summary = "列表查询")
     @GetMapping
-    public R<List<${table.className}>> getList() {
+    public R<List<${table.className}Vo>> getList() {
         val list = ${serviceName}.list();
-        return R.ok(list);
+        val voList = BeanUtil.toBean(list, ${table.className}Vo.class);
+        return R.ok(voList);
     }
 
     @Operation(summary = "按照id查询")
     @GetMapping("/{id}")
-    public R<${table.className}> getById(@PathVariable("id") @Parameter(description = "id") ${primaryColumn.javaType} id) {
+    public R<${table.className}Vo> getById(@PathVariable("id") @Parameter(description = "id") ${primaryColumn.javaType} id) {
         val one = ${serviceName}.getById(id);
-        return R.ok(one);
+        val vo = BeanUtil.toBean(one, StudentTestVo.class);
+        return R.ok(vo);
     }
 
     @Operation(summary = "新增")
