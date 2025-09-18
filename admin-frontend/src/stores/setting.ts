@@ -27,7 +27,7 @@ const useSettingStore = defineStore(
         'Boolean'
       ],
       htmlTypeList: ['input', 'textarea', 'select', 'radio', 'checkbox', 'datetime'],
-      selectConditionList: ['=', '>', '>=', '<', '<=', 'like', 'between']
+      selectConditionList: ['=', '>', '>=', '<', '<=', 'like']
     }
 
     function $reset() {

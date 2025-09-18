@@ -31,22 +31,10 @@ public final class CodegenUtil {
     // 新增修改忽略字段
     private static final Set<String> CREATE_UPDATE_IGNORE_FIELDS = Set.of("createTime", "updateTime", "createUser", "updateUser");
 
-    @Getter
-    public enum CodegenColumnConditionEnum {
-        EQ("="),
-        GT(">"),
-        GTE(">="),
-        LT("<"),
-        LTE("<="),
-        LIKE("like"),
-        BETWEEN("between");
-
-        private final String condition;
-
-        CodegenColumnConditionEnum(String condition) {
-            this.condition = condition;
-        }
-    }
+    // 查询条件字段映射
+    private static final Map<String, CodegenColumnConditionEnum> SELECT_CONDITION_MAPPING = Map.of(
+            "name", CodegenColumnConditionEnum.LIKE
+    );
     // 查询忽略字段
     private static final Set<String> SELECT_IGNORE_FIELDS = Set.of("createUser", "updateUser");
     // 前端 number 类型映射
@@ -58,12 +46,21 @@ public final class CodegenUtil {
             DbColumnType.FLOAT.getType(),
             DbColumnType.DOUBLE.getType()
     );
-    // 查询条件字段映射
-    private static final Map<String, CodegenColumnConditionEnum> SELECT_CONDITION_MAPPING = Map.of(
-            "name", CodegenColumnConditionEnum.LIKE,
-            "time", CodegenColumnConditionEnum.BETWEEN,
-            "date", CodegenColumnConditionEnum.BETWEEN
-    );
+    @Getter
+    public enum CodegenColumnConditionEnum {
+        EQ("="),
+        GT(">"),
+        GTE(">="),
+        LT("<"),
+        LTE("<="),
+        LIKE("like");
+
+        private final String condition;
+
+        CodegenColumnConditionEnum(String condition) {
+            this.condition = condition;
+        }
+    }
     // html 类型字段映射
     private static final Map<String, CodegenColumnHtmlTypeEnum> HTML_TYPE_MAPPING = Map.of(
             "status", CodegenColumnHtmlTypeEnum.RADIO,

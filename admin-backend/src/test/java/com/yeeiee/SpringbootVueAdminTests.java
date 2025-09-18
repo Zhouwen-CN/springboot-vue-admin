@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 import java.util.Arrays;
 import java.util.Map;
 
-@SpringBootTest
+@SpringBootTest(args = {"--mpw.key=18mTlw4bqrAmvNXB"})
 class SpringbootVueAdminTests {
     @Autowired
     ApplicationContext context;

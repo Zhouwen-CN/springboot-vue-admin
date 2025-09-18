@@ -158,7 +158,6 @@ public class FreemarkerEngineService implements InitializingBean {
         private String getFilePath(String businessName) {
             return func.apply(businessName);
         }
-
     }
 
     /**
@@ -173,14 +172,13 @@ public class FreemarkerEngineService implements InitializingBean {
         public String service = "service";
         public String serviceImpl = "service.impl";
         public String controller = "controller";
-        public String javaFilePath = "admin-backend/src/main/java/com/yeeiee";
+        public String javaFilePath = "admin-backend/src/main/java/" + basePackage.replace(".", "/");
         public String xmlFilePath = "admin-backend/src/main/resources/mapper";
         public String jsFilePath = "admin-frontend/src";
 
         public Map<String, String> getPackageInfo() {
-
             return Map.of(
-                    "base", basePackage,
+                    "basePackage", basePackage,
                     "entity", basePackage + "." + entity,
                     "vo", basePackage + "." + vo,
                     "form", basePackage + "." + form,

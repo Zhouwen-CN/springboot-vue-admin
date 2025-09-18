@@ -14,11 +14,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -40,8 +50,13 @@ public class StudentTestController {
     public R<PageVo<StudentTest>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size
             , @PathVariable("current") @Parameter(description = "当前页面") Integer current
+            , @RequestParam(value = "name", required = false) @Parameter(description = "名称") String name
+            , @RequestParam(value = "gender", required = false) @Parameter(description = "性别") Integer gender
     ) {
-        val page = studentTestService.page(Page.of(current, size));
+        val page = studentTestService.lambdaQuery()
+                .like(StringUtils.hasText(name), StudentTest::getName, name)
+                .eq(Objects.nonNull(gender), StudentTest::getGender, gender)
+                .page(Page.of(current, size));
         return R.ok(PageVo.fromPage(page));
     }
 

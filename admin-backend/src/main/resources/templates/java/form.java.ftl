@@ -1,7 +1,7 @@
 <#--@formatter:off-->
 package ${package.form};
 
-import ${package.base}.domain.validate.GroupingValidate;
+import ${package.basePackage}.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
