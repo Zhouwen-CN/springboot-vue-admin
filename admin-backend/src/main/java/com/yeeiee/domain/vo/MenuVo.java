@@ -27,8 +27,6 @@ public class MenuVo {
     private String title;
     @Schema(description = "菜单访问路径")
     private String accessPath;
-    @Schema(description = "菜单文件路径")
-    private String filePath;
     @Schema(description = "菜单图标")
     private String icon;
     @Schema(description = "父级菜单id")

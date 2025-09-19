@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-05
+ * @since 2025-09-19
  */
 @Getter
 @Setter
@@ -39,10 +39,6 @@ public class Menu {
     @Schema(description = "访问路径")
     @TableField(value = "access_path")
     private String accessPath;
-
-    @Schema(description = "文件路径")
-    @TableField(value = "file_path")
-    private String filePath;
 
     @Schema(description = "图标")
     @TableField(value = "icon")

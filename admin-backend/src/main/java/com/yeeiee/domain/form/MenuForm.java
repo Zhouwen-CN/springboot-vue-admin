@@ -38,10 +38,6 @@ public class MenuForm {
     @Schema(description = "菜单访问路径")
     private String accessPath;
 
-    @Schema(description = "菜单文件路径")
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 60)
-    private String filePath;
-
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "菜单图标")
     private String icon;

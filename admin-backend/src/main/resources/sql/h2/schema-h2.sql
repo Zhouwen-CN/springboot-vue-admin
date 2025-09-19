@@ -109,7 +109,6 @@ CREATE TABLE t_menu (
     id            NUMBER(18) PRIMARY KEY,
     title         VARCHAR2(15) NOT NULL,
     access_path   VARCHAR2(40) NOT NULL,
-    file_path     VARCHAR2(60) DEFAULT NULL,
     icon          VARCHAR2(15) NOT NULL,
     pid           NUMBER(18) NOT NULL,
     keep_alive    NUMBER(1) DEFAULT 0,
@@ -125,7 +124,6 @@ COMMENT ON TABLE t_menu IS '菜单表';
 COMMENT ON COLUMN t_menu.id IS '主键';
 COMMENT ON COLUMN t_menu.title IS '标题';
 COMMENT ON COLUMN t_menu.access_path IS '访问路径';
-COMMENT ON COLUMN t_menu.file_path IS '文件路径';
 COMMENT ON COLUMN t_menu.icon IS '图标';
 COMMENT ON COLUMN t_menu.pid IS '父级菜单id';
 COMMENT ON COLUMN t_menu.keep_alive IS '是否缓存';

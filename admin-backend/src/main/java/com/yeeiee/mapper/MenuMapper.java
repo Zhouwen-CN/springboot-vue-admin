@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.Menu;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.MenuVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2025-09-05
+ * @since 2025-09-19
  */
 public interface MenuMapper extends BaseMapper<Menu> {
     List<MenuVo> selectMenusByRoleNames(@Param("roles") List<String> roles);

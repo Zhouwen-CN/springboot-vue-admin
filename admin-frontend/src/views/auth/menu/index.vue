@@ -23,7 +23,6 @@ const menuForm = reactive<MenuForm>({
   id: undefined,
   title: '',
   accessPath: '',
-  filePath: undefined,
   icon: '',
   keepAlive: false,
   pid: 0,
@@ -42,20 +41,13 @@ const validateAccessPath = (rule: any, value: any, callback: any) => {
     callback(new Error('访问路径须以 / 开头'))
   }
 }
-const validateFilePath = (rule: any, value: any, callback: any) => {
-  if (value && value.startsWith('/')) {
-    callback()
-  } else {
-    callback(new Error('文件路径须以 / 开头'))
-  }
-}
+
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     { required: true, message: '请输入菜单名称', trigger: 'blur' },
     { min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
   ],
   accessPath: [{ validator: validateAccessPath, trigger: 'blur' }],
-  filePath: [{ validator: validateFilePath, trigger: 'blur' }],
   icon: [{ required: true, message: '请输入菜单图标', trigger: 'submit' }]
 })
 
@@ -72,7 +64,6 @@ function updateMenu(row: MenuVo) {
   menuForm.id = row.id
   menuForm.title = row.title
   menuForm.accessPath = row.accessPath
-  menuForm.filePath = row.filePath
   menuForm.icon = row.icon
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
@@ -111,7 +102,6 @@ const menuInfo = computed(() => {
       id: 0,
       title: '主类目',
       accessPath: '',
-      filePath: '',
       icon: '',
       keepAlive: false,
       pid: 0,
@@ -126,7 +116,6 @@ function clean() {
   menuForm.id = undefined
   menuForm.title = ''
   menuForm.accessPath = ''
-  menuForm.filePath = undefined
   menuForm.icon = ''
   menuForm.keepAlive = false
   menuForm.pid = 0
@@ -189,7 +178,11 @@ onMounted(() => {
           </template>
         </el-table-column>
         <el-table-column label="访问路径" prop="accessPath" />
-        <el-table-column label="文件路径" prop="filePath" />
+        <el-table-column label="文件路径" prop="filePath">
+          <template #default="{ row }: { row: MenuVo }">
+            {{ row.children.length > 0 ? '' : `${row.accessPath}/index.vue` }}
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="是否缓存" min-width="40px" prop="keepAlive">
           <template #default="{ row }: { row: MenuVo }">
             <el-switch
@@ -254,9 +247,6 @@ onMounted(() => {
           </el-form-item>
           <el-form-item label="访问路径" prop="accessPath">
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
-          </el-form-item>
-          <el-form-item label="文件路径" prop="filePath" v-if="menuForm.menuType">
-            <el-input v-model="menuForm.filePath" placeholder="文件路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-popover ref="iconPopoverRef" :width="400" placement="bottom-start" trigger="click">

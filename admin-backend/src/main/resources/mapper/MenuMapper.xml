@@ -8,7 +8,6 @@
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="access_path" property="accessPath" />
-        <result column="file_path" property="filePath" />
         <result column="icon" property="icon" />
         <result column="pid" property="pid" />
         <result column="keep_alive" property="keepAlive" />
@@ -21,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, access_path, file_path, icon, pid, keep_alive, menu_type, create_user, create_time, update_user, update_time
+        id, title, access_path, icon, pid, keep_alive, menu_type, create_user, create_time, update_user, update_time
     </sql>
 
     <select id="selectMenusByRoleNames" resultType="com.yeeiee.domain.vo.MenuVo">
@@ -29,7 +28,6 @@
             a.id,
             a.title,
             a.access_path as accessPath,
-            a.file_path as filePath,
             a.icon,
             a.pid,
             a.keep_alive as keepAlive,

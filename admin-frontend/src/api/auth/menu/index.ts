@@ -5,7 +5,6 @@ export interface MenuVo extends BaseVo {
   id: number
   title: string
   accessPath: string
-  filePath: string
   icon: string
   keepAlive: boolean
   pid: number
@@ -25,7 +24,6 @@ export interface MenuForm {
   id?: number
   title: string
   accessPath: string
-  filePath?: string
   icon: string
   keepAlive: boolean
   pid: number
