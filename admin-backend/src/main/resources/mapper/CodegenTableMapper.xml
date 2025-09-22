@@ -7,6 +7,7 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.CodegenTable">
         <id column="id" property="id" />
         <result column="data_source_id" property="dataSourceId" />
+        <result column="parent_menu_id" property="parentMenuId" />
         <result column="table_name" property="tableName" />
         <result column="table_comment" property="tableComment" />
         <result column="class_name" property="className" />
@@ -22,13 +23,14 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, data_source_id, table_name, table_comment, class_name, author, business_name, ignore_table_prefix, ignore_column_prefix, create_user, create_time, update_user, update_time
+        id, data_source_id, parent_menu_id, table_name, table_comment, class_name, author, business_name, ignore_table_prefix, ignore_column_prefix, create_user, create_time, update_user, update_time
     </sql>
 
     <select id="selectCodegenTablePage" resultType="com.yeeiee.domain.vo.CodegenTableVo">
         select
             a.id,
             b.name as dataSource,
+            a.parent_menu_id as parentMenuId,
             a.table_name as tableName,
             a.table_comment as tableComment,
             a.class_name as className,

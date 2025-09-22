@@ -25,6 +25,10 @@ public class CodegenTableForm {
     @Schema(description = "主键")
     private Long id;
 
+    @NotNull
+    @Schema(description = "上级菜单编号")
+    private Long parentMenuId;
+
     @NotBlank
     @Length(max = 50)
     @Schema(description = "表名称")

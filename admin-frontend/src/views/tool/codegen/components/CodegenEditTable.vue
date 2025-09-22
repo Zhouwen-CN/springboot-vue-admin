@@ -9,6 +9,7 @@ import {
 } from '@/api/tool/codegen'
 import { type DictTypeSelectorVo, reqGetDictTypeSelectorList } from '@/api/tool/dict'
 import useSettingStore from '@/stores/setting'
+import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
 
 const {
   codegenConfig: { jsTypeList, javaTypeList, htmlTypeList, selectConditionList }
@@ -99,6 +100,9 @@ defineExpose({
         <el-tab-pane label="基础信息" name="basicInfo">
           <el-form-item label="数据源名称" prop="table.dataSource">
             <el-input v-model="formData.table.dataSource" disabled> </el-input>
+          </el-form-item>
+          <el-form-item label="上级菜单" prop="table.parentMenuId">
+            <MenuTreeSelect v-model="formData.table.parentMenuId" />
           </el-form-item>
           <el-form-item label="表名称" prop="table.tableName">
             <el-input v-model="formData.table.tableName" placeholder="请输入表名称"> </el-input>

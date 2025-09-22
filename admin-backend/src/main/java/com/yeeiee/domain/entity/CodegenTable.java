@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-09-16
+ * @since 2025-09-22
  */
 @Getter
 @Setter
@@ -35,6 +35,10 @@ public class CodegenTable {
     @Schema(description = "数据源配置的编号")
     @TableField(value = "data_source_id")
     private Long dataSourceId;
+
+    @Schema(description = "上级菜单编号")
+    @TableField(value = "parent_menu_id")
+    private Long parentMenuId;
 
     @Schema(description = "表名称")
     @TableField(value = "table_name")

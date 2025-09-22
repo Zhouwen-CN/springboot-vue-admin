@@ -150,6 +150,7 @@ drop table if exists t_codegen_table;
 create table t_codegen_table  (
   id bigint primary key auto_increment comment '主键',
   data_source_id bigint not null comment '数据源配置的编号',
+  parent_menu_id bigint not null comment '上级菜单编号',
   table_name varchar(50) not null comment '表名称',
   table_comment varchar(100) not null comment '表描述',
   class_name varchar(100) not null comment '类名称',

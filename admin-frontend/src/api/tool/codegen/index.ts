@@ -19,6 +19,7 @@ export function reqGetCodegenTableSelectorList(dataSourceId: number) {
 // 代码生成表单提交
 export interface CodegenTableImportForm {
   dataSourceId?: number
+  parentMenuId: number
   author: string
   ignoreTablePrefix?: string
   ignoreColumnPrefix?: string
@@ -33,6 +34,7 @@ export function reqImportCodegenTable(CodegenTableImportForm: CodegenTableImport
 export interface CodegenTableVo extends BaseVo {
   id: number
   dataSource: string
+  parentMenuId: number
   tableName: string
   tableComment: string
   className: string

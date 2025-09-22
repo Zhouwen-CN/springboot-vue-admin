@@ -25,6 +25,9 @@ public class CodegenTableVo {
     @Schema(description = "数据源名称")
     private String dataSource;
 
+    @Schema(description = "上级菜单编号")
+    private Long parentMenuId;
+
     @Schema(description = "表名称")
     private String tableName;
 

@@ -15,6 +15,7 @@ import {
 } from '@/api/tool/codegen'
 import useSettingStore from '@/stores/setting'
 import CodegenEditTable from './components/CodegenEditTable.vue'
+import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
 
 const { codegenConfig } = useSettingStore()
 
@@ -51,6 +52,7 @@ function searchByKeyword() {
 // 代码生成导入-表单提交对象
 const codegenTableImportForm = reactive<CodegenTableImportForm>({
   dataSourceId: undefined,
+  parentMenuId: 0,
   author: codegenConfig.author,
   ignoreTablePrefix: codegenConfig.ignoreTablePrefix,
   ignoreColumnPrefix: codegenConfig.ignoreColumnPrefix,
@@ -251,6 +253,9 @@ onMounted(() => {
           style="padding: 0 20px"
           @submit.prevent="onSubmit(formRef)"
         >
+          <el-form-item label="上级菜单" prop="parentMenuId">
+            <MenuTreeSelect v-model="codegenTableImportForm.parentMenuId" />
+          </el-form-item>
           <el-form-item label="作者" prop="author">
             <el-input v-model="codegenTableImportForm.author" placeholder="作者"></el-input>
           </el-form-item>

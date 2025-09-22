@@ -28,6 +28,10 @@ public class CodegenTableImportForm {
     @Schema(description = "数据源配置的编号")
     private Long dataSourceId;
 
+    @NotNull
+    @Schema(description = "上级菜单编号")
+    private Long parentMenuId;
+
     @NotBlank
     @Length(max = 20)
     @Schema(description = "作者")

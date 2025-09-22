@@ -6,6 +6,7 @@ import type { MenuVo } from '@/api/auth/menu'
 import { type MenuForm, reqDeleteMenu, reqSaveMenu } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type PopoverInstance } from 'element-plus'
 import useDict from '@/hooks/useDictionary'
+import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
 
 const userStore = useUserStore()
 
@@ -95,21 +96,6 @@ async function onSubmit(formEl: FormInstance | undefined) {
   }
 }
 
-// 树形选择器
-const menuInfo = computed(() => {
-  return [
-    {
-      id: 0,
-      title: '主类目',
-      accessPath: '',
-      icon: '',
-      keepAlive: false,
-      pid: 0,
-      children: userStore.menuInfo.filter((menu) => menu.title !== '首页')
-    }
-  ]
-})
-
 // 打开对话框前的清理操作
 function clean() {
   toggleDialog.title = ''
@@ -133,9 +119,9 @@ const iconPopoverRef = ref<PopoverInstance>()
 const elementIcons = ref<string[]>(Object.keys(ElementPlusIconsVue))
 // 筛选图标
 const filteredIcons = computed(() => {
-  const trimed = searchIconKeyword.value.trim()
-  if (trimed) {
-    return elementIcons.value.filter((icon) => icon.toLowerCase().includes(trimed.toLowerCase()))
+  const keyword = searchIconKeyword.value.trim()
+  if (keyword) {
+    return elementIcons.value.filter((icon) => icon.toLowerCase().includes(keyword.toLowerCase()))
   } else {
     return elementIcons.value
   }
@@ -222,15 +208,7 @@ onMounted(() => {
           @submit.prevent="onSubmit(ruleFormRef)"
         >
           <el-form-item label="上级菜单" prop="pid">
-            <el-tree-select
-              v-model="menuForm.pid"
-              node-key="id"
-              :props="{ value: 'id', label: 'title', children: 'children' }"
-              :data="menuInfo"
-              :default-expanded-keys="[0]"
-              check-strictly
-              filterable
-            />
+            <MenuTreeSelect v-model="menuForm.pid" />
           </el-form-item>
           <el-form-item label="菜单名称" prop="title">
             <el-input v-model="menuForm.title" placeholder="菜单名称"></el-input>
@@ -245,7 +223,11 @@ onMounted(() => {
               />
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="访问路径" prop="accessPath">
+          <el-form-item
+            v-tip="`访问路径 + /index.vue = 文件路径`"
+            label="访问路径"
+            prop="accessPath"
+          >
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">

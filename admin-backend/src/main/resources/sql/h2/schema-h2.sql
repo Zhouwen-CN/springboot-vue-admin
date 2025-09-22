@@ -317,6 +317,7 @@ INCREMENT BY 1;
 create table t_codegen_table(
   id NUMBER(18) primary key,
   data_source_id NUMBER(18) not null,
+  parent_menu_id NUMBER(18) not null,
   table_name varchar2(50) not null,
   table_comment varchar2(100) not null,
   class_name varchar2(100) not null,
@@ -334,6 +335,7 @@ create table t_codegen_table(
 COMMENT ON TABLE t_codegen_table IS '代码生成表';
 COMMENT ON COLUMN t_codegen_table.id IS '主键';
 COMMENT ON COLUMN t_codegen_table.data_source_id IS '数据源配置编号';
+COMMENT ON COLUMN t_codegen_table.parent_menu_id IS '上级菜单编号';
 COMMENT ON COLUMN t_codegen_table.table_name IS '表名称';
 COMMENT ON COLUMN t_codegen_table.table_comment IS '表描述';
 COMMENT ON COLUMN t_codegen_table.class_name IS '类名称';

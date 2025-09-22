@@ -122,6 +122,7 @@ public final class CodegenUtil {
     public static CodegenTable toCodegenTable(TableInfo tableInfo, CodegenTableImportForm codegenTableImportForm) {
         val codegenTable = new CodegenTable();
         codegenTable.setDataSourceId(codegenTableImportForm.getDataSourceId());
+        codegenTable.setParentMenuId(codegenTableImportForm.getParentMenuId());
         codegenTable.setTableName(tableInfo.getName());
         codegenTable.setTableComment(tableInfo.getComment());
         val entityName = tableInfo.getEntityName();

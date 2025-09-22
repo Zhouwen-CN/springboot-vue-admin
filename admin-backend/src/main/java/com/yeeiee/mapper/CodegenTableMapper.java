@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
  * </p>
  *
  * @author chen
- * @since 2025-09-16
+ * @since 2025-09-22
  */
 public interface CodegenTableMapper extends BaseMapper<CodegenTable> {
 
