@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -115,14 +114,6 @@ public class ${table.className}Controller {
         val page = ${pageLambdaQuery}
                 .page(Page.of(current, size));
         return R.ok(PageVo.fromPage(page, ${table.className}Vo.class));
-    }
-
-    @Operation(summary = "列表查询")
-    @GetMapping
-    public R<List<${table.className}Vo>> getList() {
-        val list = ${serviceName}.list();
-        val voList = BeanUtil.toBean(list, ${table.className}Vo.class);
-        return R.ok(voList);
     }
 
     @Operation(summary = "按照id查询")

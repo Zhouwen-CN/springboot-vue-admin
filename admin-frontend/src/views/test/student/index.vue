@@ -1,22 +1,16 @@
-<#--@formatter:off-->
 <script lang="ts" setup>
 import { Search, Plus, Delete, Edit } from '@element-plus/icons-vue'
-import { reqGetPage, reqRemoveById, reqRemoveByIds, type ${table.className}Vo } from '@/api${package.jsBasePackage}'
-import ${table.className}Form from './components/${table.className}Form.vue'
-<#-- 字典列表 -->
-<#assign dictList = columns?filter(column -> column.dictTypeId??)>
-<#if (dictList!?size > 0)>
+import { reqGetPage, reqRemoveById, reqRemoveByIds, type StudentTestVo } from '@/api/test/student'
+import StudentTestForm from './components/StudentTestForm.vue'
 import useDict from '@/hooks/useDictionary'
-</#if>
 
 // 表单对话框
-const formDialog = ref<InstanceType<typeof ${table.className}Form>>()
+const formDialog = ref<InstanceType<typeof StudentTestForm>>()
 
 // 分页查询参数
 const pageParams = reactive({
-<#list columns?filter(column -> column.selectConditionField) as column>
-  ${column.javaField}: undefined,
-</#list>
+  name: undefined,
+  gender: undefined,
 })
 
 // 分页
@@ -33,11 +27,7 @@ const {
 } = reqGetPage()
 
 // 字典(可能没有，也可能有多个)
-<#if (dictList!?size > 0)>
-<#list dictList as dict>
-const { dictData: ${dict.javaField}DictData, dictMap: ${dict.javaField}DictMap, run:${dict.javaField}DictRun } = useDict(${dict.dictTypeId})
-</#list>
-</#if>
+const { dictData: genderDictData, dictMap: genderDictMap, run:genderDictRun } = useDict(2)
 
 // 分页搜索
 function pageSearch() {
@@ -51,11 +41,9 @@ async function remove(id: number) {
 }
 
 // 批量删除
-<#-- 获取主键 -->
-<#assign primaryKey= columns?filter(column -> column.primaryKey)?first>
 const deleteIds = ref<number[]>([])
-function handleSelectionChange(voList: ${table.className}Vo[]) {
-  deleteIds.value = voList.map((voList) => voList.${primaryKey.javaField})
+function handleSelectionChange(voList: StudentTestVo[]) {
+  deleteIds.value = voList.map((voList) => voList.id)
 }
 async function removeBatch() {
   await reqRemoveByIds(deleteIds.value)
@@ -64,65 +52,34 @@ async function removeBatch() {
 
 onMounted(() => {
   refresh({ params: { ...pageParams } })
-<#if (dictList!?size > 0)>
-<#list dictList as dict>
-  ${dict.javaField}DictRun()
-</#list>
-</#if>
+  genderDictRun()
 })
 </script>
 
-<#--TODO: 待补全html类型-->
-<#function getHtmlByType column variableName>
-  <#-- 字典 -->
-  <#if column.dictTypeId??>
-    <#return '<el-select
-            v-model="${variableName}.${column.javaField}"
-            clearable
-            placeholder="请选择"
-            style="width: 120px"
-          >
-            <el-option
-              v-for="item in ${column.javaField}DictData"
-              :key="item.data"
-              :label="item.label"
-              :value="item.data"
-            >
-              </el-option>
-            </el-select>'>
-  <#-- 时间选择器 -->
-  <#elseif column.javaType='LocalDateTime' && column.htmlType='datetime'>
-    <#return '<el-date-picker
-            v-model="${variableName}.${column.javaField}"
-            type="datetime"
-            format="YYYY-MM-DD HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            clearable
-            placeholder="${column.columnComment}"
-          />'>
-  <#-- 文本域 -->
-  <#elseif column.javaType='String' && column.htmlType='textarea'>
-    <#return '<el-input
-            v-model="${variableName}.${column.javaField}"
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            placeholder="${column.columnComment}"
-          />'>
-  <#-- 默认input -->
-  <#else>
-    <#return '<el-input v-model="${variableName}.${column.javaField}" clearable placeholder="${column.columnComment}" />'>
-  </#if>
-</#function>
 <template>
   <div>
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline label-width="auto" @submit.prevent="pageSearch()">
-    <#list columns?filter(column -> column.selectConditionField) as column>
-        <el-form-item label="${column.columnComment}">
-          ${getHtmlByType(column, 'pageParams')}
+        <el-form-item label="名称">
+          <el-input v-model="pageParams.name" clearable placeholder="名称" />
         </el-form-item>
-    </#list>
+        <el-form-item label="性别">
+          <el-select
+            v-model="pageParams.gender"
+            clearable
+            placeholder="请选择"
+            style="width: 120px"
+          >
+            <el-option
+              v-for="item in genderDictData"
+              :key="item.data"
+              :label="item.label"
+              :value="item.data"
+            >
+              </el-option>
+            </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
             >搜索
@@ -153,19 +110,19 @@ onMounted(() => {
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="45" />
-    <#list columns?filter(column -> column.selectResultField) as column>
-      <#if column.dictTypeId??>
-        <el-table-column label="${column.columnComment}" prop="${column.javaField}">
-          <template #default="{ row }: { row: ${table.className}Vo }">
-            {{ ${column.javaField}DictMap.get(row.${column.javaField}) }}
+        <el-table-column label="主键" prop="id"></el-table-column>
+        <el-table-column label="名称" prop="name"></el-table-column>
+        <el-table-column label="性别" prop="gender">
+          <template #default="{ row }: { row: StudentTestVo }">
+            {{ genderDictMap.get(row.gender) }}
           </template>
         </el-table-column>
-      <#else>
-        <el-table-column label="${column.columnComment}" prop="${column.javaField}"></el-table-column>
-      </#if>
-    </#list>
+        <el-table-column label="生日" prop="birthday"></el-table-column>
+        <el-table-column label="简介" prop="intro"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime"></el-table-column>
+        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
-          <template #default="{ row }: { row: ${table.className}Vo }">
+          <template #default="{ row }: { row: StudentTestVo }">
             <el-button-group>
               <el-button
                 :icon="Edit"
@@ -196,14 +153,11 @@ onMounted(() => {
       />
     </el-card>
 
-    <#-- form对话框 -->
-    <${table.className}Form
+    <StudentTestForm
       ref="formDialog"
       @refresh="refresh({ params: { ...pageParams } })"
-    <#list dictList as dict>
-      :${dict.javaField}DictData="${dict.javaField}DictData"
-    </#list>
-    ></${table.className}Form>
+      :genderDictData="genderDictData"
+    ></StudentTestForm>
   </div>
 </template>
 

@@ -12,7 +12,6 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -64,7 +64,7 @@ public class FreemarkerEngineService implements InitializingBean {
                 .eq(CodegenTable::getId, tableId)
                 .one();
 
-        if(table == null){
+        if (table == null) {
             throw new CodegenFailedException("代码生成表不存在");
         }
 
@@ -98,7 +98,7 @@ public class FreemarkerEngineService implements InitializingBean {
         for (JsTemplate value : jsTemplates) {
             val ftlPath = value.getFtlPath();
             val content = this.render(ftlPath, bindingMap);
-            val filePath = value.getFilePath(jsBasePackage);
+            val filePath = value.getFilePath(jsBasePackage, table.getClassName());
             result.put(filePath, content);
         }
 
@@ -107,6 +107,7 @@ public class FreemarkerEngineService implements InitializingBean {
 
     /**
      * 获取js基础包名
+     *
      * @param parentMenuId 父级菜单id
      * @param businessName 业务名
      * @return js基础包名
@@ -183,25 +184,15 @@ public class FreemarkerEngineService implements InitializingBean {
      * js模板，获取模板文件地址和生成文件地址（枚举名称为模板前缀）
      */
     public enum JsTemplate {
-        index(jsBasePackage -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/index.vue"),
-        form(jsBasePackage -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/components/" + getComponentName(jsBasePackage)),
-        api(jsBasePackage -> packageConfig.jsFilePath + "/api" + jsBasePackage + "/index.ts");
+        index((jsBasePackage, className) -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/index.vue"),
+        form((jsBasePackage, className) -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/components/" + className + "Form.vue"),
+        api((jsBasePackage, className) -> packageConfig.jsFilePath + "/api" + jsBasePackage + "/index.ts");
 
         private static final String TEMPLATE_PATH_PREFIX = "js";
-        private final Function<String, String> func;
+        private final BiFunction<String, String, String> func;
 
-        JsTemplate(Function<String, String> func) {
+        JsTemplate(BiFunction<String, String, String> func) {
             this.func = func;
-        }
-
-        /**
-         * 获取form组件名称
-         * @param jsBasePackage js基础包名
-         * @return form组件名称
-         */
-        private static String getComponentName(String jsBasePackage) {
-            val split = jsBasePackage.split("/");
-            return StringUtils.capitalize(split[split.length - 1]) + "Form.vue";
         }
 
         private String getFtlPath() {
@@ -211,8 +202,8 @@ public class FreemarkerEngineService implements InitializingBean {
             return TEMPLATE_PATH_PREFIX + "/" + name() + ".vue.ftl";
         }
 
-        private String getFilePath(String jsBasePackage) {
-            return func.apply(jsBasePackage);
+        private String getFilePath(String jsBasePackage, String className) {
+            return func.apply(jsBasePackage, className);
         }
     }
 
