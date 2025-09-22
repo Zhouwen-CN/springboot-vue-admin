@@ -152,7 +152,7 @@ onMounted(() => {
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
+        <el-table-column type="selection" width="45px" />
     <#list columns?filter(column -> column.selectResultField) as column>
       <#if column.dictTypeId??>
         <el-table-column label="${column.columnComment}" prop="${column.javaField}">

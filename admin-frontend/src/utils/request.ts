@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosRequestConfig } from 'axios'
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import type { ResultData } from '@/utils/requestTypes'
@@ -60,6 +60,11 @@ class Request {
         if (data.code && data.code !== 200) {
           this.alterMessage(data.code, data.message)
           return Promise.reject(data.message)
+        }
+
+        // 如果是文件下载，直接返回response，因为需要从请求头中获取文件名
+        if (response.headers['content-disposition']) {
+          return response
         }
 
         return data
@@ -138,6 +143,21 @@ class Request {
    */
   public request<T, D>(config: AxiosRequestConfig<D>): Promise<ResultData<T>> {
     return this.instance.request(config)
+  }
+
+  /**
+   * 文件下载，默认get，可以通过请求配置修改
+   * @param url 请求地址
+   * @param config 请求配置
+   * @returns
+   */
+  public download(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<Blob>> {
+    return this.instance.request({
+      url,
+      method: 'get',
+      responseType: 'blob',
+      ...config
+    })
   }
 
   /**

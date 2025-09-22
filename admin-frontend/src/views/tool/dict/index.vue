@@ -163,7 +163,7 @@ onMounted(() => {
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
+        <el-table-column type="selection" width="45px" />
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="字典类型" prop="dictType">
           <template #default="{ row }: { row: DictTypeVo }">

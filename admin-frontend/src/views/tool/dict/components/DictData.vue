@@ -174,10 +174,10 @@ defineExpose({
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
-        <el-table-column label="标签键" min-width="40px" prop="label"> </el-table-column>
-        <el-table-column label="标签值" min-width="40px" prop="data"></el-table-column>
-        <el-table-column label="排序" min-width="40px" prop="sortId"></el-table-column>
+        <el-table-column type="selection" width="45px" />
+        <el-table-column label="标签键" prop="label"> </el-table-column>
+        <el-table-column label="标签值" prop="data"></el-table-column>
+        <el-table-column label="排序" prop="sortId"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
           <template #default="{ row }: { row: DictDataVo }">

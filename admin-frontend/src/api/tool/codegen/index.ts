@@ -99,3 +99,8 @@ export interface CodegenTableForm {
 export function reqUpdateCodegenTable(CodegenTableForm: CodegenTableForm) {
   return request.put<void, CodegenTableForm>(`/codegen`, CodegenTableForm)
 }
+
+// 下载生成代码
+export function reqDownloadCodegen(id: number) {
+  return request.download(`/codegen/download/${id}`)
+}

@@ -10,7 +10,7 @@ const formDialog = ref<InstanceType<typeof StudentTestForm>>()
 // 分页查询参数
 const pageParams = reactive({
   name: undefined,
-  gender: undefined,
+  gender: undefined
 })
 
 // 分页
@@ -27,7 +27,7 @@ const {
 } = reqGetPage()
 
 // 字典(可能没有，也可能有多个)
-const { dictData: genderDictData, dictMap: genderDictMap, run:genderDictRun } = useDict(2)
+const { dictData: genderDictData, dictMap: genderDictMap, run: genderDictRun } = useDict(2)
 
 // 分页搜索
 function pageSearch() {
@@ -77,8 +77,8 @@ onMounted(() => {
               :label="item.label"
               :value="item.data"
             >
-              </el-option>
-            </el-select>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
@@ -109,7 +109,7 @@ onMounted(() => {
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
+        <el-table-column type="selection" width="45px" />
         <el-table-column label="主键" prop="id"></el-table-column>
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="性别" prop="gender">

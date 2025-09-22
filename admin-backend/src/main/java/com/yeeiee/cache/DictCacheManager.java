@@ -44,6 +44,7 @@ public class DictCacheManager {
                         DictData::getData
                 )
                 .eq(DictData::getTypeId, typeId)
+                .orderByAsc(DictData::getSortId)
                 .list();
         return BeanUtil.toBean(list, DictDataSelectorVo.class);
     }

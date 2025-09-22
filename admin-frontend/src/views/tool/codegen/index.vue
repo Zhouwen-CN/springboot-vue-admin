@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Delete, Download, Edit, Refresh, Search } from '@element-plus/icons-vue'
+import { Aim, Delete, Download, Edit, Refresh, Search, View } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { type DataSourceSelectorVo, reqGetDataSourceSelectorList } from '@/api/tool/datasource'
 import {
@@ -11,11 +11,13 @@ import {
   reqImportCodegenTable,
   reqRemoveCodegenTableById,
   reqRemoveCodegenTableByIds,
-  reqSyncCodegenColumnList
+  reqSyncCodegenColumnList,
+  reqDownloadCodegen
 } from '@/api/tool/codegen'
 import useSettingStore from '@/stores/setting'
 import CodegenEditTable from './components/CodegenEditTable.vue'
 import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
+import type { AxiosResponse } from 'axios'
 
 const { codegenConfig } = useSettingStore()
 
@@ -61,12 +63,19 @@ const codegenTableImportForm = reactive<CodegenTableImportForm>({
 
 // 导入表
 async function importCodegenTable() {
-  if (codegenTableImportForm.dataSourceId) {
-    const result = await reqGetCodegenTableSelectorList(codegenTableImportForm.dataSourceId)
-    codegenTableSelectorList.value = result.data
-    toggleDialog.value = true
-  } else {
-    ElMessage.warning('请选择数据源')
+  saveLoading.value = true
+  try {
+    if (codegenTableImportForm.dataSourceId) {
+      const result = await reqGetCodegenTableSelectorList(codegenTableImportForm.dataSourceId)
+      codegenTableSelectorList.value = result.data
+      toggleDialog.value = true
+    } else {
+      ElMessage.warning('请选择数据源')
+    }
+  } catch (error) {
+    // do nothing
+  } finally {
+    saveLoading.value = false
   }
 }
 
@@ -106,11 +115,9 @@ async function deleteCodegenTableById(id: number) {
 
 // 批量删除代码生成表
 const deleteIds = ref<number[]>([])
-
 function handleSelectionChange(dataSourceList: CodegenTableVo[]) {
   deleteIds.value = dataSourceList.map((dataSource) => dataSource.id)
 }
-
 async function deleteCodegenTableByIds() {
   await reqRemoveCodegenTableByIds(deleteIds.value)
   refresh({ params: { keyword: keyword.value } })
@@ -121,6 +128,43 @@ async function deleteCodegenTableByIds() {
 const codegenEditTableRef = ref<InstanceType<typeof CodegenEditTable>>()
 function updateCodegenTable(row: CodegenTableVo) {
   codegenEditTableRef?.value?.showDrawer(row)
+}
+
+// 下载生成代码
+async function downloadCodegen(id: number) {
+  try {
+    let link = document.createElement('a')
+    const response = await reqDownloadCodegen(id)
+    const fileName = getFileNameFormResponse('codegen.zip', response)
+    const url = URL.createObjectURL(response.data)
+    link.href = url
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    // 释放
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  } catch (error) {
+    ElMessage.error('下载失败')
+  }
+  ElMessage.success('操作成功')
+}
+
+// 工具方法：从响应中获取文件名
+function getFileNameFormResponse(defaultName: string, response: AxiosResponse) {
+  let fileName = defaultName
+  const contentDisposition = response.headers['content-disposition']
+  if (contentDisposition && contentDisposition.includes('filename=')) {
+    const matches = contentDisposition.match(/filename="?(.+)"?/) // 正则匹配文件名
+    if (matches.length > 1) {
+      fileName = matches[1]
+    }
+  }
+  return fileName
+}
+
+function previewCodegen(id: number) {
+  ElMessage.success('操作成功')
 }
 
 // 同步代码生成表字段
@@ -179,7 +223,9 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button :icon="Download" native-type="submit" type="primary">导入 </el-button>
+          <el-button :loading="saveLoading" :icon="Aim" native-type="submit" type="primary"
+            >导入
+          </el-button>
         </el-form-item>
         <el-form-item>
           <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
@@ -200,19 +246,19 @@ onMounted(() => {
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
+        <el-table-column type="selection" width="45px" />
         <el-table-column label="ID" prop="id"></el-table-column>
-
         <el-table-column label="数据源名称" prop="dataSource"></el-table-column>
         <el-table-column label="表名称" prop="tableName"></el-table-column>
         <el-table-column label="表描述" prop="tableComment"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" min-width="150px">
           <template #default="{ row }: { row: CodegenTableVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>
-
+              <el-button :icon="View" type="success" @click="previewCodegen(row.id)"> </el-button>
+              <el-button :icon="Download" type="info" @click="downloadCodegen(row.id)"> </el-button>
               <el-popconfirm title="是否重新同步？" @confirm="syncCodegenColumnList(row.id)">
                 <template #reference>
                   <el-button :icon="Refresh" type="warning"></el-button>

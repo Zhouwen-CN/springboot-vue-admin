@@ -11,7 +11,7 @@ defineProps({
   genderDictData: {
     type: Array as () => DictDataSelectorVo[],
     default: () => []
-  },
+  }
 })
 
 // 对话框切换
@@ -26,7 +26,7 @@ const form = reactive<StudentTestForm>({
   name: undefined,
   gender: undefined,
   birthday: undefined,
-  intro: undefined,
+  intro: undefined
 })
 
 // 保存按钮加载中
@@ -39,16 +39,12 @@ const rules = reactive<FormRules<typeof form>>({
     { required: true, message: '名称不能为空', trigger: 'blur' },
     { max: 20, message: '名称长度不能大于20', trigger: 'blur' }
   ],
-  gender: [
-    { required: true, message: '性别不能为空', trigger: 'blur' },
-  ],
-  birthday: [
-    { required: true, message: '生日不能为空', trigger: 'blur' },
-  ],
+  gender: [{ required: true, message: '性别不能为空', trigger: 'blur' }],
+  birthday: [{ required: true, message: '生日不能为空', trigger: 'blur' }],
   intro: [
     { required: true, message: '简介不能为空', trigger: 'blur' },
     { max: 65535, message: '简介长度不能大于65535', trigger: 'blur' }
-  ],
+  ]
 })
 
 // 表单提交
@@ -118,20 +114,15 @@ defineExpose({
           <el-input v-model="form.name" clearable placeholder="名称" />
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select
-            v-model="form.gender"
-            clearable
-            placeholder="请选择"
-            style="width: 120px"
-          >
+          <el-select v-model="form.gender" clearable placeholder="请选择" style="width: 120px">
             <el-option
               v-for="item in genderDictData"
               :key="item.data"
               :label="item.label"
               :value="item.data"
             >
-              </el-option>
-            </el-select>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="生日" prop="birthday">
           <el-date-picker

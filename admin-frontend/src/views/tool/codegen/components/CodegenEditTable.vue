@@ -183,12 +183,12 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="新增" min-width="40px" prop="insertField">
+            <el-table-column label="新增" prop="insertField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.insertField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="编辑" min-width="40px" prop="updateField">
+            <el-table-column label="编辑" prop="updateField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.updateField" false-value="false" true-value="true" />
               </template>
@@ -205,7 +205,7 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="列表" min-width="40px" prop="selectResultField">
+            <el-table-column label="列表" prop="selectResultField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectResultField"
@@ -214,7 +214,7 @@ defineExpose({
                 />
               </template>
             </el-table-column>
-            <el-table-column label="查询" min-width="40px" prop="selectConditionField">
+            <el-table-column label="查询" prop="selectConditionField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectConditionField"

@@ -169,7 +169,7 @@ onMounted(() => {
             {{ row.children.length > 0 ? '' : `${row.accessPath}/index.vue` }}
           </template>
         </el-table-column>
-        <el-table-column align="center" label="是否缓存" min-width="40px" prop="keepAlive">
+        <el-table-column label="是否缓存" prop="keepAlive">
           <template #default="{ row }: { row: MenuVo }">
             <el-switch
               v-model="row.keepAlive"

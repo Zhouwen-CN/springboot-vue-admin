@@ -205,7 +205,7 @@ onMounted(() => {
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" />
+        <el-table-column type="selection" width="45px" />
         <el-table-column label="ID" prop="id"></el-table-column>
         <el-table-column label="角色名称" prop="roleName"></el-table-column>
         <el-table-column label="说明" prop="description"></el-table-column>

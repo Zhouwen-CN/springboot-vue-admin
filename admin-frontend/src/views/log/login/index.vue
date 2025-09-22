@@ -67,7 +67,7 @@ onMounted(() => {
       <el-table :border="true" :data="data" show-overflow-tooltip>
         <el-table-column label="用户名称" prop="createUser"></el-table-column>
         <el-table-column label="操作类型" prop="operation"></el-table-column>
-        <el-table-column label="操作状态" min-width="40px" prop="status"></el-table-column>
+        <el-table-column label="操作状态" prop="status"></el-table-column>
         <el-table-column label="ip地址" prop="ip"></el-table-column>
         <el-table-column label="用户代理" prop="userAgent"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>

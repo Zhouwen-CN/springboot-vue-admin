@@ -103,7 +103,6 @@ public class DictDataController {
     @Operation(summary = "根据类型id获取字典列表")
     @GetMapping("/{typeId}")
     public R<List<DictDataSelectorVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
-
         val list = dictCacheManager.getDictByTypeId(typeId);
         return R.ok(list);
     }
