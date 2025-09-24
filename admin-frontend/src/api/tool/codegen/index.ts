@@ -100,6 +100,16 @@ export function reqUpdateCodegenTable(CodegenTableForm: CodegenTableForm) {
   return request.put<void, CodegenTableForm>(`/codegen`, CodegenTableForm)
 }
 
+export interface CodegenPreviewVo {
+  filePath: string
+  content: string
+}
+
+// 代码生成预览
+export function reqGetCodegenPreview(id: number) {
+  return request.get<CodegenPreviewVo[]>(`/codegen/preview/${id}`)
+}
+
 // 下载生成代码
 export function reqDownloadCodegen(id: number) {
   return request.download(`/codegen/download/${id}`)

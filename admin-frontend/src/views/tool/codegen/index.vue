@@ -16,6 +16,7 @@ import {
 } from '@/api/tool/codegen'
 import useSettingStore from '@/stores/setting'
 import CodegenEditTable from './components/CodegenEditTable.vue'
+import CodegenPreview from './components/CodegenPreview.vue'
 import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
 import type { AxiosResponse } from 'axios'
 
@@ -163,8 +164,10 @@ function getFileNameFormResponse(defaultName: string, response: AxiosResponse) {
   return fileName
 }
 
+// 代码生成预览
+const codegenPreviewRef = ref<InstanceType<typeof CodegenPreview>>()
 function previewCodegen(id: number) {
-  ElMessage.success('操作成功')
+  codegenPreviewRef.value?.openDialog(id)
 }
 
 // 同步代码生成表字段
@@ -345,7 +348,10 @@ onMounted(() => {
     </el-dialog>
 
     <!-- 代码生成编辑-抽屉 -->
-    <codegen-edit-table ref="codegenEditTableRef"></codegen-edit-table>
+    <CodegenEditTable ref="codegenEditTableRef"></CodegenEditTable>
+
+    <!-- 代码生成预览-对话框 -->
+    <CodegenPreview ref="codegenPreviewRef"></CodegenPreview>
   </div>
 </template>
 

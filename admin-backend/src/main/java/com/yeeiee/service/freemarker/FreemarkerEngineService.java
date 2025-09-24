@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -85,7 +86,8 @@ public class FreemarkerEngineService implements InitializingBean {
 
         // java
         val javaTemplates = JavaTemplate.values();
-        val result = new HashMap<String, String>();
+        // 有序
+        val result = new LinkedHashMap<String, String>();
         for (JavaTemplate value : javaTemplates) {
             val ftlPath = value.getFtlPath();
             val content = this.render(ftlPath, bindingMap);
