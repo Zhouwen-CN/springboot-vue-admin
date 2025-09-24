@@ -322,7 +322,7 @@ create table t_codegen_table(
   table_comment varchar2(100) not null,
   class_name varchar2(100) not null,
   author varchar2(20) not null,
-  base_package varchar2(50) not null,
+  business_name varchar2(50) not null,
   ignore_table_prefix varchar2(20) default null,
   ignore_column_prefix varchar2(20) default null,
   create_user varchar2(15) default null,
@@ -340,7 +340,7 @@ COMMENT ON COLUMN t_codegen_table.table_name IS '表名称';
 COMMENT ON COLUMN t_codegen_table.table_comment IS '表描述';
 COMMENT ON COLUMN t_codegen_table.class_name IS '类名称';
 COMMENT ON COLUMN t_codegen_table.author IS '作者';
-COMMENT ON COLUMN t_codegen_table.base_package IS '基础包名';
+COMMENT ON COLUMN t_codegen_table.business_name IS '业务名称';
 COMMENT ON COLUMN t_codegen_table.ignore_table_prefix IS '忽略表前缀';
 COMMENT ON COLUMN t_codegen_table.ignore_column_prefix IS '忽略字段前缀';
 COMMENT ON COLUMN t_codegen_table.create_user IS '创建者';
@@ -365,7 +365,7 @@ create table t_codegen_column(
   js_type varchar2(20) not null,
   html_type varchar2(20) not null,
   sort_id NUMBER(9) not null,
-  dict_type_id number(18) not null,
+  dict_type_id number(18) default null,
   select_condition varchar2(20) default null,
   primary_key number(1) not null,
   nullable number(1) not null,

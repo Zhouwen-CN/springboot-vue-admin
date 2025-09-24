@@ -37,7 +37,7 @@ const vCopy: Directive<HTMLElement, string> = {
     // @ts-ignore
     el._copyHandler = copyHandler
   },
-  beforeUpdate(el) {
+  beforeUnmount(el) {
     // 移除事件监听，避免内存泄漏
     // @ts-ignore
     const copyHandler = el._copyHandler

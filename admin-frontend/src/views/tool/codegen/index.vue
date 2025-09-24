@@ -214,32 +214,31 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
-      <el-form inline label-width="auto" @submit.prevent="importCodegenTable">
-        <el-form-item label="数据源" prop="dataSourceId">
-          <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
-            <el-option
-              v-for="(item, index) in dataSourceSelectorList"
-              :key="index"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button :loading="saveLoading" :icon="Aim" native-type="submit" type="primary"
-            >导入
-          </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
-            <template #reference>
-              <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
-                >批量删除
-              </el-button>
-            </template>
-          </el-popconfirm>
-        </el-form-item>
-      </el-form>
+      <div>
+        <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
+          <el-option
+            v-for="(item, index) in dataSourceSelectorList"
+            :key="index"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-button
+          style="margin-left: 12px"
+          :loading="saveLoading"
+          :icon="Aim"
+          type="primary"
+          @click="importCodegenTable"
+          >导入
+        </el-button>
+        <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
+          <template #reference>
+            <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
+              >批量删除
+            </el-button>
+          </template>
+        </el-popconfirm>
+      </div>
 
       <!-- 表格 -->
       <el-table

@@ -21,12 +21,12 @@ const pageParams = reactive({
 
 // 分页
 const {
-  loading: pageLoading,
+  loading,
   current,
   total,
   size,
   sizeOption,
-  data: pageData,
+  data,
   refresh,
   onPageChange,
   onSizeChange
@@ -124,7 +124,7 @@ onMounted(() => {
         </el-form-item>
     </#list>
         <el-form-item>
-          <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
+          <el-button :icon="Search" :loading="loading" native-type="submit" type="primary"
             >搜索
           </el-button>
         </el-form-item>
@@ -147,7 +147,7 @@ onMounted(() => {
       <!-- 表格 -->
       <el-table
         :border="true"
-        :data="pageData"
+        :data="data"
         show-overflow-tooltip
         style="margin-top: 16px"
         @selection-change="handleSelectionChange"
@@ -199,6 +199,7 @@ onMounted(() => {
     <#-- form对话框 -->
     <${table.className}Form
       ref="formDialog"
+      v-model:loading="loading"
       @refresh="refresh({ params: { ...pageParams } })"
     <#list dictList as dict>
       :${dict.javaField}DictData="${dict.javaField}DictData"

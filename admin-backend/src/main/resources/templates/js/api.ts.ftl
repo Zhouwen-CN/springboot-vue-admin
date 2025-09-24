@@ -4,7 +4,7 @@ import request from '@/utils/request'
 
 export interface ${table.className}Vo {
 <#list columns?filter(column -> column.selectResultField) as column>
-  ${column.columnName}: ${column.jsType}
+  ${column.javaField}: ${column.jsType}
 </#list>
 }
 
@@ -13,14 +13,9 @@ export function reqGetPage() {
   return usePagination<${table.className}Vo>('/${table.businessName}')
 }
 
-// 按照id查询
-export function reqGetById(id: number) {
-  return request.get<${table.className}Vo>('/${table.businessName}/' + id)
-}
-
 export interface ${table.className}Form {
 <#list columns?filter(column -> column.updateField) as column>
-  ${column.columnName}?: ${column.jsType}
+  ${column.javaField}?: ${column.jsType}
 </#list>
 }
 

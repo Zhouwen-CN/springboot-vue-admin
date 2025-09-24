@@ -34,7 +34,7 @@ export function getAsyncRoutes(
   menus: MenuVo[]
 ): RouteRecordSingleViewWithChildren[] {
   return menus.map((menu) => {
-    const componentName = 'sv' + menu.accessPath.replaceAll('/', '-')
+    const componentName = 'sv' + menu.accessPath.replace(/\//g, '-')
     // 默认 accessPath + /index.vue = filePath
     const filePath = `../views${menu.accessPath}/index.vue`
     let component = modules[filePath]

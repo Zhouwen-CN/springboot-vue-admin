@@ -6,18 +6,31 @@ import java from 'highlight.js/lib/languages/java'
 import xml from 'highlight.js/lib/languages/xml'
 import html from 'highlight.js/lib/languages/vbscript-html'
 import typescript from 'highlight.js/lib/languages/typescript'
+import type { TabsPaneContext, TreeInstance } from 'element-plus'
 
-// 树形结构对象
-interface CodegenPreviewTree {
+// 目录树形结构
+interface CongenDirTreeVo {
   id: string
   label: string
-  children: CodegenPreviewTree[]
+  parentId: string
+  children: CongenDirTreeVo[]
 }
 
+// 默认左边 splitterPanel 大小
+const defaultLeftPanelSize = 350
+const leftPanelSize = ref(defaultLeftPanelSize)
 // 切换对话框
 const toggleDialog = ref(false)
-// 代码预览列表
-const previewList = ref<CodegenPreviewVo[]>([])
+// 代码预览响应列表
+const codegenPreviewVoList = ref<CodegenPreviewVo[]>([])
+// 代码预览对象
+const preview = reactive<{
+  dirTree: CongenDirTreeVo[]
+  activeName: string
+}>({
+  dirTree: [],
+  activeName: ''
+})
 
 /**
  * 代码高亮
@@ -35,7 +48,88 @@ const highlightedCode = (item: CodegenPreviewVo) => {
 async function openDialog(id: number) {
   toggleDialog.value = true
   const result = await reqGetCodegenPreview(id)
-  previewList.value = result.data
+  const data = result.data
+  codegenPreviewVoList.value = data
+  // 默认选中 tab、tree
+  const activeName = data[0]?.filePath
+  preview.activeName = activeName
+  treeRef.value?.setCurrentKey(activeName)
+
+  const treeMap = getCongenDirTreeMap(data)
+  preview.dirTree = getCongenDirTreeVoList(treeMap)
+}
+
+/**
+ * 将 map 结构转换成目录树
+ * @param treeMap map
+ */
+function getCongenDirTreeVoList(treeMap: Map<string, CongenDirTreeVo>) {
+  const result: CongenDirTreeVo[] = []
+  const voList = treeMap.values()
+
+  for (const vo of voList) {
+    const parentId = vo.parentId
+    if (parentId === '/') {
+      result.push(vo)
+    }
+
+    const parent = treeMap.get(parentId)
+    if (parent) {
+      parent.children.push(vo)
+    }
+  }
+
+  return result
+}
+
+/**
+ * 将文件路径切割，并存入 map 中
+ * @param voList voList
+ */
+function getCongenDirTreeMap(voList: CodegenPreviewVo[]) {
+  const result: Map<string, CongenDirTreeVo> = new Map()
+
+  for (const item of voList) {
+    const filePath = item.filePath
+    const paths = filePath.split('/')
+    for (let i = 0; i < paths.length; i++) {
+      const path = paths[i]
+      let id = ''
+      if (i < paths.length - 1) {
+        id = paths.slice(0, i + 1).join('/')
+      } else {
+        id = filePath
+      }
+
+      if (result.has(id)) {
+        continue
+      }
+
+      const label = path
+      const parentId = i === 0 ? '/' : paths.slice(0, i).join('/')
+      result.set(id, { id, label, parentId, children: [] })
+    }
+  }
+  return result
+}
+
+// tree点击
+function nodeClickHandle(data: CongenDirTreeVo, node: any) {
+  if (node && !node.isLeaf) {
+    return
+  }
+  preview.activeName = data.id
+}
+
+// tab 点击
+const treeRef = ref<TreeInstance>()
+function tabClickHandler(context: TabsPaneContext) {
+  treeRef.value?.setCurrentKey(context.paneName)
+}
+
+// 恢复leftPanelSize默认值
+function colse() {
+  leftPanelSize.value = defaultLeftPanelSize
 }
 
 defineExpose({
@@ -58,42 +152,48 @@ onMounted(() => {
     width="80%"
     style="height: 80vh"
     top="10vh"
+    @close="colse"
   >
-    <el-row>
-      <el-col :span="8">
-        <el-card body-style="height: calc(80vh - 40px - 32px);">
-          <el-scrollbar>
-            <div style="height: 1000px">左边</div>
-          </el-scrollbar>
-        </el-card>
-      </el-col>
-      <el-col :span="16">
-        <el-card body-style="height: calc(80vh - 40px - 32px);">
-          <el-tabs>
-            <el-tab-pane
-              v-for="item in previewList"
-              :key="item.filePath"
-              :label="item.filePath.substring(item.filePath.lastIndexOf('/') + 1)"
+    <el-splitter style="height: calc(80vh - 40px - 32px)">
+      <el-splitter-panel v-model:size="leftPanelSize" :min="300">
+        <el-scrollbar>
+          <el-tree
+            ref="treeRef"
+            :data="preview.dirTree"
+            :expand-on-click-node="false"
+            default-expand-all
+            highlight-current
+            node-key="id"
+            @node-click="nodeClickHandle"
+          />
+        </el-scrollbar>
+      </el-splitter-panel>
+      <el-splitter-panel :min="600">
+        <el-tabs v-model="preview.activeName" @tab-click="tabClickHandler">
+          <el-tab-pane
+            v-for="item in codegenPreviewVoList"
+            :key="item.filePath"
+            :name="item.filePath"
+            :label="item.filePath.substring(item.filePath.lastIndexOf('/') + 1)"
+          >
+            <el-button v-copy="item.content" class="copy-btn" text bg type="primary">
+              复制</el-button
             >
-              <el-scrollbar class="scrollbar">
-                <pre><code v-html="highlightedCode(item)" class="hljs"></code></pre>
-              </el-scrollbar>
-            </el-tab-pane>
-          </el-tabs>
-        </el-card>
-      </el-col>
-    </el-row>
+            <el-scrollbar height="calc(80vh - 40px - 32px - 60px)">
+              <pre><code v-html="highlightedCode(item)" class="hljs"></code></pre>
+            </el-scrollbar>
+          </el-tab-pane>
+        </el-tabs>
+      </el-splitter-panel>
+    </el-splitter>
   </el-dialog>
 </template>
 
 <style lang="scss" scoped>
-/**
-  40px: 对话框头
-  32px: 对话框padding
-  40px: card padding
-  60px: tabs 头
-*/
-.scrollbar {
-  height: calc(80vh - 40px - 32px - 40px - 60px);
+.copy-btn {
+  position: absolute;
+  top: 0;
+  left: 90%;
+  z-index: 1;
 }
 </style>

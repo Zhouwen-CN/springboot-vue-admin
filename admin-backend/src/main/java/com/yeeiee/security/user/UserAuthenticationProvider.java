@@ -6,7 +6,6 @@ import com.yeeiee.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,16 +33,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         val username = (String) authentication.getPrincipal();
         val password = (String) authentication.getCredentials();
 
-        // 加载与 token 关联的用户（认证异常以外的异常需要手动处理，不然会抛到控制台）
-        User user;
-        try {
-            user = userService.getUserByUsername(username);
-        } catch (Exception e) {
-            val rootCauseMessage = ExceptionUtils.getRootCauseMessage(e);
-            log.error("User authentication provider exception by: " + rootCauseMessage);
-            throw new NamedAuthenticationException(username, rootCauseMessage);
-        }
-
+        // 加载与 token 关联的用户
+        User user = userService.getUserByUsername(username);
         if (user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())) {
             throw new NamedAuthenticationException(username, "用户名或密码错误");
         }

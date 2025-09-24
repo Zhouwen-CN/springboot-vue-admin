@@ -17,7 +17,7 @@ defineProps({
   <#list dictList as dict>
   ${dict.javaField}DictData: {
     type: Array as () => DictDataSelectorVo[],
-    default: () => []
+    required: true
   },
 </#list>
 })
@@ -36,9 +36,6 @@ const form = reactive<${table.className}Form>({
 </#list>
 })
 
-// 保存按钮加载中
-const saveLoading = ref(false)
-
 // 表单校验
 const formRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof form>>({
@@ -55,7 +52,7 @@ const rules = reactive<FormRules<typeof form>>({
 // 表单提交
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
-  saveLoading.value = true
+  loading.value = true
   try {
     await formEl.validate()
     await reqSave(form)
@@ -65,18 +62,16 @@ async function onSubmit(formEl: FormInstance | undefined) {
   } catch (error) {
     // do nothing
   } finally {
-    saveLoading.value = false
+    loading.value = false
   }
 }
 
 // 清空表单
 function clean() {
   toggleDialog.title = ''
-  form.id = undefined
-  form.name = undefined
-  form.gender = undefined
-  form.birthday = undefined
-  form.intro = undefined
+<#list columns?filter(column -> column.updateField) as column>
+  form.${column.javaField} = undefined
+</#list>
   formRef.value?.clearValidate()
 }
 
@@ -84,17 +79,21 @@ function clean() {
 function openDialog(data?: ${table.className}Vo) {
   if (data) {
     toggleDialog.title = '修改'
-    toggleDialog.show = true
-
     // 数据回显
   <#list columns?filter(column -> column.updateField) as column>
     form.${column.javaField} = data.${column.javaField}
   </#list>
   } else {
     toggleDialog.title = '新增'
-    toggleDialog.show = true
   }
+  toggleDialog.show = true
 }
+
+// save loading
+const loading = defineModel('loading', {
+  type: Boolean,
+  required: true
+})
 
 defineExpose({
   openDialog
@@ -105,12 +104,7 @@ defineExpose({
 <#function getHtmlByType column variableName>
   <#-- 字典 -->
   <#if column.dictTypeId??>
-    <#return '<el-select
-            v-model="${variableName}.${column.javaField}"
-            clearable
-            placeholder="请选择"
-            style="width: 120px"
-          >
+    <#return '<el-select v-model="${variableName}.${column.javaField}" clearable placeholder="请选择" style="width: 120px">
             <el-option
               v-for="item in ${column.javaField}DictData"
               :key="item.data"
@@ -161,7 +155,7 @@ defineExpose({
       </#list>
         <el-form-item>
           <el-button @click="toggleDialog.show = false">取消</el-button>
-          <el-button :loading="saveLoading" native-type="submit" type="primary">确认</el-button>
+          <el-button :loading="loading" native-type="submit" type="primary">确认</el-button>
         </el-form-item>
       </el-form>
     </template>

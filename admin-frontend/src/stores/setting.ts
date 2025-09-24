@@ -26,7 +26,7 @@ const useSettingStore = defineStore(
         'LocalDateTime',
         'Boolean'
       ],
-      htmlTypeList: ['input', 'textarea', 'select', 'radio', 'checkbox', 'datetime'],
+      htmlTypeList: ['input', 'textarea', 'select', 'radio', 'datetime'],
       selectConditionList: ['=', '>', '>=', '<', '<=', 'like']
     }
 

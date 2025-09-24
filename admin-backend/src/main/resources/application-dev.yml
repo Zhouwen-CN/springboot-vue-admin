@@ -1,39 +1,39 @@
 spring:
   # 数据源配置
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
-#    #    url: jdbc:h2:file:./springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
-#    username: sa
-#    password: 123
-#  h2:
-#    console:
-#      path: /h2
-#      enabled: true
-#      settings:
-#        web-allow-others: true
-#  sql:
-#    init:
-#      schema-locations: classpath:sql/h2/schema-h2.sql
-#      data-locations: classpath:sql/h2/data-h2.sql
-#      mode: embedded #h2内存模式才会进行初始化
-#      encoding: utf-8
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
+    #    url: jdbc:h2:file:./springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 123
+  h2:
+    console:
+      path: /h2
+      enabled: true
+      settings:
+        web-allow-others: true
+  sql:
+    init:
+      schema-locations: classpath:sql/h2/schema-h2.sql
+      data-locations: classpath:sql/h2/data-h2.sql
+      mode: embedded #h2内存模式才会进行初始化
+      encoding: utf-8
 
   # 数据源配置
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
-    username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
-    password: mpw:skR0PmgRHk6TEa77ZCgF+A==
-    hikari:
-      pool-name: sv-admin
-      maximum-pool-size: 5 #最大连接数
-      minimum-idle: 1 #最小空闲连接数
-      connection-timeout: 5000 #获取连接超时，5秒
-      validation-timeout: 5000 #校验连接时超时，5秒
-      keepalive-time: 120000 #保活时间，2分钟
-      idle-timeout: 600000 #空闲时间，10分钟
-      max-lifetime: 1200000 #最大存活时间，20分钟
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
+#    username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
+#    password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+#    hikari:
+#      pool-name: sv-admin
+#      maximum-pool-size: 5 #最大连接数
+#      minimum-idle: 1 #最小空闲连接数
+#      connection-timeout: 5000 #获取连接超时，5秒
+#      validation-timeout: 5000 #校验连接时超时，5秒
+#      keepalive-time: 120000 #保活时间，2分钟
+#      idle-timeout: 600000 #空闲时间，10分钟
+#      max-lifetime: 1200000 #最大存活时间，20分钟
 
 # 指标监控
 management:

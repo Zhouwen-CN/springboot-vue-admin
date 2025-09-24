@@ -153,14 +153,14 @@ public class FreemarkerEngineService implements InitializingBean {
      * java模板，获取模板文件地址和生成文件地址（枚举名称为模板前缀）
      */
     public enum JavaTemplate {
+        controller(className -> packageConfig.javaFilePath + "/controller/" + className + "Controller.java"),
         entity(className -> packageConfig.javaFilePath + "/domain/entity/" + className + ".java"),
         vo(className -> packageConfig.javaFilePath + "/domain/vo/" + className + "Vo.java"),
         form(className -> packageConfig.javaFilePath + "/domain/form/" + className + "Form.java"),
         mapper(className -> packageConfig.javaFilePath + "/mapper/" + className + "Mapper.java"),
-        service(className -> packageConfig.javaFilePath + "/service/" + className + "Service.java"),
         serviceImpl(className -> packageConfig.javaFilePath + "/service/impl/" + className + "ServiceImpl.java"
         ),
-        controller(className -> packageConfig.javaFilePath + "/controller/" + className + "Controller.java"),
+        service(className -> packageConfig.javaFilePath + "/service/" + className + "Service.java"),
         xml(className -> packageConfig.xmlFilePath + "/" + className + "Mapper.xml");
 
         private static final String TEMPLATE_PATH_PREFIX = "java";
@@ -186,9 +186,9 @@ public class FreemarkerEngineService implements InitializingBean {
      * js模板，获取模板文件地址和生成文件地址（枚举名称为模板前缀）
      */
     public enum JsTemplate {
-        index((jsBasePackage, className) -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/index.vue"),
+        api((jsBasePackage, className) -> packageConfig.jsFilePath + "/api" + jsBasePackage + "/index.ts"),
         form((jsBasePackage, className) -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/components/" + className + "Form.vue"),
-        api((jsBasePackage, className) -> packageConfig.jsFilePath + "/api" + jsBasePackage + "/index.ts");
+        index((jsBasePackage, className) -> packageConfig.jsFilePath + "/views" + jsBasePackage + "/index.vue");
 
         private static final String TEMPLATE_PATH_PREFIX = "js";
         private final BiFunction<String, String, String> func;

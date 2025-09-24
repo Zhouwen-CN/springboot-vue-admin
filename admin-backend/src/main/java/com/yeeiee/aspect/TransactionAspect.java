@@ -39,7 +39,7 @@ public class TransactionAspect {
         transactionTemplate.setReadOnly(isReadOnly);
         transactionTemplate.setName(signatureName);
 
-        // 鉴权过程中的异常，比如事务超时，需要手动处理
+        // 鉴权过程中的异常，比如事务超时，会抛到控制台
         return transactionTemplate.execute(new TransactionCallback<>() {
             @SneakyThrows
             @Override

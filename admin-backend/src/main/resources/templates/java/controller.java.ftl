@@ -116,14 +116,6 @@ public class ${table.className}Controller {
         return R.ok(PageVo.fromPage(page, ${table.className}Vo.class));
     }
 
-    @Operation(summary = "按照id查询")
-    @GetMapping("/{id}")
-    public R<${table.className}Vo> getById(@PathVariable("id") @Parameter(description = "id") ${primaryColumn.javaType} id) {
-        val one = ${serviceName}.getById(id);
-        val vo = BeanUtil.toBean(one, StudentTestVo.class);
-        return R.ok(vo);
-    }
-
     @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@RequestBody @Validated(GroupingValidate.Create.class) ${table.className}Form form) {

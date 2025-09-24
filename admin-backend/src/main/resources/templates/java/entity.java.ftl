@@ -23,7 +23,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("${table.tableName}")
-@KeySequence("${table.tableName}_seq")
+@KeySequence("${table.tableName}_SEQ")
 public class ${table.className} {
 
 <#list columns as column>
@@ -32,9 +32,9 @@ public class ${table.className} {
      */
     <#if column.primaryKey>
     @TableId(value = "${column.columnName}")
-    <#elseif column.columnName='create_user' || column.columnName='create_time'>
+    <#elseif column.columnName?lower_case='create_user' || column.columnName?lower_case='create_time'>
     @TableField(value = "${column.columnName}", fill = FieldFill.INSERT)
-    <#elseif column.columnName='update_user' || column.columnName='update_time'>
+    <#elseif column.columnName?lower_case='update_user' || column.columnName?lower_case='update_time'>
     @TableField(value = "${column.columnName}", fill = FieldFill.INSERT_UPDATE)
     <#else>
     @TableField(value = "${column.columnName}")

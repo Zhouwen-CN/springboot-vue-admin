@@ -166,6 +166,8 @@ public class RestClientConfig {
                 .disableConnectionState()
                 // 不设置会有一个默认的 DefaultConnectionKeepAliveStrategy
                 // .setKeepAliveStrategy()
+                // rest client 请求指标
+                // .addExecInterceptorLast("micrometer", new ObservationExecChainHandler(observationRegistry))
                 .build();
     }
 
