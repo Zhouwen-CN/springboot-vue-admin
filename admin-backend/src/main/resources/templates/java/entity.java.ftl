@@ -23,7 +23,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("${table.tableName}")
-@KeySequence("${table.tableName}_SEQ")
+<#if table.tableName == table.tableName?upper_case>
+    <#assign sequence = table.tableName + '_SEQ'>
+<#else>
+    <#assign sequence = table.tableName + '_seq'>
+</#if>
+@KeySequence("${sequence}")
 public class ${table.className} {
 
 <#list columns as column>
