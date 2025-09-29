@@ -32,13 +32,13 @@ const {
   onSizeChange
 } = reqGetPage()
 
-// 字典(可能没有，也可能有多个)
 <#if (dictList!?size > 0)>
+// 字典
 <#list dictList as dict>
 const { dictData: ${dict.javaField}DictData, dictMap: ${dict.javaField}DictMap, run:${dict.javaField}DictRun } = useDict(${dict.dictTypeId})
+
 </#list>
 </#if>
-
 // 分页搜索
 function pageSearch() {
   refresh({ params: { ...pageParams } })
@@ -72,16 +72,10 @@ onMounted(() => {
 })
 </script>
 
-<#--TODO: 待补全html类型-->
 <#function getHtmlByType column variableName>
-  <#-- 字典 -->
+<#-- 字典 -->
   <#if column.dictTypeId??>
-    <#return '<el-select
-            v-model="${variableName}.${column.javaField}"
-            clearable
-            placeholder="请选择"
-            style="width: 120px"
-          >
+    <#return '<el-select v-model="${variableName}.${column.javaField}" clearable placeholder="请选择" style="width: 120px">
             <el-option
               v-for="item in ${column.javaField}DictData"
               :key="item.data"
@@ -108,6 +102,9 @@ onMounted(() => {
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="${column.columnComment}"
           />'>
+  <#-- 滑块切换 -->
+  <#elseif column.javaType='Boolean' && column.htmlType='switch'>
+    <#return '<el-switch v-model="${variableName}.${column.javaField}" />'>
   <#-- 默认input -->
   <#else>
     <#return '<el-input v-model="${variableName}.${column.javaField}" clearable placeholder="${column.columnComment}" />'>

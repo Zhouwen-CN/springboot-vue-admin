@@ -11,8 +11,8 @@ import type { DictDataSelectorVo } from '@/api/tool/dict'
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])
 
-// 字典数据(可能没有，也可能有多个)
 <#if (dictList!?size > 0)>
+// 字典数据
 defineProps({
   <#list dictList as dict>
   ${dict.javaField}DictData: {
@@ -21,8 +21,8 @@ defineProps({
   },
 </#list>
 })
-</#if>
 
+</#if>
 // 对话框切换
 const toggleDialog = reactive({
   show: false,
@@ -32,14 +32,18 @@ const toggleDialog = reactive({
 // 表单对象
 const form = reactive<${table.className}Form>({
 <#list columns?filter(column -> column.updateField) as column>
+<#if column.jsType == 'boolean'>
+  ${column.javaField}: false,
+<#else>
   ${column.javaField}: undefined,
+</#if>
 </#list>
 })
 
 // 表单校验
 const formRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof form>>({
-<#list columns?filter(column -> column.updateField && !column.primaryKey) as column>
+<#list columns?filter(column -> column.updateField && !column.primaryKey && column.jsType != 'boolean') as column>
   ${column.javaField}: [
     { required: true, message: '${column.columnComment}不能为空', trigger: 'blur' },
   <#if column.columnLength??>
@@ -100,7 +104,6 @@ defineExpose({
 })
 </script>
 
-<#--TODO: 待补全html类型-->
 <#function getHtmlByType column variableName>
   <#-- 字典 -->
   <#if column.dictTypeId??>
@@ -131,6 +134,9 @@ defineExpose({
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="${column.columnComment}"
           />'>
+  <#-- 滑块切换 -->
+  <#elseif column.javaType='Boolean' && column.htmlType='switch'>
+    <#return '<el-switch v-model="${variableName}.${column.javaField}" />'>
   <#-- 默认input -->
   <#else>
     <#return '<el-input v-model="${variableName}.${column.javaField}" clearable placeholder="${column.columnComment}" />'>

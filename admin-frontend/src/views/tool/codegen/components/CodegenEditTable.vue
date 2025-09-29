@@ -18,7 +18,7 @@ const {
 // 抽屉开关
 const drawerVisible = ref(false)
 // 激活的标签
-const activeName = ref('colums')
+const activeName = ref('basicInfo')
 const saveLoading = ref(false)
 // 表单数据
 const formData = reactive<CodegenTableForm>({
@@ -87,7 +87,7 @@ defineExpose({
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" size="70%" title="代码生成配置" @closed="closeDrawer">
+  <el-drawer v-model="drawerVisible" size="75%" title="代码生成配置" @closed="closeDrawer">
     <el-form
       ref="formRef"
       :model="formData"

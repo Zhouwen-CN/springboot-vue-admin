@@ -63,9 +63,6 @@ public final class CodegenUtil {
     }
     // html 类型字段映射
     private static final Map<String, CodegenColumnHtmlTypeEnum> HTML_TYPE_MAPPING = Map.of(
-            "status", CodegenColumnHtmlTypeEnum.RADIO,
-            "sex", CodegenColumnHtmlTypeEnum.RADIO,
-            "type", CodegenColumnHtmlTypeEnum.SELECT,
             "time", CodegenColumnHtmlTypeEnum.DATETIME,
             "date", CodegenColumnHtmlTypeEnum.DATETIME
     );
@@ -142,9 +139,9 @@ public final class CodegenUtil {
      */
     private static String getHtmlType(TableField tableField) {
         val javaType = tableField.getColumnType().getType();
-        // 如果是 Boolean 类型时，设置为 radio 类型.
+        // 如果是 Boolean 类型时，设置为 switch 类型.
         if (Boolean.class.getSimpleName().equals(javaType)) {
-            return CodegenColumnHtmlTypeEnum.RADIO.getType();
+            return CodegenColumnHtmlTypeEnum.SWITCH.getType();
         }
 
         // 如果是 LocalDateTime 类型，则设置为 datetime 类型
@@ -156,7 +153,7 @@ public final class CodegenUtil {
         val entries = HTML_TYPE_MAPPING.entrySet();
         for (Map.Entry<String, CodegenColumnHtmlTypeEnum> entry : entries) {
             val key = entry.getKey();
-            if (tableField.getName().endsWith(key)) {
+            if (tableField.getName().toLowerCase().endsWith(key)) {
                 return entry.getValue().getType();
             }
         }
@@ -188,7 +185,7 @@ public final class CodegenUtil {
         val entries = SELECT_CONDITION_MAPPING.entrySet();
         for (Map.Entry<String, CodegenColumnConditionEnum> entry : entries) {
             val key = entry.getKey();
-            if (tableField.getName().endsWith(key)) {
+            if (tableField.getName().toLowerCase().endsWith(key)) {
                 return entry.getValue().getCondition();
             }
         }
@@ -276,7 +273,7 @@ public final class CodegenUtil {
         INPUT("input"), // 文本框
         TEXTAREA("textarea"), // 文本域
         SELECT("select"), // 下拉框
-        RADIO("radio"), // 单选框
+        SWITCH("switch"), // 单选框
         DATETIME("datetime"); // 日期控件
 
         private final String type;

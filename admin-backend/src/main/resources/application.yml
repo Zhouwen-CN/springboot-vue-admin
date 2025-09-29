@@ -9,6 +9,11 @@ spring:
   transaction:
     default-timeout: 60s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 16MB #单个文件大小
+      max-request-size: 32MB #总上传的文件大小
   # jackson配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

@@ -11,7 +11,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * <pre>
@@ -52,19 +49,22 @@ public class RequestProxyController {
             @RequestParam MultiValueMap<String, String> params,
             @RequestHeader MultiValueMap<String, String> headers,
             @RequestBody(required = false) String body,
+            HttpMethod httpMethod,
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
+        if(request instanceof MultipartHttpServletRequest){
+            throw new RuntimeException("不支持文件上传");
+        }
+
         // headers.remove("authorization");
         headers.remove("host");
 
         // 请求路径
         val url = request.getRequestURI().replaceFirst("/proxy", "");
-        // 请求方法
-        val method = request.getMethod();
 
         // 请求参数、请求头转发
-        val requestBodySpec = restClient.method(HttpMethod.valueOf(method))
+        val requestBodySpec = restClient.method(httpMethod)
                 .uri(server + url, uriBuilder -> {
                     uriBuilder.queryParams(params);
                     return uriBuilder.build();
@@ -72,17 +72,17 @@ public class RequestProxyController {
                 .headers((httpHeaders) -> httpHeaders.addAll(headers));
 
         // 请求体转发
-        // 1、form
-        if (request instanceof MultipartHttpServletRequest multipartHttpServletRequest) {
-            val form = new LinkedMultiValueMap<String, Object>();
-            val fileMap = multipartHttpServletRequest.getFileMap();
-            val entries = fileMap.entrySet();
-            for (Map.Entry<String, MultipartFile> entry : entries) {
-                val multipartFile = entry.getValue();
-                form.add(entry.getKey(), this.getInputStreamResource(multipartFile));
-            }
-            requestBodySpec.body(form);
-        }
+        // 1、form（好像有点问题）
+        // if (request instanceof MultipartHttpServletRequest multipartHttpServletRequest) {
+        //     val form = new LinkedMultiValueMap<String, Object>();
+        //     val fileMap = multipartHttpServletRequest.getFileMap();
+        //     val entries = fileMap.entrySet();
+        //     for (Map.Entry<String, MultipartFile> entry : entries) {
+        //         val multipartFile = entry.getValue();
+        //         form.add(entry.getKey(), this.getInputStreamResource(multipartFile));
+        //     }
+        //     requestBodySpec.body(form);
+        // }
 
         // 2、json
         if (StringUtils.hasText(body)) {
@@ -109,14 +109,16 @@ public class RequestProxyController {
         }
 
         // 响应体转发
-        val entityBody = Optional.ofNullable(entity.getBody()).orElse(new byte[0]);
-        val outputStream = response.getOutputStream();
-        outputStream.write(entityBody);
-        outputStream.flush();
+        val entityBody = entity.getBody();
+        if (entityBody != null) {
+            val outputStream = response.getOutputStream();
+            outputStream.write(entityBody);
+            outputStream.flush();
+        }
     }
 
 
-    @RequestMapping("/test")
+    @RequestMapping("/upload/test")
     public String test(HttpServletRequest request) {
         if (request instanceof MultipartHttpServletRequest multipartHttpServletRequest) {
             System.out.println("multipartHttpServletRequest = " + multipartHttpServletRequest);
