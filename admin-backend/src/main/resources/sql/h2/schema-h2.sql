@@ -407,3 +407,33 @@ COMMENT ON COLUMN t_codegen_column.update_time IS '更新时间';
 CREATE SEQUENCE t_codegen_column_seq
 START WITH 1
 INCREMENT BY 1;
+
+create table t_job(
+  id NUMBER(18) primary key,
+  name varchar2(32) not null,
+  cron_expression varchar2(32) not null,
+  js_script clob not null,
+  retry_count NUMBER(9) default 0,
+  retry_interval NUMBER(9) default 0,
+  job_enable number(1) default 0,
+  create_user varchar2(15) default null,
+  create_time DATE default SYSDATE,
+  update_user varchar2(15) default null,
+  update_time DATE default SYSDATE
+);
+COMMENT ON TABLE t_job IS '定时任务表';
+COMMENT ON COLUMN t_job.id IS '主键';
+COMMENT ON COLUMN t_job.name IS '任务名称';
+COMMENT ON COLUMN t_job.cron_expression IS 'cron 表达式';
+COMMENT ON COLUMN t_job.js_script IS 'js脚本';
+COMMENT ON COLUMN t_job.retry_count IS '重试次数';
+COMMENT ON COLUMN t_job.retry_interval IS '重试间隔';
+COMMENT ON COLUMN t_job.job_enable IS '是否启用';
+COMMENT ON COLUMN t_job.create_user IS '创建者';
+COMMENT ON COLUMN t_job.create_time IS '创建时间';
+COMMENT ON COLUMN t_job.update_user IS '更新者';
+COMMENT ON COLUMN t_job.update_time IS '更新时间';
+
+CREATE SEQUENCE t_job_seq
+START WITH 1
+INCREMENT BY 1;

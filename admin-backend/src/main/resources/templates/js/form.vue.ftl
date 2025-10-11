@@ -32,11 +32,7 @@ const toggleDialog = reactive({
 // 表单对象
 const form = reactive<${table.className}Form>({
 <#list columns?filter(column -> column.updateField) as column>
-<#if column.jsType == 'boolean'>
-  ${column.javaField}: false,
-<#else>
   ${column.javaField}: undefined,
-</#if>
 </#list>
 })
 
@@ -54,6 +50,7 @@ const rules = reactive<FormRules<typeof form>>({
 })
 
 // 表单提交
+const loading = ref(false)
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
   loading.value = true
@@ -92,12 +89,6 @@ function openDialog(data?: ${table.className}Vo) {
   }
   toggleDialog.show = true
 }
-
-// save loading
-const loading = defineModel('loading', {
-  type: Boolean,
-  required: true
-})
 
 defineExpose({
   openDialog

@@ -196,7 +196,6 @@ onMounted(() => {
     <#-- form对话框 -->
     <${table.className}Form
       ref="formDialog"
-      v-model:loading="loading"
       @refresh="refresh({ params: { ...pageParams } })"
     <#list dictList as dict>
       :${dict.javaField}DictData="${dict.javaField}DictData"

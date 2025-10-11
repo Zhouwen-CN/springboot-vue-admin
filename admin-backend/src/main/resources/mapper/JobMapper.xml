@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.mapper.JobMapper">
+    <!--@formatter:off-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.Job">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="cron_expression" property="cronExpression" />
+        <result column="js_script" property="jsScript" />
+        <result column="retry_count" property="retryCount" />
+        <result column="retry_interval" property="retryInterval" />
+        <result column="job_enable" property="jobEnable" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, cron_expression, js_script, retry_count, retry_interval, job_enable, create_user, create_time, update_user, update_time
+    </sql>
+</mapper>

@@ -48,13 +48,14 @@ VALUES (1, '权限管理', '/auth', 'Lock', 0, 0, 0),
        (7, '字典管理', '/tool/dict', 'Collection', 5, 0, 1),
        (8, '数据源管理', '/tool/datasource', 'SetUp', 5, 0, 1),
        (9, '代码生成', '/tool/codegen', 'Coffee', 5, 0, 1),
-       (10, '日志管理', '/log', 'Management', 0, 0, 0),
-       (11, '登入日志', '/log/login', 'Checked', 10, 0, 1),
-       (12, '操作日志', '/log/ops', 'List', 10, 0, 1),
-       (13, '异常日志', '/log/error', 'Failed', 10, 0, 1),
-       (14, '菜单测试', '/test', 'CameraFilled', 0, 0, 0),
-       (15, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 14, 0, 1),
-       (16, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 14, 0, 1);
+       (10, '定时任务', '/tool/job', 'Clock', 5, 0, 1),
+       (11, '日志管理', '/log', 'Management', 0, 0, 0),
+       (12, '登入日志', '/log/login', 'Checked', 11, 0, 1),
+       (13, '操作日志', '/log/ops', 'List', 11, 0, 1),
+       (14, '异常日志', '/log/error', 'Failed', 11, 0, 1),
+       (15, '菜单测试', '/test', 'CameraFilled', 0, 0, 0),
+       (16, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 15, 0, 1),
+       (17, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 15, 0, 1);
 
 -- 字典类型表
 delete from t_dict_type where true;
