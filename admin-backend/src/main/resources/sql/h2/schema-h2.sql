@@ -113,6 +113,7 @@ CREATE TABLE t_menu (
     pid           NUMBER(18) NOT NULL,
     keep_alive    NUMBER(1) DEFAULT 0,
     menu_type     NUMBER(1) NOT NULL,
+    sort_id NUMBER(9) NOT NULL,
     create_user   VARCHAR2(15) DEFAULT NULL,
     create_time   DATE DEFAULT SYSDATE,
     update_user   VARCHAR2(15) DEFAULT NULL,
@@ -128,6 +129,8 @@ COMMENT ON COLUMN t_menu.icon IS '图标';
 COMMENT ON COLUMN t_menu.pid IS '父级菜单id';
 COMMENT ON COLUMN t_menu.keep_alive IS '是否缓存';
 COMMENT ON COLUMN t_menu.menu_type IS '菜单类型：0-目录，1-菜单';
+COMMENT
+ON COLUMN t_menu.sort_id IS '菜单排序';
 COMMENT ON COLUMN t_menu.create_user IS '创建者';
 COMMENT ON COLUMN t_menu.create_time IS '创建时间';
 COMMENT ON COLUMN t_menu.update_user IS '更新者';

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
+
 const userStore = useUserStore()
 
 const model = defineModel<number>({

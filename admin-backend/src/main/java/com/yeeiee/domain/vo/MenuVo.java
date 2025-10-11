@@ -14,35 +14,44 @@ import java.util.List;
  * </p>
  *
  * @author chen
- * @since 2024-05-14
+ * @since 2025-10-11
  */
 @Getter
 @Setter
 @ToString
 @Schema(name = "MenuVo", description = "菜单视图")
 public class MenuVo {
-    @Schema(description = "菜单id")
+
+    @Schema(description = "主键")
     private Long id;
-    @Schema(description = "菜单标题")
+
+    @Schema(description = "标题")
     private String title;
-    @Schema(description = "菜单访问路径")
+
+    @Schema(description = "访问路径")
     private String accessPath;
-    @Schema(description = "菜单图标")
+
+    @Schema(description = "图标")
     private String icon;
+
     @Schema(description = "父级菜单id")
     private Long pid;
+
     @Schema(description = "是否缓存")
     private Boolean keepAlive;
-    @Schema(description = "菜单类型")
+
+    @Schema(description = "菜单类型：0-目录，1-菜单")
     private Integer menuType;
-    @Schema(description = "创建者")
-    private String createUser;
+
+    @Schema(description = "菜单排序")
+    private Integer sortId;
+
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
-    @Schema(description = "更新者")
-    private String updateUser;
+
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
     @Schema(description = "子菜单列表")
     private List<MenuVo> children;
 }

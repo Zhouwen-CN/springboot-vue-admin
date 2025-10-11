@@ -3,11 +3,7 @@ package com.yeeiee.utils;
 import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -42,7 +38,8 @@ public final class CollectionUtil {
                                           Predicate<ID> checkRoot) {
         // 结果集
         val result = new ArrayList<E>();
-        val map = new HashMap<ID, E>();
+        // 有序
+        val map = new LinkedHashMap<ID, E>();
 
         // 将所有节点添加到map中
         for (E item : list) {

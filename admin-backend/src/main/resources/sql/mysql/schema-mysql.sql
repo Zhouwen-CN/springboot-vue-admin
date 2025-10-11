@@ -57,6 +57,7 @@ create table t_menu(
     pid         bigint      not null comment '父级菜单id',
     keep_alive  bit(1) default 0 null comment '是否缓存',
     menu_type   tinyint not null comment '菜单类型：0-目录，1-菜单',
+    sort_id int default 0 comment '菜单排序',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',

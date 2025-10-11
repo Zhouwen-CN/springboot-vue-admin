@@ -9,6 +9,7 @@ export interface MenuVo extends BaseVo {
   keepAlive: boolean
   pid: number
   menuType: number
+  sortId: number
   children: MenuVo[]
 }
 
@@ -28,6 +29,7 @@ export interface MenuForm {
   keepAlive: boolean
   pid: number
   menuType: number
+  sortId: number
 }
 
 /**

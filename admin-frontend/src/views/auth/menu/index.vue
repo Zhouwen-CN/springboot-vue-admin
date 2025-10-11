@@ -27,7 +27,8 @@ const menuForm = reactive<MenuForm>({
   icon: '',
   keepAlive: false,
   pid: 0,
-  menuType: 0
+  menuType: 0,
+  sortId: 0
 })
 
 // 保存菜单按钮loading
@@ -69,6 +70,7 @@ function updateMenu(row: MenuVo) {
   menuForm.keepAlive = row.keepAlive
   menuForm.pid = row.pid
   menuForm.menuType = row.menuType
+  menuForm.sortId = row.sortId
 }
 
 // 删除菜单
@@ -106,26 +108,29 @@ function clean() {
   menuForm.keepAlive = false
   menuForm.pid = 0
   menuForm.menuType = 0
+  menuForm.sortId = 0
   ruleFormRef.value?.clearValidate()
   // 关闭图标选择器
   iconPopoverRef.value?.hide()
 }
 
-// 搜索图标
-const searchIconKeyword = ref('')
 // 弹出框
 const iconPopoverRef = ref<PopoverInstance>()
 // element图标列表
-const elementIcons = ref<string[]>(Object.keys(ElementPlusIconsVue))
+const elementIcons = Object.keys(ElementPlusIconsVue)
 // 筛选图标
-const filteredIcons = computed(() => {
-  const keyword = searchIconKeyword.value.trim()
+const filteredIcons = ref<string[]>(elementIcons)
+
+function searchIcon(value: string) {
+  const keyword = value.trim()
   if (keyword) {
-    return elementIcons.value.filter((icon) => icon.toLowerCase().includes(keyword.toLowerCase()))
+    filteredIcons.value = elementIcons.filter((icon) =>
+      icon.toLowerCase().includes(keyword.toLowerCase())
+    )
   } else {
-    return elementIcons.value
+    filteredIcons.value = elementIcons
   }
-})
+}
 
 // 选择图标
 function selectIcon(icon: string) {
@@ -180,6 +185,7 @@ onMounted(() => {
             />
           </template>
         </el-table-column>
+        <el-table-column label="菜单排序" prop="sortId"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime" />
         <el-table-column label="操作">
           <template #default="{ row }: { row: MenuVo }">
@@ -230,17 +236,20 @@ onMounted(() => {
           >
             <el-input v-model="menuForm.accessPath" placeholder="访问路径"></el-input>
           </el-form-item>
+          <el-form-item v-tip="`数值越小越靠前`" label="菜单排序" prop="sortId">
+            <el-input v-model="menuForm.sortId" type="number"></el-input>
+          </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
             <el-popover ref="iconPopoverRef" :width="400" placement="bottom-start" trigger="click">
               <template #reference>
-                <el-input v-model="menuForm.icon" clearable placeholder="菜单图标"> </el-input>
+                <el-input
+                  v-model="menuForm.icon"
+                  clearable
+                  placeholder="菜单图标"
+                  @input="searchIcon"
+                >
+                </el-input>
               </template>
-              <el-input
-                v-model="searchIconKeyword"
-                clearable
-                placeholder="搜索图标"
-                style="margin-bottom: 10px"
-              ></el-input>
               <el-scrollbar always height="300px">
                 <ul class="icon-grid">
                   <li
@@ -265,7 +274,6 @@ onMounted(() => {
               inline-prompt
             />
           </el-form-item>
-
           <el-form-item>
             <el-button @click="toggleDialog.show = false">取消 </el-button>
             <el-button :loading="saveLoading" type="primary" native-type="submit"> 确认 </el-button>

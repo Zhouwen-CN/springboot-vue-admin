@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { Search, Plus, Delete, Edit, VideoPlay, VideoPause } from '@element-plus/icons-vue'
+import { Delete, Edit, Plus, Search, VideoPause, VideoPlay } from '@element-plus/icons-vue'
 import {
+  type JobVo,
   reqGetPage,
-  reqRemoveById,
-  reqRemoveByIds,
   reqModifyEnable,
-  type JobVo
+  reqRemoveById,
+  reqRemoveByIds
 } from '@/api/tool/job'
 import JobForm from './components/JobForm.vue'
 

@@ -12,6 +12,7 @@
         <result column="pid" property="pid" />
         <result column="keep_alive" property="keepAlive" />
         <result column="menu_type" property="menuType" />
+        <result column="sort_id" property="sortId" />
         <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
@@ -20,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, access_path, icon, pid, keep_alive, menu_type, create_user, create_time, update_user, update_time
+        id, title, access_path, icon, pid, keep_alive, menu_type, sort_id, create_user, create_time, update_user, update_time
     </sql>
 
     <select id="selectMenusByRoleNames" resultType="com.yeeiee.domain.vo.MenuVo">
@@ -32,6 +33,7 @@
             a.pid,
             a.keep_alive as keepAlive,
             a.menu_type as menuType,
+            a.sort_id as sortId,
             a.create_user as createUser,
             a.create_time as createTime,
             a.update_user as updateUser,
@@ -54,6 +56,6 @@
             group by b.menu_id
         ) b
         on a.id = b.menu_id
-        order by a.id
+        order by a.sort_id
     </select>
 </mapper>

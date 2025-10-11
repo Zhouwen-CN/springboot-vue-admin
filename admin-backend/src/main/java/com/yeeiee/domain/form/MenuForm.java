@@ -12,34 +12,36 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  * <p>
- * 新增 & 更新 菜单表单
+ * 菜单表单
  * </p>
  *
  * @author chen
- * @since 2025-05-27
+ * @since 2025-10-11
  */
 @Getter
 @Setter
 @ToString
 @Schema(name = "MenuForm", description = "菜单表单")
 public class MenuForm {
+
     @NotNull(groups = {GroupingValidate.Update.class})
-    @Schema(description = "菜单id")
+    @Schema(description = "主键")
     private Long id;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
-    @Schema(description = "菜单标题")
+    @Schema(description = "标题")
     private String title;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 40)
     @Pattern(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, regexp = "^/.*$")
-    @Schema(description = "菜单访问路径")
+    @Schema(description = "访问路径")
     private String accessPath;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Schema(description = "菜单图标")
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
+    @Schema(description = "图标")
     private String icon;
 
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
@@ -51,6 +53,11 @@ public class MenuForm {
     private Boolean keepAlive;
 
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Schema(description = "菜单类型")
+    @Schema(description = "菜单类型：0-目录，1-菜单")
     private Integer menuType;
+
+    @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
+    @Schema(description = "菜单排序")
+    private Integer sortId;
+
 }

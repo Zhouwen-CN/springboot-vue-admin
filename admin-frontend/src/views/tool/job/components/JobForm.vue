@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { reqSave, type JobForm, type JobVo } from '@/api/tool/job'
-import { type FormRules, type FormInstance } from 'element-plus'
+import { type JobForm, type JobVo, reqSave } from '@/api/tool/job'
+import { type FormInstance, type FormRules } from 'element-plus'
 
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])

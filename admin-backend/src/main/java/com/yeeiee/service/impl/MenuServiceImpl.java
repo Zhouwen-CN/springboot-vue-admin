@@ -68,7 +68,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
 
         // TODO: 演示项目禁止删除功能菜单
-        if (id <= 16L) {
+        if (id <= 17L) {
             throw new DmlOperationException("删除失败，演示项目不能删除功能菜单");
         }
 
