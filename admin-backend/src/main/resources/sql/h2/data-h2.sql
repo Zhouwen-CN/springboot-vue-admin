@@ -30,7 +30,8 @@ VALUES (1, 1, 1),
        (13, 1, 13),
        (14, 1, 14),
        (15, 1, 15),
-       (16, 1, 16);
+       (16, 1, 16),
+       (17, 1, 17);
 
 -- 菜单表
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type)

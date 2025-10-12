@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -52,6 +53,18 @@ public class FreemarkerEngineService implements InitializingBean {
         configuration.setDefaultEncoding(ConstVal.UTF8);
         configuration.setClassForTemplateLoading(FreemarkerEngineService.class, "/templates");
         configuration.setNumberFormat("#");
+    }
+
+    /**
+     * 根据代码生成表ids，生成代码
+     *
+     * @param ids 代码生成表ids
+     * @return key -> 文件地址；value -> 文件内容
+     */
+    public Map<String, String> codegenByIds(Collection<Long> ids) {
+        val result = new HashMap<String, String>();
+        ids.forEach(id -> result.putAll(this.codegenById(id)));
+        return result;
     }
 
     /**

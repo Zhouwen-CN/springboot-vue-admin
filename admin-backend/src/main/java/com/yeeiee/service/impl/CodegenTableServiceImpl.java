@@ -39,7 +39,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -99,12 +98,12 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     }
 
     @Override
-    public void addBatchCodegenTable(CodegenTableImportForm codegenTableImportForm) {
+    public void addCodegenTable(CodegenTableImportForm codegenTableImportForm) {
         val dataSourceId = codegenTableImportForm.getDataSourceId();
         val dataSourceConfig = dataSourceService.getById(dataSourceId);
 
         val codegenTableConfigDto = new CodegenTableConfigDto();
-        codegenTableConfigDto.setIncludeTableNames(codegenTableImportForm.getTableNames());
+        codegenTableConfigDto.setIncludeTableName(codegenTableImportForm.getTableName());
         codegenTableConfigDto.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());
         codegenTableConfigDto.setIgnoreColumnPrefix(codegenTableImportForm.getIgnoreColumnPrefix());
 
@@ -129,7 +128,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
         }
 
         val codegenTableConfigDto = new CodegenTableConfigDto();
-        codegenTableConfigDto.setIncludeTableNames(Collections.singletonList(codegenTable.getTableName()));
+        codegenTableConfigDto.setIncludeTableName(codegenTable.getTableName());
         codegenTableConfigDto.setIgnoreTablePrefix(codegenTable.getIgnoreTablePrefix());
         codegenTableConfigDto.setIgnoreColumnPrefix(codegenTable.getIgnoreColumnPrefix());
 
@@ -155,7 +154,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     }
 
     /**
-     * 这里循环插入，因为要获取插入成功后的 id，量不会很大，不需要考虑性能
+     * 保存代码生成表记录
      *
      * @param tableInfoList table info list
      * @param function      返回一个codegen table
@@ -189,11 +188,11 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     }
 
     /**
-     * 获取 table info list
+     * 获取 TableInfo，虽然返回的是 List，但是肯定是一条记录
      *
      * @param dataSource            数据源配置
      * @param codegenTableConfigDto 代码生成配置dto
-     * @return table info list
+     * @return TableInfo
      */
     private List<TableInfo> getTableList(DataSource dataSource, CodegenTableConfigDto codegenTableConfigDto) {
         val url = dataSource.getUrl();
@@ -227,7 +226,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
         // 忽略视图
         strategyConfigBuilder.enableSkipView();
         // 过滤表名
-        strategyConfigBuilder.addInclude(codegenTableConfigDto.getIncludeTableNames());
+        strategyConfigBuilder.addInclude(codegenTableConfigDto.getIncludeTableName());
         // 忽略表前缀
         val ignoreTablePrefix = codegenTableConfigDto.getIgnoreTablePrefix();
         if (StringUtils.hasText(ignoreTablePrefix)) {

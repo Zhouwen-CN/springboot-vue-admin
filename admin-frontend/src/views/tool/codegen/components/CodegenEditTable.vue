@@ -18,7 +18,7 @@ const {
 // 抽屉开关
 const drawerVisible = ref(false)
 // 激活的标签
-const activeName = ref('basicInfo')
+const activeName = ref('colums')
 const saveLoading = ref(false)
 // 表单数据
 const formData = reactive<CodegenTableForm>({

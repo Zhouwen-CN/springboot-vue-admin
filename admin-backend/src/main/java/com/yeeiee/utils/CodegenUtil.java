@@ -125,8 +125,7 @@ public final class CodegenUtil {
         val entityName = tableInfo.getEntityName();
         codegenTable.setClassName(entityName);
         codegenTable.setAuthor(codegenTableImportForm.getAuthor());
-        // 业务名称
-        codegenTable.setBusinessName(getBusinessName(entityName));
+        codegenTable.setBusinessName(codegenTableImportForm.getBusinessName());
         codegenTable.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());
         codegenTable.setIgnoreColumnPrefix(codegenTableImportForm.getIgnoreColumnPrefix());
         return codegenTable;
@@ -159,20 +158,6 @@ public final class CodegenUtil {
         }
 
         return CodegenColumnHtmlTypeEnum.INPUT.getType();
-    }
-
-    /**
-     * 获取业务名称，取第一个单词
-     * @param entityName 实体名称
-     * @return 业务名称
-     */
-    public static String getBusinessName(String entityName){
-        val split = org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase(entityName);
-        if(split.length > 0){
-            return org.apache.commons.lang3.StringUtils.uncapitalize(split[0]);
-        }
-
-        return org.apache.commons.lang3.StringUtils.uncapitalize(entityName);
     }
 
     /**

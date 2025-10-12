@@ -30,11 +30,11 @@ public interface CodegenTableService extends IService<CodegenTable> {
     List<CodegenTableSelectorVo> getCodegenTableSelector(Long dataSourceId);
 
     /**
-     * 批量添加代码生成表和字段
+     * 添加代码生成表和字段
      *
      * @param codegenTableImportForm 代码生成导入表单
      */
-    void addBatchCodegenTable(CodegenTableImportForm codegenTableImportForm);
+    void addCodegenTable(CodegenTableImportForm codegenTableImportForm);
 
     /**
      * reset 代码生成列

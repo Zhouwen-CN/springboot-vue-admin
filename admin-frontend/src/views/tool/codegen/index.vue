@@ -6,13 +6,13 @@ import {
   type CodegenTableImportForm,
   type CodegenTableSelectorVo,
   type CodegenTableVo,
+  reqDownloadCodegen,
   reqGetCodegenTablePage,
   reqGetCodegenTableSelectorList,
   reqImportCodegenTable,
   reqRemoveCodegenTableById,
   reqRemoveCodegenTableByIds,
-  reqSyncCodegenColumnList,
-  reqDownloadCodegen
+  reqSyncCodegenColumnList
 } from '@/api/tool/codegen'
 import useSettingStore from '@/stores/setting'
 import CodegenEditTable from './components/CodegenEditTable.vue'
@@ -59,7 +59,8 @@ const codegenTableImportForm = reactive<CodegenTableImportForm>({
   author: codegenConfig.author,
   ignoreTablePrefix: codegenConfig.ignoreTablePrefix,
   ignoreColumnPrefix: codegenConfig.ignoreColumnPrefix,
-  tableNames: []
+  tableName: '',
+  businessName: ''
 })
 
 // 导入表
@@ -87,7 +88,8 @@ const rules = reactive<FormRules<typeof codegenTableImportForm>>({
     { required: true, message: '作者不能为空', trigger: 'blur' },
     { min: 1, max: 20, message: '长度 1-20 之间', trigger: 'blur' }
   ],
-  tableNames: [{ required: true, message: '选择器不能为空', trigger: 'submit' }]
+  businessName: [{ required: true, message: '业务名称不能为空', trigger: 'blur' }],
+  tableName: [{ required: true, message: '表名称不能为空', trigger: 'submit' }]
 })
 
 // 导入代码生成表-表单提交
@@ -115,12 +117,12 @@ async function deleteCodegenTableById(id: number) {
 }
 
 // 批量删除代码生成表
-const deleteIds = ref<number[]>([])
+const selectedIds = ref<number[]>([])
 function handleSelectionChange(dataSourceList: CodegenTableVo[]) {
-  deleteIds.value = dataSourceList.map((dataSource) => dataSource.id)
+  selectedIds.value = dataSourceList.map((dataSource) => dataSource.id)
 }
 async function deleteCodegenTableByIds() {
-  await reqRemoveCodegenTableByIds(deleteIds.value)
+  await reqRemoveCodegenTableByIds(selectedIds.value)
   refresh({ params: { keyword: keyword.value } })
   ElMessage.success('操作成功')
 }
@@ -132,10 +134,10 @@ function updateCodegenTable(row: CodegenTableVo) {
 }
 
 // 下载生成代码
-async function downloadCodegen(id: number) {
+async function downloadCodegen() {
   try {
     let link = document.createElement('a')
-    const response = await reqDownloadCodegen(id)
+    const response = await reqDownloadCodegen(selectedIds.value)
     const fileName = getFileNameFormResponse('codegen.zip', response)
     const url = URL.createObjectURL(response.data)
     link.href = url
@@ -182,7 +184,8 @@ function clean() {
   codegenTableImportForm.author = codegenConfig.author
   codegenTableImportForm.ignoreTablePrefix = codegenConfig.ignoreTablePrefix
   codegenTableImportForm.ignoreColumnPrefix = codegenConfig.ignoreColumnPrefix
-  codegenTableImportForm.tableNames = []
+  codegenTableImportForm.tableName = ''
+  codegenTableImportForm.businessName = ''
   formRef.value?.clearValidate()
 }
 
@@ -214,30 +217,41 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
-      <div>
-        <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
-          <el-option
-            v-for="(item, index) in dataSourceSelectorList"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
-        <el-button
-          style="margin-left: 12px"
-          :loading="saveLoading"
-          :icon="Aim"
-          type="primary"
-          @click="importCodegenTable"
-          >导入
-        </el-button>
-        <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
-          <template #reference>
-            <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
-              >批量删除
-            </el-button>
-          </template>
-        </el-popconfirm>
+      <div class="content-top">
+        <div>
+          <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
+            <el-option
+              v-for="(item, index) in dataSourceSelectorList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+          <el-button
+            :icon="Aim"
+            :loading="saveLoading"
+            style="margin-left: 12px"
+            type="primary"
+            @click="importCodegenTable"
+            >导入
+          </el-button>
+          <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
+            <template #reference>
+              <el-button :disabled="selectedIds.length == 0" :icon="Delete" type="danger"
+                >批量删除
+              </el-button>
+            </template>
+          </el-popconfirm>
+        </div>
+        <div>
+          <el-button
+            :disabled="selectedIds.length == 0"
+            :icon="Download"
+            type="primary"
+            @click="downloadCodegen"
+            >下载
+          </el-button>
+        </div>
       </div>
 
       <!-- 表格 -->
@@ -255,13 +269,12 @@ onMounted(() => {
         <el-table-column label="表描述" prop="tableComment"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="150px">
+        <el-table-column label="操作" min-width="120px">
           <template #default="{ row }: { row: CodegenTableVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>
               <el-button :icon="View" type="success" @click="previewCodegen(row.id)"> </el-button>
-              <el-button :icon="Download" type="info" @click="downloadCodegen(row.id)"> </el-button>
-              <el-popconfirm title="是否重新同步？" @confirm="syncCodegenColumnList(row.id)">
+              <el-popconfirm title="是否同步字段信息？" @confirm="syncCodegenColumnList(row.id)">
                 <template #reference>
                   <el-button :icon="Refresh" type="warning"></el-button>
                 </template>
@@ -318,14 +331,16 @@ onMounted(() => {
             >
             </el-input>
           </el-form-item>
-          <el-form-item label="表名" prop="tableNames">
-            <el-select
-              v-model="codegenTableImportForm.tableNames"
-              collapse-tags
-              collapse-tags-tooltip
-              filterable
-              multiple
-            >
+          <el-form-item
+            v-tip="`作为url前缀 和 前端文件夹名称`"
+            label="业务名称"
+            prop="businessName"
+          >
+            <el-input v-model="codegenTableImportForm.businessName" placeholder="业务名称">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="表名" prop="tableName">
+            <el-select v-model="codegenTableImportForm.tableName" filterable>
               <el-option
                 v-for="(item, index) in codegenTableSelectorList"
                 :key="index"
@@ -362,5 +377,10 @@ onMounted(() => {
 .table-comment {
   float: right;
   color: var(--el-text-color-secondary);
+}
+
+.content-top {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

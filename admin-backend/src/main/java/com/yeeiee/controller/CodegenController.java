@@ -5,12 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
-import com.yeeiee.domain.vo.CodegenColumnVo;
-import com.yeeiee.domain.vo.CodegenPreviewVo;
-import com.yeeiee.domain.vo.CodegenTableSelectorVo;
-import com.yeeiee.domain.vo.CodegenTableVo;
-import com.yeeiee.domain.vo.PageVo;
-import com.yeeiee.domain.vo.R;
+import com.yeeiee.domain.vo.*;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.freemarker.FreemarkerEngineService;
@@ -25,15 +20,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -81,8 +68,8 @@ public class CodegenController {
 
     @Operation(summary = "导入代码生成表")
     @PostMapping
-    public R<Void> addBatch(@RequestBody @Validated CodegenTableImportForm codegenTableImportForm) {
-        codegenTableService.addBatchCodegenTable(codegenTableImportForm);
+    public R<Void> add(@RequestBody @Validated CodegenTableImportForm codegenTableImportForm) {
+        codegenTableService.addCodegenTable(codegenTableImportForm);
         return R.ok();
     }
 
@@ -142,12 +129,12 @@ public class CodegenController {
     }
 
     @Operation(summary = "代码生成下载")
-    @GetMapping("/download/{id}")
+    @GetMapping("/download")
     public void download(
-            @PathVariable("id") @Parameter(description = "代码生成表id") Long id,
+            @RequestParam("ids") @Parameter(description = "代码生成id列表") @Size(min = 1, max = 10) Collection<Long> ids,
             HttpServletResponse response
     ) {
-        val map = freemarkerEngineService.codegenById(id);
+        val map = freemarkerEngineService.codegenByIds(ids);
         val paths = new ArrayList<>(map.keySet());
         val ins = map.values().stream()
                 .map(content -> {

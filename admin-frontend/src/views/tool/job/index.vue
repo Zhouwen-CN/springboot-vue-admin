@@ -118,7 +118,7 @@ onMounted(() => {
         <el-table-column label="重试间隔" prop="retryInterval"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="90px">
+        <el-table-column label="操作" min-width="120px">
           <template #default="{ row }: { row: JobVo }">
             <el-button-group>
               <el-button

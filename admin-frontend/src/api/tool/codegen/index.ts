@@ -23,7 +23,8 @@ export interface CodegenTableImportForm {
   author: string
   ignoreTablePrefix?: string
   ignoreColumnPrefix?: string
-  tableNames: string[]
+  tableName: string
+  businessName: string
 }
 
 // 代码生成表导入
@@ -111,6 +112,10 @@ export function reqGetCodegenPreview(id: number) {
 }
 
 // 下载生成代码
-export function reqDownloadCodegen(id: number) {
-  return request.download(`/codegen/download/${id}`)
+export function reqDownloadCodegen(ids: number[]) {
+  return request.download(`/codegen/download`, {
+    params: {
+      ids: ids.join()
+    }
+  })
 }

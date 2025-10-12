@@ -56,6 +56,6 @@
             group by b.menu_id
         ) b
         on a.id = b.menu_id
-        order by a.sort_id
+        order by a.sort_id,a.id
     </select>
 </mapper>

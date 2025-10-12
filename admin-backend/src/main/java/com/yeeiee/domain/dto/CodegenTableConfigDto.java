@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 /**
  * <p>
  * 代码生成表配置 dto
@@ -18,7 +16,7 @@ import java.util.List;
 @Setter
 @ToString
 public class CodegenTableConfigDto {
-    private List<String> includeTableNames;
+    private String includeTableName;
     private String ignoreTablePrefix;
     private String ignoreColumnPrefix;
 }

@@ -3,13 +3,10 @@ package com.yeeiee.domain.form;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.List;
 
 /**
  * <p>
@@ -46,7 +43,10 @@ public class CodegenTableImportForm {
     private String ignoreColumnPrefix;
 
     @NotNull
-    @Size(min = 1, max = 20)
     @Schema(description = "表名")
-    private List<String> tableNames;
+    private String tableName;
+
+    @NotNull
+    @Schema(description = "业务名称")
+    private String businessName;
 }
