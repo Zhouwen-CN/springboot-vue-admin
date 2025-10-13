@@ -40,7 +40,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/job")
-@Tag(name = "定时任务 控制器")
+@Tag(name = "定时任务控制器")
 public class JobController {
     private final JobService jobService;
 
@@ -73,7 +73,7 @@ public class JobController {
         return R.ok();
     }
 
-    @Operation(summary = "按照id删除")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(
             @PathVariable("id") @Parameter(description = "id") Long id,
@@ -83,7 +83,7 @@ public class JobController {
         return R.ok();
     }
 
-    @Operation(summary = "修改任务状态")
+    @Operation(summary = "修改状态")
     @PatchMapping("/{id}")
     public R<Void> modifyJobEnable(
             @PathVariable("id") @Parameter(description = "id") Long id,
@@ -93,7 +93,7 @@ public class JobController {
         return R.ok();
     }
 
-    @Operation(summary = "触发一次任务")
+    @Operation(summary = "触发任务")
     @GetMapping("/trigger/{id}")
     public R<Void> triggerJob(@PathVariable("id") @Parameter(description = "id") Long id) {
         jobService.triggerJob(id);

@@ -45,13 +45,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/dict/data")
-@Tag(name = "字典数据表 控制器")
+@Tag(name = "字典数据控制器")
 public class DictDataController {
 
     private final DictDataService dictDataService;
     private final DictCacheManager dictCacheManager;
 
-    @Operation(summary = "查询字典数据分页")
+    @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
     public R<PageVo<DictDataVo>> getPageByTypeId(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -68,14 +68,14 @@ public class DictDataController {
         return R.ok(PageVo.fromPage(page, DictDataVo.class));
     }
 
-    @Operation(summary = "新增字典数据")
+    @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DictDataForm dictDataForm) {
         dictDataService.addDictData(dictDataForm);
         return R.ok();
     }
 
-    @Operation(summary = "修改字典数据")
+    @Operation(summary = "更新")
     @PutMapping
     @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.typeId")
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
@@ -84,7 +84,7 @@ public class DictDataController {
         return R.ok();
     }
 
-    @Operation(summary = "删除字典数据")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "字典数据id") Long id) {
         dictCacheManager.evictByDataIds(Collections.singleton(id));
@@ -92,7 +92,7 @@ public class DictDataController {
         return R.ok();
     }
 
-    @Operation(summary = "批量删除字典数据")
+    @Operation(summary = "批量删除")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "字典数据id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictCacheManager.evictByDataIds(ids);
@@ -100,7 +100,7 @@ public class DictDataController {
         return R.ok();
     }
 
-    @Operation(summary = "根据类型id获取字典列表")
+    @Operation(summary = "选择器查询")
     @GetMapping("/{typeId}")
     public R<List<DictDataSelectorVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
         val list = dictCacheManager.getDictByTypeId(typeId);

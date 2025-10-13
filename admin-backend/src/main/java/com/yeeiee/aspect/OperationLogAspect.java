@@ -9,9 +9,12 @@ import com.yeeiee.utils.JsonUtil;
 import com.yeeiee.utils.RequestObjectUtil;
 import com.yeeiee.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * <p>
@@ -44,17 +48,24 @@ public class OperationLogAspect {
     public Object around(ProceedingJoinPoint pjp, Operation operation) throws Throwable {
         long beginTime = System.currentTimeMillis();
 
-        log.info("Start a request [{}]", operation.summary());
+        // 控制器名称
+        val controllerName = Optional.ofNullable(pjp.getTarget().getClass().getAnnotation(Tag.class))
+                .map(Tag::name)
+                .orElse(StringUtils.EMPTY);
+
+        // 操作名称
+        val operationValue = controllerName + "-" + operation.summary();
+
         try {
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, OperationStatusEnum.SUCCESS, time);
-            log.info("Finish a request [{}] in {}ms", operation.summary(), time);
+            saveOperationLog(pjp, operationValue, OperationStatusEnum.SUCCESS, time);
+            log.info("[{}]-[{}] {}ms", controllerName, operation.summary(), time);
             return result;
         } catch (Throwable e) {
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operation, OperationStatusEnum.FIELD, time);
-            log.warn("Failed request [{}]: {}", operation.summary(), e.getMessage());
+            saveOperationLog(pjp, operationValue, OperationStatusEnum.FIELD, time);
+            log.warn("[{}]-[{}] {}ms: {}", controllerName, operation.summary(), time, ExceptionUtils.getRootCauseMessage(e));
             throw e;
         }
     }
@@ -67,7 +78,7 @@ public class OperationLogAspect {
      * @param operationStatusEnum 状态
      * @param time                耗时
      */
-    private void saveOperationLog(ProceedingJoinPoint pjp, Operation operation, OperationStatusEnum operationStatusEnum, long time) throws NoSuchMethodException {
+    private void saveOperationLog(ProceedingJoinPoint pjp, String operation, OperationStatusEnum operationStatusEnum, long time) throws NoSuchMethodException {
         val httpServletRequest = RequestObjectUtil.getHttpServletRequest();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         val method = signature.getMethod();
@@ -80,7 +91,7 @@ public class OperationLogAspect {
 
         val user = SecurityUserUtil.getSecurityUser();
         val operationLog = new OperationLog();
-        operationLog.setOperation(operation.summary());
+        operationLog.setOperation(operation);
         operationLog.setUrl(httpServletRequest.getRequestURI());
         operationLog.setMethod(RequestMethodEnum.from(httpServletRequest.getMethod()));
         String params = this.getParameter(method, pjp.getArgs());

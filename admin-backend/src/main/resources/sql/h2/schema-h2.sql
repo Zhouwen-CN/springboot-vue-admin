@@ -170,7 +170,7 @@ INCREMENT BY 1;
 -- 操作日志表
 CREATE TABLE t_operation_log (
     id            NUMBER(18) PRIMARY KEY,
-    operation     VARCHAR2(10) NOT NULL,
+    operation     VARCHAR2(50) NOT NULL,
     url           VARCHAR2(50) NOT NULL,
     method        NUMBER(1) NOT NULL,
     params        CLOB DEFAULT NULL,

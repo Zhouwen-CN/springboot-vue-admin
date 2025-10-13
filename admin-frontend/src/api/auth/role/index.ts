@@ -71,5 +71,5 @@ export function reqDeleteRoles(ids: number[]) {
  * @returns
  */
 export function reqGetRoleSelectorVoByUserId(userId: number) {
-  return request.get<RoleSelectorVo[]>(`/role/${userId}`)
+  return request.get<number[]>(`/role/${userId}`)
 }

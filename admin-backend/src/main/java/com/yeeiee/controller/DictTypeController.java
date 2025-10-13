@@ -45,11 +45,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/dict/type")
-@Tag(name = "字典类型表 控制器")
+@Tag(name = "字典类型控制器")
 public class DictTypeController {
     private final DictTypeService dictTypeService;
 
-    @Operation(summary = "查询字典类型分页")
+    @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
     public R<PageVo<DictTypeVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -65,7 +65,7 @@ public class DictTypeController {
         return R.ok(PageVo.fromPage(page, DictTypeVo.class));
     }
 
-    @Operation(summary = "查询字典类型选择器")
+    @Operation(summary = "选择器查询")
     @GetMapping
     public R<List<DictTypeSelectorVo>> getSelector(){
         val list = dictTypeService.lambdaQuery()
@@ -77,14 +77,14 @@ public class DictTypeController {
         return R.ok(dictTypeSelectorVoList);
     }
 
-    @Operation(summary = "新增字典类型")
+    @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DictTypeForm dictTypeForm) {
         dictTypeService.addDictType(dictTypeForm);
         return R.ok();
     }
 
-    @Operation(summary = "更新字典类型")
+    @Operation(summary = "更新")
     @PutMapping
     @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.id")
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictTypeForm dictTypeForm) {
@@ -93,14 +93,14 @@ public class DictTypeController {
         return R.ok();
     }
 
-    @Operation(summary = "删除字典类型")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "字典类型id") Long id) {
         dictTypeService.removeDictTypeByIds(Collections.singleton(id));
         return R.ok();
     }
 
-    @Operation(summary = "批量删除字典类型")
+    @Operation(summary = "批量删除")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "字典类型id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dictTypeService.removeDictTypeByIds(ids);

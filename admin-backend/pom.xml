@@ -149,12 +149,6 @@
             <artifactId>tika-core</artifactId>
         </dependency>
 
-        <!-- sql print -->
-        <dependency>
-            <groupId>com.github.gavlyukovskiy</groupId>
-            <artifactId>p6spy-spring-boot-starter</artifactId>
-        </dependency>
-
         <!-- configuration-processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

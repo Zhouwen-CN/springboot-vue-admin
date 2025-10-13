@@ -29,7 +29,6 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <jjwt.version>0.12.6</jjwt.version>
         <openapi.version>2.5.0</openapi.version>
-        <p6spy.verison>1.10.0</p6spy.verison>
         <tika.version>3.2.3</tika.version>
 
         <!-- maven plugin -->
@@ -100,13 +99,6 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${openapi.version}</version>
-            </dependency>
-
-            <!-- sql print -->
-            <dependency>
-                <groupId>com.github.gavlyukovskiy</groupId>
-                <artifactId>p6spy-spring-boot-starter</artifactId>
-                <version>${p6spy.verison}</version>
             </dependency>
 
             <!-- tika: 根据文件头魔数和文件名获取 MIME 类型 -->

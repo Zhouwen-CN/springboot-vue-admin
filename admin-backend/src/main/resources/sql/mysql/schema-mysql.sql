@@ -80,7 +80,7 @@ create table t_login_log(
 drop table if exists t_operation_log;
 create table t_operation_log(
     id        bigint primary key auto_increment comment '主键',
-    operation varchar(10) not null comment '操作',
+    operation varchar(50) not null comment '操作',
     url         varchar(50) not null comment '请求地址',
     method      tinyint not null comment '请求方式',
     params      text default null comment '请求参数',

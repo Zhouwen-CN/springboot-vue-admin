@@ -30,7 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/log")
-@Tag(name = "日志表 控制器")
+@Tag(name = "日志控制器")
 public class LogController {
 
     private final LoginLogService loginLogService;

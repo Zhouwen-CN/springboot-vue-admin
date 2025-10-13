@@ -5,7 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
-import com.yeeiee.domain.vo.*;
+import com.yeeiee.domain.vo.CodegenColumnVo;
+import com.yeeiee.domain.vo.CodegenPreviewVo;
+import com.yeeiee.domain.vo.CodegenTableSelectorVo;
+import com.yeeiee.domain.vo.CodegenTableVo;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.freemarker.FreemarkerEngineService;
@@ -20,7 +25,15 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,14 +53,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/codegen")
-@Tag(name = "代码生成配置表 控制器")
+@Tag(name = "代码生成配置控制器")
 public class CodegenController {
 
     private final CodegenTableService codegenTableService;
     private final CodegenColumnService codegenColumnService;
     private final FreemarkerEngineService freemarkerEngineService;
 
-    @Operation(summary = "查询代码生成表分页")
+    @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
     public R<PageVo<CodegenTableVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -58,7 +71,7 @@ public class CodegenController {
         return R.ok(PageVo.fromPage(list));
     }
 
-    @Operation(summary = "查询代码生成表选择器")
+    @Operation(summary = "选择器查询")
     @GetMapping
     public R<List<CodegenTableSelectorVo>> getSelectorList(@RequestParam("dataSourceId") @Parameter(description = "数据源编号") Long dataSourceId) {
         val codegenTableVoList = codegenTableService.getCodegenTableSelector(dataSourceId);
@@ -66,28 +79,28 @@ public class CodegenController {
     }
 
 
-    @Operation(summary = "导入代码生成表")
+    @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@RequestBody @Validated CodegenTableImportForm codegenTableImportForm) {
         codegenTableService.addCodegenTable(codegenTableImportForm);
         return R.ok();
     }
 
-    @Operation(summary = "修改代码生成表")
+    @Operation(summary = "更新")
     @PutMapping
     public R<Void> modify(@RequestBody @Validated CodegenTableColumnsForm codegenTableColumnsForm) {
         codegenTableService.modifyCodegenConfig(codegenTableColumnsForm);
         return R.ok();
     }
 
-    @Operation(summary = "同步代码生成表")
+    @Operation(summary = "同步")
     @GetMapping("/sync/{id}")
     public R<Void> syncColumnList(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
         codegenTableService.modifyCodegenColumnList(id);
         return R.ok();
     }
 
-    @Operation(summary = "删除代码生成表")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
         codegenColumnService.remove(
@@ -98,7 +111,7 @@ public class CodegenController {
         return R.ok();
     }
 
-    @Operation(summary = "批量删除代码生成表")
+    @Operation(summary = "批量删除")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "代码生成表id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         codegenColumnService.remove(
@@ -109,7 +122,7 @@ public class CodegenController {
         return R.ok();
     }
 
-    @Operation(summary = "查询代码生成字段列表")
+    @Operation(summary = "id查询")
     @GetMapping("/{id}")
     public R<List<CodegenColumnVo>> getColumnListByTableId(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
         val list = codegenColumnService.lambdaQuery()
@@ -120,7 +133,7 @@ public class CodegenController {
         return R.ok(columnVoList);
     }
 
-    @Operation(summary = "代码生成预览")
+    @Operation(summary = "预览")
     @GetMapping("/preview/{id}")
     public R<List<CodegenPreviewVo>> preview(@PathVariable("id") @Parameter(description = "代码生成表id") Long id) {
         val map = freemarkerEngineService.codegenById(id);
@@ -128,7 +141,7 @@ public class CodegenController {
         return R.ok(previewVoList);
     }
 
-    @Operation(summary = "代码生成下载")
+    @Operation(summary = "下载")
     @GetMapping("/download")
     public void download(
             @RequestParam("ids") @Parameter(description = "代码生成id列表") @Size(min = 1, max = 10) Collection<Long> ids,

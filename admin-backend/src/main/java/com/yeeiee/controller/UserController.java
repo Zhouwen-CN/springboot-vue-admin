@@ -41,11 +41,11 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-@Tag(name = "用户表 控制器")
+@Tag(name = "用户控制器")
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "查询用户分页")
+    @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
     public R<PageVo<UserVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -65,42 +65,42 @@ public class UserController {
         return R.ok();
     }
 
-    @Operation(summary = "新增用户")
+    @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody UserForm userForm) {
         userService.addUser(userForm);
         return R.ok();
     }
 
-    @Operation(summary = "更新用户")
+    @Operation(summary = "更新")
     @PutMapping
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody UserForm userForm) {
         userService.modifyUser(userForm);
         return R.ok();
     }
 
-    @Operation(summary = "删除用户")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.removeUserById(id);
         return R.ok();
     }
 
-    @Operation(summary = "批量删除用户")
+    @Operation(summary = "批量删除")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "用户id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         userService.removeUserByIds(ids);
         return R.ok();
     }
 
-    @Operation(summary = "修改用户密码")
+    @Operation(summary = "修改密码")
     @PatchMapping("/pwd/change")
     public R<Void> changePwd(@Validated @RequestBody ChangePwdForm changePwdForm) {
         userService.modifyUserChangePwd(changePwdForm);
         return R.ok();
     }
 
-    @Operation(summary = "重置用户密码")
+    @Operation(summary = "重置密码")
     @PatchMapping("/pwd/reset/{id}")
     public R<Void> resetPwdById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.modifyUserResetPwd(id);

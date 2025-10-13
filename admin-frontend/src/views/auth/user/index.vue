@@ -96,7 +96,7 @@ async function updateUser(row: UserVo) {
   toggleDialog.title = '修改用户'
   userForm.id = id
   userForm.username = row.username
-  userForm.roleIds = reuslt.data?.map((role) => role.id)
+  userForm.roleIds = reuslt.data
   pwdVisible.value = false
 }
 

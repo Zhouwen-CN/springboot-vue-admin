@@ -48,12 +48,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/datasource")
-@Tag(name = "数据源配置表 控制器")
+@Tag(name = "数据源配置控制器")
 public class DataSourceController {
 
     private final DataSourceService dataSourceService;
 
-    @Operation(summary = "查询数据源分页")
+    @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
     public R<PageVo<DataSourceVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
@@ -67,7 +67,7 @@ public class DataSourceController {
         return R.ok(PageVo.fromPage(page, DataSourceVo.class));
     }
 
-    @Operation(summary = "查询数据源选择器")
+    @Operation(summary = "选择器查询")
     @GetMapping
     public R<List<DataSourceSelectorVo>> getSelectorList() {
         val list = dataSourceService.lambdaQuery()
@@ -80,7 +80,7 @@ public class DataSourceController {
         return R.ok(dataSourceSelectorVoList);
     }
 
-    @Operation(summary = "新增数据源")
+    @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DataSourceForm dataSourceForm) {
         val name = dataSourceForm.getName();
@@ -97,7 +97,7 @@ public class DataSourceController {
         return R.ok();
     }
 
-    @Operation(summary = "更新数据源")
+    @Operation(summary = "更新")
     @PutMapping
     public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DataSourceForm dataSourceForm) {
         val dataSource = BeanUtil.toBean(dataSourceForm, DataSource.class);
@@ -106,21 +106,21 @@ public class DataSourceController {
     }
 
 
-    @Operation(summary = "删除数据源")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         dataSourceService.removeById(id);
         return R.ok();
     }
 
-    @Operation(summary = "批量删除数据源")
+    @Operation(summary = "批量删除")
     @DeleteMapping
     public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "数据源id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
         dataSourceService.removeByIds(ids);
         return R.ok();
     }
 
-    @Operation(summary = "测试数据源连接")
+    @Operation(summary = "测试连接")
     @GetMapping("/check/{id}")
     public R<Void> checkConnection(@PathVariable("id") @Parameter(description = "数据源id") Long id) {
         val dataSource = dataSourceService.getById(id);

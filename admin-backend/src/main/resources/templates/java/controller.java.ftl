@@ -42,7 +42,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/${table.businessName}")
-@Tag(name = "${table.tableComment?remove_ending('表')} 控制器")
+@Tag(name = "${table.tableComment?remove_ending('表')}控制器")
 public class ${table.className}Controller {
     <#-- service变量名 -->
     <#assign serviceName = table.className?uncap_first + 'Service'>
@@ -132,7 +132,7 @@ public class ${table.className}Controller {
         return R.ok();
     }
 
-    @Operation(summary = "按照id删除")
+    @Operation(summary = "id删除")
     @DeleteMapping("/{id}")
     public R<Void> removeById(@PathVariable("id") @Parameter(description = "id") Long id) {
         ${serviceName}.removeById(id);

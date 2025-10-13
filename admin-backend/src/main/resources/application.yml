@@ -102,14 +102,6 @@ spring:
           await-termination-period: 30s
         thread-name-prefix: quartz-
 
-# 控制台打印sql
-decorator:
-  datasource:
-    p6spy:
-      log-format: "Execute SQL in %(executionTime)ms: %(sqlSingleLine)"
-      logging: custom
-      custom-appender-class: com.yeeiee.config.P6spySqlFormatConfiguration
-
 # 关闭 swagger-ui，前端已经整合
 springdoc:
   swagger-ui:
