@@ -119,12 +119,11 @@ onMounted(() => {
         <el-table-column label="主键" prop="id"></el-table-column>
         <el-table-column label="任务名称" prop="name"></el-table-column>
         <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
-        <el-table-column label="js脚本" prop="jsScript"></el-table-column>
         <el-table-column label="重试次数" prop="retryCount"></el-table-column>
         <el-table-column label="重试间隔" prop="retryInterval"></el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="120px">
+        <el-table-column label="操作" min-width="130px">
           <template #default="{ row }: { row: JobVo }">
             <el-button-group>
               <el-button

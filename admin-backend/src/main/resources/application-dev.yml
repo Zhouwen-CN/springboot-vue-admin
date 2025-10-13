@@ -50,7 +50,7 @@ spring:
 #      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
 #      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
 #      hikari:
-#        pool-name: master
+#        pool-name: quartz
 #        maximum-pool-size: 5 #最大连接数
 #        minimum-idle: 1 #最小空闲连接数
 #        connection-timeout: 5000 #获取连接超时，5秒
@@ -65,6 +65,11 @@ management:
     web:
       exposure:
         include: "*"
+
+# mybatis日志打印
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:
