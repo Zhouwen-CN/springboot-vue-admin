@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "custom.http")
-public class RestClientConfig {
+public class RestClientConfiguration {
     private PoolConfig pool = new PoolConfig();
     private ConnectConfig connect = new ConnectConfig();
 

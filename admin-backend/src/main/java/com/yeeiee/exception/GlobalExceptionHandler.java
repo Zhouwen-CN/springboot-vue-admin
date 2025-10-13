@@ -93,6 +93,7 @@ public class GlobalExceptionHandler {
 
     /**
      * url参数校验
+     *
      * @param e 参数校验异常
      * @return 错误信息
      */
@@ -126,6 +127,7 @@ public class GlobalExceptionHandler {
 
     /**
      * restClient 响应状态码异常处理器
+     *
      * @param e 响应状态码异常
      * @return 错误信息
      */
@@ -135,7 +137,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 定时任务异常处理
+     *
+     * @param e 定时任务异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(JobSchedulerException.class)
+    public R<Void> jobSchedulerExceptionHandler(JobSchedulerException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
      * 默认异常处理
+     *
      * @param e 默认异常
      * @return 错误信息
      */

@@ -6,24 +6,24 @@ import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @ConditionalOnProperty(prefix = "spring.cache", name = "type", havingValue = "redis")
-public class RedisCacheConfig {
+public class RedisCacheConfiguration {
     /**
      * cache redis 配置
+     *
      * @param cacheProperties cache配置
      * @return redis cache配置
      */
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties, @Qualifier("redisObjectMapper") ObjectMapper objectMapper) {
+    public org.springframework.data.redis.cache.RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties, @Qualifier("redisObjectMapper") ObjectMapper objectMapper) {
         // 序列化
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
-        RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+        org.springframework.data.redis.cache.RedisCacheConfiguration cacheConfig = org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer.UTF_8))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
 

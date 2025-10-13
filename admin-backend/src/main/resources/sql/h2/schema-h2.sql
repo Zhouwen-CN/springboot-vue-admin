@@ -113,7 +113,7 @@ CREATE TABLE t_menu (
     pid           NUMBER(18) NOT NULL,
     keep_alive    NUMBER(1) DEFAULT 0,
     menu_type     NUMBER(1) NOT NULL,
-    sort_id NUMBER(9) NOT NULL,
+    sort_id       NUMBER(9) DEFAULT 0,
     create_user   VARCHAR2(15) DEFAULT NULL,
     create_time   DATE DEFAULT SYSDATE,
     update_user   VARCHAR2(15) DEFAULT NULL,

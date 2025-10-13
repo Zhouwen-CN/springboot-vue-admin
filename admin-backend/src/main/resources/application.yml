@@ -5,15 +5,18 @@ spring:
     name: sv-admin
   profiles:
     active: dev
+
   # 事务配置
   transaction:
     default-timeout: 60s #事务超时时间
     rollback-on-commit-failure: true #提交失败回滚
+
   # 文件上传配置
   servlet:
     multipart:
       max-file-size: 16MB #单个文件大小
       max-request-size: 32MB #总上传的文件大小
+
   # jackson配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -26,6 +29,7 @@ spring:
       read-enums-using-to-string: true
       read-unknown-enum-values-using-default-value: true
       fail-on-unknown-properties: false
+
   # 缓存配置（如果要启用redis缓存，需要修改redis配置）
   cache:
     type: caffeine
@@ -36,6 +40,7 @@ spring:
       use-key-prefix: true #是否使用key前缀
     caffeine:
       spec: initialCapacity=10,maximumSize=100,expireAfterAccess=5m
+
   # redis配置
   data:
     redis:
@@ -52,17 +57,50 @@ spring:
           min-idle: 1 #最小空闲连接数
           max-wait: 5s #从连接池获取连接超时时间
           time-between-eviction-runs: 5m #空闲连接检查间隔
-  # 线程池配置，默认配置 org.springframework.boot.autoconfigure.task.TaskExecutorConfigurations
+
+  # Quartz配置，参考：SchedulerFactoryBean.initSchedulerFactory
+  quartz:
+    scheduler-name: sv-admin #集群名称
+    job-store-type: jdbc #存储器类型，默认为 memory
+    auto-startup: true #是否自动启动
+    startup-delay: 0s #启动延迟
+    wait-for-jobs-to-complete-on-shutdown: true #应用关闭时，是否等待定时任务执行完成，默认为 false
+    overwrite-existing-jobs: true #是否覆盖已有Job的配置，仅适用于Bean注册
+    properties: #quartz附加属性，参考：http://www.quartz-scheduler.org/documentation/2.4.0-SNAPSHOT/configuration.html
+      org:
+        quartz:
+          # Scheduler配置
+          scheduler:
+            #instanceName: 不需要配置，同 spring.quartz.scheduler-name
+            instanceId: AUTO #自动生成 instanceID
+            instanceIdGenerator:
+              class: org.quartz.simpl.SimpleInstanceIdGenerator #id生成策略类，默认为 SimpleInstanceIdGenerator
+          # JobStore 相关配置
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore #JobStore实现类
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_ #Quartz表前缀
+            isClustered: true #是集群模式
+            clusterCheckinInterval: 15000 #集群检查频率，单位：毫秒。默认为 15000
+            misfireThreshold: 60000 #允许任务在错过触发时间后自动重试，比如任务暂停时间在60秒之内，那么期间没有执行的任务会补充执行
+            useProperties: false
+    jdbc:
+      initialize-schema: never #不初始化数据库
+
+  # 线程池配置，参考：TaskExecutorConfigurations.TaskExecutorConfiguration.applicationTaskExecutor
   task:
     execution:
-      pool:
-        core-size: 1
-        max-size: 5
-        queue-capacity: 50
-        keep-alive: 60s
-      shutdown:
-        await-termination: true
-        await-termination-period: 30s
+      quartz:
+        pool:
+          core-size: 1
+          max-size: 5
+          queue-capacity: 50
+          keep-alive: 60s
+          allow-core-thread-timeout: true
+        shutdown:
+          await-termination: true
+          await-termination-period: 30s
+        thread-name-prefix: quartz-
 
 # 控制台打印sql
 decorator:
@@ -70,7 +108,7 @@ decorator:
     p6spy:
       log-format: "Execute SQL in %(executionTime)ms: %(sqlSingleLine)"
       logging: custom
-      custom-appender-class: com.yeeiee.config.P6spySqlFormatConfig
+      custom-appender-class: com.yeeiee.config.P6spySqlFormatConfiguration
 
 # 关闭 swagger-ui，前端已经整合
 springdoc:

@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024-04-27
  */
 @Configuration
-public class OpenApiConfig {
+public class OpenApiConfiguration {
 
     private static final String SECURITY_SCHEME_NAME = "Bearer Authentication";
 

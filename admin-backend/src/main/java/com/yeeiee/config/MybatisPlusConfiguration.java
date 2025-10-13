@@ -37,13 +37,13 @@ import java.time.LocalDateTime;
  * @since 2024-04-27
  */
 @Configuration
-public class MybatisPlusConfig implements MetaObjectHandler, InitializingBean {
+public class MybatisPlusConfiguration implements MetaObjectHandler, InitializingBean {
     @Value("${custom.jsql-parser.cache.spec}")
     private String jSqlParserCacheSpec;
     private final DbType dbType;
 
     @Autowired
-    public MybatisPlusConfig(ConfigurableEnvironment environment) {
+    public MybatisPlusConfiguration(ConfigurableEnvironment environment) {
         dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
     }
 

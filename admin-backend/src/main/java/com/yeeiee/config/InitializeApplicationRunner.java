@@ -1,9 +1,13 @@
 package com.yeeiee.config;
 
 import com.yeeiee.domain.entity.DataSource;
+import com.yeeiee.domain.entity.Job;
+import com.yeeiee.scheduler.SchedulerManager;
 import com.yeeiee.service.DataSourceService;
+import com.yeeiee.service.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.quartz.SchedulerException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -23,24 +27,27 @@ public class InitializeApplicationRunner implements ApplicationRunner {
 
     private final DataSourceService dataSourceService;
     private final DataSourceProperties dataSourceProperties;
+    private final SchedulerManager schedulerManager;
+    private final JobService jobService;
     private static final String CURRENT_DATASOURCE_NAME = "master";
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         this.initDataSourceConfig();
+        this.initQuartzJob();
     }
 
     /**
      * 初始化当前数据源配置
      */
-    private void initDataSourceConfig(){
+    private void initDataSourceConfig() {
         var dataSource = dataSourceService.lambdaQuery()
                 .eq(DataSource::getName, CURRENT_DATASOURCE_NAME)
                 .one();
 
         val notExists = dataSource == null;
 
-        if(notExists){
+        if (notExists) {
             dataSource = new DataSource();
             dataSource.setName(CURRENT_DATASOURCE_NAME);
         }
@@ -49,10 +56,33 @@ public class InitializeApplicationRunner implements ApplicationRunner {
         dataSource.setUsername(dataSourceProperties.getUsername());
         dataSource.setPassword(dataSourceProperties.getPassword());
 
-        if(notExists){
+        if (notExists) {
             dataSourceService.save(dataSource);
-        }else{
+        } else {
             dataSourceService.updateById(dataSource);
+        }
+    }
+
+    /**
+     * 初始化定时任务
+     *
+     * @throws SchedulerException 调度异常
+     */
+    private void initQuartzJob() throws SchedulerException {
+        // schedulerManager.clean();
+
+        val jobList = jobService.lambdaQuery()
+                .select(Job::getId, Job::getName, Job::getCronExpression, Job::getJsScript, Job::getJobEnable)
+                .list();
+
+        for (Job job : jobList) {
+            schedulerManager.addJob(
+                    job.getId(),
+                    job.getName(),
+                    job.getJsScript(),
+                    job.getCronExpression(),
+                    job.getJobEnable()
+            );
         }
     }
 }

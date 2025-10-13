@@ -2,17 +2,16 @@ package com.yeeiee.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.Job;
+import com.yeeiee.domain.form.JobEnableChangeForm;
 import com.yeeiee.domain.form.JobForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.JobVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
-import com.yeeiee.domain.vo.JobVo;
 import com.yeeiee.service.JobService;
-import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -64,43 +62,41 @@ public class JobController {
     @Operation(summary = "新增")
     @PostMapping
     public R<Void> add(@RequestBody @Validated(GroupingValidate.Create.class) JobForm form) {
-        val entity = BeanUtil.toBean(form, Job.class);
-        jobService.save(entity);
+        jobService.addJob(form);
         return R.ok();
     }
 
     @Operation(summary = "更新")
     @PutMapping
     public R<Void> modify(@RequestBody @Validated(GroupingValidate.Update.class) JobForm form) {
-        val entity = BeanUtil.toBean(form, Job.class);
-        jobService.updateById(entity);
+        jobService.modifyJob(form);
         return R.ok();
     }
 
     @Operation(summary = "按照id删除")
     @DeleteMapping("/{id}")
-    public R<Void> removeById(@PathVariable("id") @Parameter(description = "id") Long id) {
-        jobService.removeById(id);
-        return R.ok();
-    }
-
-    @Operation(summary = "批量删除")
-    @DeleteMapping
-    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
-        jobService.removeByIds(ids);
+    public R<Void> removeById(
+            @PathVariable("id") @Parameter(description = "id") Long id,
+            @RequestParam("name") @Parameter(description = "任务名称") String name
+    ) {
+        jobService.removeJob(id, name);
         return R.ok();
     }
 
     @Operation(summary = "修改任务状态")
     @PatchMapping("/{id}")
     public R<Void> modifyJobEnable(
-            @PathVariable("id") Long id,
-            @RequestParam(value = "jobEnable") @Parameter(description = "任务状态") Boolean jobEnable
+            @PathVariable("id") @Parameter(description = "id") Long id,
+            @RequestBody @Validated JobEnableChangeForm jobEnableChangeForm
     ) {
-        jobService.lambdaUpdate()
-                .eq(Job::getId, id)
-                .set(Job::getJobEnable, jobEnable)
-                .update();
+        jobService.modifyJobEnable(id, jobEnableChangeForm);
+        return R.ok();
+    }
+
+    @Operation(summary = "触发一次任务")
+    @GetMapping("/trigger/{id}")
+    public R<Void> triggerJob(@PathVariable("id") @Parameter(description = "id") Long id) {
+        jobService.triggerJob(id);
         return R.ok();
     }
 }

@@ -1,11 +1,19 @@
 <script lang="ts" setup>
-import { Delete, Edit, Plus, Search, VideoPause, VideoPlay } from '@element-plus/icons-vue'
+import {
+  CircleCheck,
+  Delete,
+  Edit,
+  Plus,
+  Search,
+  VideoPause,
+  VideoPlay
+} from '@element-plus/icons-vue'
 import {
   type JobVo,
   reqGetPage,
   reqModifyEnable,
   reqRemoveById,
-  reqRemoveByIds
+  reqTriggerJobOnce
 } from '@/api/tool/job'
 import JobForm from './components/JobForm.vue'
 
@@ -28,27 +36,39 @@ function pageSearch() {
 }
 
 // 按照id删除
-async function remove(id: number) {
-  await reqRemoveById(id)
-  refresh({ params: { ...pageParams } })
-}
-
-// 批量删除
-const deleteIds = ref<number[]>([])
-function handleSelectionChange(voList: JobVo[]) {
-  deleteIds.value = voList.map((voList) => voList.id)
-}
-async function removeBatch() {
-  await reqRemoveByIds(deleteIds.value)
-  refresh({ params: { ...pageParams } })
+async function remove(row: JobVo) {
+  row.loading = true
+  try {
+    await reqRemoveById(row.id, row.name)
+    refresh({ params: { ...pageParams } })
+  } catch (error) {
+    // do nothing
+  } finally {
+    row.loading = false
+  }
 }
 
 // 修改任务状态
 async function modifyJobEnable(row: JobVo) {
   row.loading = true
   try {
-    await reqModifyEnable(row.id, !row.jobEnable)
+    await reqModifyEnable(row.id, {
+      name: row.name,
+      jobEnable: !row.jobEnable
+    })
     refresh({ params: { ...pageParams } })
+  } catch (error) {
+    // do nothing
+  } finally {
+    row.loading = false
+  }
+}
+
+// 触发一次任务
+async function triggerJobOnce(row: JobVo) {
+  row.loading = true
+  try {
+    await reqTriggerJobOnce(row.id)
   } catch (error) {
     // do nothing
   } finally {
@@ -92,24 +112,10 @@ onMounted(() => {
       <!-- 表格上面的按钮 -->
       <div>
         <el-button :icon="Plus" type="primary" @click="formDialog?.openDialog()">新建</el-button>
-        <el-popconfirm title="是否删除？" @confirm="removeBatch">
-          <template #reference>
-            <el-button :disabled="deleteIds.length == 0" :icon="Delete" type="danger"
-              >批量删除
-            </el-button>
-          </template>
-        </el-popconfirm>
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="data"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
+      <el-table :border="true" :data="data" show-overflow-tooltip style="margin-top: 16px">
         <el-table-column label="主键" prop="id"></el-table-column>
         <el-table-column label="任务名称" prop="name"></el-table-column>
         <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
@@ -128,13 +134,19 @@ onMounted(() => {
               ></el-button>
               <el-button
                 :icon="row.jobEnable ? VideoPause : VideoPlay"
+                :loading="row.loading"
                 :type="row.jobEnable ? 'success' : 'info'"
                 @click="modifyJobEnable(row)"
-                :loading="row.loading"
               ></el-button>
-              <el-popconfirm title="是否删除？" @confirm="remove(row.id)">
+              <el-button
+                :icon="CircleCheck"
+                :loading="row.loading"
+                type="warning"
+                @click="triggerJobOnce(row)"
+              ></el-button>
+              <el-popconfirm title="是否删除？" @confirm="remove(row)">
                 <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
+                  <el-button :icon="Delete" :loading="row.loading" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </el-button-group>

@@ -3,7 +3,6 @@ package com.yeeiee.config;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +16,7 @@ import java.util.Set;
  * @since 2025-08-18
  */
 @Slf4j
-public class P6spySqlFormatConfig extends FormattedLogger {
+public class P6spySqlFormatConfiguration extends FormattedLogger {
 
     private static final Set<Category> INCLUDE = new HashSet<>();
 
@@ -33,7 +32,8 @@ public class P6spySqlFormatConfig extends FormattedLogger {
 
     @Override
     public void logText(String text) {
-        log.info(text.replaceAll("\\s+", StringUtils.SPACE));
+        // TODO 考虑放弃打印sql，或者不用自动装配（定制化），quartz打印太多日志了
+        // log.info(text.replaceAll("\\s+", StringUtils.SPACE));
     }
 
     @Override

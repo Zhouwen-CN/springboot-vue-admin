@@ -38,18 +38,25 @@ export function reqSave(form: JobForm) {
 }
 
 // 按照id删除
-export function reqRemoveById(id: number) {
-  return request.delete<void>('/job/' + id)
+export function reqRemoveById(id: number, name: string) {
+  return request.delete<void>('/job/' + id, {
+    params: {
+      name
+    }
+  })
 }
 
-// 批量删除
-export function reqRemoveByIds(ids: number[]) {
-  return request.delete<void>(`/job`, { params: { ids: ids.join() } })
+interface JobEnableChangeForm {
+  name: string
+  jobEnable: boolean
 }
 
 // 修改任务状态
-export function reqModifyEnable(id: number, jobEnable: boolean) {
-  return request.patch<void>(`/job/${id}`, null, {
-    params: { jobEnable: jobEnable }
-  })
+export function reqModifyEnable(id: number, form: JobEnableChangeForm) {
+  return request.patch<void>(`/job/${id}`, form)
+}
+
+// 触发一次任务
+export function reqTriggerJobOnce(id: number) {
+  return request.get<void>(`/job/trigger/${id}`)
 }

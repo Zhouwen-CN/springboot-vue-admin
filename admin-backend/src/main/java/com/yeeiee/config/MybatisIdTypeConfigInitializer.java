@@ -23,7 +23,7 @@ import java.util.Set;
 @Slf4j
 public class MybatisIdTypeConfigInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     private static final String ID_TYPE_KEY = "mybatis-plus.global-config.db-config.id-type";
-    private static final String DATASOURCE_URL_KEY = "spring.datasource.url";
+    private static final String DATASOURCE_URL_KEY = "spring.datasource.master.url";
 
     private static final Set<DbType> INPUT_ID_TYPES = Set.of(
             DbType.DB2,

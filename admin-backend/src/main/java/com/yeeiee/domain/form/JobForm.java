@@ -1,5 +1,6 @@
 package com.yeeiee.domain.form;
 
+import com.yeeiee.domain.validate.CronExpression;
 import com.yeeiee.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -34,7 +35,7 @@ public class JobForm {
     private String name;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 32)
+    @CronExpression(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
     @Schema(description = "cron 表达式")
     private String cronExpression;
 
