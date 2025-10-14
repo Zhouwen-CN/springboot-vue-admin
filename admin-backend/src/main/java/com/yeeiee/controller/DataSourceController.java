@@ -48,7 +48,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/datasource")
-@Tag(name = "数据源配置控制器")
+@Tag(name = "数据源配置 控制器")
 public class DataSourceController {
 
     private final DataSourceService dataSourceService;

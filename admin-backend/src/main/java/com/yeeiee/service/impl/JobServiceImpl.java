@@ -70,7 +70,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                 schedulerManager.updateJob(
                         oldJobName,
                         form.getJsScript(),
-                        form.getCronExpression()
+                        form.getCronExpression(),
+                        job.getJobEnable()
                 );
             }
 

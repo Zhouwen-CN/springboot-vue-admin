@@ -11,6 +11,10 @@ import 'element-plus/dist/index.css'
 // @ts-ignore
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// cron表达式组件
+// @ts-ignore
+import noVue3Cron from 'no-vue3-cron'
+import 'no-vue3-cron/lib/noVue3Cron.css' // 引入样式
 // 样式清除
 import './assets/css/reset.scss'
 // 自定义指令，给表单项添加提示
@@ -48,6 +52,7 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn
 })
+app.use(noVue3Cron)
 app.directive('tip', vTip)
 app.directive('copy', vCopy)
 

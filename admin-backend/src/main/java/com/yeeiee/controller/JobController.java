@@ -40,7 +40,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/job")
-@Tag(name = "定时任务控制器")
+@Tag(name = "定时任务 控制器")
 public class JobController {
     private final JobService jobService;
 

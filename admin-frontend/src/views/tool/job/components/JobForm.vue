@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { type JobForm, type JobVo, reqSave } from '@/api/tool/job'
 import { type FormInstance, type FormRules } from 'element-plus'
+import type { PopoverInstance } from 'element-plus'
 
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])
@@ -29,8 +30,8 @@ const rules = reactive<FormRules<typeof form>>({
     { max: 32, message: '任务名称长度不能大于32', trigger: 'blur' }
   ],
   cronExpression: [
-    { required: true, message: 'cron 表达式不能为空', trigger: 'blur' },
-    { max: 32, message: 'cron 表达式长度不能大于32', trigger: 'blur' }
+    { required: true, message: 'cron 表达式不能为空', trigger: 'submit' },
+    { max: 32, message: 'cron 表达式长度不能大于32', trigger: 'submit' }
   ],
   jsScript: [
     { required: true, message: 'js脚本不能为空', trigger: 'blur' },
@@ -56,6 +57,16 @@ async function onSubmit(formEl: FormInstance | undefined) {
   } finally {
     loading.value = false
   }
+}
+
+// cron 弹出框
+const cronPopoverRef = ref<PopoverInstance>()
+function changeCron(val: string | Event) {
+  if (typeof val !== 'string') return false
+  form.cronExpression = val
+}
+function closeCron() {
+  cronPopoverRef.value?.hide()
 }
 
 // 清空表单
@@ -108,7 +119,20 @@ defineExpose({
           <el-input v-model="form.name" clearable placeholder="任务名称" />
         </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
-          <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式" />
+          <el-popover :width="570" placement="bottom-start" ref="cronPopoverRef" trigger="click">
+            <template #reference>
+              <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式" />
+            </template>
+            <el-scrollbar max-height="400px">
+              <noVue3Cron
+                :cron-value="form.cronExpression"
+                @change="changeCron"
+                @close="closeCron"
+                i18n="cn"
+              >
+              </noVue3Cron>
+            </el-scrollbar>
+          </el-popover>
         </el-form-item>
         <el-form-item label="js脚本" prop="jsScript">
           <el-input

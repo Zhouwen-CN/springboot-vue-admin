@@ -42,7 +42,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/menu")
-@Tag(name = "菜单控制器")
+@Tag(name = "菜单 控制器")
 public class MenuController {
     private final MenuService menuService;
     private final RoleMenuService roleMenuService;

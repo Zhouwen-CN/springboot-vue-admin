@@ -42,7 +42,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/role")
-@Tag(name = "角色控制器")
+@Tag(name = "角色 控制器")
 public class RoleController {
     private final RoleService roleService;
 

@@ -45,7 +45,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/dict/data")
-@Tag(name = "字典数据控制器")
+@Tag(name = "字典数据 控制器")
 public class DictDataController {
 
     private final DictDataService dictDataService;

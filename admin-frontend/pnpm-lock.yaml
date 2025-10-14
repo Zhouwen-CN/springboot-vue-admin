@@ -20,6 +20,9 @@ importers:
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
+      no-vue3-cron:
+        specifier: ^2.0.0
+        version: 2.0.0(typescript@5.4.5)
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -1201,6 +1204,9 @@ packages:
   core-js-pure@3.41.0:
     resolution: {integrity: sha512-71Gzp96T9YPk63aUvE5Q5qP+DryB4ZloUZPSOebGM88VNw8VNfvdA7z6kGA8iGOTEzAomsRidp4jXSmUIJsL+Q==}
 
+  core-js@3.46.0:
+    resolution: {integrity: sha512-vDMm9B0xnqqZ8uSBpZ8sNtRtOdmfShrvT6h2TuQGLs0Is+cR0DYbj/KWP6ALVNbWPpqA/qPLoOuppJN07humpA==}
+
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -1927,6 +1933,9 @@ packages:
   neotraverse@0.6.18:
     resolution: {integrity: sha512-Z4SmBUweYa09+o6pG+eASabEpP6QkQ70yHj351pQoEXIs8uHbaU2DWVmzBANKgflPa47A50PtB2+NgRpQvr7vA==}
     engines: {node: '>= 10'}
+
+  no-vue3-cron@2.0.0:
+    resolution: {integrity: sha512-t21cND1xe3jAsNxQ23LtM3kSJCTG074e47sI7KwxsFPgwI5kIU7ZJ4JQ+/cg/8/z5hz9o4bmYNBzbD4w2YyYrw==}
 
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
@@ -4256,6 +4265,8 @@ snapshots:
 
   core-js-pure@3.41.0: {}
 
+  core-js@3.46.0: {}
+
   cross-spawn@7.0.3:
     dependencies:
       path-key: 3.1.1
@@ -4982,6 +4993,15 @@ snapshots:
   natural-compare@1.4.0: {}
 
   neotraverse@0.6.18: {}
+
+  no-vue3-cron@2.0.0(typescript@5.4.5):
+    dependencies:
+      core-js: 3.46.0
+      element-plus: 2.10.7(vue@3.4.38(typescript@5.4.5))
+      vue: 3.4.38(typescript@5.4.5)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - typescript
 
   node-abort-controller@3.1.1: {}
 

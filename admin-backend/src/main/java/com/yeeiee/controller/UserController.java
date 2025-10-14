@@ -41,7 +41,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
-@Tag(name = "用户控制器")
+@Tag(name = "用户 控制器")
 public class UserController {
     private final UserService userService;
 

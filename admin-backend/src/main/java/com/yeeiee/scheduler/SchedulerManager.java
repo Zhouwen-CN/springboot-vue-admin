@@ -1,14 +1,13 @@
 package com.yeeiee.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.stereotype.Service;
@@ -37,17 +36,27 @@ public class SchedulerManager {
      * @param jobName        任务名称
      * @param script         执行脚本
      * @param cronExpression cron表达式
+     * @param immediate      是否立即执行
      * @throws SchedulerException 调度异常
      */
     public void addJob(Long jobId, String jobName, String script, String cronExpression, boolean immediate) throws SchedulerException {
-        JobDetail jobDetail = JobBuilder.newJob(JobExecutor.class)
+        val jobDetail = JobBuilder.newJob(JobExecutor.class)
                 .withIdentity(jobName)
                 .usingJobData(ID, jobId)
                 .build();
 
-        Trigger trigger = TriggerBuilder.newTrigger()
+        // 当前时间 - 开火时间 > misfireThreshold，则判定为失火；参考: CronTriggerImpl.updateAfterMisfire
+        val cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression)
+                // 默认，失火后，下次开火时间 = 当前时间
+                .withMisfireHandlingInstructionFireAndProceed();
+        // 失火后，下次开火时间 = 当前时间 + 调度间隔
+        // .withMisfireHandlingInstructionDoNothing()
+        // 忽略失火。例如，每15秒触发一次，失火了5分钟，一旦有机会触发，就会触发 20 次
+        // .withMisfireHandlingInstructionIgnoreMisfires();
+
+        val trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobName)
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .withSchedule(cronScheduleBuilder)
                 .usingJobData(SCRIPT, script)
                 .build();
 
@@ -64,18 +73,22 @@ public class SchedulerManager {
      * @param jobName        任务名称
      * @param script         执行脚本
      * @param cronExpression cron表达式
+     * @param immediate      是否立即执行
      * @throws SchedulerException 调度异常
      */
-    public void updateJob(String jobName, String script, String cronExpression)
+    public void updateJob(String jobName, String script, String cronExpression, boolean immediate)
             throws SchedulerException {
-
-        Trigger trigger = TriggerBuilder.newTrigger()
+        val trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobName)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .usingJobData(SCRIPT, script)
                 .build();
 
         scheduler.rescheduleJob(TriggerKey.triggerKey(jobName), trigger);
+
+        if(!immediate){
+            this.pauseJob(jobName);
+        }
     }
 
     /**
@@ -134,10 +147,10 @@ public class SchedulerManager {
      */
     public void triggerJob(Long jobId, String jobName, String script)
             throws SchedulerException {
-        JobDataMap data = new JobDataMap();
-        data.put(ID, jobId);
-        data.put(SCRIPT, script);
-        scheduler.triggerJob(JobKey.jobKey(jobName), data);
+        val jobDataMap = new JobDataMap();
+        jobDataMap.put(ID, jobId);
+        jobDataMap.put(SCRIPT, script);
+        scheduler.triggerJob(JobKey.jobKey(jobName), jobDataMap);
     }
 
     /**

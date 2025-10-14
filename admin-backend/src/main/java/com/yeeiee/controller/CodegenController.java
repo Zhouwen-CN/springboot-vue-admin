@@ -53,7 +53,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/codegen")
-@Tag(name = "代码生成配置控制器")
+@Tag(name = "代码生成配置 控制器")
 public class CodegenController {
 
     private final CodegenTableService codegenTableService;
