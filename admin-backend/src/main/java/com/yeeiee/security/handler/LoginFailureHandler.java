@@ -48,7 +48,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         // 写入日志
         val loginLog = new LoginLog();
         loginLog.setOperation(LoginOperationEnum.LOGIN);
-        loginLog.setStatus(OperationStatusEnum.FIELD);
+        loginLog.setStatus(OperationStatusEnum.FAILURE);
         loginLog.setIp(IPUtil.getClientIP(request));
         loginLog.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
         loginLog.setCreateUser(username);

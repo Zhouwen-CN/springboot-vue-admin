@@ -1,9 +1,11 @@
 package com.yeeiee.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.Job;
 import com.yeeiee.domain.form.JobEnableChangeForm;
 import com.yeeiee.domain.form.JobForm;
+import com.yeeiee.exception.DmlOperationException;
 import com.yeeiee.exception.JobSchedulerException;
 import com.yeeiee.mapper.JobMapper;
 import com.yeeiee.scheduler.SchedulerManager;
@@ -29,12 +31,21 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
     @Override
     public void addJob(JobForm form) {
+        val name = form.getName();
+        val exists = this.exists(Wrappers.<Job>lambdaQuery().eq(Job::getName, name));
+
+        if (exists) {
+            throw new DmlOperationException("任务名称已存在");
+        }
+
         try {
             schedulerManager.addJob(
                     form.getId(),
-                    form.getName(),
+                    name,
                     form.getJsScript(),
                     form.getCronExpression(),
+                    form.getRetryCount(),
+                    form.getRetryInterval(),
                     false
             );
         } catch (SchedulerException e) {
@@ -63,6 +74,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                         newJobName,
                         form.getJsScript(),
                         form.getCronExpression(),
+                        form.getRetryCount(),
+                        form.getRetryInterval(),
                         job.getJobEnable()
                 );
                 // 否则更新任务
@@ -71,6 +84,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                         oldJobName,
                         form.getJsScript(),
                         form.getCronExpression(),
+                        form.getRetryCount(),
+                        form.getRetryInterval(),
                         job.getJobEnable()
                 );
             }
@@ -111,7 +126,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     public void triggerJob(Long id) {
         val job = this.lambdaQuery()
-                .select(Job::getName, Job::getJsScript)
+                .select(Job::getName, Job::getJsScript, Job::getRetryCount, Job::getRetryInterval)
                 .eq(Job::getId, id)
                 .one();
 
@@ -119,7 +134,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             schedulerManager.triggerJob(
                     id,
                     job.getName(),
-                    job.getJsScript()
+                    job.getJsScript(),
+                    job.getRetryCount(),
+                    job.getRetryInterval()
             );
         } catch (SchedulerException e) {
             throw new JobSchedulerException("触发定时任务异常", e);

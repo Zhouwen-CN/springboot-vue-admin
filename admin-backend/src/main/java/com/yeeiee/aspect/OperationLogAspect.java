@@ -64,7 +64,7 @@ public class OperationLogAspect {
             return result;
         } catch (Throwable e) {
             long time = System.currentTimeMillis() - beginTime;
-            saveOperationLog(pjp, operationValue, OperationStatusEnum.FIELD, time);
+            saveOperationLog(pjp, operationValue, OperationStatusEnum.FAILURE, time);
             log.warn("[{}]-[{}] {}ms: {}", controllerName, operation.summary(), time, ExceptionUtils.getRootCauseMessage(e));
             throw e;
         }

@@ -27,6 +27,9 @@ import java.util.Set;
 public class SchedulerManager {
     public static final String ID = "id";
     public static final String SCRIPT = "script";
+    public static final String RETRY_COUNT = "retryCount";
+    public static final String RETRY_INTERVAL = "retryInterval";
+
     private final Scheduler scheduler;
 
     /**
@@ -36,10 +39,21 @@ public class SchedulerManager {
      * @param jobName        任务名称
      * @param script         执行脚本
      * @param cronExpression cron表达式
+     * @param retryCount     重试次数
+     * @param retryInterval  重试间隔
      * @param immediate      是否立即执行
      * @throws SchedulerException 调度异常
      */
-    public void addJob(Long jobId, String jobName, String script, String cronExpression, boolean immediate) throws SchedulerException {
+    public void addJob(
+            Long jobId,
+            String jobName,
+            String script,
+            String cronExpression,
+            Integer retryCount,
+            Integer retryInterval,
+            boolean immediate
+    ) throws SchedulerException {
+
         val jobDetail = JobBuilder.newJob(JobExecutor.class)
                 .withIdentity(jobName)
                 .usingJobData(ID, jobId)
@@ -58,6 +72,8 @@ public class SchedulerManager {
                 .withIdentity(jobName)
                 .withSchedule(cronScheduleBuilder)
                 .usingJobData(SCRIPT, script)
+                .usingJobData(RETRY_COUNT, retryCount)
+                .usingJobData(RETRY_INTERVAL, retryInterval)
                 .build();
 
         scheduler.scheduleJob(jobDetail, Set.of(trigger), true);
@@ -73,20 +89,31 @@ public class SchedulerManager {
      * @param jobName        任务名称
      * @param script         执行脚本
      * @param cronExpression cron表达式
+     * @param retryCount     重试次数
+     * @param retryInterval  重试间隔
      * @param immediate      是否立即执行
      * @throws SchedulerException 调度异常
      */
-    public void updateJob(String jobName, String script, String cronExpression, boolean immediate)
+    public void updateJob(
+            String jobName,
+            String script,
+            String cronExpression,
+            Integer retryCount,
+            Integer retryInterval,
+            boolean immediate
+    )
             throws SchedulerException {
         val trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobName)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .usingJobData(SCRIPT, script)
+                .usingJobData(RETRY_COUNT, retryCount)
+                .usingJobData(RETRY_INTERVAL, retryInterval)
                 .build();
 
         scheduler.rescheduleJob(TriggerKey.triggerKey(jobName), trigger);
 
-        if(!immediate){
+        if (!immediate) {
             this.pauseJob(jobName);
         }
     }
@@ -140,16 +167,20 @@ public class SchedulerManager {
     /**
      * 触发一次任务
      *
-     * @param jobId   任务id
-     * @param jobName 任务名称
-     * @param script  执行脚本
+     * @param jobId         任务id
+     * @param jobName       任务名称
+     * @param script        执行脚本
+     * @param retryCount    重试次数
+     * @param retryInterval 重试间隔
      * @throws SchedulerException 调度异常
      */
-    public void triggerJob(Long jobId, String jobName, String script)
+    public void triggerJob(Long jobId, String jobName, String script, Integer retryCount, Integer retryInterval)
             throws SchedulerException {
         val jobDataMap = new JobDataMap();
         jobDataMap.put(ID, jobId);
         jobDataMap.put(SCRIPT, script);
+        jobDataMap.put(RETRY_COUNT, retryCount);
+        jobDataMap.put(RETRY_INTERVAL, retryInterval);
         scheduler.triggerJob(JobKey.jobKey(jobName), jobDataMap);
     }
 

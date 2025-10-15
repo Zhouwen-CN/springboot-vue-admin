@@ -72,7 +72,15 @@ public class InitializeApplicationRunner implements ApplicationRunner {
         // schedulerManager.clean();
 
         val jobList = jobService.lambdaQuery()
-                .select(Job::getId, Job::getName, Job::getCronExpression, Job::getJsScript, Job::getJobEnable)
+                .select(
+                        Job::getId,
+                        Job::getName,
+                        Job::getJsScript,
+                        Job::getCronExpression,
+                        Job::getRetryCount,
+                        Job::getRetryInterval,
+                        Job::getJobEnable
+                )
                 .list();
 
         for (Job job : jobList) {
@@ -81,6 +89,8 @@ public class InitializeApplicationRunner implements ApplicationRunner {
                     job.getName(),
                     job.getJsScript(),
                     job.getCronExpression(),
+                    job.getRetryCount(),
+                    job.getRetryInterval(),
                     job.getJobEnable()
             );
         }

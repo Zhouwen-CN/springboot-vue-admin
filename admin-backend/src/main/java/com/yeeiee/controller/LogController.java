@@ -1,12 +1,15 @@
 package com.yeeiee.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.domain.entity.LoginLog;
 import com.yeeiee.domain.entity.OperationLog;
+import com.yeeiee.domain.vo.JobLogVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.ErrorLogService;
+import com.yeeiee.service.JobLogService;
 import com.yeeiee.service.LoginLogService;
 import com.yeeiee.service.OperationLogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,9 +17,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -36,6 +45,7 @@ public class LogController {
     private final LoginLogService loginLogService;
     private final OperationLogService operationLogService;
     private final ErrorLogService errorLogService;
+    private final JobLogService jobLogService;
 
     @Operation(summary = "登入日志分页")
     @GetMapping("/login/{size}/{current}")
@@ -85,6 +95,27 @@ public class LogController {
                 .orderByDesc(ErrorLog::getCreateTime)
                 .page(Page.of(current, size));
 
+        return R.ok(PageVo.fromPage(page));
+    }
+
+    @Operation(summary = "定时任务分页")
+    @GetMapping("/job/{size}/{current}")
+    public R<PageVo<JobLogVo>> getPage(
+            @PathVariable("size") @Parameter(description = "页面大小") Integer size
+            , @PathVariable("current") @Parameter(description = "当前页面") Integer current
+            , @RequestParam(value = "jobId", required = false) @Parameter(description = "任务编号") Long jobId
+            , @RequestParam(value = "status", required = false) @Parameter(description = "任务状态") Integer status
+            , @RequestParam(value = "startTime", required = false) @Parameter(description = "开始时间") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime
+            , @RequestParam(value = "endTime", required = false) @Parameter(description = "结束时间")  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime
+    ) {
+
+        IPage<JobLogVo> page = jobLogService.getJobLogPage(
+                Page.<JobLogVo>of(current, size),
+                jobId,
+                status,
+                startTime,
+                endTime
+        );
         return R.ok(PageVo.fromPage(page));
     }
 }

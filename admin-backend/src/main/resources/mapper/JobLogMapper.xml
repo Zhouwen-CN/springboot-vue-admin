@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.mapper.JobLogMapper">
+    <!--@formatter:off-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.JobLog">
+        <id column="id" property="id" />
+        <result column="job_id" property="jobId" />
+        <result column="fire_num" property="fireNum" />
+        <result column="status" property="status" />
+        <result column="js_log" property="jsLog" />
+        <result column="error_msg" property="errorMsg" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, job_id, fire_num, status, js_log, error_msg, create_time, update_time
+    </sql>
+
+    <select id="selectJobLogPage" resultType="com.yeeiee.domain.vo.JobLogVo">
+        select
+            a.id,
+            b.name as jobName,
+            a.fire_num as fireNum,
+            a.status,
+            a.js_log as jsLog,
+            a.error_msg as errorMsg,
+            a.create_time as startTime,
+            a.update_time as endTime
+        from t_job_log a
+        left join t_job b
+        on a.job_id = b.id
+        <where>
+            <if test="jobId != null">
+                and a.job_id = #{jobId}
+            </if>
+            <if test="status != null">
+                and a.status = #{status}
+            </if>
+            <if test="startTime != null">
+                and a.create_time <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="endTime != null">
+                and a.create_time <![CDATA[ <= ]]> #{endTime}
+            </if>
+        </where>
+        order by a.create_time desc
+    </select>
+</mapper>
