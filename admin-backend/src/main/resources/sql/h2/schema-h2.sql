@@ -101,7 +101,7 @@ COMMENT ON COLUMN t_role_menu.update_user IS '更新者';
 COMMENT ON COLUMN t_role_menu.update_time IS '更新时间';
 
 CREATE SEQUENCE t_role_menu_seq
-START WITH 17
+START WITH 18
 INCREMENT BY 1;
 
 -- 菜单表
@@ -137,7 +137,7 @@ COMMENT ON COLUMN t_menu.update_user IS '更新者';
 COMMENT ON COLUMN t_menu.update_time IS '更新时间';
 
 CREATE SEQUENCE t_menu_seq
-START WITH 17
+START WITH 18
 INCREMENT BY 1;
 
 -- 登录日志表

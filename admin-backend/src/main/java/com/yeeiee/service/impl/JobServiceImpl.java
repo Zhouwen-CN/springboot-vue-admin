@@ -38,23 +38,24 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             throw new DmlOperationException("任务名称已存在");
         }
 
+        // 这里得先插入，因为要获取 id
+        val entity = BeanUtil.toBean(form, Job.class);
+        this.save(entity);
+
         try {
             schedulerManager.addJob(
-                    form.getId(),
+                    entity.getId(),
                     name,
-                    form.getHandlerName(),
-                    form.getHandlerParam(),
-                    form.getCronExpression(),
-                    form.getRetryCount(),
-                    form.getRetryInterval(),
+                    entity.getHandlerName(),
+                    entity.getHandlerParam(),
+                    entity.getCronExpression(),
+                    entity.getRetryCount(),
+                    entity.getRetryInterval(),
                     false
             );
         } catch (SchedulerException e) {
             throw new JobSchedulerException("添加定时任务异常", e);
         }
-
-        val entity = BeanUtil.toBean(form, Job.class);
-        this.save(entity);
     }
 
     @Override
