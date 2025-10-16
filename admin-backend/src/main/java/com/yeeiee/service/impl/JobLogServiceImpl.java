@@ -29,9 +29,23 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
     private final JobLogMapper jobLogMapper;
 
     @Override
-    public Long addJobLog(long jobId, int fireNum) {
+    public void addJobLogWithResult(long jobId, String jobHandlerName, String jobHandlerParam, int fireNum, String result) {
         val jobLog = new JobLog();
         jobLog.setJobId(jobId);
+        jobLog.setHandlerName(jobHandlerName);
+        jobLog.setHandlerParam(jobHandlerParam);
+        jobLog.setStatus(JobStatusEnum.FAILURE);
+        jobLog.setFireNum(fireNum);
+        jobLog.setResult(result);
+        this.save(jobLog);
+    }
+
+    @Override
+    public Long addJobLog(long jobId, String jobHandlerName, String jobHandlerParam, int fireNum) {
+        val jobLog = new JobLog();
+        jobLog.setJobId(jobId);
+        jobLog.setHandlerName(jobHandlerName);
+        jobLog.setHandlerParam(jobHandlerParam);
         jobLog.setStatus(JobStatusEnum.RUNNING);
         jobLog.setFireNum(fireNum);
         this.save(jobLog);
@@ -39,18 +53,18 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
     }
 
     @Override
-    public void modifyJobLog(Long jobLogId, Throwable exception, String jsLog) {
+    public void modifyJobLog(Long jobLogId, Throwable exception, String result) {
         val jobLog = new JobLog();
-        var isSuccess = true;
 
         if (exception != null) {
-            isSuccess = false;
-            jobLog.setErrorMsg(ExceptionUtils.getRootCauseMessage(exception));
+            jobLog.setStatus(JobStatusEnum.FAILURE);
+            jobLog.setResult(ExceptionUtils.getRootCauseMessage(exception));
+        } else {
+            jobLog.setStatus(JobStatusEnum.SUCCESS);
+            jobLog.setResult(result);
         }
 
         jobLog.setId(jobLogId);
-        jobLog.setStatus(isSuccess ? JobStatusEnum.SUCCESS : JobStatusEnum.FAILURE);
-        jobLog.setJsLog(jsLog);
         this.updateById(jobLog);
     }
 

@@ -17,23 +17,36 @@ import java.time.LocalDateTime;
  * @since 2025-10-15
  */
 public interface JobLogService extends IService<JobLog> {
+    /**
+     * 添加定时任务日志
+     *
+     * @param jobId           任务id
+     * @param jobHandlerName  任务名称
+     * @param jobHandlerParam 任务参数
+     * @param fireNum         第几次执行
+     * @param result          任务结果
+     */
+    void addJobLogWithResult(long jobId, String jobHandlerName, String jobHandlerParam, int fireNum, String result);
 
     /**
      * 添加定时任务日志
      *
-     * @param jobId 任务id
-     * @param fireNum 第几次执行
+     * @param jobId           任务id
+     * @param jobHandlerName  任务名称
+     * @param jobHandlerParam 任务参数
+     * @param fireNum         第几次执行
      * @return 定时任务日志id
      */
-    Long addJobLog(long jobId, int fireNum);
+    Long addJobLog(long jobId, String jobHandlerName, String jobHandlerParam, int fireNum);
 
     /**
      * 修改定时任务日志
-     * @param jobLogId 定时任务日志id
+     *
+     * @param jobLogId  定时任务日志id
      * @param exception 异常
-     * @param jsLog js日志
+     * @param result    任务结果
      */
-    void modifyJobLog(Long jobLogId, Throwable exception, String jsLog);
+    void modifyJobLog(Long jobLogId, Throwable exception, String result);
 
     /**
      * 获取定时任务日志分页

@@ -8,6 +8,7 @@ import com.yeeiee.domain.validate.GroupingValidate;
 import com.yeeiee.domain.vo.JobVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
+import com.yeeiee.scheduler.JobHandlerHolder;
 import com.yeeiee.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,6 +45,7 @@ import java.util.Objects;
 @Tag(name = "定时任务 控制器")
 public class JobController {
     private final JobService jobService;
+    private final JobHandlerHolder jobHandlerHolder;
 
     @Operation(summary = "分页查询")
     @GetMapping("/{size}/{current}")
@@ -98,5 +101,12 @@ public class JobController {
     public R<Void> triggerJob(@PathVariable("id") @Parameter(description = "id") Long id) {
         jobService.triggerJob(id);
         return R.ok();
+    }
+
+    @Operation(summary = "获取处理器名称")
+    @GetMapping("/handlers")
+    public R<List<String>> getJobHandlerNames(){
+        val jobHandlerNames = jobHandlerHolder.getJobHandlerNames();
+        return R.ok(jobHandlerNames);
     }
 }

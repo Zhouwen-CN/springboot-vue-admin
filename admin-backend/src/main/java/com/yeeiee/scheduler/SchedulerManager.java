@@ -57,7 +57,7 @@ public class SchedulerManager {
             boolean immediate
     ) throws SchedulerException {
 
-        val jobDetail = JobBuilder.newJob(JobHandlerCaller.class)
+        val jobDetail = JobBuilder.newJob(JobHandlerInvoker.class)
                 .withIdentity(jobName)
                 .usingJobData(ID, jobId)
                 .build();

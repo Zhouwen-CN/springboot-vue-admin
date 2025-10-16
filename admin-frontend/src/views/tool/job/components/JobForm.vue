@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { type JobForm, type JobVo, reqSave } from '@/api/tool/job'
+import { type JobForm, type JobVo, reqSave, reqGetHandlerNames } from '@/api/tool/job'
 import { type FormInstance, type FormRules } from 'element-plus'
 import type { PopoverInstance } from 'element-plus'
 
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])
+
+// 处理器名称列表
+const handlerNames = ref<string[]>([])
 
 // 对话框切换
 const toggleDialog = reactive({
@@ -104,6 +107,10 @@ function openDialog(data?: JobVo) {
 defineExpose({
   openDialog
 })
+
+onMounted(() => {
+  reqGetHandlerNames().then((res) => (handlerNames.value = res.data))
+})
 </script>
 
 <template>
@@ -122,7 +129,14 @@ defineExpose({
           <el-input v-model="form.name" clearable placeholder="任务名称" />
         </el-form-item>
         <el-form-item label="处理器名称" prop="handlerName">
-          <el-input v-model="form.handlerName" clearable placeholder="处理器名称" />
+          <el-select v-model="form.handlerName" clearable placeholder="请选择" style="width: 120px">
+            <el-option
+              v-for="(handlerName, index) in handlerNames"
+              :key="index"
+              :value="handlerName"
+              :label="handlerName"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
           <el-popover :width="570" placement="bottom-start" ref="cronPopoverRef" trigger="click">
@@ -151,7 +165,7 @@ defineExpose({
         <el-form-item label="重试次数" prop="retryCount">
           <el-input v-model="form.retryCount" type="number" placeholder="重试次数" />
         </el-form-item>
-        <el-form-item label="重试间隔" prop="retryInterval">
+        <el-form-item label="重试间隔" prop="retryInterval" v-tip="`毫秒`">
           <el-input v-model="form.retryInterval" type="number" placeholder="重试间隔" />
         </el-form-item>
         <el-form-item>

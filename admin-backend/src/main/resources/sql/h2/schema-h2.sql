@@ -442,3 +442,31 @@ COMMENT ON COLUMN t_job.update_time IS '更新时间';
 CREATE SEQUENCE t_job_seq
 START WITH 1
 INCREMENT BY 1;
+
+create table t_job_log(
+  id NUMBER(18) primary key,
+  job_id NUMBER(18) not null,
+  handler_name varchar2(32) not null,
+  handler_param varchar2(500) default null,
+  fire_num NUMBER(1) not null,
+  status NUMBER(1) not null,
+  result varchar2(500) default null,
+  create_time DATE default SYSDATE,
+  update_time DATE default SYSDATE
+);
+COMMENT ON TABLE t_job_log IS '定时任务日志表';
+COMMENT ON COLUMN t_job_log.id IS '主键';
+COMMENT ON COLUMN t_job_log.job_id IS '任务编号';
+COMMENT ON COLUMN t_job_log.handler_name IS '处理器名称';
+COMMENT ON COLUMN t_job_log.handler_param IS '处理器参数';
+COMMENT ON COLUMN t_job_log.fire_num IS '第几次执行';
+COMMENT ON COLUMN t_job_log.status IS '任务状态';
+COMMENT ON COLUMN t_job_log.result IS '结果数据';
+COMMENT ON COLUMN t_job_log.create_time IS '创建时间';
+COMMENT ON COLUMN t_job_log.update_time IS '更新时间';
+
+CREATE INDEX idx_job_create_time ON t_job_log(create_time DESC);
+
+CREATE SEQUENCE t_job_log_seq
+START WITH 1
+INCREMENT BY 1;

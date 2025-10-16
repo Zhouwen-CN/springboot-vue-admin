@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-15
+ * @since 2025-10-16
  */
 @Getter
 @Setter
@@ -40,6 +40,18 @@ public class JobLog {
     private Long jobId;
 
     /**
+     * 处理器名称
+     */
+    @TableField(value = "handler_name")
+    private String handlerName;
+
+    /**
+     * 处理器参数
+     */
+    @TableField(value = "handler_param")
+    private String handlerParam;
+
+    /**
      * 第几次执行
      */
     @TableField(value = "fire_num")
@@ -52,16 +64,10 @@ public class JobLog {
     private JobStatusEnum status;
 
     /**
-     * js日志
+     * 结果数据
      */
-    @TableField(value = "js_log")
-    private String jsLog;
-
-    /**
-     * 错误信息
-     */
-    @TableField(value = "error_msg")
-    private String errorMsg;
+    @TableField(value = "result")
+    private String result;
 
     /**
      * 创建时间

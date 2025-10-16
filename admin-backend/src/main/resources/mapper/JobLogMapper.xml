@@ -7,27 +7,29 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.JobLog">
         <id column="id" property="id" />
         <result column="job_id" property="jobId" />
+        <result column="handler_name" property="handlerName" />
+        <result column="handler_param" property="handlerParam" />
         <result column="fire_num" property="fireNum" />
         <result column="status" property="status" />
-        <result column="js_log" property="jsLog" />
-        <result column="error_msg" property="errorMsg" />
+        <result column="result" property="result" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, job_id, fire_num, status, js_log, error_msg, create_time, update_time
+        id, job_id, handler_name, handler_param, fire_num, status, result, create_time, update_time
     </sql>
 
     <select id="selectJobLogPage" resultType="com.yeeiee.domain.vo.JobLogVo">
         select
             a.id,
             b.name as jobName,
+            a.handler_name as handlerName,
+            a.handler_param as handlerParam,
             a.fire_num as fireNum,
             a.status,
-            a.js_log as jsLog,
-            a.error_msg as errorMsg,
+            a.result,
             a.create_time as startTime,
             a.update_time as endTime
         from t_job_log a

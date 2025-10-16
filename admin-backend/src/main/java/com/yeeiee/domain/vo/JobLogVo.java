@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-15
+ * @since 2025-10-16
  */
 @Getter
 @Setter
@@ -28,17 +28,20 @@ public class JobLogVo {
     @Schema(description = "任务名称")
     private String jobName;
 
+    @Schema(description = "处理器名称")
+    private String handlerName;
+
+    @Schema(description = "处理器参数")
+    private String handlerParam;
+
     @Schema(description = "第几次执行")
     private Integer fireNum;
 
     @Schema(description = "任务状态")
     private JobStatusEnum status;
 
-    @Schema(description = "js日志")
-    private String jsLog;
-
-    @Schema(description = "错误信息")
-    private String errorMsg;
+    @Schema(description = "结果数据")
+    private String result;
 
     @Schema(description = "开始时间")
     private LocalDateTime startTime;

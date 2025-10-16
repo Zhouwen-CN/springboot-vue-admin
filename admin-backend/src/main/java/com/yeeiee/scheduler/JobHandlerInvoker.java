@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class JobHandlerCaller extends QuartzJobBean {
+public class JobHandlerInvoker extends QuartzJobBean {
 
     private final JobLogService jobLogService;
     private final JobHandlerHolder jobHandlerHolder;
@@ -28,35 +28,43 @@ public class JobHandlerCaller extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         val name = context.getJobDetail().getKey().getName();
-        log.info("执行调度任务: {}",name);
+        log.info("执行调度任务: {}", name);
 
         val mergedJobDataMap = context.getMergedJobDataMap();
+        val jobId = mergedJobDataMap.getLong(SchedulerManager.ID);
         val handlerName = mergedJobDataMap.getString(SchedulerManager.HANDLER_NAME);
+        val fireCount = context.getRefireCount();
+        val handlerParam = mergedJobDataMap.getString(SchedulerManager.HANDLER_PARAM);
         val jobHandler = jobHandlerHolder.getJobHandler(handlerName);
-        // todo 如果jobHandler为空，记录日志并退出
+
+        // 如果jobHandler为空，记录日志并退出
         if (jobHandler == null) {
+            jobLogService.addJobLogWithResult(
+                    jobId,
+                    handlerName,
+                    handlerParam,
+                    fireCount + 1,
+                    "未找到对应的任务处理器"
+            );
             return;
         }
 
-
-        val jobId = mergedJobDataMap.getLong(SchedulerManager.ID);
-        val fireCount = context.getRefireCount();
-        val handlerParam = mergedJobDataMap.getString(SchedulerManager.HANDLER_PARAM);
         val retryCount = mergedJobDataMap.getInt(SchedulerManager.RETRY_COUNT);
         val retryInterval = mergedJobDataMap.getInt(SchedulerManager.RETRY_INTERVAL);
 
         Long jobLogId = null;
         Throwable exception = null;
-        String jsLog = null;
+        String result = null;
         try {
             // 添加任务日志
-            jobLogId = jobLogService.addJobLog(jobId, fireCount + 1);
+            jobLogId = jobLogService.addJobLog(jobId, handlerName, handlerParam, fireCount + 1);
+            result = jobHandler.execute(handlerParam);
         } catch (Throwable e) {
             exception = e;
         }
 
         // 更新任务日志
-        jobLogService.modifyJobLog(jobLogId, exception, jsLog);
+        jobLogService.modifyJobLog(jobLogId, exception, result);
 
         // 异常处理
         handlerException(exception, fireCount, retryCount, retryInterval);

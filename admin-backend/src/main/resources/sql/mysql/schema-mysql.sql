@@ -213,10 +213,11 @@ drop table if exists t_job_log;
 create table t_job_log  (
   id bigint primary key auto_increment comment '主键',
   job_id bigint not null comment '任务编号',
+  handler_name varchar(32) not null comment '处理器名称',
+  handler_param varchar(500) default null comment '处理器参数',
   fire_num tinyint not null comment '第几次执行',
   status tinyint not null comment '任务状态',
-  js_log varchar(4000) default '' comment 'js日志',
-  error_msg varchar(4000) default '' comment '错误信息',
+  result varchar(500) default null comment '结果数据',
   create_time datetime default current_timestamp comment '创建时间',
   update_time datetime default current_timestamp comment '更新时间',
   index idx_error_create_time (create_time desc)

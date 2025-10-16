@@ -62,3 +62,8 @@ export function reqModifyEnable(id: number, form: JobEnableChangeForm) {
 export function reqTriggerJobOnce(id: number) {
   return request.get<void>(`/job/trigger/${id}`)
 }
+
+// 获取任务处理器名称列表
+export function reqGetHandlerNames() {
+  return request.get<string[]>('/job/handlers')
+}

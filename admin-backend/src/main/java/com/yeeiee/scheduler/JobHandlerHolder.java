@@ -4,6 +4,7 @@ import com.yeeiee.scheduler.handler.JobHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,5 +27,9 @@ public class JobHandlerHolder {
 
     public JobHandler getJobHandler(String name){
         return jobHandlerMap.get(name);
+    }
+
+    public List<String> getJobHandlerNames(){
+        return jobHandlerMap.keySet().stream().toList();
     }
 }
