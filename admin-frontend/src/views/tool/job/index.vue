@@ -118,6 +118,7 @@ onMounted(() => {
       <el-table :border="true" :data="data" show-overflow-tooltip style="margin-top: 16px">
         <el-table-column label="主键" prop="id"></el-table-column>
         <el-table-column label="任务名称" prop="name"></el-table-column>
+        <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
         <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
         <el-table-column label="重试次数" prop="retryCount"></el-table-column>
         <el-table-column label="重试间隔" prop="retryInterval"></el-table-column>

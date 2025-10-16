@@ -1,7 +1,6 @@
 package com.yeeiee.scheduler;
 
 import com.yeeiee.service.JobLogService;
-import com.yeeiee.service.js.JsEngineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -21,20 +20,28 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class JobExecutor extends QuartzJobBean {
+public class JobHandlerCaller extends QuartzJobBean {
 
-    private final JsEngineService jsEngineService;
     private final JobLogService jobLogService;
+    private final JobHandlerHolder jobHandlerHolder;
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         val name = context.getJobDetail().getKey().getName();
         log.info("执行调度任务: {}",name);
+
         val mergedJobDataMap = context.getMergedJobDataMap();
+        val handlerName = mergedJobDataMap.getString(SchedulerManager.HANDLER_NAME);
+        val jobHandler = jobHandlerHolder.getJobHandler(handlerName);
+        // todo 如果jobHandler为空，记录日志并退出
+        if (jobHandler == null) {
+            return;
+        }
+
 
         val jobId = mergedJobDataMap.getLong(SchedulerManager.ID);
-        val script = mergedJobDataMap.getString(SchedulerManager.SCRIPT);
         val fireCount = context.getRefireCount();
+        val handlerParam = mergedJobDataMap.getString(SchedulerManager.HANDLER_PARAM);
         val retryCount = mergedJobDataMap.getInt(SchedulerManager.RETRY_COUNT);
         val retryInterval = mergedJobDataMap.getInt(SchedulerManager.RETRY_INTERVAL);
 
@@ -44,7 +51,6 @@ public class JobExecutor extends QuartzJobBean {
         try {
             // 添加任务日志
             jobLogId = jobLogService.addJobLog(jobId, fireCount + 1);
-            jsLog = jsEngineService.eval(script);
         } catch (Throwable e) {
             exception = e;
         }

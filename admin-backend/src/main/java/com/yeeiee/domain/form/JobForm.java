@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.Length;
  * </p>
  *
  * @author chen
- * @since 2025-10-11
+ * @since 2025-10-16
  */
 @Getter
 @Setter
@@ -40,9 +40,13 @@ public class JobForm {
     private String cronExpression;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 65535)
-    @Schema(description = "js脚本")
-    private String jsScript;
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 32)
+    @Schema(description = "处理器名称")
+    private String handlerName;
+
+    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 500)
+    @Schema(description = "处理器参数")
+    private String handlerParam;
 
     @Min(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, value = 0)
     @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})

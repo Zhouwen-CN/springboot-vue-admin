@@ -197,8 +197,9 @@ drop table if exists t_job;
 create table t_job  (
   id bigint primary key auto_increment comment '主键',
   name varchar(32) not null comment '任务名称',
+  handler_name varchar(32) not null comment '处理器名称',
+  handler_param varchar(500) default null comment '处理器参数',
   cron_expression varchar(32) not null comment 'cron 表达式',
-  js_script text not null comment 'js脚本',
   retry_count int default 0 comment '重试次数',
   retry_interval int default 0 comment '重试间隔',
   job_enable bit(1) default 0 comment '是否启用',

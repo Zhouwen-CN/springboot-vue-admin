@@ -17,7 +17,8 @@ const form = reactive<JobForm>({
   id: undefined,
   name: undefined,
   cronExpression: undefined,
-  jsScript: undefined,
+  handlerName: undefined,
+  handlerParam: undefined,
   retryCount: 0,
   retryInterval: 0
 })
@@ -33,9 +34,9 @@ const rules = reactive<FormRules<typeof form>>({
     { required: true, message: 'cron 表达式不能为空', trigger: 'submit' },
     { max: 32, message: 'cron 表达式长度不能大于32', trigger: 'submit' }
   ],
-  jsScript: [
-    { required: true, message: 'js脚本不能为空', trigger: 'blur' },
-    { max: 65535, message: 'js脚本长度不能大于65535', trigger: 'blur' }
+  handlerName: [
+    { required: true, message: '处理器的名字不能为空', trigger: 'blur' },
+    { max: 32, message: '处理器的名字长度不能大于32', trigger: 'blur' }
   ],
   retryCount: [{ required: true, message: '重试次数不能为空', trigger: 'blur' }],
   retryInterval: [{ required: true, message: '重试间隔不能为空', trigger: 'blur' }]
@@ -75,7 +76,8 @@ function clean() {
   form.id = undefined
   form.name = undefined
   form.cronExpression = undefined
-  form.jsScript = undefined
+  form.handlerName = undefined
+  form.handlerParam = undefined
   form.retryCount = 0
   form.retryInterval = 0
   formRef.value?.clearValidate()
@@ -89,7 +91,8 @@ function openDialog(data?: JobVo) {
     form.id = data.id
     form.name = data.name
     form.cronExpression = data.cronExpression
-    form.jsScript = data.jsScript
+    form.handlerName = data.handlerName
+    form.handlerParam = data.handlerParam
     form.retryCount = data.retryCount
     form.retryInterval = data.retryInterval
   } else {
@@ -118,6 +121,9 @@ defineExpose({
         <el-form-item label="任务名称" prop="name">
           <el-input v-model="form.name" clearable placeholder="任务名称" />
         </el-form-item>
+        <el-form-item label="处理器名称" prop="handlerName">
+          <el-input v-model="form.handlerName" clearable placeholder="处理器名称" />
+        </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
           <el-popover :width="570" placement="bottom-start" ref="cronPopoverRef" trigger="click">
             <template #reference>
@@ -134,12 +140,12 @@ defineExpose({
             </el-scrollbar>
           </el-popover>
         </el-form-item>
-        <el-form-item label="js脚本" prop="jsScript">
+        <el-form-item label="处理器参数" prop="handlerParam">
           <el-input
-            v-model="form.jsScript"
+            v-model="form.handlerParam"
             type="textarea"
             :autosize="{ minRows: 5, maxRows: 10 }"
-            placeholder="js脚本"
+            placeholder="处理器参数"
           />
         </el-form-item>
         <el-form-item label="重试次数" prop="retryCount">

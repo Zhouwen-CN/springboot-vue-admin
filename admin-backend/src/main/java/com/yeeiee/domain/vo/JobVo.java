@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-11
+ * @since 2025-10-16
  */
 @Getter
 @Setter
@@ -27,11 +27,14 @@ public class JobVo {
     @Schema(description = "任务名称")
     private String name;
 
+    @Schema(description = "处理器名称")
+    private String handlerName;
+
+    @Schema(description = "处理器参数")
+    private String handlerParam;
+
     @Schema(description = "cron 表达式")
     private String cronExpression;
-
-    @Schema(description = "js脚本")
-    private String jsScript;
 
     @Schema(description = "重试次数")
     private Integer retryCount;

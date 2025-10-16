@@ -36,7 +36,6 @@
         <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
-        <js-scriptengine.version>25.0.0</js-scriptengine.version>
     </properties>
 
     <profiles>
@@ -107,19 +106,6 @@
                 <groupId>org.apache.tika</groupId>
                 <artifactId>tika-core</artifactId>
                 <version>${tika.version}</version>
-            </dependency>
-
-            <!-- js engine -->
-            <dependency>
-                <groupId>org.graalvm.js</groupId>
-                <artifactId>js</artifactId>
-                <version>${js-scriptengine.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.graalvm.js</groupId>
-                <artifactId>js-scriptengine</artifactId>
-                <version>${js-scriptengine.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

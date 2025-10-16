@@ -42,7 +42,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             schedulerManager.addJob(
                     form.getId(),
                     name,
-                    form.getJsScript(),
+                    form.getHandlerName(),
+                    form.getHandlerParam(),
                     form.getCronExpression(),
                     form.getRetryCount(),
                     form.getRetryInterval(),
@@ -72,7 +73,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                 schedulerManager.addJob(
                         form.getId(),
                         newJobName,
-                        form.getJsScript(),
+                        form.getHandlerName(),
+                        form.getHandlerParam(),
                         form.getCronExpression(),
                         form.getRetryCount(),
                         form.getRetryInterval(),
@@ -82,7 +84,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             } else {
                 schedulerManager.updateJob(
                         oldJobName,
-                        form.getJsScript(),
+                        form.getHandlerName(),
+                        form.getHandlerParam(),
                         form.getCronExpression(),
                         form.getRetryCount(),
                         form.getRetryInterval(),
@@ -126,7 +129,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     public void triggerJob(Long id) {
         val job = this.lambdaQuery()
-                .select(Job::getName, Job::getJsScript, Job::getRetryCount, Job::getRetryInterval)
                 .eq(Job::getId, id)
                 .one();
 
@@ -134,7 +136,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             schedulerManager.triggerJob(
                     id,
                     job.getName(),
-                    job.getJsScript(),
+                    job.getHandlerName(),
+                    job.getHandlerParam(),
                     job.getRetryCount(),
                     job.getRetryInterval()
             );

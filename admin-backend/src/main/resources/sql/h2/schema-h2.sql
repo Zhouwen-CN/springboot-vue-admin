@@ -414,8 +414,9 @@ INCREMENT BY 1;
 create table t_job(
   id NUMBER(18) primary key,
   name varchar2(32) not null,
+  handler_name varchar2(32) not null,
+  handler_param varchar2(500) default null,
   cron_expression varchar2(32) not null,
-  js_script clob not null,
   retry_count NUMBER(9) default 0,
   retry_interval NUMBER(9) default 0,
   job_enable number(1) default 0,
@@ -427,8 +428,9 @@ create table t_job(
 COMMENT ON TABLE t_job IS '定时任务表';
 COMMENT ON COLUMN t_job.id IS '主键';
 COMMENT ON COLUMN t_job.name IS '任务名称';
+COMMENT ON COLUMN t_job.handler_name IS '处理器名称';
+COMMENT ON COLUMN t_job.handler_param IS '处理器参数';
 COMMENT ON COLUMN t_job.cron_expression IS 'cron 表达式';
-COMMENT ON COLUMN t_job.js_script IS 'js脚本';
 COMMENT ON COLUMN t_job.retry_count IS '重试次数';
 COMMENT ON COLUMN t_job.retry_interval IS '重试间隔';
 COMMENT ON COLUMN t_job.job_enable IS '是否启用';

@@ -7,8 +7,9 @@
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.Job">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="handler_name" property="handlerName" />
+        <result column="handler_param" property="handlerParam" />
         <result column="cron_expression" property="cronExpression" />
-        <result column="js_script" property="jsScript" />
         <result column="retry_count" property="retryCount" />
         <result column="retry_interval" property="retryInterval" />
         <result column="job_enable" property="jobEnable" />
@@ -20,6 +21,6 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, cron_expression, js_script, retry_count, retry_interval, job_enable, create_user, create_time, update_user, update_time
+        id, name, handler_name, handler_param, cron_expression, retry_count, retry_interval, job_enable, create_user, create_time, update_user, update_time
     </sql>
 </mapper>

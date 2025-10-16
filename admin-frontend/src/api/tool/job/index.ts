@@ -4,8 +4,9 @@ import request from '@/utils/request'
 export interface JobVo {
   id: number
   name: string
+  handlerName: string
+  handlerParam: string
   cronExpression: string
-  jsScript: string
   retryCount: number
   retryInterval: number
   jobEnable: boolean
@@ -23,7 +24,8 @@ export interface JobForm {
   id?: number
   name?: string
   cronExpression?: string
-  jsScript?: string
+  handlerName?: string
+  handlerParam?: string
   retryCount: number
   retryInterval: number
 }

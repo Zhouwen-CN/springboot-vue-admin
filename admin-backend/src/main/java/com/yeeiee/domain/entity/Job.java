@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-11
+ * @since 2025-10-16
  */
 @Getter
 @Setter
@@ -39,16 +39,22 @@ public class Job {
     private String name;
 
     /**
+     * 处理器名称
+     */
+    @TableField(value = "handler_name")
+    private String handlerName;
+
+    /**
+     * 处理器参数
+     */
+    @TableField(value = "handler_param")
+    private String handlerParam;
+
+    /**
      * cron 表达式
      */
     @TableField(value = "cron_expression")
     private String cronExpression;
-
-    /**
-     * js脚本
-     */
-    @TableField(value = "js_script")
-    private String jsScript;
 
     /**
      * 重试次数

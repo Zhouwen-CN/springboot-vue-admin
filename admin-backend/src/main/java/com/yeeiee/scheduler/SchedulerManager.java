@@ -26,7 +26,8 @@ import java.util.Set;
 @Service
 public class SchedulerManager {
     public static final String ID = "id";
-    public static final String SCRIPT = "script";
+    public static final String HANDLER_NAME = "name";
+    public static final String HANDLER_PARAM = "param";
     public static final String RETRY_COUNT = "retryCount";
     public static final String RETRY_INTERVAL = "retryInterval";
 
@@ -35,26 +36,28 @@ public class SchedulerManager {
     /**
      * 添加任务
      *
-     * @param jobId          任务id
-     * @param jobName        任务名称
-     * @param script         执行脚本
-     * @param cronExpression cron表达式
-     * @param retryCount     重试次数
-     * @param retryInterval  重试间隔
-     * @param immediate      是否立即执行
+     * @param jobId           任务id
+     * @param jobName         任务名称
+     * @param jobHandlerName  任务处理类名称
+     * @param jobHandlerParam 任务处理参数
+     * @param cronExpression  cron表达式
+     * @param retryCount      重试次数
+     * @param retryInterval   重试间隔
+     * @param immediate       是否立即执行
      * @throws SchedulerException 调度异常
      */
     public void addJob(
             Long jobId,
             String jobName,
-            String script,
+            String jobHandlerName,
+            String jobHandlerParam,
             String cronExpression,
             Integer retryCount,
             Integer retryInterval,
             boolean immediate
     ) throws SchedulerException {
 
-        val jobDetail = JobBuilder.newJob(JobExecutor.class)
+        val jobDetail = JobBuilder.newJob(JobHandlerCaller.class)
                 .withIdentity(jobName)
                 .usingJobData(ID, jobId)
                 .build();
@@ -71,7 +74,8 @@ public class SchedulerManager {
         val trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobName)
                 .withSchedule(cronScheduleBuilder)
-                .usingJobData(SCRIPT, script)
+                .usingJobData(HANDLER_NAME, jobHandlerName)
+                .usingJobData(HANDLER_PARAM, jobHandlerParam)
                 .usingJobData(RETRY_COUNT, retryCount)
                 .usingJobData(RETRY_INTERVAL, retryInterval)
                 .build();
@@ -86,17 +90,19 @@ public class SchedulerManager {
     /**
      * 更新任务
      *
-     * @param jobName        任务名称
-     * @param script         执行脚本
-     * @param cronExpression cron表达式
-     * @param retryCount     重试次数
-     * @param retryInterval  重试间隔
-     * @param immediate      是否立即执行
+     * @param jobName         任务名称
+     * @param jobHandlerName  任务处理类名称
+     * @param jobHandlerParam 任务处理参数
+     * @param cronExpression  cron表达式
+     * @param retryCount      重试次数
+     * @param retryInterval   重试间隔
+     * @param immediate       是否立即执行
      * @throws SchedulerException 调度异常
      */
     public void updateJob(
             String jobName,
-            String script,
+            String jobHandlerName,
+            String jobHandlerParam,
             String cronExpression,
             Integer retryCount,
             Integer retryInterval,
@@ -106,7 +112,8 @@ public class SchedulerManager {
         val trigger = TriggerBuilder.newTrigger()
                 .withIdentity(jobName)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
-                .usingJobData(SCRIPT, script)
+                .usingJobData(HANDLER_NAME, jobHandlerName)
+                .usingJobData(HANDLER_PARAM, jobHandlerParam)
                 .usingJobData(RETRY_COUNT, retryCount)
                 .usingJobData(RETRY_INTERVAL, retryInterval)
                 .build();
@@ -169,16 +176,25 @@ public class SchedulerManager {
      *
      * @param jobId         任务id
      * @param jobName       任务名称
-     * @param script        执行脚本
+     * @param jobHandlerName 任务处理类名称
+     * @param jobHandlerParam 任务处理参数
      * @param retryCount    重试次数
      * @param retryInterval 重试间隔
      * @throws SchedulerException 调度异常
      */
-    public void triggerJob(Long jobId, String jobName, String script, Integer retryCount, Integer retryInterval)
+    public void triggerJob(
+            Long jobId,
+            String jobName,
+            String jobHandlerName,
+            String jobHandlerParam,
+            Integer retryCount,
+            Integer retryInterval
+    )
             throws SchedulerException {
         val jobDataMap = new JobDataMap();
         jobDataMap.put(ID, jobId);
-        jobDataMap.put(SCRIPT, script);
+        jobDataMap.put(HANDLER_NAME, jobHandlerName);
+        jobDataMap.put(HANDLER_PARAM, jobHandlerParam);
         jobDataMap.put(RETRY_COUNT, retryCount);
         jobDataMap.put(RETRY_INTERVAL, retryInterval);
         scheduler.triggerJob(JobKey.jobKey(jobName), jobDataMap);
