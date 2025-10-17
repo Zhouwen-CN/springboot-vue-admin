@@ -31,7 +31,8 @@ VALUES (1, 1, 1),
        (14, 1, 14),
        (15, 1, 15),
        (16, 1, 16),
-       (17, 1, 17);
+       (17, 1, 17),
+       (18, 1, 18);
 
 -- 菜单表
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type)
@@ -49,9 +50,10 @@ VALUES (1, '权限管理', '/auth', 'Lock', 0, 0, 0),
        (12, '登入日志', '/log/login', 'Checked', 11, 0, 1),
        (13, '操作日志', '/log/ops', 'List', 11, 0, 1),
        (14, '异常日志', '/log/error', 'Failed', 11, 0, 1),
-       (15, '菜单测试', '/test', 'CameraFilled', 0, 0, 0),
-       (16, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 15, 0, 1),
-       (17, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 15, 0, 1);
+       (15, '调度日志', '/log/job', 'BellFilled', 11, 0, 1),
+       (16, '菜单测试', '/test', 'CameraFilled', 0, 0, 0),
+       (17, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 16, 0, 1),
+       (18, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 16, 0, 1);
 
 -- 字典类型表
 insert into t_dict_type(id, dict_type, name)

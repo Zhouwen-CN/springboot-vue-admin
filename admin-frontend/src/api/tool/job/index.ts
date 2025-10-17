@@ -67,3 +67,12 @@ export function reqTriggerJobOnce(id: number) {
 export function reqGetHandlerNames() {
   return request.get<string[]>('/job/handlers')
 }
+
+// 任务选择器查询
+export interface JobSelectorVo {
+  id: number
+  name: string
+}
+export function reqGetJobSelector() {
+  return request.get<JobSelectorVo[]>('/job')
+}

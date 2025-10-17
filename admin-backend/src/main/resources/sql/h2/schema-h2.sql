@@ -101,7 +101,7 @@ COMMENT ON COLUMN t_role_menu.update_user IS '更新者';
 COMMENT ON COLUMN t_role_menu.update_time IS '更新时间';
 
 CREATE SEQUENCE t_role_menu_seq
-START WITH 18
+START WITH 19
 INCREMENT BY 1;
 
 -- 菜单表
@@ -137,7 +137,7 @@ COMMENT ON COLUMN t_menu.update_user IS '更新者';
 COMMENT ON COLUMN t_menu.update_time IS '更新时间';
 
 CREATE SEQUENCE t_menu_seq
-START WITH 18
+START WITH 19
 INCREMENT BY 1;
 
 -- 登录日志表
@@ -152,7 +152,7 @@ CREATE TABLE t_login_log (
     CONSTRAINT pk_login_log PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_login_create_time ON t_login_log(create_time DESC);
+CREATE INDEX idx_login_log_create_time ON t_login_log(create_time DESC);
 
 COMMENT ON TABLE t_login_log IS '登录日志表';
 COMMENT ON COLUMN t_login_log.id IS '主键';
@@ -182,7 +182,7 @@ CREATE TABLE t_operation_log (
     create_time   DATE DEFAULT SYSDATE
 );
 
-CREATE INDEX idx_ops_create_time ON t_operation_log(create_time DESC);
+CREATE INDEX idx_ops_log_create_time ON t_operation_log(create_time DESC);
 
 COMMENT ON TABLE t_operation_log IS '操作日志表';
 COMMENT ON COLUMN t_operation_log.id IS '主键';
@@ -215,7 +215,7 @@ CREATE TABLE t_error_log (
     CONSTRAINT pk_error_log PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_error_create_time ON t_error_log(create_time DESC);
+CREATE INDEX idx_error_log_create_time ON t_error_log(create_time DESC);
 
 COMMENT ON TABLE t_error_log IS '错误日志表';
 COMMENT ON COLUMN t_error_log.id IS '主键';
@@ -467,7 +467,8 @@ COMMENT ON COLUMN t_job_log.result IS '结果数据';
 COMMENT ON COLUMN t_job_log.create_time IS '创建时间';
 COMMENT ON COLUMN t_job_log.update_time IS '更新时间';
 
-CREATE INDEX idx_job_create_time ON t_job_log(create_time DESC);
+CREATE INDEX idx_job_log_job_id ON t_job_log(job_id);
+CREATE INDEX idx_job_log_create_time ON t_job_log(create_time DESC);
 
 CREATE SEQUENCE t_job_log_seq
 START WITH 1

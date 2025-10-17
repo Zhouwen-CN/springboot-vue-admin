@@ -16,6 +16,7 @@ import {
   reqTriggerJobOnce
 } from '@/api/tool/job'
 import JobForm from './components/JobForm.vue'
+const router = useRouter()
 
 // 表单对话框
 const formDialog = ref<InstanceType<typeof JobForm>>()
@@ -76,6 +77,16 @@ async function triggerJobOnce(row: JobVo) {
   }
 }
 
+// 跳转到调度日志
+function toJobLogView(row: JobVo) {
+  router.push({
+    path: '/log/job',
+    query: {
+      jobId: row.id
+    }
+  })
+}
+
 onMounted(() => {
   refresh({ params: { ...pageParams } })
 })
@@ -117,7 +128,11 @@ onMounted(() => {
       <!-- 表格 -->
       <el-table :border="true" :data="data" show-overflow-tooltip style="margin-top: 16px">
         <el-table-column label="主键" prop="id"></el-table-column>
-        <el-table-column label="任务名称" prop="name"></el-table-column>
+        <el-table-column label="任务名称" prop="name">
+          <template #default="{ row }: { row: JobVo }">
+            <span class="job-name" @click="toJobLogView(row)">{{ row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
         <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
         <el-table-column label="重试次数" prop="retryCount"></el-table-column>
@@ -172,4 +187,9 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.job-name {
+  color: var(--el-color-primary);
+  cursor: pointer;
+}
+</style>

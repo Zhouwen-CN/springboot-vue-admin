@@ -84,6 +84,7 @@ function clean() {
   form.retryCount = 0
   form.retryInterval = 0
   formRef.value?.clearValidate()
+  cronPopoverVisible.value = false
 }
 
 // 打开表单对话框

@@ -74,7 +74,7 @@ create table t_login_log(
     user_agent  varchar(200) not null comment '用户代理',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
-    index idx_login_create_time(create_time desc)
+    index idx_login_log_create_time (create_time desc)
 ) comment '登录日志表';
 
 drop table if exists t_operation_log;
@@ -90,7 +90,7 @@ create table t_operation_log(
     user_agent  varchar(200) not null comment '用户代理',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
-    index idx_ops_create_time (create_time desc)
+    index idx_ops_log_create_time (create_time desc)
 ) comment '操作日志表';
 
 drop table if exists t_error_log;
@@ -104,7 +104,7 @@ create table t_error_log(
     error_msg   text         not null comment '错误信息',
     create_user varchar(15) default null comment '创建者',
     create_time timestamp default current_timestamp comment '创建时间',
-    index idx_error_create_time (create_time desc)
+    index idx_error_log_create_time (create_time desc)
 ) comment '错误日志表';
 
 drop table if exists t_dict_type;
@@ -221,7 +221,8 @@ create table t_job_log  (
   result varchar(500) default null comment '结果数据',
   create_time datetime default current_timestamp comment '创建时间',
   update_time datetime default current_timestamp comment '更新时间',
-  index idx_error_create_time (create_time desc)
+  index idx_job_log_job_id (job_id),
+  index idx_job_log_create_time (create_time desc)
 ) comment = '定时任务日志表';
 
 # 尚未用到

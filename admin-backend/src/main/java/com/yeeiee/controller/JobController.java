@@ -5,11 +5,13 @@ import com.yeeiee.domain.entity.Job;
 import com.yeeiee.domain.form.JobEnableChangeForm;
 import com.yeeiee.domain.form.JobForm;
 import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.domain.vo.JobSelectorVo;
 import com.yeeiee.domain.vo.JobVo;
 import com.yeeiee.domain.vo.PageVo;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.scheduler.JobHandlerHolder;
 import com.yeeiee.service.JobService;
+import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -108,5 +110,15 @@ public class JobController {
     public R<List<String>> getJobHandlerNames(){
         val jobHandlerNames = jobHandlerHolder.getJobHandlerNames();
         return R.ok(jobHandlerNames);
+    }
+
+    @Operation(summary = "选择器查询")
+    @GetMapping
+    public R<List<JobSelectorVo>> getJobSelector(){
+        val list = jobService.lambdaQuery()
+                .select(Job::getId, Job::getName)
+                .list();
+        val voList = BeanUtil.toBean(list, JobSelectorVo.class);
+        return R.ok(voList);
     }
 }
