@@ -19,11 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -39,7 +35,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/log")
-@Tag(name = "日志 控制器")
+@Tag(name = "日志表 控制器")
 public class LogController {
 
     private final LoginLogService loginLogService;

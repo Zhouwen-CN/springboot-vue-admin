@@ -1,5 +1,6 @@
 package com.yeeiee.scheduler;
 
+import com.yeeiee.exception.JobHandlerParamException;
 import com.yeeiee.service.JobLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,8 +74,8 @@ public class JobHandlerInvoker extends QuartzJobBean {
         if (exception == null) {
             return;
         }
-        // 如果达到重试上限，直接抛出异常
-        if (fireCount >= retryCount) {
+        // 如果达到重试上限 或者是 任务参数异常，则无需重试
+        if (fireCount >= retryCount || exception instanceof JobHandlerParamException) {
             throw new JobExecutionException(exception);
         }
 

@@ -70,3 +70,11 @@ delete from t_dict_data where true;
 insert into t_dict_data(id, type_id, label, data, sort_id)
 values (1,1,'目录',0,0),
        (2,1,'菜单',1,1);
+
+-- 定时任务表
+delete
+from t_job
+where true;
+insert into t_job(id, name, handler_name, handler_param, cron_expression, retry_count, retry_interval, job_enable)
+values (1, '随机抽签', 'http', '{"method":"get","url":"http://shanhe.kim/api/za/chouq.php"}', '0/5 * * * * ? *', 0, 0,
+        0);

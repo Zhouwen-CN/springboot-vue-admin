@@ -5,12 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenColumn;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
-import com.yeeiee.domain.vo.CodegenColumnVo;
-import com.yeeiee.domain.vo.CodegenPreviewVo;
-import com.yeeiee.domain.vo.CodegenTableSelectorVo;
-import com.yeeiee.domain.vo.CodegenTableVo;
-import com.yeeiee.domain.vo.PageVo;
-import com.yeeiee.domain.vo.R;
+import com.yeeiee.domain.vo.*;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.freemarker.FreemarkerEngineService;
@@ -25,15 +20,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,7 +40,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/codegen")
-@Tag(name = "代码生成配置 控制器")
+@Tag(name = "代码生成配置表 控制器")
 public class CodegenController {
 
     private final CodegenTableService codegenTableService;

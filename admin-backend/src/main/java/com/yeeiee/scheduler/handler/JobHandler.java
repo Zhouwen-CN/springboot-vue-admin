@@ -1,8 +1,9 @@
 package com.yeeiee.scheduler.handler;
 
+
 /**
  * <p>
- * 任务处理器
+ * 任务处理器接口
  * </p>
  *
  * @author chen
@@ -11,12 +12,14 @@ package com.yeeiee.scheduler.handler;
 public interface JobHandler {
     /**
      * jobHandlerName
+     *
      * @return jobHandlerName
      */
     String name();
 
     /**
      * 执行job
+     *
      * @param param jobHandlerParam
      * @return result
      */

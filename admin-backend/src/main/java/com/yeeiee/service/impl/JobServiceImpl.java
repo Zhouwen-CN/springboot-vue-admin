@@ -54,7 +54,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                     false
             );
         } catch (SchedulerException e) {
-            throw new JobSchedulerException("添加定时任务异常", e);
+            throw new JobSchedulerException("添加定时任务异常: " + e.getMessage());
         }
     }
 
@@ -95,7 +95,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             }
 
         } catch (SchedulerException e) {
-            throw new JobSchedulerException("修改定时任务异常", e);
+            throw new JobSchedulerException("修改定时任务异常: " + e.getMessage());
         }
 
         val entity = BeanUtil.toBean(form, Job.class);
@@ -107,7 +107,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         try {
             schedulerManager.deleteJob(name);
         } catch (SchedulerException e) {
-            throw new JobSchedulerException("删除定时任务异常", e);
+            throw new JobSchedulerException("删除定时任务异常: " + e.getMessage());
         }
 
         this.removeById(id);
@@ -118,7 +118,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         try {
             schedulerManager.switchJob(jobEnableChangeForm.getName(), jobEnableChangeForm.isJobEnable());
         } catch (SchedulerException e) {
-            throw new JobSchedulerException("启停定时任务异常", e);
+            throw new JobSchedulerException("启停定时任务异常: " + e.getMessage());
         }
 
         this.lambdaUpdate()
@@ -143,7 +143,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                     job.getRetryInterval()
             );
         } catch (SchedulerException e) {
-            throw new JobSchedulerException("触发定时任务异常", e);
+            throw new JobSchedulerException("触发定时任务异常: " + e.getMessage());
         }
     }
 }
