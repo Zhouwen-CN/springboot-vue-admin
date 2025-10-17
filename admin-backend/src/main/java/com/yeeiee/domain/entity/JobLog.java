@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-16
+ * @since 2025-10-17
  */
 @Getter
 @Setter
@@ -56,6 +56,12 @@ public class JobLog {
      */
     @TableField(value = "fire_num")
     private Integer fireNum;
+
+    /**
+     * 执行耗时
+     */
+    @TableField(value = "time")
+    private Long time;
 
     /**
      * 任务状态

@@ -2,8 +2,8 @@ package com.yeeiee.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.domain.entity.JobLog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yeeiee.domain.entity.JobLog;
 import com.yeeiee.domain.vo.JobLogVo;
 
 import java.time.LocalDateTime;
@@ -43,10 +43,11 @@ public interface JobLogService extends IService<JobLog> {
      * 修改定时任务日志
      *
      * @param jobLogId  定时任务日志id
+     * @param time      执行耗时
      * @param exception 异常
      * @param result    任务结果
      */
-    void modifyJobLog(Long jobLogId, Throwable exception, String result);
+    void modifyJobLog(Long jobLogId, long time, Throwable exception, String result);
 
     /**
      * 获取定时任务日志分页

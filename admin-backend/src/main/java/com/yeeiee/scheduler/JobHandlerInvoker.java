@@ -28,7 +28,6 @@ public class JobHandlerInvoker extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         val beginTime = System.currentTimeMillis();
-        val name = context.getJobDetail().getKey().getName();
         val mergedJobDataMap = context.getMergedJobDataMap();
         val jobId = mergedJobDataMap.getLong(SchedulerManager.ID);
         val handlerName = mergedJobDataMap.getString(SchedulerManager.HANDLER_NAME);
@@ -63,8 +62,8 @@ public class JobHandlerInvoker extends QuartzJobBean {
         }
 
         // 更新任务日志
-        jobLogService.modifyJobLog(jobLogId, exception, result);
-        log.info("[定时任务 执行器]-[{}] {}ms", name, System.currentTimeMillis() - beginTime);
+        val time = System.currentTimeMillis() - beginTime;
+        jobLogService.modifyJobLog(jobLogId, time, exception, result);
 
         // 异常处理
         handlerException(exception, fireCount, retryCount, retryInterval);

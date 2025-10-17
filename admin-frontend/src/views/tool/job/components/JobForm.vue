@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { type JobForm, type JobVo, reqSave, reqGetHandlerNames } from '@/api/tool/job'
 import { type FormInstance, type FormRules } from 'element-plus'
-import type { PopoverInstance } from 'element-plus'
+import { Setting } from '@element-plus/icons-vue'
 
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])
@@ -64,13 +64,13 @@ async function onSubmit(formEl: FormInstance | undefined) {
 }
 
 // cron 弹出框
-const cronPopoverRef = ref<PopoverInstance>()
+const cronPopoverVisible = ref(false)
 function changeCron(val: string | Event) {
   if (typeof val !== 'string') return false
   form.cronExpression = val
 }
 function closeCron() {
-  cronPopoverRef.value?.hide()
+  cronPopoverVisible.value = false
 }
 
 // 清空表单
@@ -139,9 +139,13 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
-          <el-popover :width="570" placement="bottom-start" ref="cronPopoverRef" trigger="click">
+          <el-popover :width="570" placement="bottom-start" :visible="cronPopoverVisible">
             <template #reference>
-              <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式" />
+              <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式">
+                <template #append>
+                  <el-button :icon="Setting" @click="cronPopoverVisible = true"></el-button>
+                </template>
+              </el-input>
             </template>
             <el-scrollbar max-height="400px">
               <noVue3Cron

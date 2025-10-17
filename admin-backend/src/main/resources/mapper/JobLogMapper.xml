@@ -10,6 +10,7 @@
         <result column="handler_name" property="handlerName" />
         <result column="handler_param" property="handlerParam" />
         <result column="fire_num" property="fireNum" />
+        <result column="time" property="time" />
         <result column="status" property="status" />
         <result column="result" property="result" />
         <result column="create_time" property="createTime" />
@@ -18,7 +19,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, job_id, handler_name, handler_param, fire_num, status, result, create_time, update_time
+        id, job_id, handler_name, handler_param, fire_num, time, status, result, create_time, update_time
     </sql>
 
     <select id="selectJobLogPage" resultType="com.yeeiee.domain.vo.JobLogVo">
@@ -28,6 +29,7 @@
             a.handler_name as handlerName,
             a.handler_param as handlerParam,
             a.fire_num as fireNum,
+            a.time,
             a.status,
             a.result,
             a.create_time as startTime,

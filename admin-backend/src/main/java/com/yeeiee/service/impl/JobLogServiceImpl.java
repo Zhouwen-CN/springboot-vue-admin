@@ -53,7 +53,7 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
     }
 
     @Override
-    public void modifyJobLog(Long jobLogId, Throwable exception, String result) {
+    public void modifyJobLog(Long jobLogId, long time, Throwable exception, String result) {
         val jobLog = new JobLog();
 
         if (exception != null) {
@@ -65,6 +65,7 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
         }
 
         jobLog.setId(jobLogId);
+        jobLog.setTime(time);
         this.updateById(jobLog);
     }
 

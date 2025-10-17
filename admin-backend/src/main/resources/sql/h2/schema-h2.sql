@@ -449,6 +449,7 @@ create table t_job_log(
   handler_name varchar2(32) not null,
   handler_param varchar2(500) default null,
   fire_num NUMBER(1) not null,
+  time NUMBER(18) default null,
   status NUMBER(1) not null,
   result varchar2(500) default null,
   create_time DATE default SYSDATE,
@@ -460,6 +461,7 @@ COMMENT ON COLUMN t_job_log.job_id IS '任务编号';
 COMMENT ON COLUMN t_job_log.handler_name IS '处理器名称';
 COMMENT ON COLUMN t_job_log.handler_param IS '处理器参数';
 COMMENT ON COLUMN t_job_log.fire_num IS '第几次执行';
+COMMENT ON COLUMN t_job_log.time IS '执行耗时';
 COMMENT ON COLUMN t_job_log.status IS '任务状态';
 COMMENT ON COLUMN t_job_log.result IS '结果数据';
 COMMENT ON COLUMN t_job_log.create_time IS '创建时间';

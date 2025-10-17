@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author chen
- * @since 2025-10-16
+ * @since 2025-10-17
  */
 @Getter
 @Setter
@@ -36,6 +36,9 @@ public class JobLogVo {
 
     @Schema(description = "第几次执行")
     private Integer fireNum;
+
+    @Schema(description = "执行耗时")
+    private Long time;
 
     @Schema(description = "任务状态")
     private JobStatusEnum status;

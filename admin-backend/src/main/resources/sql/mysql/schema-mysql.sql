@@ -216,6 +216,7 @@ create table t_job_log  (
   handler_name varchar(32) not null comment '处理器名称',
   handler_param varchar(500) default null comment '处理器参数',
   fire_num tinyint not null comment '第几次执行',
+  time bigint default null comment '执行耗时',
   status tinyint not null comment '任务状态',
   result varchar(500) default null comment '结果数据',
   create_time datetime default current_timestamp comment '创建时间',
