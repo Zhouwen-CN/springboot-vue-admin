@@ -451,7 +451,7 @@ create table t_job_log(
   fire_num NUMBER(1) not null,
   time NUMBER(18) default null,
   status NUMBER(1) not null,
-  result varchar2(500) default null,
+  result CLOB default null,
   create_time DATE default SYSDATE,
   update_time DATE default SYSDATE
 );

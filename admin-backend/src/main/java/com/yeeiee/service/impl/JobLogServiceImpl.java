@@ -10,7 +10,6 @@ import com.yeeiee.mapper.JobLogMapper;
 import com.yeeiee.service.JobLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -58,7 +57,7 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
 
         if (exception != null) {
             jobLog.setStatus(JobStatusEnum.FAILURE);
-            jobLog.setResult(ExceptionUtils.getRootCauseMessage(exception));
+            jobLog.setResult(exception.getMessage());
         } else {
             jobLog.setStatus(JobStatusEnum.SUCCESS);
             jobLog.setResult(result);

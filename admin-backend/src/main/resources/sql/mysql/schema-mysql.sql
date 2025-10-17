@@ -218,7 +218,7 @@ create table t_job_log  (
   fire_num tinyint not null comment '第几次执行',
   time bigint default null comment '执行耗时',
   status tinyint not null comment '任务状态',
-  result varchar(500) default null comment '结果数据',
+  result text default null comment '结果数据',
   create_time datetime default current_timestamp comment '创建时间',
   update_time datetime default current_timestamp comment '更新时间',
   index idx_job_log_job_id (job_id),
