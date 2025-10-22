@@ -15,15 +15,16 @@ import org.hibernate.validator.constraints.Length;
  * </p>
  *
  * @author chen
- * @since 2025-05-27
+ * @since 2025-10-22
  */
 @Getter
 @Setter
 @ToString
 @Schema(name = "DictTypeForm", description = "字典类型表单")
 public class DictTypeForm {
+
     @NotNull(groups = {GroupingValidate.Update.class})
-    @Schema(description = "字典类型id")
+    @Schema(description = "主键")
     private Long id;
 
     @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
@@ -31,8 +32,8 @@ public class DictTypeForm {
     @Schema(description = "字典名称")
     private String name;
 
-    @NotBlank(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
-    @Length(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class}, max = 15)
-    @Schema(description = "字典类型")
-    private String dictType;
+    @NotNull(groups = {GroupingValidate.Create.class, GroupingValidate.Update.class})
+    @Schema(description = "字典是否启用：0-禁用，1-启用")
+    private Boolean dictEnable;
+
 }

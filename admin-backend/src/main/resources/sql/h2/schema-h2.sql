@@ -235,19 +235,19 @@ INCREMENT BY 1;
 -- 字典类型表
 CREATE TABLE t_dict_type (
     id            NUMBER(18) PRIMARY KEY,
-    dict_type     VARCHAR2(15) NOT NULL,
     name          VARCHAR2(40) NOT NULL,
+    dict_enable   NUMBER(1) NOT NULL,
     create_user   VARCHAR2(15) DEFAULT NULL,
     create_time   DATE DEFAULT SYSDATE,
     update_user   VARCHAR2(15) DEFAULT NULL,
     update_time   DATE DEFAULT SYSDATE,
-    CONSTRAINT uniq_dict_type UNIQUE (dict_type)
+    CONSTRAINT uniq_dict_type_name UNIQUE (name)
 );
 
 COMMENT ON TABLE t_dict_type IS '字典类型表';
 COMMENT ON COLUMN t_dict_type.id IS '主键';
-COMMENT ON COLUMN t_dict_type.dict_type IS '字典类型';
 COMMENT ON COLUMN t_dict_type.name IS '字典名称';
+COMMENT ON COLUMN t_dict_type.dict_enable IS '字典是否启用：0-禁用，1-启用';
 COMMENT ON COLUMN t_dict_type.create_user IS '创建者';
 COMMENT ON COLUMN t_dict_type.create_time IS '创建时间';
 COMMENT ON COLUMN t_dict_type.update_user IS '更新者';

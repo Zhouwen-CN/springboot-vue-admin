@@ -21,4 +21,18 @@
         id, type_id, label, data, sort_id, create_user, create_time, update_user, update_time
     </sql>
 
+    <select id="selectDictByTypeId" resultType="com.yeeiee.domain.vo.DictDataSelectorVo">
+        select
+            b.label,
+            b.data
+        from (
+            select
+                id
+            from t_dict_type
+            where id=#{typeId} and dict_enable = 1
+        ) a
+        join t_dict_data b
+        on a.id=b.type_id
+        order by b.sort_id
+    </select>
 </mapper>

@@ -12,7 +12,7 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import DictData from './components/DictData.vue'
 
 // 搜索关键字
-const keyword = ref('')
+const searchName = ref('')
 // 弹窗切换
 const toggleDialog = reactive({
   show: false,
@@ -22,7 +22,7 @@ const toggleDialog = reactive({
 const dictTypeForm = reactive<DictTypeForm>({
   id: undefined,
   name: '',
-  dictType: ''
+  dictEnable: true
 })
 
 // 保存字典按钮loading
@@ -43,14 +43,14 @@ const {
 
 // 查询字典类型
 function searchByKeyword() {
-  keyword.value = keyword.value.trim()
-  refresh({ params: { keyword: keyword.value } })
+  searchName.value = searchName.value.trim()
+  refresh({ params: { name: searchName.value } })
 }
 
 // 删除字典类型
 async function removeDictType(id: number) {
   await reqRemoveDictTypeById(id)
-  refresh({ params: { keyword: keyword.value } })
+  refresh({ params: { name: searchName.value } })
   ElMessage.success('操作成功')
 }
 
@@ -61,7 +61,7 @@ function handleSelectionChange(dictTypes: DictTypeVo[]) {
 }
 async function removeBatchDictType() {
   await reqRemoveDictTypeByIds(deleteIds.value)
-  refresh({ params: { keyword: keyword.value } })
+  refresh({ params: { name: searchName.value } })
   ElMessage.success('操作成功')
 }
 
@@ -76,15 +76,14 @@ function modifyDictType(row: DictTypeVo) {
   toggleDialog.show = true
   toggleDialog.title = '更新字典类型'
   dictTypeForm.id = row.id
-  dictTypeForm.dictType = row.dictType
   dictTypeForm.name = row.name
+  dictTypeForm.dictEnable = row.dictEnable
 }
 
 // 表单校验
 const dictTypeFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof dictTypeForm>>({
-  name: [{ required: true, message: '请输入字典类型', trigger: 'blur' }],
-  dictType: [{ required: true, message: '请输入字典名称', trigger: 'blur' }]
+  name: [{ required: true, message: '请输入字典类型', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -94,7 +93,7 @@ async function onSubmit(formEl: FormInstance | undefined) {
   try {
     await formEl.validate()
     await reqSaveDictType(dictTypeForm)
-    refresh({ params: { keyword: keyword.value } })
+    refresh({ params: { name: searchName.value } })
     toggleDialog.show = false
     ElMessage.success('操作成功')
   } catch (error) {
@@ -108,8 +107,8 @@ async function onSubmit(formEl: FormInstance | undefined) {
 function dialogClean() {
   toggleDialog.title = ''
   dictTypeForm.id = undefined
-  dictTypeForm.dictType = ''
   dictTypeForm.name = ''
+  dictTypeForm.dictEnable = true
   dictTypeFormRef.value?.clearValidate()
 }
 
@@ -132,7 +131,7 @@ onMounted(() => {
     <el-card>
       <el-form inline label-width="auto" @submit.prevent="searchByKeyword()">
         <el-form-item label="关键字">
-          <el-input v-model="keyword" clearable placeholder="关键字"></el-input>
+          <el-input v-model="searchName" clearable placeholder="关键字"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button :icon="Search" :loading="pageLoading" native-type="submit" type="primary"
@@ -165,12 +164,18 @@ onMounted(() => {
       >
         <el-table-column type="selection" width="45px" />
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="字典类型" prop="dictType">
+        <el-table-column label="字典名称" prop="name">
           <template #default="{ row }: { row: DictTypeVo }">
-            <span class="dict-type" @click="openDrawer(row.id)">{{ row.dictType }}</span>
+            <span class="dict-type" @click="openDrawer(row.id)">{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="字典名称" prop="name"></el-table-column>
+        <el-table-column label="状态" prop="dictEnable">
+          <template #default="{ row }: { row: DictTypeVo }">
+            <el-tag size="large" :type="row.dictEnable ? 'success' : 'danger'"
+              >{{ row.dictEnable ? '启用' : '禁用' }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="更新时间" prop="updateTime"></el-table-column>
         <el-table-column label="操作">
@@ -196,8 +201,8 @@ onMounted(() => {
         background
         layout="prev, pager, next, jumper, ->, total, sizes"
         style="margin-top: 16px"
-        @current-change="(val: number) => onPageChange(val, { params: { keyword: keyword } })"
-        @size-change="(val: number) => onSizeChange(val, { params: { keyword: keyword } })"
+        @current-change="(val: number) => onPageChange(val, { params: { name: searchName } })"
+        @size-change="(val: number) => onSizeChange(val, { params: { name: searchName } })"
       />
     </el-card>
 
@@ -217,11 +222,11 @@ onMounted(() => {
           style="padding: 0 20px"
           @submit.prevent="onSubmit(dictTypeFormRef)"
         >
-          <el-form-item label="字典类型" prop="dictType">
-            <el-input v-model="dictTypeForm.dictType" placeholder="字典类型"></el-input>
-          </el-form-item>
           <el-form-item label="字典名称" prop="name">
             <el-input v-model="dictTypeForm.name" placeholder="字典名称"></el-input>
+          </el-form-item>
+          <el-form-item label="是否开启" prop="dictEnable">
+            <el-switch v-model="dictTypeForm.dictEnable"></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button @click="toggleDialog.show = false">取消 </el-button>

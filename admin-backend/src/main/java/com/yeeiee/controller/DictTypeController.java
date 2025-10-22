@@ -46,12 +46,10 @@ public class DictTypeController {
     public R<PageVo<DictTypeVo>> getPage(
             @PathVariable("size") @Parameter(description = "页面大小") Integer size,
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
-            @RequestParam(value = "keyword", required = false) @Parameter(description = "关键字") String keyword
+            @RequestParam(value = "name", required = false) @Parameter(description = "关键字") String name
     ) {
         val page = dictTypeService.lambdaQuery()
-                .like(StringUtils.hasText(keyword), DictType::getName, keyword)
-                .or()
-                .like(StringUtils.hasText(keyword), DictType::getDictType, keyword)
+                .like(StringUtils.hasText(name), DictType::getName, name)
                 .page(Page.of(current, size));
 
         return R.ok(PageVo.fromPage(page, DictTypeVo.class));
@@ -64,7 +62,9 @@ public class DictTypeController {
                 .select(
                         DictType::getId,
                         DictType::getName
-                ).list();
+                )
+                .eq(DictType::getDictEnable, true)
+                .list();
         val dictTypeSelectorVoList = BeanUtil.toBean(list, DictTypeSelectorVo.class);
         return R.ok(dictTypeSelectorVoList);
     }

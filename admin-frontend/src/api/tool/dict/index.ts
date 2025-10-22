@@ -6,13 +6,13 @@ import { type BaseVo } from '@/utils/requestTypes'
 export interface DictTypeVo extends BaseVo {
   id: number
   name: string
-  dictType: string
+  dictEnable: boolean
 }
 
 export interface DictTypeForm {
   id?: number
   name: string
-  dictType: string
+  dictEnable: boolean
 }
 
 // 获取字典类型分页

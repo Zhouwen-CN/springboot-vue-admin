@@ -176,13 +176,9 @@ onMounted(() => {
         </el-table-column>
         <el-table-column label="是否缓存" prop="keepAlive">
           <template #default="{ row }: { row: MenuVo }">
-            <el-switch
-              v-model="row.keepAlive"
-              active-icon="Check"
-              disabled
-              inactive-icon="Close"
-              inline-prompt
-            />
+            <el-tag size="large" :type="row.keepAlive ? 'success' : 'danger'"
+              >{{ row.keepAlive ? '启用' : '禁用' }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="菜单排序" prop="sortId"></el-table-column>

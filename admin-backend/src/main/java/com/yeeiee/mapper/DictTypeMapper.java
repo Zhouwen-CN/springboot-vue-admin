@@ -1,7 +1,7 @@
 package com.yeeiee.mapper;
 
-import com.yeeiee.domain.entity.DictType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yeeiee.domain.entity.DictType;
 
 /**
  * <p>
@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2025-09-05
  */
 public interface DictTypeMapper extends BaseMapper<DictType> {
-
 }

@@ -110,13 +110,13 @@ create table t_error_log(
 drop table if exists t_dict_type;
 create table t_dict_type(
     id bigint primary key auto_increment comment '主键',
-    dict_type varchar(15) not null comment '字典类型',
     name varchar(40) not null comment '字典名称',
+    dict_enable bit(1) not null comment '字典是否启用：0-禁用，1-启用',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
     update_time datetime default current_timestamp comment '更新时间',
-    constraint uniq_dict_type unique (dict_type)
+    constraint uniq_dict_type_name unique (name)
 ) comment '字典类型表';
 
 drop table if exists t_dict_data;

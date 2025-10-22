@@ -33,11 +33,11 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     @Override
     public void addDictType(DictTypeForm dictTypeForm) {
         val exists = this.lambdaQuery()
-                .eq(DictType::getDictType, dictTypeForm.getDictType())
+                .eq(DictType::getName, dictTypeForm.getName())
                 .exists();
 
         if (exists) {
-            throw new DmlOperationException("字典类型已存在");
+            throw new DmlOperationException("字典名称已存在");
         }
 
         val dictType = BeanUtil.toBean(dictTypeForm, DictType.class);

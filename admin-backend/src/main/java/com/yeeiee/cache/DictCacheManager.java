@@ -3,7 +3,6 @@ package com.yeeiee.cache;
 import com.yeeiee.domain.entity.DictData;
 import com.yeeiee.domain.vo.DictDataSelectorVo;
 import com.yeeiee.service.DictDataService;
-import com.yeeiee.utils.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.cache.CacheManager;
@@ -38,15 +37,7 @@ public class DictCacheManager {
      */
     @Cacheable(cacheNames = DICT_CACHE, key = "#p0")
     public List<DictDataSelectorVo> getDictByTypeId(Long typeId) {
-        val list = dictDataService.lambdaQuery()
-                .select(
-                        DictData::getLabel,
-                        DictData::getData
-                )
-                .eq(DictData::getTypeId, typeId)
-                .orderByAsc(DictData::getSortId)
-                .list();
-        return BeanUtil.toBean(list, DictDataSelectorVo.class);
+        return dictDataService.getDictByTypeId(typeId);
     }
 
     /**

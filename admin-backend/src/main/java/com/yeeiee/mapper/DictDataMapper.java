@@ -2,6 +2,10 @@ package com.yeeiee.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.vo.DictDataSelectorVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.yeeiee.domain.entity.DictData;
  */
 public interface DictDataMapper extends BaseMapper<DictData> {
 
+    List<DictDataSelectorVo> selectDictByTypeId(@Param("typeId") Long typeId);
 }

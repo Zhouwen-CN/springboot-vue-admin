@@ -56,8 +56,8 @@ VALUES (1, '权限管理', '/auth', 'Lock', 0, 0, 0),
        (18, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 16, 0, 1);
 
 -- 字典类型表
-insert into t_dict_type(id, dict_type, name)
-values (1,'menu_type','菜单类型');
+insert into t_dict_type(id, name, dict_enable)
+values (1,'菜单类型',true);
 
 -- 字典数据表
 insert into t_dict_data(id, type_id, label, data, sort_id)

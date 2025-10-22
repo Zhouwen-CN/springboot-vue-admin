@@ -6,8 +6,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yeeiee.domain.entity.DictType">
         <id column="id" property="id" />
-        <result column="dict_type" property="dictType" />
         <result column="name" property="name" />
+        <result column="dict_enable" property="dictEnable" />
         <result column="create_user" property="createUser" />
         <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
@@ -16,7 +16,6 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, dict_type, name, create_user, create_time, update_user, update_time
+        id, name, dict_enable, create_user, create_time, update_user, update_time
     </sql>
-
 </mapper>
