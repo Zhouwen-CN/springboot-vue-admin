@@ -205,7 +205,7 @@ public class SchedulerManager {
      *
      * @throws SchedulerException 调度异常
      */
-    public void clean() throws SchedulerException {
+    public void clear() throws SchedulerException {
         scheduler.clear();
     }
 }
