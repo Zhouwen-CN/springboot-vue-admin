@@ -1,16 +1,16 @@
 spring:
-  # 数据源配置
+  # 数据源配置（h2）
   datasource:
     master:
       driver-class-name: org.h2.Driver
-      url: jdbc:h2:mem:springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
-      #    url: jdbc:h2:file:./springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
+      url: jdbc:h2:mem:sv_admin;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+      #    url: jdbc:h2:file:./sv_admin;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
       username: sa
       password: 123
     quartz:
       driver-class-name: org.h2.Driver
-      url: jdbc:h2:mem:springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
-      #    url: jdbc:h2:file:./springboot_vue_admin;MODE=ORACLE;DB_CLOSE_DELAY=-1
+      url: jdbc:h2:mem:sv_admin;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+      #    url: jdbc:h2:file:./sv_admin;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
       username: sa
       password: 123
   h2:
@@ -28,7 +28,7 @@ spring:
       mode: embedded #h2内存模式才会进行初始化
       encoding: utf-8
 
-  # 数据源配置
+  # 数据源配置（mysql）
 #  datasource:
 #    master:
 #      driver-class-name: com.mysql.cj.jdbc.Driver
@@ -49,6 +49,68 @@ spring:
 #      url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAMSl4JIYdxI+R/g7XOPydE1
 #      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
 #      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+#      hikari:
+#        pool-name: quartz
+#        maximum-pool-size: 5 #最大连接数
+#        minimum-idle: 1 #最小空闲连接数
+#        connection-timeout: 5000 #获取连接超时，5秒
+#        validation-timeout: 5000 #校验连接时超时，5秒
+#        keepalive-time: 120000 #保活时间，2分钟
+#        idle-timeout: 600000 #空闲时间，10分钟
+#        max-lifetime: 1200000 #最大存活时间，20分钟
+
+  # 数据源配置（oracle）
+#  datasource:
+#    master:
+#      driver-class-name: oracle.jdbc.OracleDriver
+#      url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+#      username: root
+#      password: 123456
+#      hikari:
+#        pool-name: master
+#        maximum-pool-size: 5 #最大连接数
+#        minimum-idle: 1 #最小空闲连接数
+#        connection-timeout: 5000 #获取连接超时，5秒
+#        validation-timeout: 5000 #校验连接时超时，5秒
+#        keepalive-time: 120000 #保活时间，2分钟
+#        idle-timeout: 600000 #空闲时间，10分钟
+#        max-lifetime: 1200000 #最大存活时间，20分钟
+#    quartz:
+#      driver-class-name: oracle.jdbc.OracleDriver
+#      url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+#      username: root
+#      password: 123456
+#      hikari:
+#        pool-name: quartz
+#        maximum-pool-size: 5 #最大连接数
+#        minimum-idle: 1 #最小空闲连接数
+#        connection-timeout: 5000 #获取连接超时，5秒
+#        validation-timeout: 5000 #校验连接时超时，5秒
+#        keepalive-time: 120000 #保活时间，2分钟
+#        idle-timeout: 600000 #空闲时间，10分钟
+#        max-lifetime: 1200000 #最大存活时间，20分钟
+
+  # 数据源配置（postgresql）
+#  datasource:
+#    master:
+#      driver-class-name: org.postgresql.Driver
+#      url: jdbc:postgresql://localhost:5432/sv_admin
+#      username: root
+#      password: 123456
+#      hikari:
+#        pool-name: master
+#        maximum-pool-size: 5 #最大连接数
+#        minimum-idle: 1 #最小空闲连接数
+#        connection-timeout: 5000 #获取连接超时，5秒
+#        validation-timeout: 5000 #校验连接时超时，5秒
+#        keepalive-time: 120000 #保活时间，2分钟
+#        idle-timeout: 600000 #空闲时间，10分钟
+#        max-lifetime: 1200000 #最大存活时间，20分钟
+#    quartz:
+#      driver-class-name: org.postgresql.Driver
+#      url: jdbc:postgresql://localhost:5432/sv_admin
+#      username: root
+#      password: 123456
 #      hikari:
 #        pool-name: quartz
 #        maximum-pool-size: 5 #最大连接数

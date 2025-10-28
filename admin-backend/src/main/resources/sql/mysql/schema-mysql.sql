@@ -1,7 +1,3 @@
-create database if not exists springboot_vue_admin;
-use springboot_vue_admin;
-
-DROP TABLE IF EXISTS t_user;
 create table t_user(
     id            bigint primary key auto_increment comment '主键',
     username      varchar(15)      not null comment '用户名',
@@ -14,7 +10,6 @@ create table t_user(
     constraint uniq_user_name unique (username)
 ) comment '用户表';
 
-DROP TABLE IF EXISTS t_user_role;
 create table t_user_role(
     id          bigint primary key auto_increment comment '主键',
     user_id     bigint not null comment '用户id',
@@ -25,7 +20,6 @@ create table t_user_role(
     update_time datetime default current_timestamp comment '更新时间'
 ) comment '用户角色关系表';
 
-DROP TABLE IF EXISTS t_role;
 create table t_role(
     id          bigint primary key auto_increment comment '主键',
     role_name varchar(15) not null comment '角色名称',
@@ -37,7 +31,6 @@ create table t_role(
     constraint uniq_role_name unique (role_name)
 ) comment '角色表';
 
-DROP TABLE IF EXISTS t_role_menu;
 create table t_role_menu(
     id          bigint primary key auto_increment comment '主键',
     role_id     bigint not null comment '角色id',
@@ -48,14 +41,13 @@ create table t_role_menu(
     update_time datetime default current_timestamp comment '更新时间'
 ) comment '角色菜单关系表';
 
-DROP TABLE IF EXISTS t_menu;
 create table t_menu(
     id          bigint primary key auto_increment comment '主键',
-    title       varchar(15) not null comment '标题',
+    title       varchar(20) not null comment '标题',
     access_path varchar(40) not null comment '访问路径',
     icon        varchar(15) not null comment '图标',
     pid         bigint      not null comment '父级菜单id',
-    keep_alive  bit(1) default 0 null comment '是否缓存',
+    keep_alive  bit(1) not null comment '是否缓存',
     menu_type   tinyint not null comment '菜单类型：0-目录，1-菜单',
     sort_id int default 0 comment '菜单排序',
     create_user varchar(15) default null comment '创建者',
@@ -65,7 +57,6 @@ create table t_menu(
     constraint uniq_enum_title unique (title)
 ) comment '菜单表';
 
-drop table if exists t_login_log;
 create table t_login_log(
     id          bigint primary key auto_increment comment '主键',
     operation   tinyint not null comment '操作类型',
@@ -77,7 +68,6 @@ create table t_login_log(
     index idx_login_log_create_time (create_time desc)
 ) comment '登录日志表';
 
-drop table if exists t_operation_log;
 create table t_operation_log(
     id        bigint primary key auto_increment comment '主键',
     operation varchar(50) not null comment '操作',
@@ -93,7 +83,6 @@ create table t_operation_log(
     index idx_ops_log_create_time (create_time desc)
 ) comment '操作日志表';
 
-drop table if exists t_error_log;
 create table t_error_log(
     id          bigint primary key auto_increment comment '主键',
     url         varchar(50) not null comment '请求地址',
@@ -107,7 +96,6 @@ create table t_error_log(
     index idx_error_log_create_time (create_time desc)
 ) comment '错误日志表';
 
-drop table if exists t_dict_type;
 create table t_dict_type(
     id bigint primary key auto_increment comment '主键',
     name varchar(40) not null comment '字典名称',
@@ -119,7 +107,6 @@ create table t_dict_type(
     constraint uniq_dict_type_name unique (name)
 ) comment '字典类型表';
 
-drop table if exists t_dict_data;
 create table t_dict_data(
     id bigint primary key auto_increment comment '主键',
     type_id bigint not null comment '字典类型id',
@@ -133,7 +120,6 @@ create table t_dict_data(
     constraint uniq_dict_type_label unique (type_id, label)
 ) comment '字典数据表';
 
-drop table if exists t_data_source;
 create table t_data_source(
     id bigint primary key auto_increment comment '主键',
     name varchar(15) not null comment '数据源名称',
@@ -147,7 +133,6 @@ create table t_data_source(
     constraint uniq_datasource_name unique (name)
 ) comment = '数据源配置表';
 
-drop table if exists t_codegen_table;
 create table t_codegen_table  (
   id bigint primary key auto_increment comment '主键',
   data_source_id bigint not null comment '数据源配置的编号',
@@ -166,7 +151,6 @@ create table t_codegen_table  (
   constraint uniq_table_name unique (table_name)
 ) comment = '代码生成表';
 
-drop table if exists t_codegen_column;
 create table t_codegen_column  (
   id bigint primary key auto_increment comment '主键',
   table_id bigint not null comment '代码生成表编号',
@@ -193,7 +177,6 @@ create table t_codegen_column  (
   update_time datetime default current_timestamp comment '更新时间'
 ) comment = '代码生成字段表';
 
-drop table if exists t_job;
 create table t_job  (
   id bigint primary key auto_increment comment '主键',
   name varchar(32) not null comment '任务名称',
@@ -209,7 +192,6 @@ create table t_job  (
   update_time datetime default current_timestamp comment '更新时间'
 ) comment = '定时任务表';
 
-drop table if exists t_job_log;
 create table t_job_log  (
   id bigint primary key auto_increment comment '主键',
   job_id bigint not null comment '任务编号',
@@ -221,7 +203,6 @@ create table t_job_log  (
   result text default null comment '结果数据',
   create_time datetime default current_timestamp comment '创建时间',
   update_time datetime default current_timestamp comment '更新时间',
-  index idx_job_log_job_id (job_id),
   index idx_job_log_create_time (create_time desc)
 ) comment = '定时任务日志表';
 

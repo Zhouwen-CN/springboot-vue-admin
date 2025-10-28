@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationContextInitializer=\
-  com.yeeiee.config.MybatisIdTypeConfigInitializer
+  com.yeeiee.config.EnvironmentConfiguration

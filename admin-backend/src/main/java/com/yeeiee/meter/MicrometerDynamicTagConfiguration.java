@@ -24,7 +24,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  */
 
 @Configuration
-public class MicrometerDynamicTagConfig {
+public class MicrometerDynamicTagConfiguration {
     private final ExpressionParser PARSER = new SpelExpressionParser();
     @Bean
     public MeterTagAnnotationHandler meterTagAnnotationHandler() {

@@ -78,7 +78,7 @@ spring:
           # JobStore 相关配置
           jobStore:
             class: org.springframework.scheduling.quartz.LocalDataSourceJobStore #JobStore实现类
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            #driverDelegateClass: 在 EnvironmentConfiguration 类中动态配置
             tablePrefix: QRTZ_ #Quartz表前缀
             isClustered: true #是集群模式
             clusterCheckinInterval: 15000 #集群检查频率，单位：毫秒。默认为 15000
@@ -109,9 +109,11 @@ springdoc:
 
 # mybatis-plus
 mybatis-plus:
+  configuration:
+    jdbc-type-for-null: "null" #解决oracle插入null值报错：一定得带双引号或者单引号，不然值设置不进去
   global-config:
     db-config:
-      id-type: none #由 MybatisIdTypeConfigInitializer 动态设置成 AUTO 或者 INPUT 模式
+      id-type: none #由 EnvironmentConfiguration 动态设置成 AUTO 或者 INPUT 模式
 #      id-type: auto #自增ID，适合 MySQL 等直接自增的数据库
 #      id-type: input #用户输入ID，适合 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库
 #      id-type: assign_id #分配ID，默认使用雪花算法。注意，Oracle、PostgreSQL、Kingbase、DB2、H2 数据库时，需要去除实体类上的 @KeySequence 注解

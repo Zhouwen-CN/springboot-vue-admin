@@ -3,16 +3,12 @@ package com.yeeiee.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.DB2KeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.DmKeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.H2KeyGenerator;
-import com.baomidou.mybatisplus.extension.incrementer.KingbaseKeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.OracleKeyGenerator;
 import com.baomidou.mybatisplus.extension.incrementer.PostgreKeyGenerator;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserGlobal;
 import com.baomidou.mybatisplus.extension.parser.cache.JdkSerialCaffeineJsqlParseCache;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yeeiee.utils.SecurityUserUtil;
@@ -37,14 +33,15 @@ import java.time.LocalDateTime;
  * @since 2024-04-27
  */
 @Configuration
-public class MybatisPlusConfiguration implements MetaObjectHandler, InitializingBean {
+public class MybatisPlusConfiguration implements InitializingBean {
+
     @Value("${custom.jsql-parser.cache.spec}")
     private String jSqlParserCacheSpec;
     private final DbType dbType;
 
     @Autowired
     public MybatisPlusConfiguration(ConfigurableEnvironment environment) {
-        dbType = MybatisIdTypeConfigInitializer.getDbType(environment);
+        dbType = EnvironmentConfiguration.getDbType(environment);
     }
 
     /**
@@ -57,13 +54,8 @@ public class MybatisPlusConfiguration implements MetaObjectHandler, Initializing
 
         // 分页插件
         val paginationInnerInterceptor = new PaginationInnerInterceptor();
-        // TODO: h2 默认是 postgresql 分页，这里h2用的oracle模式
-        if (dbType == DbType.H2) {
-            paginationInnerInterceptor.setDbType(DbType.ORACLE);
-        } else {
-            paginationInnerInterceptor.setDbType(dbType);
-        }
-
+        // db类型
+        paginationInnerInterceptor.setDbType(dbType);
         // 溢出总页数后是否进行处理
         paginationInnerInterceptor.setOverflow(true);
         // 单页分页条数限制，不会报错，会修正成 size=20
@@ -72,34 +64,35 @@ public class MybatisPlusConfiguration implements MetaObjectHandler, Initializing
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
 
         // 防全表更新与删除插件：插件默认拦截没有指定条件的 update 和 delete 语句
-        interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
+        // interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         return interceptor;
     }
 
     /**
-     * 插入时 字段填充
+     * 字段填充
      */
-    @Override
-    public void insertFill(MetaObject metaObject) {
-        val principal = SecurityUserUtil.getPrincipal();
-        principal.ifPresent(username -> {
-            this.strictInsertFill(metaObject, "createUser", String.class, username);
-            this.strictInsertFill(metaObject, "updateUser", String.class, username);
-        });
-        this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
-        this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
-    }
+    @Bean
+    public MetaObjectHandler metaObjectHandler() {
+        return new MetaObjectHandler() {
+            public static final String UNKNOWN_USER = "unknown";
 
-    /**
-     * 更新时 字段填充
-     */
-    @Override
-    public void updateFill(MetaObject metaObject) {
-        val principal = SecurityUserUtil.getPrincipal();
-        principal.ifPresent(username -> this.strictUpdateFill(metaObject, "updateUser", String.class, username));
-        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
-    }
+            @Override
+            public void insertFill(MetaObject metaObject) {
+                val username = SecurityUserUtil.getPrincipal().orElse(UNKNOWN_USER);
+                this.strictInsertFill(metaObject, "createUser", String.class, username);
+                this.strictInsertFill(metaObject, "updateUser", String.class, username);
+                this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
+                this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
+            }
 
+            @Override
+            public void updateFill(MetaObject metaObject) {
+                val username = SecurityUserUtil.getPrincipal().orElse(UNKNOWN_USER);
+                this.strictUpdateFill(metaObject, "updateUser", String.class, username);
+                this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
+            }
+        };
+    }
 
     /**
      * 当 idType 为 input 时，需要提供一个 IKeyGenerator
@@ -111,14 +104,8 @@ public class MybatisPlusConfiguration implements MetaObjectHandler, Initializing
     public IKeyGenerator keyGenerator() {
         if (dbType != null) {
             switch (dbType) {
-                case DB2 -> {
-                    return new DB2KeyGenerator();
-                }
                 case H2 -> {
                     return new H2KeyGenerator();
-                }
-                case KINGBASE_ES -> {
-                    return new KingbaseKeyGenerator();
                 }
                 case ORACLE, ORACLE_12C -> {
                     return new OracleKeyGenerator();
@@ -126,9 +113,10 @@ public class MybatisPlusConfiguration implements MetaObjectHandler, Initializing
                 case POSTGRE_SQL -> {
                     return new PostgreKeyGenerator();
                 }
-                case DM -> {
-                    return new DmKeyGenerator();
-                }
+                // case DB2 -> {return new DB2KeyGenerator();}
+                // case KINGBASE_ES -> {return new KingbaseKeyGenerator();}
+                // case DM -> {return new DmKeyGenerator();}
+
             }
         }
         throw new IllegalArgumentException(String.format("Cannot find a suitable IKeyGenerator implementation class for [%s]", dbType));

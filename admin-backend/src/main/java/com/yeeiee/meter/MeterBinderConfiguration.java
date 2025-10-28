@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2025-08-21
  */
 @Configuration
-public class MeterBinderConfig {
+public class MeterBinderConfiguration {
 
     /**
      * http client5 连接池监控

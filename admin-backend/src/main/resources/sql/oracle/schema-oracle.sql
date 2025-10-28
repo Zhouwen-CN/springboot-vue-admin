@@ -1,13 +1,19 @@
+/*
+    number 18 对应 mysql bigint 类型
+    number 9  对应 mysql int 类型
+    link: com.baomidou.mybatisplus.generator.type.TypeRegistry
+ */
+
 -- 用户表
 CREATE TABLE t_user (
-    id            BIGINT PRIMARY KEY,
-    username      VARCHAR(15) NOT NULL,
-    password      VARCHAR(60) NOT NULL,
-    token_version BIGINT DEFAULT 0,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    username      VARCHAR2(15) NOT NULL,
+    password      VARCHAR2(60) NOT NULL,
+    token_version NUMBER(18) DEFAULT 0,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_user_name UNIQUE (username)
 );
 
@@ -27,13 +33,13 @@ INCREMENT BY 1;
 
 -- 用户角色关系表
 CREATE TABLE t_user_role (
-    id            BIGINT PRIMARY KEY,
-    user_id       BIGINT NOT NULL,
-    role_id       BIGINT NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            NUMBER(18) PRIMARY KEY,
+    user_id       NUMBER(18) NOT NULL,
+    role_id       NUMBER(18) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE
 );
 
 COMMENT ON TABLE t_user_role IS '用户角色关系表';
@@ -51,13 +57,13 @@ INCREMENT BY 1;
 
 -- 角色表
 CREATE TABLE t_role (
-    id            BIGINT PRIMARY KEY,
-    role_name     VARCHAR(15) NOT NULL,
-    description   VARCHAR(40) NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    role_name     VARCHAR2(15) NOT NULL,
+    description   VARCHAR2(40) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_role_name UNIQUE (role_name)
 );
 
@@ -74,15 +80,15 @@ CREATE SEQUENCE t_role_seq
 START WITH 7
 INCREMENT BY 1;
 
--- 角色菜单关系表
+-- 用户菜单关系表
 CREATE TABLE t_role_menu (
-    id            BIGINT PRIMARY KEY,
-    role_id       BIGINT NOT NULL,
-    menu_id       BIGINT NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            NUMBER(18) PRIMARY KEY,
+    role_id       NUMBER(18) NOT NULL,
+    menu_id       NUMBER(18) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE
 );
 
 COMMENT ON TABLE t_role_menu IS '角色菜单关系表';
@@ -100,18 +106,18 @@ INCREMENT BY 1;
 
 -- 菜单表
 CREATE TABLE t_menu (
-    id            BIGINT PRIMARY KEY,
-    title         VARCHAR(20) NOT NULL,
-    access_path   VARCHAR(40) NOT NULL,
-    icon          VARCHAR(15) NOT NULL,
-    pid           BIGINT NOT NULL,
-    keep_alive    BOOLEAN NOT NULL,
-    menu_type     SMALLINT NOT NULL,
-    sort_id       INTEGER DEFAULT 0,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    title         VARCHAR2(20) NOT NULL,
+    access_path   VARCHAR2(40) NOT NULL,
+    icon          VARCHAR2(15) NOT NULL,
+    pid           NUMBER(18) NOT NULL,
+    keep_alive    NUMBER(1) NOT NULL,
+    menu_type     NUMBER(1) NOT NULL,
+    sort_id       NUMBER(9) DEFAULT 0,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_enum_title UNIQUE (title)
 );
 
@@ -135,13 +141,13 @@ INCREMENT BY 1;
 
 -- 登录日志表
 CREATE TABLE t_login_log (
-    id            BIGINT PRIMARY KEY,
-    operation     SMALLINT NOT NULL,
-    status        SMALLINT NOT NULL,
-    ip            VARCHAR(32) NOT NULL,
-    user_agent    VARCHAR(200) NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            NUMBER(18) PRIMARY KEY,
+    operation     NUMBER(1) NOT NULL,
+    status        NUMBER(1) NOT NULL,
+    ip            VARCHAR2(32) NOT NULL,
+    user_agent    VARCHAR2(200) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE
 );
 
 CREATE INDEX idx_login_log_create_time ON t_login_log(create_time DESC);
@@ -161,17 +167,17 @@ INCREMENT BY 1;
 
 -- 操作日志表
 CREATE TABLE t_operation_log (
-    id            BIGINT PRIMARY KEY,
-    operation     VARCHAR(50) NOT NULL,
-    url           VARCHAR(50) NOT NULL,
-    method        SMALLINT NOT NULL,
-    params        TEXT DEFAULT NULL,
-    time          BIGINT NOT NULL,
-    status        SMALLINT NOT NULL,
-    ip            VARCHAR(32) NOT NULL,
-    user_agent    VARCHAR(200) NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            NUMBER(18) PRIMARY KEY,
+    operation     VARCHAR2(50) NOT NULL,
+    url           VARCHAR2(50) NOT NULL,
+    method        NUMBER(1) NOT NULL,
+    params        CLOB DEFAULT NULL,
+    time          NUMBER(18) NOT NULL,
+    status        NUMBER(1) NOT NULL,
+    ip            VARCHAR2(32) NOT NULL,
+    user_agent    VARCHAR2(200) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE
 );
 
 CREATE INDEX idx_ops_log_create_time ON t_operation_log(create_time DESC);
@@ -195,15 +201,15 @@ INCREMENT BY 1;
 
 -- 错误日志表
 CREATE TABLE t_error_log (
-    id            BIGINT PRIMARY KEY,
-    url           VARCHAR(50) NOT NULL,
-    method        SMALLINT NOT NULL,
-    params        TEXT DEFAULT NULL,
-    ip            VARCHAR(32) NOT NULL,
-    user_agent    VARCHAR(200) NOT NULL,
-    error_msg     TEXT NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id            NUMBER(18) PRIMARY KEY,
+    url           VARCHAR2(50) NOT NULL,
+    method        NUMBER(1) NOT NULL,
+    params        CLOB DEFAULT NULL,
+    ip            VARCHAR2(32) NOT NULL,
+    user_agent    VARCHAR2(200) NOT NULL,
+    error_msg     CLOB NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE
 );
 
 CREATE INDEX idx_error_log_create_time ON t_error_log(create_time DESC);
@@ -225,13 +231,13 @@ INCREMENT BY 1;
 
 -- 字典类型表
 CREATE TABLE t_dict_type (
-    id            BIGINT PRIMARY KEY,
-    name          VARCHAR(40) NOT NULL,
-    dict_enable   BOOLEAN NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    name          VARCHAR2(40) NOT NULL,
+    dict_enable   NUMBER(1) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_dict_type_name UNIQUE (name)
 );
 
@@ -248,17 +254,18 @@ CREATE SEQUENCE t_dict_type_seq
 START WITH 2
 INCREMENT BY 1;
 
+
 -- 字典数据表
 CREATE TABLE t_dict_data (
-    id            BIGINT PRIMARY KEY,
-    type_id       BIGINT NOT NULL,
-    label         VARCHAR(15) NOT NULL,
-    data          INTEGER NOT NULL,
-    sort_id       INTEGER DEFAULT 0,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    type_id       NUMBER(18) NOT NULL,
+    label         VARCHAR2(15) NOT NULL,
+    data          NUMBER(9) NOT NULL,
+    sort_id       NUMBER(9) DEFAULT 0,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_dict_type_label UNIQUE (type_id, label)
 );
 
@@ -279,15 +286,15 @@ INCREMENT BY 1;
 
 -- 数据源配置表
 CREATE TABLE t_data_source (
-    id            BIGINT PRIMARY KEY,
-    name          VARCHAR(15) NOT NULL,
-    url           VARCHAR(200) NOT NULL,
-    username      VARCHAR(15) NOT NULL,
-    password      VARCHAR(15) NOT NULL,
-    create_user   VARCHAR(15) DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user   VARCHAR(15) DEFAULT NULL,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id            NUMBER(18) PRIMARY KEY,
+    name          VARCHAR2(15) NOT NULL,
+    url           VARCHAR2(200) NOT NULL,
+    username      VARCHAR2(15) NOT NULL,
+    password      VARCHAR2(15) NOT NULL,
+    create_user   VARCHAR2(15) DEFAULT NULL,
+    create_time   DATE DEFAULT SYSDATE,
+    update_user   VARCHAR2(15) DEFAULT NULL,
+    update_time   DATE DEFAULT SYSDATE,
     CONSTRAINT uniq_datasource_name UNIQUE (name)
 );
 
@@ -307,22 +314,22 @@ START WITH 1
 INCREMENT BY 1;
 
 -- 代码生成表
-CREATE TABLE t_codegen_table (
-    id                    BIGINT PRIMARY KEY,
-    data_source_id        BIGINT NOT NULL,
-    parent_menu_id        BIGINT NOT NULL,
-    table_name            VARCHAR(50) NOT NULL,
-    table_comment         VARCHAR(100) NOT NULL,
-    class_name            VARCHAR(100) NOT NULL,
-    author                VARCHAR(20) NOT NULL,
-    business_name         VARCHAR(50) NOT NULL,
-    ignore_table_prefix   VARCHAR(20) DEFAULT NULL,
-    ignore_column_prefix  VARCHAR(20) DEFAULT NULL,
-    create_user           VARCHAR(15) DEFAULT NULL,
-    create_time           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user           VARCHAR(15) DEFAULT NULL,
-    update_time           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uniq_table_name UNIQUE (table_name)
+create table t_codegen_table(
+  id NUMBER(18) primary key,
+  data_source_id NUMBER(18) not null,
+  parent_menu_id NUMBER(18) not null,
+  table_name varchar2(50) not null,
+  table_comment varchar2(100) not null,
+  class_name varchar2(100) not null,
+  author varchar2(20) not null,
+  business_name varchar2(50) not null,
+  ignore_table_prefix varchar2(20) default null,
+  ignore_column_prefix varchar2(20) default null,
+  create_user varchar2(15) default null,
+  create_time DATE default SYSDATE,
+  update_user varchar2(15) default null,
+  update_time DATE default SYSDATE,
+  CONSTRAINT uniq_table_name UNIQUE (table_name)
 );
 
 COMMENT ON TABLE t_codegen_table IS '代码生成表';
@@ -346,30 +353,30 @@ START WITH 1
 INCREMENT BY 1;
 
 -- 代码生成字段表
-CREATE TABLE t_codegen_column (
-    id                    BIGINT PRIMARY KEY,
-    table_id              BIGINT NOT NULL,
-    column_name           VARCHAR(50) NOT NULL,
-    column_comment        VARCHAR(100) NOT NULL,
-    db_type               VARCHAR(20) NOT NULL,
-    column_length         INTEGER DEFAULT NULL,
-    java_field            VARCHAR(50) NOT NULL,
-    java_type             VARCHAR(20) NOT NULL,
-    js_type               VARCHAR(20) NOT NULL,
-    html_type             VARCHAR(20) NOT NULL,
-    sort_id               INTEGER NOT NULL,
-    dict_type_id          BIGINT DEFAULT NULL,
-    select_condition      VARCHAR(20) DEFAULT NULL,
-    primary_key           BOOLEAN NOT NULL,
-    nullable              BOOLEAN NOT NULL,
-    select_condition_field BOOLEAN NOT NULL,
-    select_result_field   BOOLEAN NOT NULL,
-    insert_field          BOOLEAN NOT NULL,
-    update_field          BOOLEAN NOT NULL,
-    create_user           VARCHAR(15) DEFAULT NULL,
-    create_time           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user           VARCHAR(15) DEFAULT NULL,
-    update_time           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table t_codegen_column(
+  id NUMBER(18) primary key,
+  table_id NUMBER(18) not null,
+  column_name varchar2(50) not null,
+  column_comment varchar2(100) not null,
+  db_type varchar2(20) not null,
+  column_length NUMBER(9) default null,
+  java_field varchar2(50) not null,
+  java_type varchar2(20) not null,
+  js_type varchar2(20) not null,
+  html_type varchar2(20) not null,
+  sort_id NUMBER(9) not null,
+  dict_type_id number(18) default null,
+  select_condition varchar2(20) default null,
+  primary_key number(1) not null,
+  nullable number(1) not null,
+  select_condition_field number(1) not null,
+  select_result_field number(1) not null,
+  insert_field number(1) not null,
+  update_field number(1) not null,
+  create_user varchar2(15) default null,
+  create_time DATE default SYSDATE,
+  update_user varchar2(15) default null,
+  update_time DATE default SYSDATE
 );
 
 COMMENT ON TABLE t_codegen_column IS '代码生成字段表';
@@ -401,22 +408,20 @@ CREATE SEQUENCE t_codegen_column_seq
 START WITH 1
 INCREMENT BY 1;
 
--- 定时任务表
-CREATE TABLE t_job (
-    id              BIGINT PRIMARY KEY,
-    name            VARCHAR(32) NOT NULL,
-    handler_name    VARCHAR(32) NOT NULL,
-    handler_param   VARCHAR(500) DEFAULT NULL,
-    cron_expression VARCHAR(32) NOT NULL,
-    retry_count     INTEGER DEFAULT 0,
-    retry_interval  INTEGER DEFAULT 0,
-    job_enable      BOOLEAN DEFAULT false,
-    create_user     VARCHAR(15) DEFAULT NULL,
-    create_time     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_user     VARCHAR(15) DEFAULT NULL,
-    update_time     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table t_job(
+  id NUMBER(18) primary key,
+  name varchar2(32) not null,
+  handler_name varchar2(32) not null,
+  handler_param varchar2(500) default null,
+  cron_expression varchar2(32) not null,
+  retry_count NUMBER(9) default 0,
+  retry_interval NUMBER(9) default 0,
+  job_enable number(1) default 0,
+  create_user varchar2(15) default null,
+  create_time DATE default SYSDATE,
+  update_user varchar2(15) default null,
+  update_time DATE default SYSDATE
 );
-
 COMMENT ON TABLE t_job IS '定时任务表';
 COMMENT ON COLUMN t_job.id IS '主键';
 COMMENT ON COLUMN t_job.name IS '任务名称';
@@ -435,22 +440,18 @@ CREATE SEQUENCE t_job_seq
 START WITH 1
 INCREMENT BY 1;
 
--- 定时任务日志表
-CREATE TABLE t_job_log (
-    id            BIGINT PRIMARY KEY,
-    job_id        BIGINT NOT NULL,
-    handler_name  VARCHAR(32) NOT NULL,
-    handler_param VARCHAR(500) DEFAULT NULL,
-    fire_num      SMALLINT NOT NULL,
-    time          BIGINT DEFAULT NULL,
-    status        SMALLINT NOT NULL,
-    result        TEXT DEFAULT NULL,
-    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table t_job_log(
+  id NUMBER(18) primary key,
+  job_id NUMBER(18) not null,
+  handler_name varchar2(32) not null,
+  handler_param varchar2(500) default null,
+  fire_num NUMBER(1) not null,
+  time NUMBER(18) default null,
+  status NUMBER(1) not null,
+  result CLOB default null,
+  create_time DATE default SYSDATE,
+  update_time DATE default SYSDATE
 );
-
-CREATE INDEX idx_job_log_create_time ON t_job_log(create_time DESC);
-
 COMMENT ON TABLE t_job_log IS '定时任务日志表';
 COMMENT ON COLUMN t_job_log.id IS '主键';
 COMMENT ON COLUMN t_job_log.job_id IS '任务编号';
@@ -462,6 +463,8 @@ COMMENT ON COLUMN t_job_log.status IS '任务状态';
 COMMENT ON COLUMN t_job_log.result IS '结果数据';
 COMMENT ON COLUMN t_job_log.create_time IS '创建时间';
 COMMENT ON COLUMN t_job_log.update_time IS '更新时间';
+
+CREATE INDEX idx_job_log_create_time ON t_job_log(create_time DESC);
 
 CREATE SEQUENCE t_job_log_seq
 START WITH 1

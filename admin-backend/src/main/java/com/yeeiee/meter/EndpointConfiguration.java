@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
  * @since 2025-09-01
  */
 // @Configuration
-public class EndpointConfig {
+public class EndpointConfiguration {
 
     /**
      * audit events 端点
