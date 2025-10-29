@@ -1,8 +1,10 @@
 package com.yeeiee.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataSelectorVo;
 import com.yeeiee.exception.DmlOperationException;
@@ -47,7 +49,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
     }
 
     @Override
-    public List<DictDataSelectorVo> getDictByTypeId(Long typeId) {
-        return dictDataMapper.selectDictByTypeId(typeId);
+    public List<DictDataSelectorVo> getDictByTypeId(Wrapper<DictType> wrapper) {
+        return dictDataMapper.selectDictByTypeId(wrapper);
     }
 }

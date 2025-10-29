@@ -1,5 +1,6 @@
 package com.yeeiee.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -47,10 +48,10 @@ public interface CodegenTableService extends IService<CodegenTable> {
      * 获取代码生成表分页
      *
      * @param page    分页参数
-     * @param keyword 关键字
+     * @param wrapper 关键字查询条件
      * @return 代码生成表分页
      */
-    IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword);
+    IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, Wrapper<CodegenTable> wrapper);
 
     /**
      * 修改代码生成配置

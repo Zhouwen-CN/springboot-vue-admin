@@ -3,9 +3,15 @@ package com.yeeiee.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenColumn;
+import com.yeeiee.domain.entity.CodegenTable;
 import com.yeeiee.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.domain.form.CodegenTableImportForm;
-import com.yeeiee.domain.vo.*;
+import com.yeeiee.domain.vo.CodegenColumnVo;
+import com.yeeiee.domain.vo.CodegenPreviewVo;
+import com.yeeiee.domain.vo.CodegenTableSelectorVo;
+import com.yeeiee.domain.vo.CodegenTableVo;
+import com.yeeiee.domain.vo.PageVo;
+import com.yeeiee.domain.vo.R;
 import com.yeeiee.service.CodegenColumnService;
 import com.yeeiee.service.CodegenTableService;
 import com.yeeiee.service.freemarker.FreemarkerEngineService;
@@ -19,8 +25,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,7 +69,12 @@ public class CodegenController {
             @PathVariable("current") @Parameter(description = "当前页面") Integer current,
             @RequestParam(value = "keyword", required = false) @Parameter(description = "表名称 or 表备注") String keyword
     ) {
-        val list = codegenTableService.getCodegenTablePage(Page.of(current, size), keyword);
+        // 尽量不要在xml sql中使用函数，因为函数不够通用
+        val queryWrapper = Wrappers.<CodegenTable>lambdaQuery()
+                .like(StringUtils.hasText(keyword), CodegenTable::getTableName, keyword)
+                .or()
+                .like(StringUtils.hasText(keyword), CodegenTable::getTableComment, keyword);
+        val list = codegenTableService.getCodegenTablePage(Page.of(current, size), queryWrapper);
         return R.ok(PageVo.fromPage(list));
     }
 

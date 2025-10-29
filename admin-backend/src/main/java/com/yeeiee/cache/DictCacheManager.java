@@ -1,6 +1,8 @@
 package com.yeeiee.cache;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.vo.DictDataSelectorVo;
 import com.yeeiee.service.DictDataService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,11 @@ public class DictCacheManager {
      */
     @Cacheable(cacheNames = DICT_CACHE, key = "#p0")
     public List<DictDataSelectorVo> getDictByTypeId(Long typeId) {
-        return dictDataService.getDictByTypeId(typeId);
+        // xml sql涉及boolean，尽量使用queryWrapper
+        val queryWrapper = Wrappers.<DictType>lambdaQuery()
+                .eq(DictType::getId, typeId)
+                .eq(DictType::getDictEnable, true);
+        return dictDataService.getDictByTypeId(queryWrapper);
     }
 
     /**

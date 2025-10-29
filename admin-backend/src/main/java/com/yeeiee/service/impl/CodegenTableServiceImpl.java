@@ -1,6 +1,7 @@
 package com.yeeiee.service.impl;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -141,8 +142,8 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     }
 
     @Override
-    public IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, String keyword) {
-        return codegenTableMapper.selectCodegenTablePage(page, keyword);
+    public IPage<CodegenTableVo> getCodegenTablePage(Page<CodegenTableVo> page, Wrapper<CodegenTable> wrapper) {
+        return codegenTableMapper.selectCodegenTablePage(page, wrapper);
     }
 
     @Override

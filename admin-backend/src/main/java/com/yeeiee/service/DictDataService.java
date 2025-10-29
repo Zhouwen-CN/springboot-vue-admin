@@ -1,7 +1,9 @@
 package com.yeeiee.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.domain.entity.DictData;
+import com.yeeiee.domain.entity.DictType;
 import com.yeeiee.domain.form.DictDataForm;
 import com.yeeiee.domain.vo.DictDataSelectorVo;
 
@@ -24,7 +26,8 @@ public interface DictDataService extends IService<DictData> {
 
     /**
      * 根据字典类型id查询字典数据列表
-     * @param typeId 字典类型id
+     *
+     * @param wrapper 查询条件
      */
-    List<DictDataSelectorVo> getDictByTypeId(Long typeId);
+    List<DictDataSelectorVo> getDictByTypeId(Wrapper<DictType> wrapper);
 }

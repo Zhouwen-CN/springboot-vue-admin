@@ -29,9 +29,7 @@
             select
                 id
             from t_dict_type
-            where id=#{typeId}
-            -- postgresql boolean 和 integer 类型不能隐式转换
-            and cast(dict_enable as int)=1
+            ${ew.customSqlSegment}
         ) a
         join t_dict_data b
         on a.id=b.type_id

@@ -1,9 +1,11 @@
 package com.yeeiee.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yeeiee.domain.entity.CodegenTable;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yeeiee.domain.vo.CodegenTableVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +19,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface CodegenTableMapper extends BaseMapper<CodegenTable> {
 
-    IPage<CodegenTableVo> selectCodegenTablePage(Page<CodegenTableVo> page, @Param("keyword") String keyword);
+    IPage<CodegenTableVo> selectCodegenTablePage(Page<CodegenTableVo> page, @Param(Constants.WRAPPER) Wrapper<CodegenTable> wrapper);
 }
