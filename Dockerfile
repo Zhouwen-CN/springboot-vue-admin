@@ -1,0 +1,41 @@
+# 打包环境（docker.m.daocloud.io是镜像源，失效可以找别的替换）
+FROM docker.m.daocloud.io/maven:3.9.11-eclipse-temurin-17-alpine AS builder
+
+# apk镜像源
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+# 安装 npm && pnpm
+RUN apk update && apk add npm && apk add pnpm
+
+# pnpm镜像源
+RUN pnpm config set registry http://registry.npmmirror.com
+
+# copy项目
+RUN mkdir -p /opt/springboot-vue-admin
+COPY . /opt/springboot-vue-admin
+
+# maven打包
+RUN cd /opt/springboot-vue-admin && mvn -Paliyun -Dmaven.test.skip=true package
+
+# 运行环境
+FROM docker.m.daocloud.io/eclipse-temurin:17-jre-alpine
+WORKDIR /opt
+
+# 声明暴露端口（这并不意味着容器启动时会自动开启这些端口服务）
+EXPOSE 8080
+
+# 复制jar包
+COPY --from=builder /opt/springboot-vue-admin/admin-backend/target/admin-backend-*.jar /opt/app.jar
+
+# 运行（默认运行的是开发环境）
+# 1、ENTRYPOINT不会被docker run的参数覆盖；CMD会被覆盖
+# 2、exec模式不会解析变量；shell模式可以解析变量，但是会有信号接收问题（推荐使用exec模式）
+ENTRYPOINT ["java", "-jar", "/opt/app.jar"]
+CMD ["--server.port=8080", "--spring.profiles.active=dev"]
+
+# 构建镜像
+# docker build -t sv-admin .
+# 运行容器（开发环境）
+# docker run -itd -p 8080:8080 --name sv-admin sv-admin:latest
+# 运行容器（生产环境）
+# docker run -itd -p 8080:8080 --name sv-admin sv-admin:latest --server.port=8080 --spring.profiles.active=prod --mpw.key=xxxx

@@ -47,6 +47,7 @@ public class EnvironmentConfiguration implements ApplicationContextInitializer<C
 
         // 根据url获取数据库类型
         val dbType = getDbType(environment);
+        log.warn("Current dbType 【{}】", dbType);
 
         // 1、根据数据源的 url 修改 mybatis idType 配置
         val originalIdType = environment.getProperty(ID_TYPE_KEY, IdType.class);
@@ -68,7 +69,7 @@ public class EnvironmentConfiguration implements ApplicationContextInitializer<C
 
     private void setProperty(ConfigurableEnvironment environment, String key, Object value, String fieldName) {
         environment.getSystemProperties().put(key, value);
-        log.warn("Set {} to [{}]", fieldName, value);
+        log.warn("Set env 【{}】 to 【{}】", fieldName, value);
     }
 
     public static DbType getDbType(ConfigurableEnvironment environment) {

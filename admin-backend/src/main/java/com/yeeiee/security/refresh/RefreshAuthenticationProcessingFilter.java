@@ -38,7 +38,7 @@ public class RefreshAuthenticationProcessingFilter extends AbstractAuthenticatio
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        log.debug("Obtain the refresh token from the request header");
+        log.debug("Obtain the refreshToken from the request header");
         val refreshToken = RequestObjectUtil.getTokenFromRequest(request);
 
         val refreshAuthenticationToken = new RefreshAuthenticationToken();

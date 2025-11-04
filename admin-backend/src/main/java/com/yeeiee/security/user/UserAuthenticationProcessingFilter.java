@@ -42,7 +42,7 @@ public class UserAuthenticationProcessingFilter extends AbstractAuthenticationPr
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        log.debug("Obtain the account password from the login form");
+        log.debug("Obtain the account password from the loginForm");
 
         val body = request.getReader()
                 .lines()

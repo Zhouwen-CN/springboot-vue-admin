@@ -29,7 +29,7 @@ public class RefreshAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.debug("Resolve the token and verify the token version");
+        log.debug("Resolve the refreshToken and verify the token version");
         val refreshToken = (String) authentication.getCredentials();
 
         val payload = jwtTokenProvider.parseRefreshToken(refreshToken)

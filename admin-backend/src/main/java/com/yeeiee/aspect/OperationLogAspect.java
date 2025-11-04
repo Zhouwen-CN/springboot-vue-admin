@@ -60,12 +60,12 @@ public class OperationLogAspect {
             Object result = pjp.proceed();
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operationValue, OperationStatusEnum.SUCCESS, time);
-            log.info("【{}】-【{}】 {}ms", controllerName, operation.summary(), time);
+            log.info("Success 【{}】-【{}】 {}ms", controllerName, operation.summary(), time);
             return result;
         } catch (Throwable e) {
             long time = System.currentTimeMillis() - beginTime;
             saveOperationLog(pjp, operationValue, OperationStatusEnum.FAILURE, time);
-            log.warn("【{}】-【{}】 {}ms: {}", controllerName, operation.summary(), time, ExceptionUtils.getRootCauseMessage(e));
+            log.warn("Failure 【{}】-【{}】 {}ms: {}", controllerName, operation.summary(), time, ExceptionUtils.getRootCauseMessage(e));
             throw e;
         }
     }

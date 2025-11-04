@@ -29,7 +29,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.debug("Look up the data and verify whether the account password is correct");
+        log.debug("Look up the database and verify whether the account password is correct");
         val username = (String) authentication.getPrincipal();
         val password = (String) authentication.getCredentials();
 

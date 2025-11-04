@@ -42,7 +42,6 @@
         <profile>
             <id>aliyun</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>aliyun</name>
                 </property>
