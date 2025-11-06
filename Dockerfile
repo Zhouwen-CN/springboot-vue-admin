@@ -1,5 +1,6 @@
 # 打包环境（docker.m.daocloud.io是镜像源，失效可以找别的替换）
 FROM docker.m.daocloud.io/maven:3.9.11-eclipse-temurin-17-alpine AS builder
+WORKDIR /opt/springboot-vue-admin
 
 # apk镜像源
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
@@ -10,12 +11,26 @@ RUN apk update && apk add npm && apk add pnpm
 # pnpm镜像源
 RUN pnpm config set registry http://registry.npmmirror.com
 
+# 创建文件夹
+RUN mkdir admin-backend
+RUN mkdir admin-frontend
+
+# maven依赖缓存层
+COPY pom.xml .
+COPY admin-backend/pom.xml ./admin-backend
+COPY admin-frontend/pom.xml ./admin-frontend
+RUN mvn -B -Paliyun dependency:go-offline
+
+# npm依赖缓存层
+COPY admin-frontend/package.json ./admin-frontend
+COPY admin-frontend/pnpm-lock.yaml ./admin-frontend
+RUN pnpm install --prefix ./admin-frontend
+
 # copy项目
-RUN mkdir -p /opt/springboot-vue-admin
-COPY . /opt/springboot-vue-admin
+COPY . .
 
 # maven打包
-RUN cd /opt/springboot-vue-admin && mvn -Paliyun -Dmaven.test.skip=true package
+RUN mvn -B -Paliyun -Dmaven.test.skip=true package
 
 # 运行环境
 FROM docker.m.daocloud.io/eclipse-temurin:17-jre-alpine
@@ -25,7 +40,7 @@ WORKDIR /opt
 EXPOSE 8080
 
 # 复制jar包
-COPY --from=builder /opt/springboot-vue-admin/admin-backend/target/admin-backend-*.jar /opt/app.jar
+COPY --from=builder /opt/springboot-vue-admin/admin-backend/target/admin-backend-*.jar ./app.jar
 
 # 运行（默认运行的是开发环境）
 # 1、ENTRYPOINT不会被docker run的参数覆盖；CMD会被覆盖
