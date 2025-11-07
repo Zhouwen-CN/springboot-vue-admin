@@ -26,7 +26,7 @@ export interface PaginationResult<T> {
 function usePagination<T>(
   baseUrl: string,
   sizeOption: Array<number> = [5, 7, 9, 11],
-  initSize: number = sizeOption[0]
+  initSize: number = sizeOption[0] || 5
 ): PaginationResult<T> {
   const loading = ref(false)
   const current = ref(1)

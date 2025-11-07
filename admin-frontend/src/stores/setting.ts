@@ -38,7 +38,8 @@ const useSettingStore = defineStore(
   },
   {
     persist: {
-      paths: ['collapse']
+      storage: localStorage,
+      pick: ['collapse']
     }
   }
 )

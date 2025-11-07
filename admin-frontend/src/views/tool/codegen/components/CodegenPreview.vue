@@ -52,7 +52,7 @@ async function openDialog(id: number) {
   codegenPreviewVoList.value = data
   // 默认选中 tab、tree
   const activeName = data[0]?.filePath
-  preview.activeName = activeName
+  preview.activeName = activeName!
   treeRef.value?.setCurrentKey(activeName)
 
   const treeMap = getCongenDirTreeMap(data)
@@ -93,7 +93,7 @@ function getCongenDirTreeMap(voList: CodegenPreviewVo[]) {
     const filePath = item.filePath
     const paths = filePath.split('/')
     for (let i = 0; i < paths.length; i++) {
-      const path = paths[i]
+      const path = paths[i]!
       let id = ''
       if (i < paths.length - 1) {
         id = paths.slice(0, i + 1).join('/')
@@ -148,10 +148,10 @@ onMounted(() => {
 <template>
   <el-dialog
     v-model="toggleDialog"
-    title="代码生成预览"
-    width="80%"
     style="height: 80vh"
+    title="代码生成预览"
     top="10vh"
+    width="80%"
     @close="colse"
   >
     <el-splitter style="height: calc(80vh - 40px - 32px)">
@@ -173,12 +173,12 @@ onMounted(() => {
           <el-tab-pane
             v-for="item in codegenPreviewVoList"
             :key="item.filePath"
-            :name="item.filePath"
             :label="item.filePath.substring(item.filePath.lastIndexOf('/') + 1)"
+            :name="item.filePath"
           >
-            <el-button v-copy="item.content" class="copy-btn" text bg type="primary">
-              复制</el-button
-            >
+            <el-button v-copy="item.content" bg class="copy-btn" text type="primary">
+              复制
+            </el-button>
             <el-scrollbar height="calc(80vh - 40px - 32px - 60px)">
               <pre><code v-html="highlightedCode(item)" class="hljs"></code></pre>
             </el-scrollbar>

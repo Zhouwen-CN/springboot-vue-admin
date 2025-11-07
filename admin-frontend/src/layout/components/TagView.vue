@@ -90,7 +90,7 @@ function closeTagView(_index: number, closeOption: CloseOption) {
     if (visitedViews.length === 0) {
       router.push('/')
     } else {
-      const path = visitedViews[visitedViews.length - 1].path
+      const path = visitedViews[visitedViews.length - 1]!.path
       router.push(path)
     }
   }
@@ -98,11 +98,13 @@ function closeTagView(_index: number, closeOption: CloseOption) {
 
 // 刷新 tagView
 function refreshTagView(_index: number) {
-  const tagView = tagViewStore.visitedViews[_index]
-  tagViewStore.removeCacheView(tagView)
-  nextTick(() => {
-    router.replace('/redirect' + tagView.path)
-  })
+  const tagView = tagViewStore.visitedViews[_index]!
+  if (tagView) {
+    tagViewStore.removeCacheView(tagView)
+    nextTick(() => {
+      router.replace('/redirect' + tagView.path)
+    })
+  }
 }
 
 const tagMenuVisible = ref(false)
@@ -146,7 +148,7 @@ function openTagMenu(_index: number, e: MouseEvent) {
 // 是否是固定标签
 function isAffix() {
   try {
-    return tagViewStore.visitedViews[selectedIndex.value].affix
+    return tagViewStore.visitedViews[selectedIndex.value]?.affix
   } catch (e) {
     return false
   }

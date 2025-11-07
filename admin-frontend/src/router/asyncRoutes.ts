@@ -56,7 +56,7 @@ export function getAsyncRoutes(
 
     if (menu.children && menu.children.length !== 0) {
       route.component = undefined
-      route.redirect = menu.children[0].accessPath
+      route.redirect = menu.children[0]?.accessPath
       route.children = getAsyncRoutes(modules, menu.children)
     }
 
