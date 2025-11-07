@@ -19,6 +19,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- spring ai -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+
         <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -87,7 +93,7 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
-        <!-- open api -->
+        <!-- spring doc -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
