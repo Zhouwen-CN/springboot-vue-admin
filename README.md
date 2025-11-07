@@ -34,17 +34,17 @@
 
 ## 版本信息
 
-| 依赖                  | 版本     |
-|---------------------|--------|
-| JDK                 | 17+    |
-| MySQL               | 8+     |
-| Springboot          | 3.2.12 |
-| Mybatis-Plus        | 3.5.7  |
-| Springboot-Security | 3.2.12 |
-| Node.js             | 18+    |
-| pnpm                | 9+     |
-| Vue                 | 3.4.38 |
-| Element-Plus        | 2.10.7 |
+| 依赖                 | 版本      |
+|--------------------|---------|
+| JDK                | 17+     |
+| Spring-Boot        | 3.5.7   |
+| Spring-Ai          | 1.0.3   |
+| Mybatis-Plus       | 3.5.14  |
+| Node               | 22+     |
+| pnpm               | 10+     |
+| Vue                | ~3.5.17 |
+| Element-Plus       | ~2.11.7 |
+| Vue-Element-Plus-X | ~1.3.7  |
 
 ## tips
 
