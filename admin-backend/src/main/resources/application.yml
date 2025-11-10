@@ -1,5 +1,8 @@
 server:
-  port: 8080
+  port: 8081
+  servlet:
+    encoding:
+      force: true #请求、响应编码问题
 spring:
   application:
     name: sv-admin
@@ -29,6 +32,14 @@ spring:
       read-enums-using-to-string: true
       read-unknown-enum-values-using-default-value: true
       fail-on-unknown-properties: false
+
+  # http client配置
+  http:
+    client:
+      factory: http_components
+      redirects: dont_follow
+      connect-timeout: 5s
+      read-timeout: 60s
 
   # 缓存配置（如果要启用redis缓存，需要修改redis配置）
   cache:
@@ -142,14 +153,24 @@ custom:
       expiration: 7d
   # http连接池配置
   http:
-    pool:
-      max-total: 100 #最大连接数
-      max-per-route: 10 #每个路由最大连接数
-      obtain-connection-timeout: 5s #获取连接超时
-    connect:
-      connect-timeout: 5s #连接超时
-      socket-timeout: 60s #读取超时
-      default-keep-alive: 60s #默认保活时间
+    rest-client:
+      pool:
+        max-total: 100 #最大连接数
+        max-per-route: 10 #每个路由最大连接数
+        obtain-connect-timeout: 5s #获取连接超时
+      connect:
+        connect-timeout: 5s #连接超时
+        socket-timeout: 60s #读取超时
+        default-keep-alive: 60s #默认保活时间
+    web-client:
+      pool:
+        max-total: 100 #最大连接数
+        max-per-route: 10 #每个路由最大连接数
+        obtain-connect-timeout: 5s #获取连接超时
+      connect:
+        connect-timeout: 5s #连接超时
+        socket-timeout: 60s #读取超时
+        default-keep-alive: 60s #默认保活时间
   # jsqlParser解析缓存
   jsql-parser:
     cache:

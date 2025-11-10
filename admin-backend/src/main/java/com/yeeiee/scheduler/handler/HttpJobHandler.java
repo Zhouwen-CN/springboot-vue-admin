@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.yeeiee.exception.JobHandlerException;
 import com.yeeiee.exception.JobHandlerParamException;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.val;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -25,9 +29,12 @@ import java.util.Set;
  * @author chen
  * @since 2025-10-16
  */
-@RequiredArgsConstructor
 @Service
 public class HttpJobHandler extends AbstractJobHandler {
+
+    public HttpJobHandler(@Qualifier("quartzRestClient") RestClient restClient) {
+        this.restClient = restClient;
+    }
 
     private final RestClient restClient;
 

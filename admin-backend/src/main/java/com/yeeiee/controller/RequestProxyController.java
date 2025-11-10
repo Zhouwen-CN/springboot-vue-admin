@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -38,7 +37,7 @@ import java.io.IOException;
 @Slf4j
 @Deprecated
 @RequiredArgsConstructor
-@RestController
+// @RestController
 @Tag(name = "请求代理 控制器")
 public class RequestProxyController {
     private final RestClient restClient;

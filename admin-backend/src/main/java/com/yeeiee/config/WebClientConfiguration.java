@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
-import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder;
+import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManagerBuilder;
 import org.apache.hc.core5.util.Timeout;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
+import org.springframework.boot.http.client.reactive.ClientHttpConnectorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -19,19 +19,18 @@ import java.util.function.Consumer;
 
 /**
  * <pre>
- * rest client hc5 配置
- * 每一个 {@link RestClient.Builder} 都具有下面相同的配置
+ * web client hc5 配置
+ * 每一个 {@link WebClient.Builder} 都具有下面相同的配置
  * </pre>
  *
  * @author chen
- * @since 2025-08-19
+ * @since 2025-11-10
  */
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "custom.http.rest-client")
-public class RestClientConfiguration {
-
+@ConfigurationProperties(prefix = "custom.http.web-client")
+public class WebClientConfiguration {
     private PoolConfig pool = new PoolConfig();
     private ConnectConfig connect = new ConnectConfig();
 
@@ -79,9 +78,9 @@ public class RestClientConfiguration {
     }
 
     /**
-     * 连接池配置
+     * 连接池
      */
-    private Consumer<PoolingHttpClientConnectionManagerBuilder> connectionManagerCustomizer() {
+    private Consumer<PoolingAsyncClientConnectionManagerBuilder> connectionManagerCustomizer() {
         return connectionManagerCustomizer -> connectionManagerCustomizer
                 // 最大连接数
                 .setMaxConnTotal(pool.getMaxTotal())
@@ -101,7 +100,7 @@ public class RestClientConfiguration {
     /**
      * http客户端配置
      */
-    private Consumer<HttpClientBuilder> httpClientCustomizer() {
+    private Consumer<HttpAsyncClientBuilder> httpClientCustomizer() {
         return httpClientCustomizer -> httpClientCustomizer
                 // 定时清除过期的连接（线程默认休眠5秒）
                 .evictExpiredConnections()
@@ -124,11 +123,11 @@ public class RestClientConfiguration {
     }
 
     /**
-     * rest client配置
+     * web client配置
      */
     @Bean
-    public ClientHttpRequestFactoryBuilder<?> clientHttpRequestFactoryBuilder() {
-        return ClientHttpRequestFactoryBuilder
+    public ClientHttpConnectorBuilder<?> clientHttpConnectorBuilder() {
+        return ClientHttpConnectorBuilder
                 .httpComponents()
                 .withConnectionManagerCustomizer(connectionManagerCustomizer())
                 .withHttpClientCustomizer(httpClientCustomizer())

@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HandlerMethodValidationException.class)
     public R<Void> handlerMethodValidationExceptionHandler(HandlerMethodValidationException e) {
-        val allValidationResults = e.getAllValidationResults();
+        val allValidationResults = e.getParameterValidationResults();
         if (CollectionUtils.isEmpty(allValidationResults)) {
             return R.error(HttpStatus.BAD_REQUEST, e.getReason());
         }
@@ -122,18 +122,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionTimedOutException.class)
     public R<Void> transactionTimedOutExceptionHandler(TransactionTimedOutException e) {
         return R.error(HttpStatus.REQUEST_TIMEOUT, ExceptionUtils.getRootCauseMessage(e));
-    }
-
-
-    /**
-     * restClient 响应状态码异常处理器
-     *
-     * @param e 响应状态码异常
-     * @return 错误信息
-     */
-    @ExceptionHandler(HttpStatusException.class)
-    public R<Void> httpStatusExceptionHandler(HttpStatusException e) {
-        return R.error(e.getHttpStatus(), e.getMessage());
     }
 
     /**

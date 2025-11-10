@@ -26,7 +26,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 /**
  * <p>
@@ -91,9 +91,11 @@ public class WebSecurityConfig {
         http.securityMatcher("/login/*")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
 
+        val pathPatternRequestMatcherBuilder = PathPatternRequestMatcher.withDefaults();
+
         // 用户名密码登入
         val userAuthenticationFilter = new UserAuthenticationProcessingFilter(
-                new AntPathRequestMatcher("/login/user", HttpMethod.POST.name()),
+                pathPatternRequestMatcherBuilder.matcher(HttpMethod.POST, "/login/user"),
                 providerManager,
                 loginSuccessHandler,
                 loginFailureHandler
@@ -102,7 +104,7 @@ public class WebSecurityConfig {
 
         // 刷新token登入
         val refreshAuthenticationFilter = new RefreshAuthenticationProcessingFilter(
-                new AntPathRequestMatcher("/login/refresh", HttpMethod.GET.name()),
+                pathPatternRequestMatcherBuilder.matcher(HttpMethod.GET, "/login/refresh"),
                 providerManager,
                 loginSuccessHandler,
                 loginFailureHandler
@@ -143,6 +145,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理
                                 .requestMatchers("/user/**", "/role/**", "/menu/**").hasAuthority("admin")
+                                // TODO: ai相关接口，暂时不鉴权
+                                .requestMatchers("/ai/**").permitAll()
                                 // 对所有的请求开启权限保护
                                 .anyRequest()
                                 // 已认证的请求会被自动授权
@@ -167,12 +171,11 @@ public class WebSecurityConfig {
     ) {
         val providerList = authenticationProviders.orderedStream().toList();
         val providerManager = new ProviderManager(providerList);
-        val authenticationEventPublisher = defaultAuthenticationEventPublishers.getIfAvailable();
 
-        if (authenticationEventPublisher != null) {
+        defaultAuthenticationEventPublishers.ifUnique(authenticationEventPublisher -> {
             authenticationEventPublisher.setDefaultAuthenticationFailureEvent(AuthenticationFailureBadCredentialsEvent.class);
             providerManager.setAuthenticationEventPublisher(authenticationEventPublisher);
-        }
+        });
 
         return providerManager;
     }

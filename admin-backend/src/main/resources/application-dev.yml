@@ -6,6 +6,16 @@ spring:
       chat:
         options:
           model: qwen-flash
+        completions-path: /v1/chat/completions
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: never
+    retry:
+      max-attempts: 1
+
+
 
   # 数据源配置（h2）
 #  datasource:
