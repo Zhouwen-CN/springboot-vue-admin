@@ -1,5 +1,6 @@
 package com.yeeiee.security;
 
+import com.yeeiee.domain.dto.JwtClaimsDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -13,6 +14,7 @@ import lombok.val;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +22,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -43,7 +46,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Getter
     @Setter
-    public static class AccessTokenConfig{
+    public static class AccessTokenConfig {
         /**
          * 访问token密钥
          */
@@ -56,7 +59,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     @Getter
     @Setter
-    public static class RefreshTokenConfig{
+    public static class RefreshTokenConfig {
         /**
          * 刷新token密钥
          */
@@ -77,13 +80,13 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     @SneakyThrows
-    private String generateToken(String username, List<String> roles, Long tokenVersion, SecretKey secretKey, Duration expiration) {
+    private String generateToken(Long userId, List<String> roles, Long tokenVersion, SecretKey secretKey, Duration expiration) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration.toMillis());
 
         return Jwts.builder()
-                .subject(username)
+                .subject(String.valueOf(userId))
                 .issuedAt(now)
                 .issuer("sv-admin")
                 .expiration(expiryDate)
@@ -93,12 +96,12 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public String generateAccessToken(String username, List<String> roles, Long tokenVersion) {
-        return generateToken(username, roles, tokenVersion, accessSecretKey, this.access.expiration);
+    public String generateAccessToken(Long userId, List<String> roles, Long tokenVersion) {
+        return generateToken(userId, roles, tokenVersion, accessSecretKey, this.access.expiration);
     }
 
-    public String generateRefreshToken(String username, List<String> roles, Long tokenVersion) {
-        return generateToken(username, roles, tokenVersion, refreshSecretKey, this.refresh.expiration);
+    public String generateRefreshToken(Long userId, List<String> roles, Long tokenVersion) {
+        return generateToken(userId, roles, tokenVersion, refreshSecretKey, this.refresh.expiration);
     }
 
     private Optional<Jws<Claims>> validateToken(String token, SecretKey secretKey) {
@@ -122,7 +125,33 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getRoles(Claims payload) {
-        return (List<String>) payload.get("roles", List.class);
+    private Function<Jws<Claims>, JwtClaimsDto> getClaimsDtoFunction() {
+        return claimsJws -> {
+            val payload = claimsJws.getPayload();
+            val jwtClaimsDto = new JwtClaimsDto();
+            jwtClaimsDto.setUserId(Long.valueOf(payload.getSubject()));
+            jwtClaimsDto.setVersion(payload.get("version", Long.class));
+            jwtClaimsDto.setRoleNames(payload.get("roles", List.class));
+            return jwtClaimsDto;
+        };
+    }
+
+    private String trimToken(String token) {
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return token;
+    }
+
+    public Optional<JwtClaimsDto> getClaimsDtoByAccessToken(String token) {
+        token = trimToken(token);
+        return this.parseAccessToken(token)
+                .map(this.getClaimsDtoFunction());
+    }
+
+    public Optional<JwtClaimsDto> getClaimsDtoByRefreshToken(String token) {
+        token = trimToken(token);
+        return this.parseRefreshToken(token)
+                .map(this.getClaimsDtoFunction());
     }
 }

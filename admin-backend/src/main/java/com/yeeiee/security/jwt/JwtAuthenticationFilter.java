@@ -3,7 +3,6 @@ package com.yeeiee.security.jwt;
 import com.yeeiee.domain.entity.User;
 import com.yeeiee.security.JwtTokenProvider;
 import com.yeeiee.service.UserService;
-import com.yeeiee.utils.RequestObjectUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -37,22 +37,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("Try to get and parse the access token");
         // 从 request 获取 JWT token
-        val token = RequestObjectUtil.getTokenFromRequest(request);
+        val token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // 校验 token
-        val optional = jwtTokenProvider.parseAccessToken(token);
-        if (optional.isPresent()) {
-            val payload = optional.get().getPayload();
+        val jwtClaimsDtoOptional = jwtTokenProvider.getClaimsDtoByAccessToken(token);
+        if (jwtClaimsDtoOptional.isPresent()) {
 
-            val username = payload.getSubject();
-            val version = payload.get("version", Long.class);
+            val jwtClaimsDto = jwtClaimsDtoOptional.get();
+            val userId = jwtClaimsDto.getUserId();
+            val version = jwtClaimsDto.getVersion();
 
             // 加载与 token 关联的用户
-            User user = userService.getUserByUsername(username);
+            User user = userService.getUserByUserId(userId);
 
             // 检查 token version
             if (user != null && version == user.getTokenVersion() - 1) {
-                val authorities = jwtTokenProvider.getRoles(payload)
+                val authorities = jwtClaimsDto.getRoleNames()
                         .stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();

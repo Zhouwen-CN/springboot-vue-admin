@@ -2,7 +2,6 @@ package com.yeeiee.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -20,20 +19,6 @@ import java.util.Objects;
  * @since 2025-05-29
  */
 public final class RequestObjectUtil {
-    /**
-     * 从请求头中获取token
-     *
-     * @param request 请求对象
-     * @return token
-     */
-    public static String getTokenFromRequest(HttpServletRequest request) {
-        val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
     /**
      * 从线程变量中获取 request 对象
      *

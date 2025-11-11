@@ -32,15 +32,17 @@ public class RefreshAuthenticationProvider implements AuthenticationProvider {
         log.debug("Resolve the refreshToken and verify the token version");
         val refreshToken = (String) authentication.getCredentials();
 
-        val payload = jwtTokenProvider.parseRefreshToken(refreshToken)
-                .orElseThrow(() -> new VerifyTokenException("token解析失败"))
-                .getPayload();
+        val jwtClaimsDtoOptional = jwtTokenProvider.getClaimsDtoByRefreshToken(refreshToken);
 
-        val username = payload.getSubject();
-        val version = payload.get("version", Long.class);
+        User user = null;
+        Long version = null;
 
-        // 加载与 token 关联的用户
-        User user = userService.getUserByUsername(username);
+        if (jwtClaimsDtoOptional.isPresent()) {
+            val jwtClaimsDto = jwtClaimsDtoOptional.get();
+             // 加载与 token 关联的用户
+             user = userService.getUserByUserId(jwtClaimsDto.getUserId());
+             version = jwtClaimsDto.getVersion();
+        }
 
         // 检查 token version
         if (user == null || version != user.getTokenVersion() - 1) {

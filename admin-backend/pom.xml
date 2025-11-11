@@ -23,6 +23,13 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-openai</artifactId>
+            <!-- 解决springdoc /v3/api-docs 接口报错 -->
+            <exclusions>
+                <exclusion>
+                    <artifactId>swagger-annotations-jakarta</artifactId>
+                    <groupId>io.swagger.core.v3</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>

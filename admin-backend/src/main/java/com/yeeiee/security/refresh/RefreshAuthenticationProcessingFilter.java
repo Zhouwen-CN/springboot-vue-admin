@@ -1,11 +1,11 @@
 package com.yeeiee.security.refresh;
 
-import com.yeeiee.utils.RequestObjectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -39,7 +39,7 @@ public class RefreshAuthenticationProcessingFilter extends AbstractAuthenticatio
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         log.debug("Obtain the refreshToken from the request header");
-        val refreshToken = RequestObjectUtil.getTokenFromRequest(request);
+        val refreshToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         val refreshAuthenticationToken = new RefreshAuthenticationToken();
         refreshAuthenticationToken.setRefreshToken(refreshToken);

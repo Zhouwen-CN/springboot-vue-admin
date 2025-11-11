@@ -66,6 +66,13 @@ public interface UserService extends IService<User> {
     void modifyUserResetPwd(Long id);
 
     /**
+     * 根据用户ID查询用户
+     * @param userId 用户id
+     * @return 用户
+     */
+    User getUserByUserId(Long userId);
+
+    /**
      * 根据用户名查询用户
      * @param username 用户名
      * @return 用户
@@ -77,4 +84,6 @@ public interface UserService extends IService<User> {
      * @param user 用户
      */
     void modifyTokenVersionByUser(User user);
+
+
 }
