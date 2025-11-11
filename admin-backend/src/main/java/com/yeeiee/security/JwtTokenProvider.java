@@ -1,6 +1,7 @@
 package com.yeeiee.security;
 
 import com.yeeiee.domain.dto.JwtClaimsDto;
+import com.yeeiee.exception.AiChatException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -153,5 +154,11 @@ public class JwtTokenProvider implements InitializingBean {
         token = trimToken(token);
         return this.parseRefreshToken(token)
                 .map(this.getClaimsDtoFunction());
+    }
+
+    public Long getUserIdByAccessToken(String token) {
+        return this.getClaimsDtoByAccessToken(token)
+                .map(JwtClaimsDto::getUserId)
+                .orElseThrow(() -> new AiChatException("token解析失败"));
     }
 }

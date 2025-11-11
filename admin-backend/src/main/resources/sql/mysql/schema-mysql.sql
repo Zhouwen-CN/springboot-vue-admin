@@ -238,9 +238,11 @@ create table t_server(
     constraint uniq_name unique (name)
 ) comment '服务配置表';
 
-create table t_ai_chat_history (
+drop table t_chat_history;
+create table t_chat_history (
     id bigint primary key auto_increment comment '主键',
-    user_id int not null comment '用户id',
+    user_id bigint not null comment '用户id',
+    conversation_id varchar(25) not null comment '会话id',
     title varchar(255) not null comment '标题',
     create_time timestamp default CURRENT_TIMESTAMP comment '创建时间',
     update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
@@ -252,6 +254,5 @@ CREATE TABLE IF NOT EXISTS SPRING_AI_CHAT_MEMORY (
     `content` TEXT NOT NULL,
     `type` ENUM('USER', 'ASSISTANT', 'SYSTEM', 'TOOL') NOT NULL,
     `timestamp` TIMESTAMP NOT NULL,
-
     INDEX `SPRING_AI_CHAT_MEMORY_CONVERSATION_ID_TIMESTAMP_IDX` (`conversation_id`, `timestamp`)
 );

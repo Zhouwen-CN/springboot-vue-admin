@@ -123,7 +123,7 @@ public class WebClientConfiguration {
     }
 
     /**
-     * web client配置
+     * http client配置
      */
     @Bean
     public ClientHttpConnectorBuilder<?> clientHttpConnectorBuilder() {

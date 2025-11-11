@@ -20,7 +20,7 @@
     "no-vue3-cron": "~2.0.0",
     "nprogress": "~0.2.0",
     "pinia": "~3.0.4",
-    "pinia-plugin-persistedstate": "~4.6.0",
+    "pinia-plugin-persistedstate": "~3.2.3",
     "swagger-ui": "~5.13.0",
     "tree-sitter": "^0.21.1",
     "vue": "~3.5.17",

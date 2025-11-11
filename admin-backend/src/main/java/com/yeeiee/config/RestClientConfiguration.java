@@ -124,7 +124,7 @@ public class RestClientConfiguration {
     }
 
     /**
-     * rest client配置
+     * http client配置
      */
     @Bean
     public ClientHttpRequestFactoryBuilder<?> clientHttpRequestFactoryBuilder() {

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   servlet:
     encoding:
       force: true #请求、响应编码问题
@@ -112,6 +112,17 @@ spring:
           await-termination: true
           await-termination-period: 30s
         thread-name-prefix: quartz-
+      ai:
+        pool:
+          core-size: 1
+          max-size: 5
+          queue-capacity: 50
+          keep-alive: 60s
+          allow-core-thread-timeout: true
+        shutdown:
+          await-termination: true
+          await-termination-period: 30s
+        thread-name-prefix: ai-
 
 # 关闭 swagger-ui，前端已经整合
 springdoc:

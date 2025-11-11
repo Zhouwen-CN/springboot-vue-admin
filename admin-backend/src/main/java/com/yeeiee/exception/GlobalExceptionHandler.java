@@ -136,6 +136,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * ai聊天异常
+     *
+     * @param e 异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(AiChatException.class)
+    public R<Void> aiChatExceptionHandler(AiChatException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    /**
      * 默认异常处理
      *
      * @param e 默认异常
