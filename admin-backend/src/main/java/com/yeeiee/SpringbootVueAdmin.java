@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableWebSecurity
 @EnableCaching
 @EnableTransactionManagement
-@MapperScan({"com.yeeiee.mapper", "com.yeeiee.ai.mapper"})
+@MapperScan({"com.yeeiee.mapper", "com.yeeiee.ai.mapper", "com.yeeiee.codegen.mapper"})
 // freemarker 只用来做代码生成，不需要自动装配
 @SpringBootApplication(exclude = {FreeMarkerAutoConfiguration.class})
 public class SpringbootVueAdmin {

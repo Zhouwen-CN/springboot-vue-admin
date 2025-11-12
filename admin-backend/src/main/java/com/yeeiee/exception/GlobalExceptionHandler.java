@@ -1,5 +1,6 @@
 package com.yeeiee.exception;
 
+import com.yeeiee.codegen.exception.CodegenFailedException;
 import com.yeeiee.domain.entity.ErrorLog;
 import com.yeeiee.domain.vo.R;
 import com.yeeiee.enumeration.RequestMethodEnum;

@@ -1,9 +1,9 @@
 package com.yeeiee.config;
 
-import com.yeeiee.domain.entity.DataSource;
+import com.yeeiee.codegen.domain.entity.DataSource;
+import com.yeeiee.codegen.service.DataSourceService;
 import com.yeeiee.domain.entity.Job;
 import com.yeeiee.scheduler.SchedulerManager;
-import com.yeeiee.service.DataSourceService;
 import com.yeeiee.service.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
