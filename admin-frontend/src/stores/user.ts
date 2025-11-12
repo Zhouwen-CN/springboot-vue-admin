@@ -78,7 +78,7 @@ const useUserStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      pick: ['userInfo', 'menuInfo']
+      paths: ['userInfo', 'menuInfo']
     }
   }
 )

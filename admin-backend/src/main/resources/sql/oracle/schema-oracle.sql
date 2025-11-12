@@ -321,6 +321,7 @@ create table t_codegen_table(
   table_name varchar2(50) not null,
   table_comment varchar2(100) not null,
   class_name varchar2(100) not null,
+  java_base_package varchar2(50) not null,
   author varchar2(20) not null,
   business_name varchar2(50) not null,
   ignore_table_prefix varchar2(20) default null,
@@ -339,6 +340,8 @@ COMMENT ON COLUMN t_codegen_table.parent_menu_id IS '上级菜单编号';
 COMMENT ON COLUMN t_codegen_table.table_name IS '表名称';
 COMMENT ON COLUMN t_codegen_table.table_comment IS '表描述';
 COMMENT ON COLUMN t_codegen_table.class_name IS '类名称';
+COMMENT
+ON COLUMN t_codegen_table.java_base_package IS 'Java基础包名';
 COMMENT ON COLUMN t_codegen_table.author IS '作者';
 COMMENT ON COLUMN t_codegen_table.business_name IS '业务名称';
 COMMENT ON COLUMN t_codegen_table.ignore_table_prefix IS '忽略表前缀';

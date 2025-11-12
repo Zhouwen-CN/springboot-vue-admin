@@ -48,6 +48,10 @@ public class CodegenTable {
     @TableField(value = "class_name")
     private String className;
 
+    @Schema(description = "java基础包名")
+    @TableField(value = "java_base_package")
+    private String javaBasePackage;
+
     @Schema(description = "作者")
     @TableField(value = "author")
     private String author;

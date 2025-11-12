@@ -50,7 +50,8 @@ const rules = reactive<FormRules<typeof formData>>({
   'table.tableComment': [{ required: true, message: '请输入类注释', trigger: 'blur' }],
   'table.className': [{ required: true, message: '请输入类名称', trigger: 'blur' }],
   'table.author': [{ required: true, message: '请输入作者', trigger: 'blur' }],
-  'table.businessName': [{ required: true, message: '请输入业务名称', trigger: 'blur' }]
+  'table.businessName': [{ required: true, message: '请输入业务名称', trigger: 'blur' }],
+  'table.javaBasePackage': [{ required: true, message: '请输入Java基础包名', trigger: 'blur' }]
 })
 
 // 打开抽屉
@@ -105,16 +106,22 @@ defineExpose({
             <MenuTreeSelect v-model="formData.table.parentMenuId" />
           </el-form-item>
           <el-form-item label="表名称" prop="table.tableName">
-            <el-input v-model="formData.table.tableName" placeholder="请输入表名称"> </el-input>
+            <el-input v-model="formData.table.tableName" placeholder="请输入表名称"></el-input>
           </el-form-item>
           <el-form-item label="表描述" prop="table.tableComment">
-            <el-input v-model="formData.table.tableComment" placeholder="请输入表描述"> </el-input>
+            <el-input v-model="formData.table.tableComment" placeholder="请输入表描述"></el-input>
           </el-form-item>
           <el-form-item label="类名称" prop="table.className">
-            <el-input v-model="formData.table.className" placeholder="请输入类名称"> </el-input>
+            <el-input v-model="formData.table.className" placeholder="请输入类名称"></el-input>
+          </el-form-item>
+          <el-form-item label="Java基础包名" prop="table.javaBasePackage">
+            <el-input
+              v-model="formData.table.javaBasePackage"
+              placeholder="请输入Java基础包名"
+            ></el-input>
           </el-form-item>
           <el-form-item label="作者" prop="table.author">
-            <el-input v-model="formData.table.author" placeholder="请输入作者"> </el-input>
+            <el-input v-model="formData.table.author" placeholder="请输入作者"></el-input>
           </el-form-item>
           <el-form-item
             label="业务名称"
@@ -183,12 +190,12 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="新增" prop="insertField" min-width="45px">
+            <el-table-column label="新增" min-width="45px" prop="insertField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.insertField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="编辑" prop="updateField" min-width="45px">
+            <el-table-column label="编辑" min-width="45px" prop="updateField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.updateField" false-value="false" true-value="true" />
               </template>
@@ -205,7 +212,7 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="列表" prop="selectResultField" min-width="45px">
+            <el-table-column label="列表" min-width="45px" prop="selectResultField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectResultField"
@@ -214,7 +221,7 @@ defineExpose({
                 />
               </template>
             </el-table-column>
-            <el-table-column label="查询" prop="selectConditionField" min-width="45px">
+            <el-table-column label="查询" min-width="45px" prop="selectConditionField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectConditionField"
@@ -252,7 +259,7 @@ defineExpose({
       </el-tabs>
       <el-form-item style="margin-top: 16px">
         <el-button @click="drawerVisible = false">取消</el-button>
-        <el-button :loading="saveLoading" native-type="submit" type="primary">提交</el-button>
+        <el-button :loading="saveLoading" native-type="submit" type="primary">提交 </el-button>
       </el-form-item>
     </el-form>
   </el-drawer>

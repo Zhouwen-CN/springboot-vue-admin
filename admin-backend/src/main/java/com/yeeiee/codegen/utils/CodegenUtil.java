@@ -124,6 +124,7 @@ public final class CodegenUtil {
         codegenTable.setTableComment(tableInfo.getComment());
         val entityName = tableInfo.getEntityName();
         codegenTable.setClassName(entityName);
+        codegenTable.setJavaBasePackage(codegenTableImportForm.getJavaBasePackage());
         codegenTable.setAuthor(codegenTableImportForm.getAuthor());
         codegenTable.setBusinessName(codegenTableImportForm.getBusinessName());
         codegenTable.setIgnoreTablePrefix(codegenTableImportForm.getIgnoreTablePrefix());

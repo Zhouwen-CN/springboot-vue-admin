@@ -20,6 +20,7 @@ export function reqGetCodegenTableSelectorList(dataSourceId: number) {
 export interface CodegenTableImportForm {
   dataSourceId?: number
   parentMenuId: number
+  javaBasePackage: string
   author: string
   ignoreTablePrefix?: string
   ignoreColumnPrefix?: string
@@ -39,6 +40,7 @@ export interface CodegenTableVo extends BaseVo {
   tableName: string
   tableComment: string
   className: string
+  javaBasePackage: string
   author: string
   businessName: string
   ignoreTablePrefix: string

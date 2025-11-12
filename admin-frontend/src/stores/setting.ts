@@ -13,6 +13,7 @@ const useSettingStore = defineStore(
 
     // 代码生成默认配置
     const codegenConfig = {
+      javaBasePackage: 'com.yeeiee',
       author: 'chen',
       ignoreTablePrefix: 't_',
       ignoreColumnPrefix: undefined,
@@ -39,7 +40,7 @@ const useSettingStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      pick: ['collapse']
+      paths: ['collapse']
     }
   }
 )

@@ -140,6 +140,7 @@ create table t_codegen_table  (
   table_name varchar(50) not null comment '表名称',
   table_comment varchar(100) not null comment '表描述',
   class_name varchar(100) not null comment '类名称',
+  java_base_package varchar(50) not null comment 'java基础包名',
   author varchar(20) not null comment '作者',
   business_name varchar(50) not null comment '业务名称',
   ignore_table_prefix varchar(20) default null comment '忽略表前缀',

@@ -38,6 +38,9 @@ public class CodegenTableVo {
     @Schema(description = "类名称")
     private String className;
 
+    @Schema(description = "java基础包名")
+    private String javaBasePackage;
+
     @Schema(description = "作者")
     private String author;
 

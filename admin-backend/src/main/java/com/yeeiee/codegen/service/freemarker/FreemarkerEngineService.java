@@ -93,8 +93,9 @@ public class FreemarkerEngineService implements InitializingBean {
         val bindingMap = new HashMap<String, Object>();
         bindingMap.put("table", table);
         bindingMap.put("columns", columns);
+        val javaBasePackage = table.getJavaBasePackage();
         val jsBasePackage = this.getJsBasePackage(table.getParentMenuId(), table.getBusinessName());
-        val packageInfo = packageConfig.getPackageInfo(jsBasePackage);
+        val packageInfo = packageConfig.getPackageInfo(javaBasePackage, jsBasePackage);
         bindingMap.put("package", packageInfo);
 
         // java
@@ -226,7 +227,7 @@ public class FreemarkerEngineService implements InitializingBean {
      * 包配置
      */
     public static class PackageConfig {
-        public String basePackage = "com.yeeiee";
+        public String basePackage;
         public String entity = "domain.entity";
         public String vo = "domain.vo";
         public String form = "domain.form";
@@ -234,11 +235,13 @@ public class FreemarkerEngineService implements InitializingBean {
         public String service = "service";
         public String serviceImpl = "service.impl";
         public String controller = "controller";
-        public String javaFilePath = "admin-backend/src/main/java/" + basePackage.replace(".", "/");
+        public String javaFilePath;
         public String xmlFilePath = "admin-backend/src/main/resources/mapper";
         public String jsFilePath = "admin-frontend/src";
 
-        public Map<String, String> getPackageInfo(String jsBasePackage) {
+        public Map<String, String> getPackageInfo(String javaBasePackage, String jsBasePackage) {
+            this.basePackage = javaBasePackage;
+            this.javaFilePath = "admin-backend/src/main/java/" + basePackage.replace(".", "/");
             return Map.of(
                     "javaBasePackage", basePackage,
                     "entity", basePackage + "." + entity,

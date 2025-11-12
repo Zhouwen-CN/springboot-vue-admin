@@ -11,6 +11,7 @@
         <result column="table_name" property="tableName" />
         <result column="table_comment" property="tableComment" />
         <result column="class_name" property="className" />
+        <result column="java_base_package" property="javaBasePackage" />
         <result column="author" property="author" />
         <result column="business_name" property="businessName" />
         <result column="ignore_table_prefix" property="ignoreTablePrefix" />
@@ -34,6 +35,7 @@
             a.table_name as tableName,
             a.table_comment as tableComment,
             a.class_name as className,
+            a.java_base_package as javaBasePackage,
             a.author,
             a.business_name as businessName,
             a.ignore_table_prefix as ignoreTablePrefix,

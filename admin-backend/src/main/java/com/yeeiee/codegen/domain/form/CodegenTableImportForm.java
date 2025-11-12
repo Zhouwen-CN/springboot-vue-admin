@@ -30,6 +30,11 @@ public class CodegenTableImportForm {
     private Long parentMenuId;
 
     @NotBlank
+    @Length(max = 50)
+    @Schema(description = "java基础包名")
+    private String javaBasePackage;
+
+    @NotBlank
     @Length(max = 20)
     @Schema(description = "作者")
     private String author;

@@ -56,6 +56,7 @@ function searchByKeyword() {
 const codegenTableImportForm = reactive<CodegenTableImportForm>({
   dataSourceId: undefined,
   parentMenuId: 0,
+  javaBasePackage: codegenConfig.javaBasePackage,
   author: codegenConfig.author,
   ignoreTablePrefix: codegenConfig.ignoreTablePrefix,
   ignoreColumnPrefix: codegenConfig.ignoreColumnPrefix,
@@ -84,6 +85,10 @@ async function importCodegenTable() {
 // 导入代码生成表-表单校验
 const formRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof codegenTableImportForm>>({
+  javaBasePackage: [
+    { required: true, message: '作者不能为空', trigger: 'blur' },
+    { max: 50, message: '长度不能大于50', trigger: 'blur' }
+  ],
   author: [
     { required: true, message: '作者不能为空', trigger: 'blur' },
     { min: 1, max: 20, message: '长度 1-20 之间', trigger: 'blur' }
@@ -273,7 +278,7 @@ onMounted(() => {
           <template #default="{ row }: { row: CodegenTableVo }">
             <el-button-group>
               <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>
-              <el-button :icon="View" type="success" @click="previewCodegen(row.id)"> </el-button>
+              <el-button :icon="View" type="success" @click="previewCodegen(row.id)"></el-button>
               <el-popconfirm title="是否同步字段信息？" @confirm="syncCodegenColumnList(row.id)">
                 <template #reference>
                   <el-button :icon="Refresh" type="warning"></el-button>
@@ -316,6 +321,12 @@ onMounted(() => {
         >
           <el-form-item label="上级菜单" prop="parentMenuId">
             <MenuTreeSelect v-model="codegenTableImportForm.parentMenuId" />
+          </el-form-item>
+          <el-form-item label="Java基础包名" prop="javaBasePackage">
+            <el-input
+              v-model="codegenTableImportForm.javaBasePackage"
+              placeholder="Java基础包名"
+            ></el-input>
           </el-form-item>
           <el-form-item label="作者" prop="author">
             <el-input v-model="codegenTableImportForm.author" placeholder="作者"></el-input>

@@ -47,7 +47,7 @@ const validateAccessPath = (rule: any, value: any, callback: any) => {
 const rules = reactive<FormRules<typeof menuForm>>({
   title: [
     { required: true, message: '请输入菜单名称', trigger: 'blur' },
-    { min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
+    { max: 15, message: '菜单名称长度不能大于15', trigger: 'blur' }
   ],
   accessPath: [{ validator: validateAccessPath, trigger: 'blur' }],
   icon: [{ required: true, message: '请输入菜单图标', trigger: 'submit' }]
