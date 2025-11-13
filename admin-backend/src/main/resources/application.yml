@@ -59,7 +59,7 @@ spring:
       api-key: ${AI_DASHSCOPE_API_KEY}
       chat:
         options:
-          model: qwen-plus
+          model: qwen-flash
         completions-path: /v1/chat/completions
     chat:
       memory:

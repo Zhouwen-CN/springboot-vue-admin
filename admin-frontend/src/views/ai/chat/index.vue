@@ -83,6 +83,10 @@ async function onSubmit(formEl: FormInstance | undefined) {
   }
 }
 
+async function refreshConversations() {
+  await getChatHistory()
+}
+
 function clean() {
   form.conversationId = ''
   form.title = ''
@@ -123,7 +127,7 @@ onMounted(() => {
         </Conversations>
       </div>
       <div class="main">
-        <ConversationList :chatId="chatId"></ConversationList>
+        <ConversationList v-model="chatId" @refresh="refreshConversations"> </ConversationList>
       </div>
     </div>
     <el-dialog v-model="toggleDialog" title="编辑对话名称" width="30%" @close="clean">

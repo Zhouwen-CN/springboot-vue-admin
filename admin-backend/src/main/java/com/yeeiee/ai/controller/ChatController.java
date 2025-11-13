@@ -3,7 +3,6 @@ package com.yeeiee.ai.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.yeeiee.ai.domain.entity.ChatHistory;
 import com.yeeiee.ai.domain.form.ChatConversationRenameForm;
-import com.yeeiee.ai.domain.form.ChatForm;
 import com.yeeiee.ai.domain.vo.ChatHistoryVo;
 import com.yeeiee.ai.service.ChatHistoryService;
 import com.yeeiee.exception.AiChatException;
@@ -19,8 +18,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <p>
@@ -55,31 +54,31 @@ public class ChatController {
     private final ChatHistoryService chatHistoryService;
     private final ChatMemoryRepository chatMemoryRepository;
 
-    @PostMapping("/chat")
-    public Flux<String> chatStream(
+    @PostMapping(value = "/chat", consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<String>> chatStream(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody @Validated ChatForm chatForm
+            @RequestHeader("chatId") String chatId,
+            @RequestBody @NotBlank String prompt
     ) {
         val userId = jwtTokenProvider.getUserIdByAccessToken(token);
-        val conversationId = chatForm.getConversationId();
 
         val exists = chatHistoryService.exists(
                 Wrappers.<ChatHistory>lambdaQuery()
                         .eq(ChatHistory::getUserId, userId)
-                        .eq(ChatHistory::getConversationId, conversationId)
+                        .eq(ChatHistory::getConversationId, chatId)
         );
         if (!exists) {
-            throw new AiChatException("聊天会话不存在: " + userId + ":" + conversationId);
+            throw new AiChatException("聊天会话不存在: " + userId + ":" + chatId);
         }
-        return chatClient.prompt(chatForm.getPrompt())
-                .options(
-                        ChatOptions.builder()
-                                .model(chatForm.getModel())
-                                .build()
-                )
-                .advisors(
-                        memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, conversationId)
-                ).stream().content();
+        return chatClient.prompt(prompt)
+                .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, chatId))
+                .stream()
+                .chatResponse()
+                .map(chatResponse -> ServerSentEvent.<String>builder()
+                        .data(chatResponse.getResult().getOutput().getText())
+                        .event("message")
+                        .build()
+                );
     }
 
     @Operation(summary = "获取聊天历史")
@@ -95,17 +94,17 @@ public class ChatController {
     }
 
     @Operation(summary = "创建聊天会话")
-    @PostMapping("/chat/conversation")
+    @PostMapping(value = "/chat/conversation", consumes = MediaType.TEXT_PLAIN_VALUE)
     public R<String> createChatConversation(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody @NotBlank String prompt
+            @RequestBody @NotBlank String title
     ) {
         val userId = jwtTokenProvider.getUserIdByAccessToken(token);
-        val conversationId = UUID.randomUUID().toString();
+        val conversationId = String.valueOf(System.currentTimeMillis());
         val chatHistory = new ChatHistory();
         chatHistory.setUserId(userId);
         chatHistory.setConversationId(conversationId);
-        chatHistory.setTitle(prompt);
+        chatHistory.setTitle(title);
         chatHistoryService.save(chatHistory);
         return R.ok(conversationId);
     }
