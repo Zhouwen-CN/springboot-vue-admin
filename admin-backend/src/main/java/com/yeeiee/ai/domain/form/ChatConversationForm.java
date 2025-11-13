@@ -8,21 +8,18 @@ import lombok.ToString;
 
 /**
  * <p>
- * AI聊天表单
+ *
  * </p>
  *
  * @author chen
- * @since 2025-11-11
+ * @since 2025-11-13
  */
 @Getter
 @Setter
 @ToString
-@Schema(name = "ChatForm", description = "AI聊天表单")
-public class ChatForm {
+@Schema(name = "ChatConversationForm", description = "AI对话表单")
+public class ChatConversationForm {
     @NotBlank
-    @Schema(description = "会话id")
-    private String conversationId;
-    @NotBlank
-    @Schema(description = "提示词")
-    private String prompt;
+    @Schema(description = "会话标题")
+    private String title;
 }

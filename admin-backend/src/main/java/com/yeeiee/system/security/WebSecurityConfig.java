@@ -140,6 +140,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(H2_CONSOLE_PATH).permitAll()
                                 // actuator 端点
                                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
+                                // TODO: ai暂时不鉴权，方便测试
+                                .requestMatchers("/ai/**").permitAll()
                                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()

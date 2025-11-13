@@ -8,14 +8,6 @@ import { deleteAsyncRoutes } from '@/router/asyncRoutes'
 import useTagViewStore from '@/stores/tagView'
 import useSettingStore from '@/stores/setting'
 
-const config = {
-  baseURL: import.meta.env.VITE_APP_BASE_URL,
-  timeout: import.meta.env.VITE_APP_TIMEOUT,
-  headers: {
-    'Content-type': 'application/json;charset=utf-8'
-  }
-}
-
 class Request {
   private instance: AxiosInstance
 
@@ -181,5 +173,13 @@ class Request {
   }
 }
 
-const request = new Request(config)
+export const baseConfig = {
+  baseURL: import.meta.env.VITE_APP_BASE_URL,
+  timeout: import.meta.env.VITE_APP_TIMEOUT,
+  headers: {
+    'Content-type': 'application/json;charset=utf-8'
+  }
+}
+
+const request = new Request(baseConfig)
 export default request

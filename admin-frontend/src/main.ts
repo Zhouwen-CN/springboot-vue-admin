@@ -17,6 +17,7 @@ import noVue3Cron from 'no-vue3-cron'
 import 'no-vue3-cron/lib/noVue3Cron.css' // 引入样式
 // 样式清除
 import './assets/css/reset.scss'
+import './assets/css/github-markdown.css'
 // 自定义指令，给表单项添加提示
 import vTip from './directive/vTip'
 import vCopy from './directive/vCopy'

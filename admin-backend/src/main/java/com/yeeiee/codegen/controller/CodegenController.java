@@ -2,7 +2,6 @@ package com.yeeiee.codegen.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yeeiee.SpringbootVueAdmin;
 import com.yeeiee.codegen.domain.entity.CodegenColumn;
 import com.yeeiee.codegen.domain.entity.CodegenTable;
 import com.yeeiee.codegen.domain.form.CodegenTableColumnsForm;
@@ -18,6 +17,7 @@ import com.yeeiee.system.domain.vo.PageVo;
 import com.yeeiee.system.domain.vo.R;
 import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.ResponseObjectUtil;
+import com.yeeiee.utils.ZipUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,15 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -162,7 +154,7 @@ public class CodegenController {
                     return new ByteArrayInputStream(bytes);
                 }).toList();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        SpringbootVueAdmin.ZipUtil.zip(outputStream, paths, ins);
+        ZipUtil.zip(outputStream, paths, ins);
 
         ResponseObjectUtil.writeAttachment(response, "codegen.zip", outputStream.toByteArray());
     }

@@ -1,56 +1,55 @@
 <script lang="ts" setup>
-import { type ChatMessageDto, reqGetChatConversationList } from '@/api/ai/chat'
+import {
+  type ChatMessageDto,
+  reqAddChatConversation,
+  reqChat,
+  reqGetChatConversationList
+} from '@/api/ai/chat'
 import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import { BubbleList, Prompts, Sender, Welcome } from 'vue-element-plus-x'
+import { BubbleList, Prompts, Sender, useXStream, Welcome, XMarkdown } from 'vue-element-plus-x'
 import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
 import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 
-const porps = defineProps({
-  chatId: {
-    type: String,
-    required: false
-  }
+const { startStream, cancel, data, error, isLoading } = useXStream()
+// 表单
+const chatForm = reactive({
+  conversationId: '',
+  prompt: ''
 })
+
+// 会话 id
+const chatId = defineModel<string>()
+// 刷新侧边栏
+const emits = defineEmits(['refresh'])
+const isNewConversation = ref(false)
 
 // 会话列表
 const bubbleListRef = ref<BubbleListInstance>()
 const bubbleListItems = ref<BubbleListItemProps[]>([])
-watch(
-  () => porps.chatId,
-  (value) => {
-    if (value) {
+// 监听会话id
+watch(chatId, (value) => {
+  if (value) {
+    // 如果会话 id 不为空，并且不是新创建的会话，从数据库中加载会话
+    if (!isNewConversation.value) {
+      chatForm.conversationId = value
       reqGetChatConversationList(value).then((res) => {
         const data = res.data
         convertBubbleListItem(data)
       })
-    } else {
-      bubbleListItems.value = []
     }
+    // 如果会话id为空，清空会话
+  } else {
+    bubbleListItems.value = []
   }
-)
+})
+// 消息转换
 function convertBubbleListItem(messages: ChatMessageDto[]) {
   const result: BubbleListItemProps[] = []
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i]
 
     const messageType = message?.messageType
-    result.push({
-      placement: messageType === 'USER' ? 'end' : 'start',
-      avatar:
-        messageType === 'USER'
-          ? 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-          : 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80',
-      loading: false,
-      shape: 'corner',
-      variant: messageType === 'USER' ? 'outlined' : 'filled',
-      avatarSize: '36px',
-      avatarGap: '12px',
-      avatarShape: 'circle',
-      content: message?.text,
-      isMarkdown: false,
-      typing: false,
-      isFog: messageType !== 'USER'
-    })
+    result.push(createMessage(messageType === 'USER', true, message?.text))
   }
   bubbleListItems.value = result
   nextTick(() => {
@@ -60,7 +59,6 @@ function convertBubbleListItem(messages: ChatMessageDto[]) {
   })
 }
 
-const senderValue = ref('')
 const isSelect = ref(false)
 
 // 提示词集
@@ -89,13 +87,98 @@ const promptItems = ref<PromptsItemsProps[]>([
     description: '描述信息'
   }
 ])
+
+// 聊天提交
+async function onSubmit() {
+  // 清空输入框
+  const prompt = chatForm.prompt
+  chatForm.prompt = ''
+
+  try {
+    // 如果会话 id为空，创建会话 -> 刷新会话列表 -> 切换到新创建的会话
+    if (!chatId.value) {
+      isNewConversation.value = true
+      const result = await reqAddChatConversation(prompt)
+      emits('refresh')
+      chatId.value = result.data
+      chatForm.conversationId = result.data
+    }
+
+    // 创建消息
+    bubbleListItems.value.push(createMessage(true, false, prompt))
+    bubbleListItems.value.push(createMessage(false, false))
+    // 聊天请求
+    const response = await reqChat(chatForm.conversationId, prompt)
+    const readableStream = response.body!
+    await startStream({ readableStream })
+    data.value.map((item) => {
+      bubbleListItems.value[bubbleListItems.value.length - 1]!.content += item.data
+    })
+
+    // const reader = readableStream.getReader()
+    // const decoder = new TextDecoder()
+    // while (true) {
+    //   const { done, value } = await reader.read()
+    //   if (done) {
+    //     break
+    //   }
+    //   const text = decoder.decode(value)
+    //   bubbleListItems.value[bubbleListItems.value.length - 1]!.content += text
+    // }
+  } catch (e) {
+    console.error('Fetch error:', e)
+  } finally {
+    bubbleListItems.value[bubbleListItems.value.length - 1]!.loading = false
+    isNewConversation.value = false
+  }
+}
+
+/**
+ * 创建消息
+ * @param isUser 是否是用户消息
+ * @param isHistory 是否是历史消息
+ * @param message 消息
+ */
+function createMessage(isUser: boolean, isHistory: boolean, message = ''): BubbleListItemProps {
+  return {
+    placement: isUser ? 'end' : 'start',
+    avatar: isUser
+      ? 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      : 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80',
+    loading: !isUser && !isHistory,
+    shape: 'corner',
+    variant: isUser ? 'outlined' : 'filled',
+    avatarSize: '36px',
+    avatarGap: '12px',
+    avatarShape: 'circle',
+    content: message,
+    isMarkdown: !isUser,
+    typing: !isUser && !isHistory,
+    isFog: !isUser
+  }
+}
 </script>
 
 <template>
   <div class="container">
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
-      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%" />
+      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%">
+        <template #content="{ item }">
+          <!-- chat 内容走 markdown -->
+          <XMarkdown
+            v-if="item.content && item.isMarkdown"
+            :markdown="item.content"
+            :themes="{ light: 'github-light', dark: 'github-dark' }"
+            default-theme-mode="dark"
+            class="markdown-body"
+          />
+          <!-- user 内容 纯文本 -->
+          <div v-if="!item.isMarkdown" class="user-content">
+            {{ item.content }}
+          </div>
+        </template>
+      </BubbleList>
 
       <!-- 欢迎卡片 -->
       <Welcome
@@ -118,13 +201,12 @@ const promptItems = ref<PromptsItemsProps[]>([
 
     <!-- 发送框 -->
     <Sender
-      v-model="senderValue"
+      v-model="chatForm.prompt"
       :auto-size="{ minRows: 4, maxRows: 4 }"
-      allow-speech
       class="sender"
-      clearable
       placeholder="💌 在这里你可以自定义变体后的 prefix 和 action-list"
       variant="updown"
+      @submit="onSubmit"
     >
       <template #prefix>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
@@ -177,6 +259,16 @@ const promptItems = ref<PromptsItemsProps[]>([
 
     .welcome {
       margin: 0 20px;
+    }
+
+    .markdown-body {
+      background-color: transparent;
+      font-size: var(--el-font-size-base);
+    }
+
+    .user-content {
+      // 换行
+      white-space: pre-wrap;
     }
   }
 

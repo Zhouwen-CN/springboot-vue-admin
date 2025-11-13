@@ -1,4 +1,5 @@
-import request from '@/utils/request'
+import request, { baseConfig } from '@/utils/request'
+import useUserStore from '@/stores/user'
 
 export interface ChatHistoryVo {
   conversationId: string
@@ -30,7 +31,30 @@ export function reqGetChatConversationList(conversationId: string) {
   return request.get<ChatMessageDto[]>(`/ai/chat/history/${conversationId}`)
 }
 
+// 新增聊天会话
+export function reqAddChatConversation(title: string) {
+  return request.post<string>('/ai/chat/conversation', title, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  })
+}
+
 // 删除聊天会话
 export function reqDeleteChatConversationById(conversationId: string) {
   return request.delete<void>(`/ai/chat/conversation/${conversationId}`)
+}
+
+// 聊天请求
+export function reqChat(chatId: string, prompt: string) {
+  return fetch(`${baseConfig.baseURL}/ai/chat`, {
+    method: 'post',
+    body: prompt,
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'text/plain',
+      chatId: chatId,
+      Authorization: `Bearer ${useUserStore().userInfo.accessToken}`
+    }
+  })
 }
