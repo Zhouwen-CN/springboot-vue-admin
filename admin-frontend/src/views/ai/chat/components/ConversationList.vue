@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { type ChatMessageDto, reqGetChatConversationList } from '@/api/ai/chat'
-import type { BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import { BubbleList, Sender, Welcome, Prompts } from 'vue-element-plus-x'
+import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
+import { BubbleList, Prompts, Sender, Welcome } from 'vue-element-plus-x'
 import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
 import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 
@@ -13,7 +13,8 @@ const porps = defineProps({
 })
 
 // 会话列表
-const bubbleList = ref<BubbleListItemProps[]>([])
+const bubbleListRef = ref<BubbleListInstance>()
+const bubbleListItems = ref<BubbleListItemProps[]>([])
 watch(
   () => porps.chatId,
   (value) => {
@@ -23,7 +24,7 @@ watch(
         convertBubbleListItem(data)
       })
     } else {
-      bubbleList.value = []
+      bubbleListItems.value = []
     }
   }
 )
@@ -51,8 +52,12 @@ function convertBubbleListItem(messages: ChatMessageDto[]) {
       isFog: messageType !== 'USER'
     })
   }
-
-  bubbleList.value = result
+  bubbleListItems.value = result
+  nextTick(() => {
+    if (bubbleListItems.value.length > 0) {
+      bubbleListRef.value?.scrollToBottom()
+    }
+  })
 }
 
 const senderValue = ref('')
@@ -90,7 +95,7 @@ const promptItems = ref<PromptsItemsProps[]>([
   <div class="container">
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
-      <BubbleList v-if="chatId" :list="bubbleList" max-height="100%" />
+      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%" />
 
       <!-- 欢迎卡片 -->
       <Welcome

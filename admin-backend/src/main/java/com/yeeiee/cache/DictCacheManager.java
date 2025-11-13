@@ -1,10 +1,10 @@
 package com.yeeiee.cache;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.yeeiee.domain.entity.DictData;
-import com.yeeiee.domain.entity.DictType;
-import com.yeeiee.domain.vo.DictDataSelectorVo;
-import com.yeeiee.service.DictDataService;
+import com.yeeiee.system.domain.entity.DictData;
+import com.yeeiee.system.domain.entity.DictType;
+import com.yeeiee.system.domain.vo.DictDataSelectorVo;
+import com.yeeiee.system.service.DictDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.cache.CacheManager;

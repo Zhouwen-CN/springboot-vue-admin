@@ -1,0 +1,39 @@
+package com.yeeiee.system.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.yeeiee.system.domain.entity.Menu;
+import com.yeeiee.system.domain.form.MenuForm;
+import com.yeeiee.system.domain.vo.MenuVo;
+
+import java.util.List;
+
+/**
+ * <p>
+ * 菜单表 服务类
+ * </p>
+ *
+ * @author chen
+ * @since 2025-08-26
+ */
+public interface MenuService extends IService<Menu> {
+    /**
+     * 添加菜单
+     *
+     * @param menuForm 菜单
+     */
+    void addMenu(MenuForm menuForm);
+
+    /**
+     * 删除菜单
+     *
+     * @param id 菜单id
+     */
+    void removeMenu(Long id);
+
+    /**
+     * 根据角色名查询菜单
+     *
+     * @return 菜单列表
+     */
+    List<MenuVo> getMenuListByRoleNames(List<String> roles);
+}

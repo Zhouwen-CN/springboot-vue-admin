@@ -1,7 +1,7 @@
 package com.yeeiee.utils;
 
-import com.yeeiee.domain.vo.R;
 import com.yeeiee.exception.IoRuntimeException;
+import com.yeeiee.system.domain.vo.R;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;

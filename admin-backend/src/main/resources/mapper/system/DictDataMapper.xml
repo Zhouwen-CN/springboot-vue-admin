@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.system.mapper.DictDataMapper">
+    <!--@formatter:off-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.system.domain.entity.DictData">
+        <id column="id" property="id" />
+        <result column="type_id" property="typeId" />
+        <result column="label" property="label" />
+        <result column="data" property="data" />
+        <result column="sort_id" property="sortId" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type_id, label, data, sort_id, create_user, create_time, update_user, update_time
+    </sql>
+
+    <select id="selectDictByTypeId" resultType="com.yeeiee.system.domain.vo.DictDataSelectorVo">
+        select
+            b.label,
+            b.data
+        from (
+            select
+                id
+            from t_dict_type
+            ${ew.customSqlSegment}
+        ) a
+        join t_dict_data b
+        on a.id=b.type_id
+        order by b.sort_id
+    </select>
+</mapper>

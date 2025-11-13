@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationContextInitializer=\
-  com.yeeiee.config.EnvironmentConfiguration
+  com.yeeiee.system.config.EnvironmentConfiguration

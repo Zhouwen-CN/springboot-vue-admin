@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeeiee.scheduler.mapper.JobLogMapper">
+    <!--@formatter:off-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yeeiee.scheduler.domain.entity.JobLog">
+        <id column="id" property="id" />
+        <result column="job_id" property="jobId" />
+        <result column="handler_name" property="handlerName" />
+        <result column="handler_param" property="handlerParam" />
+        <result column="fire_num" property="fireNum" />
+        <result column="time" property="time" />
+        <result column="status" property="status" />
+        <result column="result" property="result" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, job_id, handler_name, handler_param, fire_num, time, status, result, create_time, update_time
+    </sql>
+
+    <select id="selectJobLogPage" resultType="com.yeeiee.scheduler.domain.vo.JobLogVo">
+        select
+            a.id,
+            b.name as jobName,
+            a.handler_name as handlerName,
+            a.handler_param as handlerParam,
+            a.fire_num as fireNum,
+            a.time,
+            a.status,
+            a.result,
+            a.create_time as startTime,
+            a.update_time as endTime
+        from t_job_log a
+        left join t_job b
+        on a.job_id = b.id
+        <where>
+            <if test="jobId != null">
+                and a.job_id = #{jobId}
+            </if>
+            <if test="status != null">
+                and a.status = #{status}
+            </if>
+            <if test="startTime != null">
+                and a.create_time <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="endTime != null">
+                and a.create_time <![CDATA[ <= ]]> #{endTime}
+            </if>
+        </where>
+        order by a.create_time desc
+    </select>
+</mapper>

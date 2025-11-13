@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.query.SQLQuery;
+import com.yeeiee.SpringbootVueAdmin;
 import com.yeeiee.codegen.domain.dto.CodegenTableConfigDto;
 import com.yeeiee.codegen.domain.entity.CodegenColumn;
 import com.yeeiee.codegen.domain.entity.CodegenTable;
@@ -28,7 +29,6 @@ import com.yeeiee.codegen.mapper.CodegenTableMapper;
 import com.yeeiee.codegen.service.CodegenColumnService;
 import com.yeeiee.codegen.service.CodegenTableService;
 import com.yeeiee.codegen.service.DataSourceService;
-import com.yeeiee.codegen.utils.CodegenUtil;
 import com.yeeiee.utils.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -112,7 +112,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
 
         this.saveCodegenTable(
                 tableInfoList,
-                (tableInfo) -> CodegenUtil.toCodegenTable(tableInfo, codegenTableImportForm)
+                (tableInfo) -> SpringbootVueAdmin.CodegenUtil.toCodegenTable(tableInfo, codegenTableImportForm)
         );
 
     }
@@ -162,7 +162,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
      */
     private void saveCodegenTable(List<TableInfo> tableInfoList, Function<TableInfo, CodegenTable> function) {
         for (TableInfo tableInfo : tableInfoList) {
-            CodegenUtil.validateTableInfo(tableInfo);
+            SpringbootVueAdmin.CodegenUtil.validateTableInfo(tableInfo);
             val codegenTable = function.apply(tableInfo);
 
             // id不存在才插入
@@ -183,7 +183,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
 
             id = codegenTable.getId();
             val fields = tableInfo.getFields();
-            val codegenColumnList = CodegenUtil.toCodegenColumnList(id, fields);
+            val codegenColumnList = SpringbootVueAdmin.CodegenUtil.toCodegenColumnList(id, fields);
             codegenColumnService.saveBatch(codegenColumnList);
         }
     }

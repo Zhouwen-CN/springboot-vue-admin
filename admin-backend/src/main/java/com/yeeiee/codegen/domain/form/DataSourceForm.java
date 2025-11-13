@@ -1,8 +1,8 @@
 package com.yeeiee.codegen.domain.form;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yeeiee.domain.serde.EncryptSerializer;
-import com.yeeiee.domain.validate.GroupingValidate;
+import com.yeeiee.system.domain.serde.EncryptSerializer;
+import com.yeeiee.system.domain.validate.GroupingValidate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

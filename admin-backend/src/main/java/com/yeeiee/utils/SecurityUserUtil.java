@@ -1,6 +1,6 @@
 package com.yeeiee.utils;
 
-import com.yeeiee.domain.entity.User;
+import com.yeeiee.system.domain.entity.User;
 import lombok.val;
 import org.springframework.security.core.context.SecurityContextHolder;
 

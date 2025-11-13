@@ -1,0 +1,109 @@
+package com.yeeiee.system.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yeeiee.cache.DictCacheManager;
+import com.yeeiee.system.domain.entity.DictData;
+import com.yeeiee.system.domain.form.DictDataForm;
+import com.yeeiee.system.domain.validate.GroupingValidate;
+import com.yeeiee.system.domain.vo.DictDataSelectorVo;
+import com.yeeiee.system.domain.vo.DictDataVo;
+import com.yeeiee.system.domain.vo.PageVo;
+import com.yeeiee.system.domain.vo.R;
+import com.yeeiee.system.service.DictDataService;
+import com.yeeiee.utils.BeanUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * <p>
+ * 字典数据表 前端控制器
+ * </p>
+ *
+ * @author chen
+ * @since 2025-02-13
+ */
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/dict/data")
+@Tag(name = "字典数据表 控制器")
+public class DictDataController {
+
+    private final DictDataService dictDataService;
+    private final DictCacheManager dictCacheManager;
+
+    @Operation(summary = "分页查询")
+    @GetMapping("/{size}/{current}")
+    public R<PageVo<DictDataVo>> getPageByTypeId(
+            @PathVariable("size") @Parameter(description = "页面大小") Integer size,
+            @PathVariable("current") @Parameter(description = "当前页面") Integer current,
+            @RequestParam("typeId") @Parameter(description = "字典类型id") Long typeId,
+            @RequestParam(value = "label", required = false) @Parameter(description = "搜索标签键") String label
+    ) {
+        val page = dictDataService.lambdaQuery()
+                .eq(DictData::getTypeId, typeId)
+                .like(StringUtils.hasText(label), DictData::getLabel, label)
+                .orderByAsc(DictData::getSortId)
+                .page(Page.of(current, size));
+
+        return R.ok(PageVo.fromPage(page, DictDataVo.class));
+    }
+
+    @Operation(summary = "新增")
+    @PostMapping
+    public R<Void> add(@Validated(GroupingValidate.Create.class) @RequestBody DictDataForm dictDataForm) {
+        dictDataService.addDictData(dictDataForm);
+        return R.ok();
+    }
+
+    @Operation(summary = "更新")
+    @PutMapping
+    @CacheEvict(cacheNames = DictCacheManager.DICT_CACHE, key = "#p0.typeId")
+    public R<Void> modify(@Validated(GroupingValidate.Update.class) @RequestBody DictDataForm dictDataForm) {
+        val dictData = BeanUtil.toBean(dictDataForm, DictData.class);
+        dictDataService.updateById(dictData);
+        return R.ok();
+    }
+
+    @Operation(summary = "id删除")
+    @DeleteMapping("/{id}")
+    public R<Void> removeById(@PathVariable("id") @Parameter(description = "字典数据id") Long id) {
+        dictCacheManager.evictByDataIds(Collections.singleton(id));
+        dictDataService.removeById(id);
+        return R.ok();
+    }
+
+    @Operation(summary = "批量删除")
+    @DeleteMapping
+    public R<Void> removeByIds(@RequestParam("ids") @Parameter(description = "字典数据id列表") @Size(min = 1, max = 10) Collection<Long> ids) {
+        dictCacheManager.evictByDataIds(ids);
+        dictDataService.removeByIds(ids);
+        return R.ok();
+    }
+
+    @Operation(summary = "选择器查询")
+    @GetMapping("/{typeId}")
+    public R<List<DictDataSelectorVo>> getListByTypeId(@PathVariable("typeId") @Parameter(description = "字典类型id") Long typeId) {
+        val list = dictCacheManager.getDictByTypeId(typeId);
+        return R.ok(list);
+    }
+}

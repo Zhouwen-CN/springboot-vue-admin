@@ -1,10 +1,10 @@
 package com.yeeiee.exception;
 
 import com.yeeiee.codegen.exception.CodegenFailedException;
-import com.yeeiee.domain.entity.ErrorLog;
-import com.yeeiee.domain.vo.R;
 import com.yeeiee.enumeration.RequestMethodEnum;
-import com.yeeiee.service.ErrorLogService;
+import com.yeeiee.system.domain.entity.ErrorLog;
+import com.yeeiee.system.domain.vo.R;
+import com.yeeiee.system.service.ErrorLogService;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.JsonUtil;
 import com.yeeiee.utils.RequestObjectUtil;
