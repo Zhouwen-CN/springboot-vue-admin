@@ -11,6 +11,7 @@ import com.yeeiee.system.security.JwtTokenProvider;
 import com.yeeiee.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -21,6 +22,8 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +40,7 @@ import java.util.List;
 
 /**
  * <p>
- *
+ * AI聊天 控制器
  * </p>
  *
  * @author chen
@@ -58,10 +61,16 @@ public class ChatController {
     public Flux<ServerSentEvent<String>> chatStream(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestHeader("chatId") String chatId,
-            @RequestBody @NotBlank String prompt
+            @RequestBody @NotBlank String prompt,
+            HttpServletRequest request
     ) {
-        val userId = jwtTokenProvider.getUserIdByAccessToken(token);
+        // 保存 security 上下文到请求属性，不然上下文丢失会报错，因为会多次调用 security 过滤器链
+        request.setAttribute(
+                RequestAttributeSecurityContextRepository.DEFAULT_REQUEST_ATTR_NAME,
+                SecurityContextHolder.getContext()
+        );
 
+        val userId = jwtTokenProvider.getUserIdByAccessToken(token);
         val exists = chatHistoryService.exists(
                 Wrappers.<ChatHistory>lambdaQuery()
                         .eq(ChatHistory::getUserId, userId)
