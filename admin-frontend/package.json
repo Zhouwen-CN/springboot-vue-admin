@@ -16,6 +16,7 @@
     "@element-plus/icons-vue": "~2.3.2",
     "axios": "~1.13.2",
     "element-plus": "~2.11.7",
+    "github-markdown-css": "~5.8.1",
     "highlight.js": "~11.11.1",
     "no-vue3-cron": "~2.0.0",
     "nprogress": "~0.2.0",

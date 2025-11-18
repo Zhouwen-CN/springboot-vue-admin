@@ -2,15 +2,15 @@
 import {
   type ChatMessageDto,
   reqAddChatConversation,
-  reqChat,
+  useChat,
   reqGetChatConversationList
 } from '@/api/ai/chat'
 import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import { BubbleList, Prompts, Sender, useXStream, Welcome, XMarkdown } from 'vue-element-plus-x'
+import { BubbleList, Prompts, Sender, Welcome, XMarkdown } from 'vue-element-plus-x'
 import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
 import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 
-const { startStream, cancel, data, error, isLoading } = useXStream()
+const { loading, run, onMessage, onError, cancel } = useChat()
 // 表单
 const chatForm = reactive({
   conversationId: '',
@@ -108,23 +108,7 @@ async function onSubmit() {
     bubbleListItems.value.push(createMessage(true, false, prompt))
     bubbleListItems.value.push(createMessage(false, false))
     // 聊天请求
-    const response = await reqChat(chatForm.conversationId, prompt)
-    const readableStream = response.body!
-    await startStream({ readableStream })
-    data.value.map((item) => {
-      bubbleListItems.value[bubbleListItems.value.length - 1]!.content += item.data
-    })
-
-    // const reader = readableStream.getReader()
-    // const decoder = new TextDecoder()
-    // while (true) {
-    //   const { done, value } = await reader.read()
-    //   if (done) {
-    //     break
-    //   }
-    //   const text = decoder.decode(value)
-    //   bubbleListItems.value[bubbleListItems.value.length - 1]!.content += text
-    // }
+    await run(chatForm.conversationId, prompt)
   } catch (e) {
     console.error('Fetch error:', e)
   } finally {
@@ -132,6 +116,10 @@ async function onSubmit() {
     isNewConversation.value = false
   }
 }
+
+onMessage((content) => {
+  bubbleListItems.value[bubbleListItems.value.length - 1]!.content += content
+})
 
 /**
  * 创建消息
@@ -167,8 +155,8 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
         <template #content="{ item }">
           <!-- chat 内容走 markdown -->
           <XMarkdown
-            v-if="item.content && item.isMarkdown"
-            :markdown="item.content"
+            v-if="item.isMarkdown"
+            :markdown="item.content!"
             :themes="{ light: 'github-light', dark: 'github-dark' }"
             default-theme-mode="dark"
             class="markdown-body"

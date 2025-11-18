@@ -1,7 +1,8 @@
 import request, { baseConfig } from '@/utils/request'
 import useUserStore from '@/stores/user'
+import useSSE from '@/hooks/useSSE'
 
-export interface ChatHistoryVo {
+interface ChatHistoryVo {
   conversationId: string
   title: string
 }
@@ -46,15 +47,26 @@ export function reqDeleteChatConversationById(conversationId: string) {
 }
 
 // 聊天请求
-export function reqChat(chatId: string, prompt: string) {
-  return fetch(`${baseConfig.baseURL}/ai/chat`, {
-    method: 'post',
-    body: prompt,
-    headers: {
-      'Cache-Control': 'no-cache',
-      'Content-Type': 'text/plain',
-      chatId: chatId,
-      Authorization: `Bearer ${useUserStore().userInfo.accessToken}`
-    }
-  })
+export function useChat() {
+  const { loading, run, onMessage, onError, cancel } = useSSE()
+  function innerRun(chatId: string, prompt: string) {
+    return run(`${baseConfig.baseURL}/ai/chat`, {
+      method: 'post',
+      body: prompt,
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/plain',
+        chatId: chatId,
+        Authorization: `Bearer ${useUserStore().userInfo.accessToken}`
+      }
+    })
+  }
+
+  return {
+    loading,
+    run: innerRun,
+    onMessage,
+    onError,
+    cancel
+  }
 }

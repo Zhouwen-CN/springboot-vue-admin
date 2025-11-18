@@ -137,4 +137,4 @@ logging:
   level:
     "org.springframework.jdbc.support.JdbcTransactionManager": info #事务debug日志
     "org.apache.hc.client5.http": info #http client5 连接池日志
-    "org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor": debug #ai日志
+    "org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor": info #ai日志

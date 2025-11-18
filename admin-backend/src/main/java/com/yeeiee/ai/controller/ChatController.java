@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -83,11 +84,13 @@ public class ChatController {
                 .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 .stream()
                 .chatResponse()
+                .filter(chatResponse -> Objects.nonNull(chatResponse.getResult().getOutput().getText()))
                 .map(chatResponse -> ServerSentEvent.<String>builder()
                         .data(chatResponse.getResult().getOutput().getText())
                         .event("message")
                         .build()
                 );
+
     }
 
     @Operation(summary = "获取聊天历史")
