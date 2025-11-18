@@ -2,6 +2,8 @@ package com.yeeiee.exception;
 
 import com.yeeiee.codegen.exception.CodegenFailedException;
 import com.yeeiee.enumeration.RequestMethodEnum;
+import com.yeeiee.exception.reactive.AIChatException;
+import com.yeeiee.exception.reactive.ReactiveAuthorizationException;
 import com.yeeiee.system.domain.entity.ErrorLog;
 import com.yeeiee.system.domain.vo.R;
 import com.yeeiee.system.service.ErrorLogService;
@@ -14,13 +16,16 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import reactor.core.publisher.Mono;
 
 /**
  * <p>
@@ -137,14 +142,32 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * ai聊天异常
+     * 鉴权异常处理
+     *
+     * @param e 未授权异常
+     * @return 错误信息
+     */
+    @ExceptionHandler(ReactiveAuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Mono<String> reactiveAuthorizationExceptionHandler(ReactiveAuthorizationException e) {
+        return Mono.just(e.getMessage());
+    }
+
+    /**
+     * ai聊天异常处理
      *
      * @param e 异常
      * @return 错误信息
      */
-    @ExceptionHandler(AiChatException.class)
-    public R<Void> aiChatExceptionHandler(AiChatException e) {
-        return R.error(HttpStatus.BAD_REQUEST, e.getMessage());
+    @ExceptionHandler(AIChatException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<ServerSentEvent<String>> aiChatExceptionHandler(AIChatException e) {
+        return Mono.just(
+                ServerSentEvent.<String>builder()
+                        .event("error")
+                        .data(e.getMessage())
+                        .build()
+        );
     }
 
     /**

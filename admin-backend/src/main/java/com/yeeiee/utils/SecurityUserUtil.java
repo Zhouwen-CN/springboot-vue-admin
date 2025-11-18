@@ -2,9 +2,10 @@ package com.yeeiee.utils;
 
 import com.yeeiee.system.domain.entity.User;
 import lombok.val;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * <p>
@@ -31,13 +32,8 @@ public class SecurityUserUtil {
         return user;
     }
 
-    /**
-     * 获取用户名
-     * @return 用户名
-     */
-    public static Optional<String> getPrincipal(){
+    public static List<String> getAuthorities() {
         val authentication = SecurityContextHolder.getContext().getAuthentication();
-        return Optional.ofNullable(authentication)
-                .map(auth -> String.valueOf(auth.getPrincipal()));
+        return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
     }
 }

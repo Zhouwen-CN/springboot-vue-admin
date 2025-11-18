@@ -74,11 +74,10 @@ public class MybatisPlusConfiguration implements InitializingBean {
     @Bean
     public MetaObjectHandler metaObjectHandler() {
         return new MetaObjectHandler() {
-            public static final String UNKNOWN_USER = "unknown";
 
             @Override
             public void insertFill(MetaObject metaObject) {
-                val username = SecurityUserUtil.getPrincipal().orElse(UNKNOWN_USER);
+                val username = SecurityUserUtil.getSecurityUser().getUsername();
                 this.strictInsertFill(metaObject, "createUser", String.class, username);
                 this.strictInsertFill(metaObject, "updateUser", String.class, username);
                 this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
@@ -87,7 +86,7 @@ public class MybatisPlusConfiguration implements InitializingBean {
 
             @Override
             public void updateFill(MetaObject metaObject) {
-                val username = SecurityUserUtil.getPrincipal().orElse(UNKNOWN_USER);
+                val username = SecurityUserUtil.getSecurityUser().getUsername();
                 this.strictUpdateFill(metaObject, "updateUser", String.class, username);
                 this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class); // 起始版本 3.3.3(推荐)
             }

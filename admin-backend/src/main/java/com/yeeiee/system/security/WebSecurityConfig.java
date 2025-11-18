@@ -141,6 +141,8 @@ public class WebSecurityConfig {
                                 // actuator 端点
                                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
                                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                                // 响应式SSE接口特殊，需要手动鉴权
+                                .requestMatchers(HttpMethod.POST,"/ai/chat").permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理

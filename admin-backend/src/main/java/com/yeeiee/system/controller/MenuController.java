@@ -1,34 +1,23 @@
 package com.yeeiee.system.controller;
 
-import com.yeeiee.exception.VerifyTokenException;
-import com.yeeiee.system.domain.dto.JwtClaimsDto;
 import com.yeeiee.system.domain.entity.Menu;
 import com.yeeiee.system.domain.entity.RoleMenu;
 import com.yeeiee.system.domain.form.MenuForm;
 import com.yeeiee.system.domain.validate.GroupingValidate;
 import com.yeeiee.system.domain.vo.MenuVo;
 import com.yeeiee.system.domain.vo.R;
-import com.yeeiee.system.security.JwtTokenProvider;
 import com.yeeiee.system.service.MenuService;
 import com.yeeiee.system.service.RoleMenuService;
 import com.yeeiee.utils.BeanUtil;
+import com.yeeiee.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,15 +36,11 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
     private final RoleMenuService roleMenuService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "列表查询")
     @GetMapping
-    public R<List<MenuVo>> getList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        val roleNames = jwtTokenProvider.getClaimsDtoByAccessToken(token)
-                .map(JwtClaimsDto::getRoleNames)
-                .orElseThrow(() -> new VerifyTokenException("token解析失败"));
-
+    public R<List<MenuVo>> getList() {
+        val roleNames = SecurityUserUtil.getAuthorities();
         if(CollectionUtils.isEmpty(roleNames)){
             return R.ok(List.of());
         }

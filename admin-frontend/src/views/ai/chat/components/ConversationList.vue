@@ -117,8 +117,8 @@ async function onSubmit() {
   }
 }
 
-onMessage((content) => {
-  bubbleListItems.value[bubbleListItems.value.length - 1]!.content += content
+onMessage((ev) => {
+  bubbleListItems.value[bubbleListItems.value.length - 1]!.content += ev.data
 })
 
 /**

@@ -1,17 +1,12 @@
 package com.yeeiee.system.security;
 
-import com.yeeiee.exception.AiChatException;
 import com.yeeiee.system.domain.dto.JwtClaimsDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import lombok.val;
+import lombok.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -156,9 +151,14 @@ public class JwtTokenProvider implements InitializingBean {
                 .map(this.getClaimsDtoFunction());
     }
 
-    public Long getUserIdByAccessToken(String token) {
-        return this.getClaimsDtoByAccessToken(token)
-                .map(JwtClaimsDto::getUserId)
-                .orElseThrow(() -> new AiChatException("token解析失败"));
+    /**
+     * 验证token，并且获取id，用于响应式接口
+     *
+     * @param accessToken 访问token
+     * @return 用户id
+     */
+    public Optional<Long> getOptionalUserId(String accessToken) {
+        return this.getClaimsDtoByAccessToken(accessToken)
+                .map(JwtClaimsDto::getUserId);
     }
 }
