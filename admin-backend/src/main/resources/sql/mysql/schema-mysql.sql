@@ -2,7 +2,7 @@ create table t_user(
     id            bigint primary key auto_increment comment '主键',
     username      varchar(15)      not null comment '用户名',
     password      varchar(60)      not null comment '密码',
-    token_version bigint default 0 not null comment 'token版本',
+    refresh_token varchar(200) default null comment '刷新token',
     create_user varchar(15) default null comment '创建者',
     create_time datetime default current_timestamp comment '创建时间',
     update_user varchar(15) default null comment '更新者',
@@ -207,7 +207,6 @@ create table t_job_log  (
   index idx_job_log_create_time (create_time desc)
 ) comment = '定时任务日志表';
 
-drop table t_chat_history;
 create table t_chat_history (
     id bigint primary key auto_increment comment '主键',
     user_id bigint not null comment '用户id',

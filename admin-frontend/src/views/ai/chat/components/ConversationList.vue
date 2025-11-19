@@ -1,16 +1,11 @@
 <script lang="ts" setup>
-import {
-  type ChatMessageDto,
-  reqAddChatConversation,
-  useChat,
-  reqGetChatConversationList
-} from '@/api/ai/chat'
-import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import { BubbleList, Prompts, Sender, Welcome, XMarkdown } from 'vue-element-plus-x'
-import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
-import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
+import {type ChatMessageDto, reqAddChatConversation, reqGetChatConversationList, useChat} from '@/api/ai/chat'
+import type {BubbleListInstance, BubbleListItemProps} from 'vue-element-plus-x/types/BubbleList'
+import {BubbleList, Prompts, Sender, Welcome, XMarkdown} from 'vue-element-plus-x'
+import {ChromeFilled, Cpu, Promotion} from '@element-plus/icons-vue'
+import type {PromptsItemsProps} from 'vue-element-plus-x/types/Prompts'
 
-const { loading, run, onMessage, onError, cancel } = useChat()
+const {loading, run, onMessage, cancel} = useChat()
 // 表单
 const chatForm = reactive({
   conversationId: '',
@@ -151,16 +146,16 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
   <div class="container">
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
-      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%">
+      <BubbleList v-if="chatId" ref="bubbleListRef"
+                  :list="bubbleListItems" max-height="100%">
         <template #content="{ item }">
           <!-- chat 内容走 markdown -->
           <XMarkdown
-            v-if="item.isMarkdown"
-            :markdown="item.content!"
-            :themes="{ light: 'github-light', dark: 'github-dark' }"
-            default-theme-mode="dark"
-            class="markdown-body"
-          />
+              v-if="item.isMarkdown"
+              :markdown="item.content!"
+              :themes="{ light: 'github-light', dark: 'github-dark' }"
+              class="markdown-body"
+              default-theme-mode="dark"/>
           <!-- user 内容 纯文本 -->
           <div v-if="!item.isMarkdown" class="user-content">
             {{ item.content }}
@@ -169,45 +164,36 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
       </BubbleList>
 
       <!-- 欢迎卡片 -->
-      <Welcome
-        v-else
-        class="welcome"
-        icon="https://camo.githubusercontent.com/4ea7fdaabf101c16965c0bd3ead816c9d7726a59b06f0800eb7c9a30212d5a6a/68747470733a2f2f63646e2e656c656d656e742d706c75732d782e636f6d2f656c656d656e742d706c75732d782e706e67"
-        title="欢迎使用 Element Plus X 💖"
-        extra="副标题"
-        description="这是描述信息 ~"
-      />
+      <Welcome v-else class="welcome"
+               description="这是描述信息 ~"
+               extra="副标题" icon="https://camo.githubusercontent.com/4ea7fdaabf101c16965c0bd3ead816c9d7726a59b06f0800eb7c9a30212d5a6a/68747470733a2f2f63646e2e656c656d656e742d706c75732d782e636f6d2f656c656d656e742d706c75732d782e706e67"
+               title="欢迎使用 Element Plus X 💖"/>
     </div>
     <!-- 提示词集 -->
-    <Prompts
-      v-if="!chatId"
-      class="prompts"
-      title="🐵 提示集组件标题"
-      :items="promptItems"
-      @itemClick="promptItemClickHandler"
-    />
+    <Prompts v-if="!chatId" :items="promptItems" class="prompts"
+             title="🐵 提示集组件标题" @itemClick="promptItemClickHandler"/>
 
     <!-- 发送框 -->
-    <Sender
-      v-model="chatForm.prompt"
-      :auto-size="{ minRows: 4, maxRows: 4 }"
-      class="sender"
-      placeholder="💌 在这里你可以自定义变体后的 prefix 和 action-list"
-      variant="updown"
-      @submit="onSubmit"
-    >
+    <Sender v-model="chatForm.prompt"
+            :auto-size="{ minRows: 4, maxRows: 4 }" class="sender"
+            placeholder="💌 在这里你可以自定义变体后的 prefix 和 action-list"
+            variant="updown"
+            @submit="onSubmit">
       <template #prefix>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
-          <div :class="{ isSelect }" class="chat-option" @click="isSelect = !isSelect">
+        <div
+            style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+          <div :class="{ isSelect }" class="chat-option"
+               @click="isSelect = !isSelect">
             <el-icon>
-              <ChromeFilled />
+              <ChromeFilled/>
             </el-icon>
             <span>联网搜索</span>
           </div>
 
-          <div :class="{ isSelect }" class="chat-option" @click="isSelect = !isSelect">
+          <div :class="{ isSelect }" class="chat-option"
+               @click="isSelect = !isSelect">
             <el-icon>
-              <Cpu />
+              <Cpu/>
             </el-icon>
             <span>深度思考</span>
           </div>

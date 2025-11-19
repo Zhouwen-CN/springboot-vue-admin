@@ -173,12 +173,9 @@ custom:
     default-password: 123456
   # jwt配置
   jwt:
-    access:
-      key: LyGR^*tpCYA&c#HMeJDndUKPShTrX%F!
-      expiration: 1d
-    refresh:
-      key: Y$tDyV!Sx&XZMnqT^AEpkQ#Wgvcs%F@w
-      expiration: 7d
+    key: LyGR^*tpCYA&c#HMeJDndUKPShTrX%F!
+    access-expiration: 1h
+    refresh-expiration: 30d
   # http连接池配置
   http:
     rest-client:

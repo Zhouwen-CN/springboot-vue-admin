@@ -10,9 +10,7 @@ export interface LoginForm {
 export interface UserLoginVo {
   id: number
   username: string
-  accessToken: string
-  refreshToken: string
-  roles: Array<string>
+  token: string
 }
 
 /**
@@ -26,19 +24,14 @@ export function reqLogin(loginForm: LoginForm) {
 
 /**
  * 刷新 token
- * @param refreshToken token
  * @returns
  */
-export function reqRefreshToken(refreshToken: string) {
-  return request.get<UserLoginVo>('/login/refresh', {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`
-    }
-  })
+export function reqRefreshToken() {
+  return request.get<void>('/user/refresh')
 }
 
-export function reqLogout(id: number) {
-  return request.get<void>(`/user/logout/${id}`)
+export function reqLogout() {
+  return request.get<void>(`/user/logout`)
 }
 
 export interface UserVo extends BaseVo {
@@ -86,7 +79,6 @@ export function reqResetPassword(id: number) {
 }
 
 export interface ChangePwdForm {
-  id: number
   oldPwd: string
   newPwd: string
   confirmPwd: string

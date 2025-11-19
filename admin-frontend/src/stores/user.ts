@@ -30,10 +30,7 @@ const useUserStore = defineStore(
       refreshTokenPromise = new Promise(async (resolve) => {
         try {
           // 状态码!=200，拦截器会返回一个失败的promise
-          const result = await reqRefreshToken(userInfo.value.refreshToken)
-          const { accessToken, refreshToken } = result.data
-          userInfo.value.accessToken = accessToken
-          userInfo.value.refreshToken = refreshToken
+          await reqRefreshToken()
           resolve(true)
         } catch (error) {
           resolve(false)
@@ -48,7 +45,7 @@ const useUserStore = defineStore(
 
     // 登出
     async function doLogout() {
-      await reqLogout(userInfo.value.id)
+      await reqLogout()
       $reset()
       useTagViewStore().$reset()
       useSettingStore().$reset()

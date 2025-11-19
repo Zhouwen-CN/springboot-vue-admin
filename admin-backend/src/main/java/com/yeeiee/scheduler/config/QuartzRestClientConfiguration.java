@@ -39,7 +39,7 @@ public class QuartzRestClientConfiguration {
                         })
                 .observationRegistry(observationRegistry)
                 .observationConvention(new DefaultClientRequestObservationConvention(REST_CLIENT_METER_NAME))
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 }

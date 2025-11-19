@@ -22,7 +22,6 @@ const saveLoading = ref(false)
 
 // 表单对象
 const changePwdForm = reactive<ChangePwdForm>({
-  id: userStore.userInfo.id,
   oldPwd: '',
   newPwd: '',
   confirmPwd: ''
@@ -135,7 +134,7 @@ function clean() {
     <div>
       <el-space size="large">
         <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
-        <el-avatar shape="square" size="default" :src="settingStore.avatarUrl"> </el-avatar>
+        <el-avatar :src="settingStore.avatarUrl" shape="square" size="default"></el-avatar>
 
         <el-dropdown>
           <span>
@@ -189,7 +188,7 @@ function clean() {
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="dialogVisible = false">取消 </el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
           <el-button :loading="saveLoading" native-type="submit" type="primary">确认 </el-button>
         </el-form-item>
       </el-form>

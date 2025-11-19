@@ -8,11 +8,11 @@ import com.yeeiee.ai.domain.form.ChatConversationRenameForm;
 import com.yeeiee.ai.domain.vo.ChatHistoryVo;
 import com.yeeiee.ai.service.ChatHistoryService;
 import com.yeeiee.system.domain.vo.R;
-import com.yeeiee.system.security.JwtTokenProvider;
 import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -20,12 +20,21 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -45,28 +54,26 @@ import java.util.Objects;
 @Tag(name = "AI聊天 控制器")
 public class ChatController {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final ChatClient chatClient;
     private final ChatHistoryService chatHistoryService;
     private final ChatMemoryRepository chatMemoryRepository;
     private final ObjectMapper objectMapper;
+    // 会话id，也用来标记是否sse请求
+    public static final String CHAT_HEADER = "chatId";
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestHeader("chatId") String chatId,
-            @RequestBody @NotBlank String prompt
+            @RequestHeader(CHAT_HEADER) String chatId,
+            @RequestBody @NotBlank String prompt,
+            HttpServletRequest request
     ) throws JsonProcessingException {
-        val optional = jwtTokenProvider.getOptionalUserId(token);
-        if (optional.isEmpty()) {
-            return Flux.just(
-                    ServerSentEvent.<String>builder()
-                            .event("error")
-                            .data(objectMapper.writeValueAsString(R.error(HttpStatus.UNAUTHORIZED, "未授权")))
-                            .build()
-            );
-        }
-        val userId = optional.get();
+        // 保存 security 上下文到请求属性，不然上下文丢失会报错，因为会多次调用 security 过滤器链
+        request.setAttribute(
+                RequestAttributeSecurityContextRepository.DEFAULT_REQUEST_ATTR_NAME,
+                SecurityContextHolder.getContext()
+        );
+
+        val userId = SecurityUserUtil.getSecurityUser().getId();
         val exists = chatHistoryService.exists(
                 Wrappers.<ChatHistory>lambdaQuery()
                         .eq(ChatHistory::getUserId, userId)
@@ -86,7 +93,6 @@ public class ChatController {
                 .chatResponse()
                 .filter(chatResponse -> Objects.nonNull(chatResponse.getResult().getOutput().getText()))
                 .map(chatResponse -> ServerSentEvent.<String>builder()
-                        .id(String.valueOf(HttpStatus.BAD_REQUEST.value()))
                         .event("message")
                         .data(chatResponse.getResult().getOutput().getText())
                         .build()

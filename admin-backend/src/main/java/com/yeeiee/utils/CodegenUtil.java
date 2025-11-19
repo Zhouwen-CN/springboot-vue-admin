@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.yeeiee.codegen.domain.entity.CodegenColumn;
 import com.yeeiee.codegen.domain.entity.CodegenTable;
 import com.yeeiee.codegen.domain.form.CodegenTableImportForm;
-import com.yeeiee.codegen.exception.CodegenFailedException;
+import com.yeeiee.codegen.exception.CodegenException;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.util.CollectionUtils;
@@ -219,22 +219,22 @@ public final class CodegenUtil {
      */
     public static void validateTableInfo(TableInfo tableInfo) {
         if (tableInfo == null) {
-            throw new CodegenFailedException("表不存在");
+            throw new CodegenException("表不存在");
         }
         val tableName = tableInfo.getName();
         val tableComment = tableInfo.getComment();
         if (!StringUtils.hasText(tableComment)) {
-            throw new CodegenFailedException("表没有备注: " + tableName);
+            throw new CodegenException("表没有备注: " + tableName);
         }
         val fields = tableInfo.getFields();
         if (CollectionUtils.isEmpty(fields)) {
-            throw new CodegenFailedException("字段不存在: " + tableName);
+            throw new CodegenException("字段不存在: " + tableName);
         }
         fields.forEach(field -> {
             val fieldName = field.getName();
             val fieldComment = field.getComment();
             if (!StringUtils.hasText(fieldComment)) {
-                throw new CodegenFailedException("字段没有备注: " + tableName + "." + fieldName);
+                throw new CodegenException("字段没有备注: " + tableName + "." + fieldName);
             }
         });
     }

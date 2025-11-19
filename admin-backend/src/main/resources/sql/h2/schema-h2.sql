@@ -3,7 +3,7 @@ CREATE TABLE t_user (
     id            BIGINT PRIMARY KEY,
     username      VARCHAR(15) NOT NULL,
     password      VARCHAR(60) NOT NULL,
-    token_version BIGINT DEFAULT 0,
+    refresh_token VARCHAR(200) DEFAULT NULL,
     create_user   VARCHAR(15) DEFAULT NULL,
     create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_user   VARCHAR(15) DEFAULT NULL,
@@ -15,7 +15,7 @@ COMMENT ON TABLE t_user IS '用户表';
 COMMENT ON COLUMN t_user.id IS '主键';
 COMMENT ON COLUMN t_user.username IS '用户名';
 COMMENT ON COLUMN t_user.password IS '密码';
-COMMENT ON COLUMN t_user.token_version IS 'token版本';
+COMMENT ON COLUMN t_user.refresh_token IS '刷新token';
 COMMENT ON COLUMN t_user.create_user IS '创建者';
 COMMENT ON COLUMN t_user.create_time IS '创建时间';
 COMMENT ON COLUMN t_user.update_user IS '更新者';

@@ -9,7 +9,7 @@ CREATE TABLE t_user (
     id            NUMBER(18) PRIMARY KEY,
     username      VARCHAR2(15) NOT NULL,
     password      VARCHAR2(60) NOT NULL,
-    token_version NUMBER(18) DEFAULT 0,
+    refresh_token VARCHAR2(200) DEFAULT NULL,
     create_user   VARCHAR2(15) DEFAULT NULL,
     create_time   DATE DEFAULT SYSDATE,
     update_user   VARCHAR2(15) DEFAULT NULL,
@@ -21,7 +21,7 @@ COMMENT ON TABLE t_user IS '用户表';
 COMMENT ON COLUMN t_user.id IS '主键';
 COMMENT ON COLUMN t_user.username IS '用户名';
 COMMENT ON COLUMN t_user.password IS '密码';
-COMMENT ON COLUMN t_user.token_version IS 'token版本';
+COMMENT ON COLUMN t_user.refresh_token IS '刷新token';
 COMMENT ON COLUMN t_user.create_user IS '创建者';
 COMMENT ON COLUMN t_user.create_time IS '创建时间';
 COMMENT ON COLUMN t_user.update_user IS '更新者';

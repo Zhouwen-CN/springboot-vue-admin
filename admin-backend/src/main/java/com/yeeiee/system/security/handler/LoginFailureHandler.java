@@ -23,7 +23,7 @@ import java.io.IOException;
 
 /**
  * <p>
- * 登入成功处理
+ * 登入失败处理
  * </p>
  *
  * @author chen
@@ -55,6 +55,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         loginLogService.save(loginLog);
 
         // 写出响应
-        ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
+        ResponseObjectUtil.writeJson(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 }

@@ -3,7 +3,7 @@ package com.yeeiee.codegen.service.freemarker;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.yeeiee.codegen.domain.entity.CodegenColumn;
 import com.yeeiee.codegen.domain.entity.CodegenTable;
-import com.yeeiee.codegen.exception.CodegenFailedException;
+import com.yeeiee.codegen.exception.CodegenException;
 import com.yeeiee.codegen.service.CodegenColumnService;
 import com.yeeiee.codegen.service.CodegenTableService;
 import com.yeeiee.system.domain.entity.Menu;
@@ -79,7 +79,7 @@ public class FreemarkerEngineService implements InitializingBean {
                 .one();
 
         if (table == null) {
-            throw new CodegenFailedException("代码生成表不存在");
+            throw new CodegenException("代码生成表不存在");
         }
 
         val columns = codegenColumnService.lambdaQuery()
@@ -87,7 +87,7 @@ public class FreemarkerEngineService implements InitializingBean {
                 .list();
 
         if (CollectionUtils.isEmpty(columns)) {
-            throw new CodegenFailedException("代码生成表字段不存在");
+            throw new CodegenException("代码生成表字段不存在");
         }
 
         val bindingMap = new HashMap<String, Object>();

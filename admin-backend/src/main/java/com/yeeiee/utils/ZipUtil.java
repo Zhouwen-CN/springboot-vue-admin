@@ -1,12 +1,16 @@
 package com.yeeiee.utils;
 
-import com.yeeiee.exception.IoRuntimeException;
+import com.yeeiee.exception.DownloadFileException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.Flushable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -93,7 +97,7 @@ public final class ZipUtil {
             }
             zip.closeEntry();
         } catch (IOException e) {
-            throw new IoRuntimeException("Zip compress error: " + ExceptionUtils.getRootCauseMessage(e));
+            throw new DownloadFileException("Zip compress error: " + ExceptionUtils.getRootCauseMessage(e));
         } finally {
             close(in);
         }

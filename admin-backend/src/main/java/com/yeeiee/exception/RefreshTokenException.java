@@ -4,12 +4,12 @@ import lombok.experimental.StandardException;
 
 /**
  * <p>
- * io运行时异常
+ * 刷新token异常
  * </p>
  *
  * @author chen
- * @since 2025-09-18
+ * @since 2025-11-19
  */
 @StandardException
-public class IoRuntimeException extends RuntimeException {
+public class RefreshTokenException extends RuntimeException {
 }

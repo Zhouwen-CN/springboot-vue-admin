@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
  * @since 2025-10-11
  */
 @Configuration
-public class AiThreadPoolConfiguration {
+public class AIThreadPoolConfiguration {
     @Bean(name = "aiTaskExecutionProperties")
     @ConfigurationProperties(prefix = "spring.task.execution.ai")
     public TaskExecutionProperties aiTaskExecutionProperties() {

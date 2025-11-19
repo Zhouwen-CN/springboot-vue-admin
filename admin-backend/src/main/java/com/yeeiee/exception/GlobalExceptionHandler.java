@@ -1,9 +1,7 @@
 package com.yeeiee.exception;
 
-import com.yeeiee.codegen.exception.CodegenFailedException;
+import com.yeeiee.codegen.exception.CodegenException;
 import com.yeeiee.enumeration.RequestMethodEnum;
-import com.yeeiee.exception.reactive.AIChatException;
-import com.yeeiee.exception.reactive.ReactiveAuthorizationException;
 import com.yeeiee.system.domain.entity.ErrorLog;
 import com.yeeiee.system.domain.vo.R;
 import com.yeeiee.system.service.ErrorLogService;
@@ -16,16 +14,13 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import reactor.core.publisher.Mono;
 
 /**
  * <p>
@@ -51,34 +46,26 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
     private final ErrorLogService errorLogService;
 
-    @ExceptionHandler(DmlOperationException.class)
-    public R<Void> dmlFailureExceptionHandler(DmlOperationException e) {
-        return R.error(HttpStatus.BAD_REQUEST, e);
-    }
-
-    @ExceptionHandler(VerifyTokenException.class)
-    public R<Void> verifyTokenExceptionHandler(VerifyTokenException e) {
-        return R.error(HttpStatus.BAD_REQUEST, e);
-    }
-
+    /**
+     * 404异常
+     */
     @ExceptionHandler(NoResourceFoundException.class)
     public R<Void> noResourceFoundExceptionHandler(NoResourceFoundException e) {
         return R.error(HttpStatus.NOT_FOUND, e);
     }
 
-    @ExceptionHandler(CodegenFailedException.class)
-    public R<Void> dataSourceConnectExceptionHandler(CodegenFailedException e) {
-        return R.error(HttpStatus.BAD_REQUEST, e);
+    /**
+     * 事务超时异常
+     */
+    @ExceptionHandler(TransactionTimedOutException.class)
+    public R<Void> transactionTimedOutExceptionHandler(TransactionTimedOutException e) {
+        return R.error(HttpStatus.REQUEST_TIMEOUT, ExceptionUtils.getRootCauseMessage(e));
     }
 
     /**
-     * body 参数校验
-     *
-     * @param e 参数校验异常
-     * @return 错误信息
+     * body参数校验异常（请求实体）
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<Void> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
@@ -98,10 +85,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * url参数校验
-     *
-     * @param e 参数校验异常
-     * @return 错误信息
+     * url参数校验异常（接口参数注解）
      */
     @ExceptionHandler(HandlerMethodValidationException.class)
     public R<Void> handlerMethodValidationExceptionHandler(HandlerMethodValidationException e) {
@@ -120,21 +104,24 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 事务超时异常处理
-     *
-     * @param e 事务超时异常
-     * @return 错误信息
+     * dml操作异常
      */
-    @ExceptionHandler(TransactionTimedOutException.class)
-    public R<Void> transactionTimedOutExceptionHandler(TransactionTimedOutException e) {
-        return R.error(HttpStatus.REQUEST_TIMEOUT, ExceptionUtils.getRootCauseMessage(e));
+    @ExceptionHandler(DmlOperationException.class)
+    public R<Void> dmlFailureExceptionHandler(DmlOperationException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e);
+    }
+
+
+    /**
+     * 代码生成异常
+     */
+    @ExceptionHandler(CodegenException.class)
+    public R<Void> dataSourceConnectExceptionHandler(CodegenException e) {
+        return R.error(HttpStatus.BAD_REQUEST, e);
     }
 
     /**
-     * 定时任务异常处理
-     *
-     * @param e 定时任务异常
-     * @return 错误信息
+     * 定时任务异常：JobServiceImpl
      */
     @ExceptionHandler(JobSchedulerException.class)
     public R<Void> jobSchedulerExceptionHandler(JobSchedulerException e) {
@@ -142,39 +129,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 鉴权异常处理
-     *
-     * @param e 未授权异常
-     * @return 错误信息
+     * 刷新token异常
      */
-    @ExceptionHandler(ReactiveAuthorizationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public Mono<String> reactiveAuthorizationExceptionHandler(ReactiveAuthorizationException e) {
-        return Mono.just(e.getMessage());
+    @ExceptionHandler(RefreshTokenException.class)
+    public R<Void> refreshTokenExceptionHandler(RefreshTokenException e) {
+        return R.error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
-    /**
-     * ai聊天异常处理
-     *
-     * @param e 异常
-     * @return 错误信息
-     */
-    @ExceptionHandler(AIChatException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<ServerSentEvent<String>> aiChatExceptionHandler(AIChatException e) {
-        return Mono.just(
-                ServerSentEvent.<String>builder()
-                        .event("error")
-                        .data(e.getMessage())
-                        .build()
-        );
-    }
 
     /**
-     * 默认异常处理
-     *
-     * @param e 默认异常
-     * @return 错误信息
+     * 默认异常
      */
     @ExceptionHandler(Exception.class)
     public R<Void> defaultExceptionHandler(Exception e) {

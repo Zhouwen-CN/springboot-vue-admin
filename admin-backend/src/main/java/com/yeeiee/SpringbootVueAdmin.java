@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author chen
  * @since 2024-04-27
  */
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableCaching
 @EnableTransactionManagement
 @MapperScan("com.yeeiee.**.mapper")

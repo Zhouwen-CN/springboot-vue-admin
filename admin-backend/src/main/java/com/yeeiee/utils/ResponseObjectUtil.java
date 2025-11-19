@@ -1,6 +1,6 @@
 package com.yeeiee.utils;
 
-import com.yeeiee.exception.IoRuntimeException;
+import com.yeeiee.exception.DownloadFileException;
 import com.yeeiee.system.domain.vo.R;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
@@ -20,18 +20,34 @@ import java.nio.charset.StandardCharsets;
  * @since 2025-05-29
  */
 public final class ResponseObjectUtil {
+
     /**
-     * 写出响应
+     * sse响应
      *
      * @param response 响应对象
-     * @param result   响应体
-     * @param <T>      实体类型
-     * @throws IOException io 异常
+     * @param result   响应结果
+     * @param <T>      响应结果类型
+     * @throws IOException e
      */
-    public static <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
-        val resultAsJson = JsonUtil.toJsonString(result);
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        response.getWriter().println(resultAsJson);
+    public static <T> void writeStream(HttpServletResponse response, R<T> result) throws IOException {
+        response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        val writer = response.getWriter();
+        writer.write("event: error\n");
+        writer.write(String.format("data: %s\n\n", JsonUtil.toJsonString(result)));
+    }
+
+    /**
+     * json响应
+     *
+     * @param response 响应对象
+     * @param result   响应结果
+     * @param <T>      响应结果类型
+     * @throws IOException e
+     */
+    public static <T> void writeJson(HttpServletResponse response, R<T> result) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        val writer = response.getWriter();
+        writer.write(JsonUtil.toJsonString(result));
     }
 
     /**
@@ -51,7 +67,7 @@ public final class ResponseObjectUtil {
             val outputStream = response.getOutputStream();
             outputStream.write(content);
         } catch (IOException e) {
-            throw new IoRuntimeException("文件下载异常: " + ExceptionUtils.getRootCauseMessage(e));
+            throw new DownloadFileException("文件下载异常: " + ExceptionUtils.getRootCauseMessage(e));
         }
     }
 }

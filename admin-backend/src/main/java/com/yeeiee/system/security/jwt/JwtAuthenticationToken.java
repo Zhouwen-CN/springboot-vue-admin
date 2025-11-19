@@ -22,7 +22,7 @@ import java.util.Collection;
 @ToString
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
-    private String accessToken;
+    private String token;
     private User user;
 
     /**
@@ -37,7 +37,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return super.isAuthenticated() ? user : accessToken;
+        return super.isAuthenticated() ? user : token;
     }
 
     @Override

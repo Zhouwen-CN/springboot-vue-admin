@@ -30,7 +30,7 @@ router.beforeEach((to, _, next) => {
 
   // 是否登录
   const userStore = useUserStore()
-  const token = userStore.userInfo.accessToken
+  const token = userStore.userInfo.token
   if (token) {
     // 登入逻辑
     if (to.path === '/login') {

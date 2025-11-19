@@ -4,12 +4,12 @@ import lombok.experimental.StandardException;
 
 /**
  * <p>
- * 代码生成失败异常
+ * 代码生成异常
  * </p>
  *
  * @author chen
  * @since 2025-09-10
  */
 @StandardException
-public class CodegenFailedException extends RuntimeException {
+public class CodegenException extends RuntimeException {
 }

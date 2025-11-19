@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yeeiee.system.domain.entity.User;
 import com.yeeiee.system.domain.form.ChangePwdForm;
 import com.yeeiee.system.domain.form.UserForm;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Collection;
 
@@ -18,10 +19,8 @@ import java.util.Collection;
 public interface UserService extends IService<User> {
     /**
      * 登出
-     *
-     * @param id 用户 id
      */
-    void logout(Long id);
+    void logout();
 
     /**
      * 新增用户和角色关系
@@ -80,10 +79,18 @@ public interface UserService extends IService<User> {
     User getUserByUsername(String username);
 
     /**
-     * 修改用户token版本
-     * @param user 用户
+     * 修改用户 refreshToken
+     *
+     * @param userId       用户
+     * @param refreshToken 刷新token
      */
-    void modifyTokenVersionByUser(User user);
+    void modifyRefreshTokenByUserId(Long userId, String refreshToken);
 
-
+    /**
+     * 刷新token
+     *
+     * @param token    access token
+     * @param response response
+     */
+    void refreshToken(String token, HttpServletResponse response);
 }

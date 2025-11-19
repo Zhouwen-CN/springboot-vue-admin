@@ -47,7 +47,7 @@ export function reqDeleteChatConversationById(conversationId: string) {
 
 // 聊天请求
 export function useChat() {
-  const { loading, run, onMessage, onError, cancel } = useChatSSE()
+  const {loading, run, onMessage, cancel} = useChatSSE()
   function innerRun(chatId: string, prompt: string) {
     return run('/ai/chat', {
       method: 'post',
@@ -64,7 +64,6 @@ export function useChat() {
     loading,
     run: innerRun,
     onMessage,
-    onError,
     cancel
   }
 }

@@ -39,25 +39,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 从 request 获取 JWT token
         val token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        val jwtClaimsDtoOptional = jwtTokenProvider.getClaimsDtoByAccessToken(token);
-        if (jwtClaimsDtoOptional.isPresent()) {
-
-            val jwtClaimsDto = jwtClaimsDtoOptional.get();
-            val userId = jwtClaimsDto.getUserId();
-            val version = jwtClaimsDto.getVersion();
+        val claimsOptional = jwtTokenProvider.getClaims(token);
+        if (claimsOptional.isPresent()) {
+            val claims = claimsOptional.get();
+            val userId = Long.parseLong(claims.getSubject());
 
             // 加载与 token 关联的用户
             User user = userService.getUserByUserId(userId);
 
-            // 检查 token version
-            if (user != null && version == user.getTokenVersion() - 1) {
-                val authorities = jwtClaimsDto.getRoleNames()
+            // 检查用户和刷新token
+            if (user != null && user.getRefreshToken() != null) {
+                val authorities = jwtTokenProvider.getRoleNames(claims)
                         .stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
                 val authenticated = new JwtAuthenticationToken(authorities);
-                authenticated.setAccessToken(token);
+                authenticated.setToken(token);
                 authenticated.setUser(user);
                 authenticated.setAuthenticated(true);
 

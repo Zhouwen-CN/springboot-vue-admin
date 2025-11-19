@@ -17,12 +17,11 @@ class Request {
     // 请求拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        // set token to request header if token not exists
-        if (!config.headers.Authorization) {
-          const userStore = useUserStore()
-          const token = userStore.userInfo.accessToken
+        // 设置请求头，如果token不存在的话
+        if (!config.headers.authorization) {
+          const token = useUserStore().userInfo.token
           if (token) {
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers.authorization = `Bearer ${token}`
           }
         }
         return config
@@ -35,14 +34,20 @@ class Request {
     // 响应拦截器
     this.instance.interceptors.response.use(
       async (response) => {
-        const { data, config } = response
+        const userStore = useUserStore()
 
+        // 如有响应头中有新的token，写入状态
+        const refreshedToken = response.headers.authorization
+        if (refreshedToken) {
+          userStore.userInfo.token = refreshedToken
+        }
+
+        const { data, config } = response
         // 如果没有权限，并且当前请求不是刷新 token 请求，则执行刷新 token
         if (data?.code === 401 && config.url !== '/user/refresh') {
-          const userStore = useUserStore()
           const isSuccess = await userStore.doRefreshToken()
           if (isSuccess) {
-            config.headers.Authorization = `Bearer ${userStore.userInfo.accessToken}`
+            config.headers.Authorization = `Bearer ${userStore.userInfo.token}`
             return await this.request(config)
           }
         }
@@ -58,7 +63,6 @@ class Request {
         if (response.headers['content-disposition']) {
           return response
         }
-
         return data
       },
       (error) => {

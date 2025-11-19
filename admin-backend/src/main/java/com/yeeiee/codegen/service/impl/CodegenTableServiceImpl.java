@@ -23,7 +23,7 @@ import com.yeeiee.codegen.domain.form.CodegenTableColumnsForm;
 import com.yeeiee.codegen.domain.form.CodegenTableImportForm;
 import com.yeeiee.codegen.domain.vo.CodegenTableSelectorVo;
 import com.yeeiee.codegen.domain.vo.CodegenTableVo;
-import com.yeeiee.codegen.exception.CodegenFailedException;
+import com.yeeiee.codegen.exception.CodegenException;
 import com.yeeiee.codegen.mapper.CodegenTableMapper;
 import com.yeeiee.codegen.service.CodegenColumnService;
 import com.yeeiee.codegen.service.CodegenTableService;
@@ -94,7 +94,7 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
             }
             return codegenTableVoList;
         } catch (SQLException e) {
-            throw new CodegenFailedException("数据源连接异常: " + ExceptionUtils.getRootCauseMessage(e));
+            throw new CodegenException("数据源连接异常: " + ExceptionUtils.getRootCauseMessage(e));
         }
     }
 
@@ -121,11 +121,11 @@ public class CodegenTableServiceImpl extends ServiceImpl<CodegenTableMapper, Cod
     public void modifyCodegenColumnList(Long id) {
         val codegenTable = this.getById(id);
         if (codegenTable == null) {
-            throw new CodegenFailedException("表不存在: " + id);
+            throw new CodegenException("表不存在: " + id);
         }
         val dataSourceConfig = dataSourceService.getById(codegenTable.getDataSourceId());
         if (dataSourceConfig == null) {
-            throw new CodegenFailedException("数据源不存在: " + codegenTable.getDataSourceId());
+            throw new CodegenException("数据源不存在: " + codegenTable.getDataSourceId());
         }
 
         val codegenTableConfigDto = new CodegenTableConfigDto();

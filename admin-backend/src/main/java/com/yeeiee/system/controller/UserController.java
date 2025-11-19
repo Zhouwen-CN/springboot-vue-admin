@@ -12,9 +12,11 @@ import com.yeeiee.system.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,9 +62,9 @@ public class UserController {
     }
 
     @Operation(summary = "退出登入")
-    @GetMapping("/logout/{id}")
-    public R<Void> logout(@PathVariable("id") @Parameter(description = "用户id") Long id) {
-        userService.logout(id);
+    @GetMapping("/logout")
+    public R<Void> logout() {
+        userService.logout();
         return R.ok();
     }
 
@@ -104,6 +107,13 @@ public class UserController {
     @PatchMapping("/pwd/reset/{id}")
     public R<Void> resetPwdById(@PathVariable("id") @Parameter(description = "用户id") Long id) {
         userService.modifyUserResetPwd(id);
+        return R.ok();
+    }
+
+    @Operation(summary = "刷新token")
+    @GetMapping("/refresh")
+    public R<Void> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, HttpServletResponse response) {
+        userService.refreshToken(token, response);
         return R.ok();
     }
 }

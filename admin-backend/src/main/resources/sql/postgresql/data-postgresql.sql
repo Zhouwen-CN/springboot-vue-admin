@@ -1,5 +1,5 @@
 -- 用户表
-INSERT INTO t_user(id, username, password, token_version) VALUES (1, 'admin', '$2a$10$wTV12Fs5hQfhG9RzZuKd6.c135tv2y8PTJAtKRhlXnU.9xS5Qqcxu', 0);
+INSERT INTO t_user(id, username, password) VALUES (1, 'admin', '$2a$10$wTV12Fs5hQfhG9RzZuKd6.c135tv2y8PTJAtKRhlXnU.9xS5Qqcxu');
 
 -- 用户角色关系表
 INSERT INTO t_user_role(id, user_id, role_id) VALUES (1, 1, 1);

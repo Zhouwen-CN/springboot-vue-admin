@@ -1,14 +1,13 @@
 package com.yeeiee.system.security;
 
-import com.yeeiee.system.domain.dto.JwtClaimsDto;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +17,6 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * <p>
@@ -26,139 +24,117 @@ import java.util.function.Function;
  * </p>
  *
  * @author chen
- * @since 2025-06-04
+ * @since 2025-11-19
  */
 
 @RequiredArgsConstructor
 @Component
-@ConfigurationProperties(prefix = "custom.jwt")
 public class JwtTokenProvider implements InitializingBean {
-    @Setter
-    @Getter
-    private AccessTokenConfig access;
-    @Setter
-    @Getter
-    private RefreshTokenConfig refresh;
+    /**
+     * token密钥
+     */
+    @Value("${custom.jwt.key}")
+    private String key;
+    /**
+     * 访问token过期时间
+     */
+    @Value("${custom.jwt.access-expiration}")
+    private Duration accessTokenExpiration;
+    /**
+     * 刷新token过期时间
+     */
+    @Value("${custom.jwt.refresh-expiration}")
+    private Duration refreshTokenExpiration;
 
-    @Getter
-    @Setter
-    public static class AccessTokenConfig {
-        /**
-         * 访问token密钥
-         */
-        private String key;
-        /**
-         * 访问token过期时间
-         */
-        private Duration expiration;
-    }
-
-    @Getter
-    @Setter
-    public static class RefreshTokenConfig {
-        /**
-         * 刷新token密钥
-         */
-        private String key;
-        /**
-         * 刷新token过期时间
-         */
-        private Duration expiration;
-    }
-
-    private SecretKey accessSecretKey;
-    private SecretKey refreshSecretKey;
+    private SecretKey secretKey;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        accessSecretKey = Keys.hmacShaKeyFor(this.access.key.getBytes(StandardCharsets.UTF_8));
-        refreshSecretKey = Keys.hmacShaKeyFor(this.refresh.key.getBytes(StandardCharsets.UTF_8));
+        secretKey = Keys.hmacShaKeyFor(this.key.getBytes(StandardCharsets.UTF_8));
     }
 
     @SneakyThrows
-    private String generateToken(Long userId, List<String> roles, Long tokenVersion, SecretKey secretKey, Duration expiration) {
+    private String generateToken(Long userId, List<String> roles, SecretKey secretKey, Duration expiration) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration.toMillis());
 
         return Jwts.builder()
                 .subject(String.valueOf(userId))
-                .issuedAt(now)
                 .issuer("sv-admin")
+                .issuedAt(now)
                 .expiration(expiryDate)
                 .claim("roles", roles)
-                .claim("version", tokenVersion)
                 .signWith(secretKey)
                 .compact();
     }
 
-    public String generateAccessToken(Long userId, List<String> roles, Long tokenVersion) {
-        return generateToken(userId, roles, tokenVersion, accessSecretKey, this.access.expiration);
+    public String generateAccessToken(Long userId, List<String> roles) {
+        return generateToken(userId, roles, secretKey, accessTokenExpiration);
     }
 
-    public String generateRefreshToken(Long userId, List<String> roles, Long tokenVersion) {
-        return generateToken(userId, roles, tokenVersion, refreshSecretKey, this.refresh.expiration);
+    public String generateRefreshToken(Long userId, List<String> roles) {
+        return generateToken(userId, roles, secretKey, refreshTokenExpiration);
     }
 
-    private Optional<Jws<Claims>> validateToken(String token, SecretKey secretKey) {
-        try {
-            val claimsJws = Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token);
-            return Optional.of(claimsJws);
-        } catch (JwtException | IllegalArgumentException e) {
-            return Optional.empty();
-        }
-    }
-
-    public Optional<Jws<Claims>> parseAccessToken(String token) {
-        return validateToken(token, accessSecretKey);
-    }
-
-    public Optional<Jws<Claims>> parseRefreshToken(String token) {
-        return validateToken(token, refreshSecretKey);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Function<Jws<Claims>, JwtClaimsDto> getClaimsDtoFunction() {
-        return claimsJws -> {
-            val payload = claimsJws.getPayload();
-            val jwtClaimsDto = new JwtClaimsDto();
-            jwtClaimsDto.setUserId(Long.valueOf(payload.getSubject()));
-            jwtClaimsDto.setVersion(payload.get("version", Long.class));
-            jwtClaimsDto.setRoleNames(payload.get("roles", List.class));
-            return jwtClaimsDto;
-        };
-    }
-
-    private String trimToken(String token) {
+    /**
+     * 删除token前缀，如何存在的话
+     *
+     * @param token token
+     * @return token
+     */
+    private String removePrefixIfExists(String token) {
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return token.substring(7);
         }
         return token;
     }
 
-    public Optional<JwtClaimsDto> getClaimsDtoByAccessToken(String token) {
-        token = trimToken(token);
-        return this.parseAccessToken(token)
-                .map(this.getClaimsDtoFunction());
-    }
+    /**
+     * 解析token并获取claims，任何异常将返回空
+     *
+     * @param token token
+     * @return claims
+     */
+    public Optional<Claims> getClaims(String token) {
+        try {
+            return Optional.of(
+                    Jwts.parser()
+                            .verifyWith(secretKey)
+                            .build()
+                            .parseSignedClaims(this.removePrefixIfExists(token))
+                            .getPayload()
+            );
+        } catch (Exception e) {
+            // do noting
+        }
 
-    public Optional<JwtClaimsDto> getClaimsDtoByRefreshToken(String token) {
-        token = trimToken(token);
-        return this.parseRefreshToken(token)
-                .map(this.getClaimsDtoFunction());
+        return Optional.empty();
     }
 
     /**
-     * 验证token，并且获取id，用于响应式接口
+     * 解析token并获取claims，忽略token过期
      *
-     * @param accessToken 访问token
-     * @return 用户id
+     * @param token token
+     * @return claims
      */
-    public Optional<Long> getOptionalUserId(String accessToken) {
-        return this.getClaimsDtoByAccessToken(accessToken)
-                .map(JwtClaimsDto::getUserId);
+    public Optional<Claims> getClaimsIgnoreExpired(String token) {
+        Claims claims = null;
+        try {
+            claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(this.removePrefixIfExists(token))
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            claims = e.getClaims();
+        } catch (Exception e) {
+            // do noting
+        }
+        return Optional.ofNullable(claims);
+    }
+
+    public List<String> getRoleNames(Claims claims) {
+        return claims.get("roles", List.class);
     }
 }

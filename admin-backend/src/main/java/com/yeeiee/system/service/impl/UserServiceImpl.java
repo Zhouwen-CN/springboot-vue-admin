@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.enumeration.LoginOperationEnum;
 import com.yeeiee.enumeration.OperationStatusEnum;
 import com.yeeiee.exception.DmlOperationException;
+import com.yeeiee.exception.RefreshTokenException;
 import com.yeeiee.system.domain.entity.LoginLog;
 import com.yeeiee.system.domain.entity.User;
 import com.yeeiee.system.domain.entity.UserRole;
 import com.yeeiee.system.domain.form.ChangePwdForm;
 import com.yeeiee.system.domain.form.UserForm;
 import com.yeeiee.system.mapper.UserMapper;
+import com.yeeiee.system.security.JwtTokenProvider;
 import com.yeeiee.system.service.LoginLogService;
 import com.yeeiee.system.service.UserRoleService;
 import com.yeeiee.system.service.UserService;
@@ -18,6 +20,8 @@ import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.RequestObjectUtil;
+import com.yeeiee.utils.SecurityUserUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * <p>
@@ -41,17 +46,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserRoleService userRoleService;
     private final LoginLogService loginLogService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
     @Value("${custom.user.default-password}")
     private String defaultPassword;
 
     @Override
-    public void logout(Long id) {
-        val user = this.getById(id);
+    public void logout() {
+        val user = SecurityUserUtil.getSecurityUser();
 
-        // 更新token version
+        // 置空 refreshToken
         this.lambdaUpdate()
-                .setIncrBy(User::getTokenVersion, 1)
-                .eq(User::getId, id)
+                .set(User::getRefreshToken, null)
+                .eq(User::getId, user.getId())
                 .update();
 
         // 退出登入日志
@@ -105,7 +111,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         this.lambdaUpdate()
                 .eq(User::getId, userId)
                 .set(User::getUsername, username)
-                .setIncrBy(User::getTokenVersion, 1)
+                .set(User::getRefreshToken, null)
                 .update();
 
         // 获取 user role 关系
@@ -158,7 +164,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         this.removeByIds(ids);
-
         userRoleService.remove(Wrappers.<UserRole>lambdaQuery()
                 .in(UserRole::getUserId, ids)
         );
@@ -166,21 +171,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void modifyUserChangePwd(ChangePwdForm changePwdForm) {
-        val id = changePwdForm.getId();
-        val oldPwd = changePwdForm.getOldPwd();
-
-        val user = this.lambdaQuery()
-                .eq(User::getId, id)
-                .one();
-
-        if (!bCryptPasswordEncoder.matches(oldPwd, user.getPassword())) {
+        val user = SecurityUserUtil.getSecurityUser();
+        if (!bCryptPasswordEncoder.matches(changePwdForm.getOldPwd(), user.getPassword())) {
             throw new DmlOperationException("旧密码错误");
         }
 
         this.lambdaUpdate()
-                .eq(User::getId, id)
+                .eq(User::getId, user.getId())
                 .set(User::getPassword, bCryptPasswordEncoder.encode(changePwdForm.getNewPwd()))
-                .setIncrBy(User::getTokenVersion, 1)
+                .set(User::getRefreshToken, null)
                 .update();
     }
 
@@ -189,7 +188,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         this.lambdaUpdate()
                 .eq(User::getId, id)
                 .set(User::getPassword, bCryptPasswordEncoder.encode(defaultPassword))
-                .setIncrBy(User::getTokenVersion, 1)
+                .set(User::getRefreshToken, null)
                 .update();
     }
 
@@ -208,10 +207,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void modifyTokenVersionByUser(User user) {
+    public void modifyRefreshTokenByUserId(Long userId, String refreshToken) {
         this.lambdaUpdate()
-                .eq(User::getId, user.getId())
-                .set(User::getTokenVersion, user.getTokenVersion() + 1)
+                .eq(User::getId, userId)
+                .set(User::getRefreshToken, refreshToken)
                 .update();
+    }
+
+    @Override
+    public void refreshToken(String token, HttpServletResponse response) {
+        val accessTokenClaims = jwtTokenProvider.getClaimsIgnoreExpired(token)
+                .orElseThrow(() -> new RefreshTokenException("token校验失败"));
+
+        // 如果当前accessToken未过期，直接返回
+        val expiration = accessTokenClaims.getExpiration();
+        if (expiration.after(new Date())) {
+            return;
+        }
+
+        val userId = Long.valueOf(accessTokenClaims.getSubject());
+        val user = this.lambdaQuery()
+                .eq(User::getId, userId)
+                .one();
+
+        val refreshToken = user.getRefreshToken();
+        val claimsOptional = jwtTokenProvider.getClaims(refreshToken);
+        if (claimsOptional.isEmpty()) {
+            throw new RefreshTokenException("token已过期");
+        }
+
+        val refreshTokenClaims = claimsOptional.get();
+        val roleNames = jwtTokenProvider.getRoleNames(refreshTokenClaims);
+        val accessToken = jwtTokenProvider.generateAccessToken(userId, roleNames);
+        response.addHeader(HttpHeaders.AUTHORIZATION, accessToken);
     }
 }
