@@ -18,6 +18,7 @@ import com.yeeiee.utils.BeanUtil;
 import com.yeeiee.utils.CollectionUtil;
 import com.yeeiee.utils.IPUtil;
 import com.yeeiee.utils.RequestObjectUtil;
+import com.yeeiee.utils.SecurityUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
@@ -166,19 +167,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void modifyUserChangePwd(ChangePwdForm changePwdForm) {
-        val id = changePwdForm.getId();
-        val oldPwd = changePwdForm.getOldPwd();
-
-        val user = this.lambdaQuery()
-                .eq(User::getId, id)
-                .one();
-
-        if (!bCryptPasswordEncoder.matches(oldPwd, user.getPassword())) {
+        val user = SecurityUserUtil.getSecurityUser();
+        if (!bCryptPasswordEncoder.matches(changePwdForm.getOldPwd(), user.getPassword())) {
             throw new DmlOperationException("旧密码错误");
         }
 
         this.lambdaUpdate()
-                .eq(User::getId, id)
+                .eq(User::getId, user.getId())
                 .set(User::getPassword, bCryptPasswordEncoder.encode(changePwdForm.getNewPwd()))
                 .setIncrBy(User::getTokenVersion, 1)
                 .update();

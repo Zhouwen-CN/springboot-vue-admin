@@ -29,10 +29,6 @@ import org.hibernate.validator.constraints.Length;
 @Schema(name = "ChangePwdForm", description = "修改密码表单")
 public class ChangePwdForm {
     @NotNull
-    @Schema(description = "用户id")
-    private Long id;
-
-    @NotNull
     @Length(min = 5, max = 15)
     @Schema(description = "旧密码")
     private String oldPwd;

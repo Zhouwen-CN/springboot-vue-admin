@@ -56,7 +56,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         val userLoginVo = new UserLoginVo();
         userLoginVo.setId(user.getId());
         userLoginVo.setUsername(user.getUsername());
-        userLoginVo.setRoles(roles);
 
         // 生成token
         val accessToken = jwtTokenProvider.generateAccessToken(user.getId(), roles, user.getTokenVersion());

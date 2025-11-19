@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 /**
  * <p>
  * 用户登入视图
@@ -28,6 +26,4 @@ public class UserLoginVo {
     private String accessToken;
     @Schema(description = "刷新 token")
     private String refreshToken;
-    @Schema(description = "用户角色列表")
-    private List<String> roles;
 }

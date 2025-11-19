@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import type { BaseVo } from '@/utils/requestTypes'
+import type {BaseVo} from '@/utils/requestTypes'
 import usePagination from '@/hooks/usePagination'
 
 export interface LoginForm {
@@ -12,7 +12,6 @@ export interface UserLoginVo {
   username: string
   accessToken: string
   refreshToken: string
-  roles: Array<string>
 }
 
 /**
@@ -86,7 +85,6 @@ export function reqResetPassword(id: number) {
 }
 
 export interface ChangePwdForm {
-  id: number
   oldPwd: string
   newPwd: string
   confirmPwd: string
