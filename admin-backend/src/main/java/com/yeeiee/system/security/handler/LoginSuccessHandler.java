@@ -74,6 +74,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         loginLogService.save(loginLog);
 
         // 写出响应
-        ResponseObjectUtil.writeJson(response, R.ok(userLoginVo));
+        ResponseObjectUtil.writeResponse(response, R.ok(userLoginVo));
     }
 }

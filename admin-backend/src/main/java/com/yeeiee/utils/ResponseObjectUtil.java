@@ -22,32 +22,17 @@ import java.nio.charset.StandardCharsets;
 public final class ResponseObjectUtil {
 
     /**
-     * sse响应
+     * 写出响应
      *
      * @param response 响应对象
-     * @param result   响应结果
-     * @param <T>      响应结果类型
-     * @throws IOException e
+     * @param result   响应体
+     * @param <T>      实体类型
+     * @throws IOException io 异常
      */
-    public static <T> void writeStream(HttpServletResponse response, R<T> result) throws IOException {
-        response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        val writer = response.getWriter();
-        writer.write("event: error\n");
-        writer.write(String.format("data: %s\n\n", JsonUtil.toJsonString(result)));
-    }
-
-    /**
-     * json响应
-     *
-     * @param response 响应对象
-     * @param result   响应结果
-     * @param <T>      响应结果类型
-     * @throws IOException e
-     */
-    public static <T> void writeJson(HttpServletResponse response, R<T> result) throws IOException {
+    public static <T> void writeResponse(HttpServletResponse response, R<T> result) throws IOException {
+        val resultAsJson = JsonUtil.toJsonString(result);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        val writer = response.getWriter();
-        writer.write(JsonUtil.toJsonString(result));
+        response.getWriter().println(resultAsJson);
     }
 
     /**

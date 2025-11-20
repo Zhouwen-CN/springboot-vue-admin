@@ -1,8 +1,6 @@
 package com.yeeiee.ai.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeeiee.ai.domain.entity.ChatHistory;
 import com.yeeiee.ai.domain.form.ChatConversationRenameForm;
 import com.yeeiee.ai.domain.vo.ChatHistoryVo;
@@ -20,7 +18,6 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,16 +54,14 @@ public class ChatController {
     private final ChatClient chatClient;
     private final ChatHistoryService chatHistoryService;
     private final ChatMemoryRepository chatMemoryRepository;
-    private final ObjectMapper objectMapper;
-    // 会话id，也用来标记是否sse请求
-    public static final String CHAT_HEADER = "chatId";
 
     @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(
-            @RequestHeader(CHAT_HEADER) String chatId,
+            @RequestHeader("chatId") String chatId,
             @RequestBody @NotBlank String prompt,
             HttpServletRequest request
-    ) throws JsonProcessingException {
+    ) {
+
         // 保存 security 上下文到请求属性，不然上下文丢失会报错，因为会多次调用 security 过滤器链
         request.setAttribute(
                 RequestAttributeSecurityContextRepository.DEFAULT_REQUEST_ATTR_NAME,
@@ -83,7 +78,7 @@ public class ChatController {
             return Flux.just(
                     ServerSentEvent.<String>builder()
                             .event("error")
-                            .data(objectMapper.writeValueAsString(R.error(HttpStatus.BAD_REQUEST, "聊天会话不存在: " + chatId)))
+                            .data("聊天会话不存在: " + chatId)
                             .build()
             );
         }
@@ -92,10 +87,15 @@ public class ChatController {
                 .stream()
                 .chatResponse()
                 .filter(chatResponse -> Objects.nonNull(chatResponse.getResult().getOutput().getText()))
-                .map(chatResponse -> ServerSentEvent.<String>builder()
-                        .event("message")
-                        .data(chatResponse.getResult().getOutput().getText())
-                        .build()
+                .map(chatResponse -> {
+                            val text = chatResponse.getResult().getOutput().getText()
+                                    .transform(s -> s.replace("\n", "\\x0a")) // 和前端约定好的换行符转义
+                                    .transform(s -> s.replace(" ", "\\x20")); // 和前端约定好的空格符转义
+                            return ServerSentEvent.<String>builder()
+                                    .event("message")
+                                    .data(text)
+                                    .build();
+                        }
                 );
     }
 

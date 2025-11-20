@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import useChatSSE from '@/hooks/useChatSSE'
 
-interface ChatHistoryVo {
+export interface ChatHistoryVo {
   conversationId: string
   title: string
 }
@@ -47,13 +47,12 @@ export function reqDeleteChatConversationById(conversationId: string) {
 
 // 聊天请求
 export function useChat() {
-  const {loading, run, onMessage, cancel} = useChatSSE()
+  const { loading, run, onMessage, onError, cancel } = useChatSSE()
   function innerRun(chatId: string, prompt: string) {
     return run('/ai/chat', {
       method: 'post',
       body: prompt,
       headers: {
-        'Cache-Control': 'no-cache',
         'Content-Type': 'text/plain',
         chatId: chatId
       }
@@ -64,6 +63,7 @@ export function useChat() {
     loading,
     run: innerRun,
     onMessage,
+    onError,
     cancel
   }
 }

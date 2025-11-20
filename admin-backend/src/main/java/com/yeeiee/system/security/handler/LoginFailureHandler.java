@@ -55,6 +55,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         loginLogService.save(loginLog);
 
         // 写出响应
-        ResponseObjectUtil.writeJson(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
+        ResponseObjectUtil.writeResponse(response, R.error(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 }

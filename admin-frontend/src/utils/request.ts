@@ -177,7 +177,7 @@ class Request {
   }
 }
 
-export const baseConfig = {
+const baseConfig = {
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   timeout: import.meta.env.VITE_APP_TIMEOUT,
   headers: {
