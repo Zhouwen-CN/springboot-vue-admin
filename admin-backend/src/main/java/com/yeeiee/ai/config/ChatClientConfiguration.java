@@ -4,6 +4,7 @@ import io.micrometer.observation.ObservationRegistry;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.observation.DefaultAdvisorObservationConvention;
 import org.springframework.ai.chat.client.observation.DefaultChatClientObservationConvention;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
@@ -36,7 +37,8 @@ public class ChatClientConfiguration {
         return ChatClient.builder(
                         openAiChatModel,
                         observationRegistry,
-                        new DefaultChatClientObservationConvention()
+                        new DefaultChatClientObservationConvention(),
+                        new DefaultAdvisorObservationConvention()
                 )
                 // .defaultSystem()
                 .defaultAdvisors(

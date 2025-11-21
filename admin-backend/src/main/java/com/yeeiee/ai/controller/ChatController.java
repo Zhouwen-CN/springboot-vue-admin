@@ -54,6 +54,10 @@ public class ChatController {
     private final ChatClient chatClient;
     private final ChatHistoryService chatHistoryService;
     private final ChatMemoryRepository chatMemoryRepository;
+    // 和前端约定好的换行符转义
+    private static final String LINE_ESCAPE = "\\x0a";
+    // 和前端约定好的空格符转义
+    private static final String SPACE_ESCAPE = "\\x20";
 
     @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(
@@ -88,9 +92,9 @@ public class ChatController {
                 .chatResponse()
                 .filter(chatResponse -> Objects.nonNull(chatResponse.getResult().getOutput().getText()))
                 .map(chatResponse -> {
-                            val text = chatResponse.getResult().getOutput().getText()
-                                    .transform(s -> s.replace("\n", "\\x0a")) // 和前端约定好的换行符转义
-                                    .transform(s -> s.replace(" ", "\\x20")); // 和前端约定好的空格符转义
+                    val text = chatResponse.getResult().getOutput().getText()
+                            .transform(s -> s.replace("\n", LINE_ESCAPE))
+                            .transform(s -> s.replace(" ", SPACE_ESCAPE));
                             return ServerSentEvent.<String>builder()
                                     .event("message")
                                     .data(text)
