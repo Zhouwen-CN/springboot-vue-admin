@@ -1,5 +1,7 @@
 package com.yeeiee.system.controller;
 
+import com.yeeiee.common.utils.BeanUtil;
+import com.yeeiee.common.utils.SecurityUserUtil;
 import com.yeeiee.system.domain.entity.Menu;
 import com.yeeiee.system.domain.entity.RoleMenu;
 import com.yeeiee.system.domain.form.MenuForm;
@@ -8,8 +10,6 @@ import com.yeeiee.system.domain.vo.MenuVo;
 import com.yeeiee.system.domain.vo.R;
 import com.yeeiee.system.service.MenuService;
 import com.yeeiee.system.service.RoleMenuService;
-import com.yeeiee.utils.BeanUtil;
-import com.yeeiee.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

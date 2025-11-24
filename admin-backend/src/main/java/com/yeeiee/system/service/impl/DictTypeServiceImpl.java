@@ -2,14 +2,14 @@ package com.yeeiee.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yeeiee.cache.DictCacheManager;
-import com.yeeiee.exception.DmlOperationException;
+import com.yeeiee.common.exception.DmlOperationException;
+import com.yeeiee.common.utils.BeanUtil;
 import com.yeeiee.system.domain.entity.DictData;
 import com.yeeiee.system.domain.entity.DictType;
 import com.yeeiee.system.domain.form.DictTypeForm;
 import com.yeeiee.system.mapper.DictTypeMapper;
 import com.yeeiee.system.service.DictDataService;
 import com.yeeiee.system.service.DictTypeService;
-import com.yeeiee.utils.BeanUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;

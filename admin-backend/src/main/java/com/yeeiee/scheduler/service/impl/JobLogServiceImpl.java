@@ -3,7 +3,7 @@ package com.yeeiee.scheduler.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yeeiee.enumeration.JobStatusEnum;
+import com.yeeiee.common.enumeration.JobStatusEnum;
 import com.yeeiee.scheduler.domain.entity.JobLog;
 import com.yeeiee.scheduler.domain.vo.JobLogVo;
 import com.yeeiee.scheduler.mapper.JobLogMapper;

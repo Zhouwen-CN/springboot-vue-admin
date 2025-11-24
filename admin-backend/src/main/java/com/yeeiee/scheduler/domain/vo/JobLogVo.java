@@ -1,6 +1,6 @@
 package com.yeeiee.scheduler.domain.vo;
 
-import com.yeeiee.enumeration.JobStatusEnum;
+import com.yeeiee.common.enumeration.JobStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

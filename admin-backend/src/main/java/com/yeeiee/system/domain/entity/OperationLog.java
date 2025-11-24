@@ -1,12 +1,8 @@
 package com.yeeiee.system.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.KeySequence;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.yeeiee.enumeration.OperationStatusEnum;
-import com.yeeiee.enumeration.RequestMethodEnum;
+import com.baomidou.mybatisplus.annotation.*;
+import com.yeeiee.common.enumeration.OperationStatusEnum;
+import com.yeeiee.common.enumeration.RequestMethodEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package com.yeeiee.system.domain.vo;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yeeiee.utils.BeanUtil;
+import com.yeeiee.common.utils.BeanUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

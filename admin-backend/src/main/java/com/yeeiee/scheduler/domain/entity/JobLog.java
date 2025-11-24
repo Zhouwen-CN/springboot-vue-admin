@@ -1,11 +1,7 @@
 package com.yeeiee.scheduler.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.KeySequence;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.yeeiee.enumeration.JobStatusEnum;
+import com.baomidou.mybatisplus.annotation.*;
+import com.yeeiee.common.enumeration.JobStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

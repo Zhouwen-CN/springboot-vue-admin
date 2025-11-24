@@ -1,6 +1,6 @@
 package com.yeeiee.scheduler.handler;
 
-import com.yeeiee.exception.JobHandlerParamException;
+import com.yeeiee.common.exception.JobHandlerParamException;
 import com.yeeiee.scheduler.SchedulerManager;
 import com.yeeiee.scheduler.service.JobLogService;
 import lombok.RequiredArgsConstructor;

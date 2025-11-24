@@ -1,7 +1,7 @@
 package com.yeeiee.scheduler.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yeeiee.exception.JobHandlerParamException;
+import com.yeeiee.common.exception.JobHandlerParamException;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Validator;

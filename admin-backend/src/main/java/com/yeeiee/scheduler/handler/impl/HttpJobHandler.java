@@ -2,8 +2,8 @@ package com.yeeiee.scheduler.handler.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.yeeiee.exception.JobHandlerException;
-import com.yeeiee.exception.JobHandlerParamException;
+import com.yeeiee.common.exception.JobHandlerException;
+import com.yeeiee.common.exception.JobHandlerParamException;
 import com.yeeiee.scheduler.handler.AbstractJobHandler;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

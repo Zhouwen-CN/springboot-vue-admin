@@ -1,6 +1,6 @@
 package com.yeeiee.scheduler.config;
 
-import com.yeeiee.exception.HttpStatusException;
+import com.yeeiee.common.exception.HttpStatusException;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
