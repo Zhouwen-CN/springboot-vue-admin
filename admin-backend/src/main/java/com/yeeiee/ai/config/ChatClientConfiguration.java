@@ -27,7 +27,7 @@ public class ChatClientConfiguration {
     @Bean
     public ChatMemory chatMemory(ChatMemoryRepository chatMemoryRepository) {
         return MessageWindowChatMemory.builder()
-                .maxMessages(100)
+                .maxMessages(20) // 默认就是20
                 .chatMemoryRepository(chatMemoryRepository)
                 .build();
     }

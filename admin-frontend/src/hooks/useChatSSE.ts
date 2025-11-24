@@ -8,6 +8,11 @@ import router from '@/router'
 const userStore = useUserStore()
 type SSEConfig = Pick<RequestInit, 'method' | 'headers' | 'body'>
 
+export interface ChatVo {
+  reasoningContent: string
+  content: string
+}
+
 /**
  * chat sse hook
  * @param lineEscape // 和后端约定好的换行符转义
@@ -18,11 +23,11 @@ function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20')
   let baseUrl = import.meta.env.VITE_APP_BASE_URL
   baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
   const loading = ref(false)
-  const controller = new AbortController()
+  let controller = new AbortController()
   const decoder = new TextDecoder()
-  let onMessageCallback: (content: string) => void
+  let onMessageCallback: (data: ChatVo) => void
 
-  function onMessage(func: (content: string) => void) {
+  function onMessage(func: (data: ChatVo) => void) {
     onMessageCallback = func
   }
 
@@ -73,6 +78,7 @@ function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20')
     } catch (e) {
       // do noting
     } finally {
+      controller = new AbortController()
       loading.value = false
     }
 
@@ -130,7 +136,8 @@ function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20')
           if (line.match(/^(\r\n|\r|\n)$/) && (type || data)) {
             const content = data.join('\n')
             if (type === 'message') {
-              onMessageCallback?.(content.replaceAll(lineEscape, '\n').replaceAll(spaceEscape, ' '))
+              const data = content.replaceAll(lineEscape, '\\n').replaceAll(spaceEscape, ' ')
+              onMessageCallback?.(JSON.parse(data) as ChatVo)
             }
             if (type === 'error') {
               throw new Error(content)
@@ -167,8 +174,8 @@ function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20')
   return {
     loading,
     run,
-    onError,
     onMessage,
+    onError,
     cancel
   }
 }

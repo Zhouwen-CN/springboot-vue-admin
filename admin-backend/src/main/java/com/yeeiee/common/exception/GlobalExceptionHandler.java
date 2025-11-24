@@ -8,11 +8,14 @@ import com.yeeiee.common.utils.SecurityUserUtil;
 import com.yeeiee.system.domain.entity.ErrorLog;
 import com.yeeiee.system.domain.vo.R;
 import com.yeeiee.system.service.ErrorLogService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.TransactionTimedOutException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -135,6 +140,16 @@ public class GlobalExceptionHandler {
         return R.error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
+    /**
+     * ai 异常
+     */
+    @ExceptionHandler(NonTransientAiException.class)
+    public void nonTransientAiExceptionHandler(NonTransientAiException e, HttpServletResponse response) throws IOException {
+        response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
+        val writer = response.getWriter();
+        writer.write("event: error\n");
+        writer.write(String.format("data: %s\n\n", e.getMessage()));
+    }
 
     /**
      * 默认异常

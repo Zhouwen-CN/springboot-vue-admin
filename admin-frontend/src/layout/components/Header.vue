@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import useUserStore from '@/stores/user'
-import { ArrowDown, ArrowRight, FullScreen } from '@element-plus/icons-vue'
+import { ArrowRight, FullScreen } from '@element-plus/icons-vue'
 import useSettingStore from '@/stores/setting'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { type ChangePwdForm, reqChangePassword } from '@/api/auth/user'
@@ -115,46 +115,43 @@ function clean() {
 
 <template>
   <div class="container">
-    <div class="left">
-      <!-- 展开收起按钮 -->
-      <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
-        <component :is="settingStore.collapse ? 'Expand' : 'Fold'"> </component>
-      </el-icon>
-      <!-- 左侧面包屑 -->
-      <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
-          <el-icon>
-            <component :is="item.meta.icon"></component>
-          </el-icon>
-          <span style="margin-left: 5px">{{ item.meta.title }}</span>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
-    <!-- 右侧头像等图标 -->
-    <div>
-      <el-space size="large">
-        <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
-        <el-avatar :src="settingStore.avatarUrl" shape="square" size="default"></el-avatar>
+    <!-- 展开收起按钮 -->
+    <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
+      <component :is="settingStore.collapse ? 'Expand' : 'Fold'"> </component>
+    </el-icon>
+    <!-- 左侧面包屑 -->
+    <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb">
+      <el-breadcrumb-item v-for="(item, index) in routeInfo" :key="index" :to="item.path">
+        <el-icon>
+          <component :is="item.meta.icon"></component>
+        </el-icon>
+        <span style="margin-left: 5px">{{ item.meta.title }}</span>
+      </el-breadcrumb-item>
+    </el-breadcrumb>
 
-        <el-dropdown>
-          <span>
-            {{ userStore.userInfo.username }}
-            <el-icon>
-              <ArrowDown />
-            </el-icon>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="changePassword">修改密码 </el-dropdown-item>
-              <el-dropdown-item @click="logout">退出登入 </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-space>
-    </div>
+    <!-- 右侧头像等图标 -->
+    <el-space>
+      <el-button :icon="FullScreen" circle size="default" @click="toggleFullScreen"></el-button>
+
+      <el-dropdown>
+        <el-avatar :src="settingStore.avatarUrl" shape="square"> </el-avatar>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="changePassword">修改密码 </el-dropdown-item>
+            <el-dropdown-item @click="logout">退出登入 </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </el-space>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="dialogVisible" title="修改密码" width="40%" @close="clean">
+    <el-dialog
+      v-model="dialogVisible"
+      title="修改密码"
+      width="40%"
+      body-class="dialog-body"
+      @close="clean"
+    >
       <el-form
         ref="formRef"
         :model="changePwdForm"
@@ -205,9 +202,12 @@ function clean() {
   padding: 0 20px;
   border-bottom: 0.8px solid var(--el-border-color);
 
-  .left {
-    display: flex;
-    align-items: center;
+  .breadcrumb {
+    flex: 1;
+  }
+
+  .dialog-body {
+    width: 1000px;
   }
 }
 </style>

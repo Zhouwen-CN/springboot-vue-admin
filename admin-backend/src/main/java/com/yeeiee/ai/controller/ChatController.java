@@ -14,20 +14,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -71,25 +82,24 @@ public class ChatController {
                         .eq(ChatHistory::getConversationId, chatId)
         );
         if (!exists) {
-            return Flux.just(
-                    ServerSentEvent.<String>builder()
-                            .event("error")
-                            .data("聊天会话不存在: " + chatId)
-                            .build()
-            );
+            throw new NonTransientAiException("聊天会话不存在: " + chatId);
         }
         return chatClient.prompt(prompt)
                 .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 .stream()
                 .chatResponse()
-                .filter(chatResponse -> Objects.nonNull(chatResponse.getResult().getOutput().getText()))
                 .map(chatResponse -> {
-                    val text = chatResponse.getResult().getOutput().getText()
-                            .transform(s -> s.replace("\n", LINE_ESCAPE))
-                            .transform(s -> s.replace(" ", SPACE_ESCAPE));
+                            val output = chatResponse.getResult().getOutput();
+                            var reasoningContent = (String) output.getMetadata().get("reasoningContent");
+                            if (!StringUtils.EMPTY.equals(reasoningContent)) {
+                                reasoningContent = this.transform(reasoningContent);
+                            }
+                            val content = Optional.ofNullable(output.getText())
+                                    .map(this::transform)
+                                    .orElse(StringUtils.EMPTY);
                             return ServerSentEvent.<String>builder()
                                     .event("message")
-                                    .data(text)
+                                    .data(this.map2json(Map.of("reasoningContent", reasoningContent, "content", content)))
                                     .build();
                         }
                 );
@@ -152,5 +162,34 @@ public class ChatController {
         );
 
         return R.ok();
+    }
+
+    private String transform(String str) {
+        return str.transform(s -> s.replace("\n", LINE_ESCAPE))
+                .transform(s -> s.replace(" ", SPACE_ESCAPE))
+                .transform(s -> s.replace("\"", "\\\""));
+    }
+
+    private String map2json(Map<String, String> map) {
+        val sb = new StringBuilder();
+        sb.append("{");
+        val entries = map.entrySet();
+        val size = entries.size();
+        var i = 0;
+        for (Map.Entry<String, String> entry : entries) {
+            val key = entry.getKey();
+            val value = entry.getValue();
+            sb.append("\"").append(key).append("\"")
+                    .append(":")
+                    .append("\"").append(value).append("\"");
+
+            if (i < size - 1) {
+                sb.append(",");
+            }
+            i++;
+        }
+
+        sb.append("}");
+        return sb.toString();
     }
 }

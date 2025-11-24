@@ -57,9 +57,9 @@ const onCancel = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <el-row class="container">
-    <el-col :span="13"></el-col>
-    <el-col :span="8" class="content">
+  <el-row class="container" justify="center" align="middle">
+    <el-col :lg="13" :sm="4" :xs="2"></el-col>
+    <el-col :lg="8" :sm="16" :xs="20">
       <el-form
         ref="ruleFormRef"
         :model="loginForm"
@@ -92,7 +92,7 @@ const onCancel = (formEl: FormInstance | undefined) => {
         </el-form-item>
       </el-form>
     </el-col>
-    <el-col :span="3"></el-col>
+    <el-col :lg="3" :sm="4" :xs="2"></el-col>
   </el-row>
 </template>
 
@@ -105,26 +105,19 @@ const onCancel = (formEl: FormInstance | undefined) => {
   background-repeat: no-repeat;
   background-position: center;
 
-  .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .form {
+    padding: 50px 50px 30px 50px;
+    border-radius: 5%;
+    background-size: cover;
+    background-image: url('@/assets/images/login_form.png');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 
-    .form {
-      width: 100%;
-      padding: 50px 50px 20px 50px;
-      border-radius: 5%;
-      background-size: cover;
-      background-image: url('@/assets/images/login_form.png');
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-
-    h1 {
-      font-size: 36px;
-      color: white;
-      margin-bottom: 20px;
-    }
+  h1 {
+    font-size: 36px;
+    color: white;
+    margin-bottom: 30px;
   }
 }
 </style>

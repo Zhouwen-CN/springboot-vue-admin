@@ -6,11 +6,20 @@ import {
   useChat
 } from '@/api/ai/chat'
 import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import { BubbleList, Prompts, Sender, Welcome, XMarkdown } from 'vue-element-plus-x'
+import type { ThinkingStatus } from 'vue-element-plus-x/types/Thinking'
+import { BubbleList, Prompts, Sender, Welcome, XMarkdown, Thinking } from 'vue-element-plus-x'
 import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
 import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 
-const { loading, run, onMessage, cancel } = useChat()
+type MessageItem = BubbleListItemProps & {
+  avatar: string
+  role: 'ai' | 'user'
+  thinkingStatus?: ThinkingStatus
+  thinkCollapse?: boolean
+  reasoningContent?: string
+}
+
+const { loading, run, onMessage, onError, cancel } = useChat()
 // 表单
 const chatForm = reactive({
   conversationId: '',
@@ -25,7 +34,7 @@ const isNewConversation = ref(false)
 
 // 会话列表
 const bubbleListRef = ref<BubbleListInstance>()
-const bubbleListItems = ref<BubbleListItemProps[]>([])
+const bubbleListItems = ref<MessageItem[]>([])
 // 监听会话id
 watch(chatId, (value) => {
   if (value) {
@@ -44,7 +53,7 @@ watch(chatId, (value) => {
 })
 // 消息转换
 function convertBubbleListItem(messages: ChatMessageDto[]) {
-  const result: BubbleListItemProps[] = []
+  const result: MessageItem[] = []
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i]
 
@@ -112,18 +121,39 @@ async function onSubmit() {
   } catch (e) {
     console.error('Fetch error:', e)
   } finally {
-    bubbleListItems.value[bubbleListItems.value.length - 1]!.loading = false
+    // 完成清除状态
+    const lastItem = bubbleListItems.value[bubbleListItems.value.length - 1]
+    if (lastItem) {
+      lastItem.loading = false
+      lastItem.thinkingStatus = 'end'
+    }
     isNewConversation.value = false
   }
 }
 
-onMessage((content) => {
+onMessage((data) => {
   const lastItem = bubbleListItems.value[bubbleListItems.value.length - 1]!
-  // 当前为加载状态并且遇到一个非空字符则取消加载状态
-  if (lastItem.loading && content) {
+  // 当前为加载状态 && 遇到第一个非空内容，取消加载状态
+  if (lastItem.loading && data.content) {
     lastItem.loading = false
   }
-  lastItem.content += content
+
+  // 当前思考为折叠状态 && 第一个非空思考内容，开启思考状态，并且打开折叠
+  if (!lastItem.thinkCollapse && data.reasoningContent) {
+    lastItem.thinkingStatus = 'thinking'
+    lastItem.thinkCollapse = true
+  }
+
+  lastItem.reasoningContent += data.reasoningContent
+  lastItem.content += data.content
+})
+
+onError((message) => {
+  const lastItem = bubbleListItems.value[bubbleListItems.value.length - 1]
+  if (lastItem) {
+    lastItem.thinkingStatus = 'error'
+  }
+  ElMessage.error(message)
 })
 
 /**
@@ -132,7 +162,7 @@ onMessage((content) => {
  * @param isHistory 是否是历史消息
  * @param message 消息
  */
-function createMessage(isUser: boolean, isHistory: boolean, message = ''): BubbleListItemProps {
+function createMessage(isUser: boolean, isHistory: boolean, message = ''): MessageItem {
   return {
     placement: isUser ? 'end' : 'start',
     avatar: isUser
@@ -147,7 +177,11 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
     content: message,
     isMarkdown: !isUser,
     typing: !isUser && !isHistory,
-    isFog: !isUser
+    isFog: !isUser,
+    thinkingStatus: 'start',
+    thinkCollapse: false,
+    reasoningContent: '',
+    role: isUser ? 'user' : 'ai'
   }
 }
 </script>
@@ -157,17 +191,27 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
       <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%">
+        <template #header="{ item }">
+          <Thinking
+            v-if="item.reasoningContent"
+            v-model="item.thinkCollapse"
+            :content="item.reasoningContent"
+            :status="item.thinkingStatus"
+            class="thinking-chain-warp"
+          />
+        </template>
+
         <template #content="{ item }">
           <!-- chat 内容走 markdown -->
           <XMarkdown
-            v-if="item.isMarkdown"
+            v-if="item.role === 'ai'"
             :markdown="item.content!"
             :themes="{ light: 'github-light', dark: 'github-dark' }"
             class="markdown-body"
             default-theme-mode="dark"
           />
           <!-- user 内容 纯文本 -->
-          <div v-if="!item.isMarkdown" class="user-content">
+          <div v-if="item.role === 'user'" class="user-content">
             {{ item.content }}
           </div>
         </template>
@@ -252,6 +296,10 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Bubbl
 
     .welcome {
       margin: 0 20px;
+    }
+
+    .thinking-chain-warp {
+      margin-bottom: 12px;
     }
 
     .markdown-body {
