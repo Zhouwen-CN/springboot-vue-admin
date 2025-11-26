@@ -11,6 +11,8 @@ import {
 import { ref } from 'vue'
 import { CircleCheck, Delete, Edit, Plus, Search } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 // 分页
 const {
@@ -176,38 +178,39 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="pageData"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column label="url" prop="url"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="90px">
-          <template #default="{ row }: { row: DataSourceVo }">
-            <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateDataSource(row)"></el-button>
-              <el-button
-                :icon="CircleCheck"
-                type="warning"
-                @click="checkConnection(row.id)"
-              ></el-button>
-              <el-popconfirm title="是否删除？" @confirm="deleteDataSource(row.id)">
-                <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :border="true"
+          :data="pageData"
+          show-overflow-tooltip
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="45px" />
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="名称" prop="name"></el-table-column>
+          <el-table-column label="url" prop="url"></el-table-column>
+          <el-table-column label="用户名" prop="username"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作" min-width="90px">
+            <template #default="{ row }: { row: DataSourceVo }">
+              <el-button-group>
+                <el-button :icon="Edit" type="primary" @click="updateDataSource(row)"></el-button>
+                <el-button
+                  :icon="CircleCheck"
+                  type="warning"
+                  @click="checkConnection(row.id)"
+                ></el-button>
+                <el-popconfirm title="是否删除？" @confirm="deleteDataSource(row.id)">
+                  <template #reference>
+                    <el-button :icon="Delete" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
@@ -224,7 +227,13 @@ onMounted(() => {
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog
+      v-model="toggleDialog.show"
+      :title="toggleDialog.title"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
+      @close="clean"
+    >
       <template #footer>
         <el-form
           ref="ruleFormRef"

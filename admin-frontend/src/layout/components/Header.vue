@@ -7,12 +7,14 @@ import { type ChangePwdForm, reqChangePassword } from '@/api/auth/user'
 import { useRouter } from 'vue-router'
 import { deleteAsyncRoutes } from '@/router/asyncRoutes'
 import useTagViewStore from '@/stores/tagView'
+import useAppStore from '@/stores/app'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 const tagViewStore = useTagViewStore()
 const settingStore = useSettingStore()
+const appStore = useAppStore()
 
 // 对话款隐藏/可见
 const dialogVisible = ref(false)
@@ -148,7 +150,8 @@ function clean() {
     <el-dialog
       v-model="dialogVisible"
       title="修改密码"
-      width="40%"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
       body-class="dialog-body"
       @close="clean"
     >

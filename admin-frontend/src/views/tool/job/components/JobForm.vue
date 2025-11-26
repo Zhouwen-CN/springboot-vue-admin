@@ -2,6 +2,8 @@
 import { type JobForm, type JobVo, reqSave, reqGetHandlerNames } from '@/api/tool/job'
 import { type FormInstance, type FormRules } from 'element-plus'
 import { Setting } from '@element-plus/icons-vue'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 // 保存后刷新事件
 const emits = defineEmits(['refresh'])
@@ -116,7 +118,13 @@ onMounted(() => {
 
 <template>
   <!-- 对话框表单 -->
-  <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+  <el-dialog
+    v-model="toggleDialog.show"
+    :title="toggleDialog.title"
+    :width="appStore.device === 'desktop' ? '50%' : '80%'"
+    :align-center="appStore.device!=='desktop'"
+    @close="clean"
+  >
     <template #footer>
       <el-form
         ref="formRef"
@@ -140,7 +148,7 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
-          <el-popover :width="570" placement="bottom-start" :visible="cronPopoverVisible">
+          <el-popover :width="430" placement="bottom-start" :visible="cronPopoverVisible">
             <template #reference>
               <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式">
                 <template #append>
@@ -148,7 +156,7 @@ onMounted(() => {
                 </template>
               </el-input>
             </template>
-            <el-scrollbar max-height="400px">
+            <el-scrollbar max-height="570px">
               <noVue3Cron
                 :cron-value="form.cronExpression"
                 @change="changeCron"
@@ -182,4 +190,13 @@ onMounted(() => {
   </el-dialog>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep(.no-vue3-cron-div .el-tabs__item) {
+  width: 59px;
+  padding: 0 !important;
+}
+
+:deep(.no-vue3-cron-div) {
+  font-size: var(--el-font-size-base);
+}
+</style>

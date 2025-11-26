@@ -19,7 +19,8 @@ import CodegenEditTable from './components/CodegenEditTable.vue'
 import CodegenPreview from './components/CodegenPreview.vue'
 import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
 import type { AxiosResponse } from 'axios'
-
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 const { codegenConfig } = useSettingStore()
 
 // 数据源选择器数据
@@ -260,39 +261,40 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="pageData"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="数据源名称" prop="dataSource"></el-table-column>
-        <el-table-column label="表名称" prop="tableName"></el-table-column>
-        <el-table-column label="表描述" prop="tableComment"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="120px">
-          <template #default="{ row }: { row: CodegenTableVo }">
-            <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>
-              <el-button :icon="View" type="success" @click="previewCodegen(row.id)"></el-button>
-              <el-popconfirm title="是否同步字段信息？" @confirm="syncCodegenColumnList(row.id)">
-                <template #reference>
-                  <el-button :icon="Refresh" type="warning"></el-button>
-                </template>
-              </el-popconfirm>
-              <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableById(row.id)">
-                <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :border="true"
+          :data="pageData"
+          show-overflow-tooltip
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="45px" />
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="数据源名称" prop="dataSource"></el-table-column>
+          <el-table-column label="表名称" prop="tableName"></el-table-column>
+          <el-table-column label="表描述" prop="tableComment"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作" min-width="120px">
+            <template #default="{ row }: { row: CodegenTableVo }">
+              <el-button-group>
+                <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>
+                <el-button :icon="View" type="success" @click="previewCodegen(row.id)"></el-button>
+                <el-popconfirm title="是否同步字段信息？" @confirm="syncCodegenColumnList(row.id)">
+                  <template #reference>
+                    <el-button :icon="Refresh" type="warning"></el-button>
+                  </template>
+                </el-popconfirm>
+                <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableById(row.id)">
+                  <template #reference>
+                    <el-button :icon="Delete" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
@@ -309,7 +311,13 @@ onMounted(() => {
     </el-card>
 
     <!-- 对话框表单-导入 -->
-    <el-dialog v-model="toggleDialog" title="导入代码生成表" width="40%" @close="clean">
+    <el-dialog
+      v-model="toggleDialog"
+      title="导入代码生成表"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
+      @close="clean"
+    >
       <template #footer>
         <el-form
           ref="formRef"

@@ -7,6 +7,8 @@ import { type MenuForm, reqDeleteMenu, reqSaveMenu } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type PopoverInstance } from 'element-plus'
 import useDict from '@/hooks/useDictionary'
 import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 const userStore = useUserStore()
 
@@ -150,56 +152,63 @@ onMounted(() => {
         <el-button :icon="Plus" type="primary" @click="addMenu">新建</el-button>
       </div>
       <!-- 表格 -->
-      <el-table
-        :data="userStore.menuInfo"
-        default-expand-all
-        row-key="id"
-        :border="true"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-      >
-        <el-table-column label="菜单名称" prop="title">
-          <template #default="{ row }: { row: MenuVo }">
-            <el-space>
-              <el-icon :size="20">
-                <component :is="row.icon"></component>
-              </el-icon>
-              <span>{{ row.title }}</span>
-            </el-space>
-          </template>
-        </el-table-column>
-        <el-table-column label="访问路径" prop="accessPath" />
-        <el-table-column label="文件路径" prop="filePath">
-          <template #default="{ row }: { row: MenuVo }">
-            {{ row.children.length > 0 ? '' : `${row.accessPath}/index.vue` }}
-          </template>
-        </el-table-column>
-        <el-table-column label="是否缓存" prop="keepAlive">
-          <template #default="{ row }: { row: MenuVo }">
-            <el-tag size="large" :type="row.keepAlive ? 'success' : 'danger'"
-              >{{ row.keepAlive ? '启用' : '禁用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="菜单排序" prop="sortId"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime" />
-        <el-table-column label="操作">
-          <template #default="{ row }: { row: MenuVo }">
-            <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateMenu(row)" />
-              <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
-                <template #reference>
-                  <el-button :disabled="row.children.length > 0" :icon="Delete" type="danger" />
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :data="userStore.menuInfo"
+          default-expand-all
+          row-key="id"
+          :border="true"
+          show-overflow-tooltip
+        >
+          <el-table-column label="菜单名称" prop="title">
+            <template #default="{ row }: { row: MenuVo }">
+              <el-space>
+                <el-icon :size="20">
+                  <component :is="row.icon"></component>
+                </el-icon>
+                <span>{{ row.title }}</span>
+              </el-space>
+            </template>
+          </el-table-column>
+          <el-table-column label="访问路径" prop="accessPath" />
+          <el-table-column label="文件路径" prop="filePath">
+            <template #default="{ row }: { row: MenuVo }">
+              {{ row.children.length > 0 ? '' : `${row.accessPath}/index.vue` }}
+            </template>
+          </el-table-column>
+          <el-table-column label="是否缓存" prop="keepAlive">
+            <template #default="{ row }: { row: MenuVo }">
+              <el-text :type="row.keepAlive ? 'success' : 'danger'">{{
+                row.keepAlive ? '启用' : '禁用'
+              }}</el-text>
+            </template>
+          </el-table-column>
+          <el-table-column label="菜单排序" prop="sortId"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime" />
+          <el-table-column label="操作">
+            <template #default="{ row }: { row: MenuVo }">
+              <el-button-group>
+                <el-button :icon="Edit" type="primary" @click="updateMenu(row)" />
+                <el-popconfirm title="是否删除？" @confirm="deleteMenu(row)">
+                  <template #reference>
+                    <el-button :disabled="row.children.length > 0" :icon="Delete" type="danger" />
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-card>
 
     <!-- 对话框 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog
+      v-model="toggleDialog.show"
+      :title="toggleDialog.title"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
+      @close="clean"
+    >
       <template #footer>
         <el-form
           ref="ruleFormRef"

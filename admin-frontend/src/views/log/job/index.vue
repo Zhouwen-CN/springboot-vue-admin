@@ -98,7 +98,7 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px">
       <!-- 表格 -->
-      <el-table :border="true" :data="data" show-overflow-tooltip style="margin-top: 16px">
+      <el-table :border="true" :data="data" show-overflow-tooltip>
         <el-table-column label="任务名称" prop="jobName"></el-table-column>
         <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
         <el-table-column label="处理器参数" prop="handlerParam"></el-table-column>

@@ -9,6 +9,8 @@ import {
 } from '@/api/tool/dict'
 import { Delete, Edit, Plus, Search } from '@element-plus/icons-vue'
 import { type FormInstance, type FormRules } from 'element-plus'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 // 搜索关键字
 const searchLabel = ref('')
@@ -167,32 +169,33 @@ defineExpose({
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="pageData"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
-        <el-table-column label="标签键" prop="label"> </el-table-column>
-        <el-table-column label="标签值" prop="data"></el-table-column>
-        <el-table-column label="排序" prop="sortId"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作">
-          <template #default="{ row }: { row: DictDataVo }">
-            <el-button-group>
-              <el-button :icon="Edit" size="small" type="primary" @click="modifyDictData(row)">
-              </el-button>
-              <el-popconfirm title="是否删除？" @confirm="removeDictData(row.id)">
-                <template #reference>
-                  <el-button :icon="Delete" size="small" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :border="true"
+          :data="pageData"
+          show-overflow-tooltip
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="45px" />
+          <el-table-column label="标签键" prop="label"> </el-table-column>
+          <el-table-column label="标签值" prop="data"></el-table-column>
+          <el-table-column label="排序" prop="sortId"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作">
+            <template #default="{ row }: { row: DictDataVo }">
+              <el-button-group>
+                <el-button :icon="Edit" size="small" type="primary" @click="modifyDictData(row)">
+                </el-button>
+                <el-popconfirm title="是否删除？" @confirm="removeDictData(row.id)">
+                  <template #reference>
+                    <el-button :icon="Delete" size="small" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
@@ -216,7 +219,8 @@ defineExpose({
     <el-dialog
       v-model="toggleDialog.show"
       :title="toggleDialog.title"
-      width="40%"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
       @close="dictDataDialogClean"
     >
       <template #footer>

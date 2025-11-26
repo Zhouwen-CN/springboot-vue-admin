@@ -12,7 +12,8 @@ import type { MenuVo } from '@/api/auth/menu'
 import { reqGetMenuIdsByRoleId } from '@/api/auth/menu'
 import { ElMessage, type FormInstance, type FormRules, type TreeInstance } from 'element-plus'
 import useUserStore from '@/stores/user'
-
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 const userStore = useUserStore()
 
 // 表单数据
@@ -198,32 +199,33 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="pageData"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="角色名称" prop="roleName"></el-table-column>
-        <el-table-column label="说明" prop="description"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作">
-          <template #default="{ row }: { row: RoleVo }">
-            <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
-              <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
-                <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :border="true"
+          :data="pageData"
+          show-overflow-tooltip
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="45px" />
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="角色名称" prop="roleName"></el-table-column>
+          <el-table-column label="说明" prop="description"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作">
+            <template #default="{ row }: { row: RoleVo }">
+              <el-button-group>
+                <el-button :icon="Edit" type="primary" @click="updateRole(row)"></el-button>
+                <el-popconfirm title="是否删除？" @confirm="deleteRole(row.id)">
+                  <template #reference>
+                    <el-button :icon="Delete" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
@@ -240,7 +242,13 @@ onMounted(() => {
     </el-card>
 
     <!-- 对话框表单 -->
-    <el-dialog v-model="toggleDialog.show" :title="toggleDialog.title" width="40%" @close="clean">
+    <el-dialog
+      v-model="toggleDialog.show"
+      :title="toggleDialog.title"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
+      @close="clean"
+    >
       <template #footer>
         <el-form
           ref="ruleFormRef"

@@ -10,6 +10,8 @@ import {
 } from '@/api/tool/dict'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import DictData from './components/DictData.vue'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 // 搜索关键字
 const searchName = ref('')
@@ -155,42 +157,43 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table
-        :border="true"
-        :data="pageData"
-        show-overflow-tooltip
-        style="margin-top: 16px"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="45px" />
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="字典名称" prop="name">
-          <template #default="{ row }: { row: DictTypeVo }">
-            <span class="dict-type" @click="openDrawer(row.id)">{{ row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" prop="dictEnable">
-          <template #default="{ row }: { row: DictTypeVo }">
-            <el-tag size="large" :type="row.dictEnable ? 'success' : 'danger'"
-              >{{ row.dictEnable ? '启用' : '禁用' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作">
-          <template #default="{ row }: { row: DictTypeVo }">
-            <el-button-group>
-              <el-button :icon="Edit" type="primary" @click="modifyDictType(row)"></el-button>
-              <el-popconfirm title="是否删除？" @confirm="removeDictType(row.id)">
-                <template #reference>
-                  <el-button :icon="Delete" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table
+          :border="true"
+          :data="pageData"
+          show-overflow-tooltip
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="45px" />
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="字典名称" prop="name">
+            <template #default="{ row }: { row: DictTypeVo }">
+              <span class="dict-type" @click="openDrawer(row.id)">{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" prop="dictEnable">
+            <template #default="{ row }: { row: DictTypeVo }">
+              <el-text :type="row.dictEnable ? 'success' : 'danger'">{{
+                row.dictEnable ? '启用' : '禁用'
+              }}</el-text>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作">
+            <template #default="{ row }: { row: DictTypeVo }">
+              <el-button-group>
+                <el-button :icon="Edit" type="primary" @click="modifyDictType(row)"></el-button>
+                <el-popconfirm title="是否删除？" @confirm="removeDictType(row.id)">
+                  <template #reference>
+                    <el-button :icon="Delete" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
@@ -210,7 +213,8 @@ onMounted(() => {
     <el-dialog
       v-model="toggleDialog.show"
       :title="toggleDialog.title"
-      width="40%"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
       @close="dialogClean"
     >
       <template #footer>

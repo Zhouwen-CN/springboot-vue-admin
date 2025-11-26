@@ -3,6 +3,8 @@ const useSettingStore = defineStore(
   () => {
     // 侧边栏折叠
     const collapse = ref(false)
+    // 侧边栏隐藏
+    const hidden = ref(false)
 
     const {
       VITE_APP_NAME: appName,
@@ -35,7 +37,16 @@ const useSettingStore = defineStore(
       collapse.value = false
     }
 
-    return { codegenConfig, collapse, appName, appShortName, giteeLink, avatarUrl, $reset }
+    return {
+      codegenConfig,
+      collapse,
+      hidden,
+      appName,
+      appShortName,
+      giteeLink,
+      avatarUrl,
+      $reset
+    }
   },
   {
     persist: {

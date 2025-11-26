@@ -14,6 +14,8 @@ import { Conversations } from 'vue-element-plus-x'
 import type { FormInstance, FormRules } from 'element-plus'
 import ConversationList from './components/ConversationList.vue'
 import { Plus } from '@element-plus/icons-vue'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 // 聊条历史
 const chatHistoryVo = ref<ConversationItem<ChatHistoryVo>[]>([])
@@ -130,7 +132,13 @@ onMounted(() => {
         <ConversationList v-model="chatId" @refresh="refreshConversations"> </ConversationList>
       </div>
     </div>
-    <el-dialog v-model="toggleDialog" title="编辑对话名称" width="30%" @close="clean">
+    <el-dialog
+      v-model="toggleDialog"
+      title="编辑对话名称"
+      :width="appStore.device === 'desktop' ? '50%' : '80%'"
+      :align-center="appStore.device!=='desktop'"
+      @close="clean"
+    >
       <el-form
         ref="formRef"
         :model="form"

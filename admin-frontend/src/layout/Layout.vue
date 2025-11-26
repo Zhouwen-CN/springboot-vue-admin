@@ -6,11 +6,21 @@ import Menu from '@/layout/components/Menu.vue'
 import Header from '@/layout/components/Header.vue'
 import TagView from '@/layout/components/TagView.vue'
 import useTagViewStore from '@/stores/tagView'
+import useWindowSize from '@/hooks/useWindowSize'
+import useAppStore from '@/stores/app'
 
 const route = useRoute()
 const settingStore = useSettingStore()
-
+const appStore = useAppStore()
 const cachedViews = computed(() => useTagViewStore().cachedViews)
+useWindowSize()
+
+watch(
+  () => appStore.device,
+  (value) => {
+    settingStore.collapse = value === 'mobile';
+  }
+)
 </script>
 
 <template>

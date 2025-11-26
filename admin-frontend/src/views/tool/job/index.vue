@@ -126,48 +126,50 @@ onMounted(() => {
       </div>
 
       <!-- 表格 -->
-      <el-table :border="true" :data="data" show-overflow-tooltip style="margin-top: 16px">
-        <el-table-column label="主键" prop="id"></el-table-column>
-        <el-table-column label="任务名称" prop="name">
-          <template #default="{ row }: { row: JobVo }">
-            <span class="job-name" @click="toJobLogView(row)">{{ row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
-        <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
-        <el-table-column label="重试次数" prop="retryCount"></el-table-column>
-        <el-table-column label="重试间隔" prop="retryInterval"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-        <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-        <el-table-column label="操作" min-width="150px">
-          <template #default="{ row }: { row: JobVo }">
-            <el-button-group>
-              <el-button
-                :icon="Edit"
-                type="primary"
-                @click="formDialog?.openDialog(row)"
-              ></el-button>
-              <el-button
-                :icon="row.jobEnable ? VideoPause : VideoPlay"
-                :loading="row.loading"
-                :type="row.jobEnable ? 'success' : 'info'"
-                @click="modifyJobEnable(row)"
-              ></el-button>
-              <el-button
-                :icon="CircleCheck"
-                :loading="row.loading"
-                type="warning"
-                @click="triggerJobOnce(row)"
-              ></el-button>
-              <el-popconfirm title="是否删除？" @confirm="remove(row)">
-                <template #reference>
-                  <el-button :icon="Delete" :loading="row.loading" type="danger"></el-button>
-                </template>
-              </el-popconfirm>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin-top: 16px">
+        <el-table :border="true" :data="data" show-overflow-tooltip>
+          <el-table-column label="主键" prop="id"></el-table-column>
+          <el-table-column label="任务名称" prop="name">
+            <template #default="{ row }: { row: JobVo }">
+              <span class="job-name" @click="toJobLogView(row)">{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
+          <el-table-column label="cron 表达式" prop="cronExpression"></el-table-column>
+          <el-table-column label="重试次数" prop="retryCount"></el-table-column>
+          <el-table-column label="重试间隔" prop="retryInterval"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
+          <el-table-column label="操作" min-width="150px">
+            <template #default="{ row }: { row: JobVo }">
+              <el-button-group>
+                <el-button
+                  :icon="Edit"
+                  type="primary"
+                  @click="formDialog?.openDialog(row)"
+                ></el-button>
+                <el-button
+                  :icon="row.jobEnable ? VideoPause : VideoPlay"
+                  :loading="row.loading"
+                  :type="row.jobEnable ? 'success' : 'info'"
+                  @click="modifyJobEnable(row)"
+                ></el-button>
+                <el-button
+                  :icon="CircleCheck"
+                  :loading="row.loading"
+                  type="warning"
+                  @click="triggerJobOnce(row)"
+                ></el-button>
+                <el-popconfirm title="是否删除？" @confirm="remove(row)">
+                  <template #reference>
+                    <el-button :icon="Delete" :loading="row.loading" type="danger"></el-button>
+                  </template>
+                </el-popconfirm>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 分页 -->
       <el-pagination
