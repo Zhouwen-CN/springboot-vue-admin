@@ -186,13 +186,13 @@ onMounted(() => {
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="45px" />
-          <el-table-column label="ID" prop="id"></el-table-column>
-          <el-table-column label="名称" prop="name"></el-table-column>
-          <el-table-column label="url" prop="url"></el-table-column>
-          <el-table-column label="用户名" prop="username"></el-table-column>
-          <el-table-column label="创建时间" prop="createTime"></el-table-column>
-          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-          <el-table-column label="操作" min-width="90px">
+          <el-table-column label="ID" prop="id" min-width="45px"></el-table-column>
+          <el-table-column label="名称" prop="name" min-width="100px"></el-table-column>
+          <el-table-column label="url" prop="url" min-width="100px"></el-table-column>
+          <el-table-column label="用户名" prop="username" min-width="100px"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime" min-width="100px"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime" min-width="100px"></el-table-column>
+          <el-table-column label="操作" min-width="165px">
             <template #default="{ row }: { row: DataSourceVo }">
               <el-button-group>
                 <el-button :icon="Edit" type="primary" @click="updateDataSource(row)"></el-button>

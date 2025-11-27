@@ -10,6 +10,7 @@ import {
 import { type DictTypeSelectorVo, reqGetDictTypeSelectorList } from '@/api/tool/dict'
 import useSettingStore from '@/stores/setting'
 import MenuTreeSelect from '@/components/MenuTreeSelect.vue'
+import useAppStore from '@/stores/app'
 
 const {
   codegenConfig: { jsTypeList, javaTypeList, htmlTypeList, selectConditionList }
@@ -88,7 +89,12 @@ defineExpose({
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" size="75%" title="代码生成配置" @closed="closeDrawer">
+  <el-drawer
+    v-model="drawerVisible"
+    :size="useAppStore().device === 'desktop' ? '60%' : '80%'"
+    title="代码生成配置"
+    @closed="closeDrawer"
+  >
     <el-form
       ref="formRef"
       :model="formData"
@@ -142,8 +148,9 @@ defineExpose({
         </el-tab-pane>
         <el-tab-pane label="字段信息" name="colums">
           <el-table :data="formData.columns" show-overflow-tooltip>
-            <el-table-column label="字段名称" prop="columnName"> </el-table-column>
-            <el-table-column label="字段描述" prop="columnComment">
+            <el-table-column label="字段名称" prop="columnName" min-width="100px">
+            </el-table-column>
+            <el-table-column label="字段描述" prop="columnComment" min-width="100px">
               <template #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
                 <el-form-item
                   style="margin-bottom: 0"
@@ -154,8 +161,8 @@ defineExpose({
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="物理类型" prop="dbType"> </el-table-column>
-            <el-table-column label="属性名" prop="javaField">
+            <el-table-column label="物理类型" prop="dbType" min-width="100px"> </el-table-column>
+            <el-table-column label="属性名" prop="javaField" min-width="100px">
               <template #default="{ row, $index }: { row: CodegenColumnVo; $index: number }">
                 <el-form-item
                   style="margin-bottom: 0"
@@ -166,7 +173,7 @@ defineExpose({
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="Java类型" prop="javaType">
+            <el-table-column label="Java类型" prop="javaType" min-width="100px">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-select v-model="row.javaType">
                   <el-option
@@ -178,7 +185,7 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="Js类型" prop="jsType">
+            <el-table-column label="Js类型" prop="jsType" min-width="100px">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-select v-model="row.jsType">
                   <el-option
@@ -190,17 +197,17 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="新增" min-width="45px" prop="insertField">
+            <el-table-column label="新增" min-width="60px" prop="insertField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.insertField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="编辑" min-width="45px" prop="updateField">
+            <el-table-column label="编辑" min-width="60px" prop="updateField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox v-model="row.updateField" false-value="false" true-value="true" />
               </template>
             </el-table-column>
-            <el-table-column label="Html类型" prop="htmlType">
+            <el-table-column label="Html类型" prop="htmlType" min-width="100px">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-select v-model="row.htmlType">
                   <el-option
@@ -212,7 +219,7 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="列表" min-width="45px" prop="selectResultField">
+            <el-table-column label="列表" min-width="60px" prop="selectResultField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectResultField"
@@ -221,7 +228,7 @@ defineExpose({
                 />
               </template>
             </el-table-column>
-            <el-table-column label="查询" min-width="45px" prop="selectConditionField">
+            <el-table-column label="查询" min-width="60px" prop="selectConditionField">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-checkbox
                   v-model="row.selectConditionField"
@@ -230,7 +237,7 @@ defineExpose({
                 />
               </template>
             </el-table-column>
-            <el-table-column label="查询条件" prop="selectCondition">
+            <el-table-column label="查询条件" prop="selectCondition" min-width="100px">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-select v-model="row.selectCondition">
                   <el-option
@@ -242,7 +249,7 @@ defineExpose({
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="字典类型" prop="dictTypeId">
+            <el-table-column label="字典类型" prop="dictTypeId" min-width="100px">
               <template #default="{ row }: { row: CodegenColumnVo }">
                 <el-select v-model="row.dictTypeId" clearable @change="dictTypeChange(row)">
                   <el-option

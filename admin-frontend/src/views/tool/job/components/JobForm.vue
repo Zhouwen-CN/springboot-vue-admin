@@ -148,7 +148,11 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item label="cron 表达式" prop="cronExpression">
-          <el-popover :width="430" placement="bottom-start" :visible="cronPopoverVisible">
+          <el-popover
+            :width="appStore.device === 'desktop' ? 430 : 380"
+            placement="bottom-start"
+            :visible="cronPopoverVisible"
+          >
             <template #reference>
               <el-input v-model="form.cronExpression" clearable placeholder="cron 表达式">
                 <template #append>

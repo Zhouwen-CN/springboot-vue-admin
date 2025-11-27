@@ -223,42 +223,38 @@ onMounted(() => {
 
     <el-card style="margin-top: 16px">
       <!-- 表格上面的按钮 -->
-      <div class="content-top">
-        <div>
-          <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
-            <el-option
-              v-for="(item, index) in dataSourceSelectorList"
-              :key="index"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-          <el-button
-            :icon="Aim"
-            :loading="saveLoading"
-            style="margin-left: 12px"
-            type="primary"
-            @click="importCodegenTable"
-            >导入
-          </el-button>
-          <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
-            <template #reference>
-              <el-button :disabled="selectedIds.length == 0" :icon="Delete" type="danger"
-                >批量删除
-              </el-button>
-            </template>
-          </el-popconfirm>
-        </div>
-        <div>
-          <el-button
-            :disabled="selectedIds.length == 0"
-            :icon="Download"
-            type="primary"
-            @click="downloadCodegen"
-            >下载
-          </el-button>
-        </div>
-      </div>
+      <el-space wrap>
+        <el-select v-model="codegenTableImportForm.dataSourceId" style="width: 120px">
+          <el-option
+            v-for="(item, index) in dataSourceSelectorList"
+            :key="index"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-button
+          :icon="Aim"
+          :loading="saveLoading"
+          style="margin-left: 12px"
+          type="primary"
+          @click="importCodegenTable"
+          >导入
+        </el-button>
+        <el-popconfirm title="是否删除？" @confirm="deleteCodegenTableByIds()">
+          <template #reference>
+            <el-button :disabled="selectedIds.length == 0" :icon="Delete" type="danger"
+              >批量删除
+            </el-button>
+          </template>
+        </el-popconfirm>
+        <el-button
+          :disabled="selectedIds.length == 0"
+          :icon="Download"
+          type="primary"
+          @click="downloadCodegen"
+          >下载
+        </el-button>
+      </el-space>
 
       <!-- 表格 -->
       <div style="margin-top: 16px">
@@ -269,13 +265,13 @@ onMounted(() => {
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="45px" />
-          <el-table-column label="ID" prop="id"></el-table-column>
-          <el-table-column label="数据源名称" prop="dataSource"></el-table-column>
-          <el-table-column label="表名称" prop="tableName"></el-table-column>
-          <el-table-column label="表描述" prop="tableComment"></el-table-column>
-          <el-table-column label="创建时间" prop="createTime"></el-table-column>
-          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-          <el-table-column label="操作" min-width="120px">
+          <el-table-column label="ID" prop="id" min-width="45px"></el-table-column>
+          <el-table-column label="数据源名称" prop="dataSource" min-width="100px"></el-table-column>
+          <el-table-column label="表名称" prop="tableName" min-width="100px"></el-table-column>
+          <el-table-column label="表描述" prop="tableComment" min-width="100px"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime" min-width="100px"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime" min-width="100px"></el-table-column>
+          <el-table-column label="操作" min-width="210px">
             <template #default="{ row }: { row: CodegenTableVo }">
               <el-button-group>
                 <el-button :icon="Edit" type="primary" @click="updateCodegenTable(row)"></el-button>

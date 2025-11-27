@@ -7,6 +7,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import html from 'highlight.js/lib/languages/vbscript-html'
 import typescript from 'highlight.js/lib/languages/typescript'
 import type { TabsPaneContext, TreeInstance } from 'element-plus'
+import useAppStore from '@/stores/app'
 
 // 目录树形结构
 interface CongenDirTreeVo {
@@ -155,7 +156,11 @@ onMounted(() => {
     @close="colse"
   >
     <el-splitter style="height: calc(80vh - 40px - 32px)">
-      <el-splitter-panel v-model:size="leftPanelSize" :min="300">
+      <el-splitter-panel
+        v-model:size="leftPanelSize"
+        :min="300"
+        v-if="useAppStore().device === 'desktop'"
+      >
         <el-scrollbar>
           <el-tree
             ref="treeRef"

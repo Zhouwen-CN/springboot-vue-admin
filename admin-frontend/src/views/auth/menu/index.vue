@@ -160,7 +160,7 @@ onMounted(() => {
           :border="true"
           show-overflow-tooltip
         >
-          <el-table-column label="菜单名称" prop="title">
+          <el-table-column label="菜单名称" prop="title" min-width="100px">
             <template #default="{ row }: { row: MenuVo }">
               <el-space>
                 <el-icon :size="20">
@@ -170,22 +170,22 @@ onMounted(() => {
               </el-space>
             </template>
           </el-table-column>
-          <el-table-column label="访问路径" prop="accessPath" />
-          <el-table-column label="文件路径" prop="filePath">
+          <el-table-column label="访问路径" prop="accessPath" min-width="100px"></el-table-column>
+          <el-table-column label="文件路径" prop="filePath" min-width="100px">
             <template #default="{ row }: { row: MenuVo }">
               {{ row.children.length > 0 ? '' : `${row.accessPath}/index.vue` }}
             </template>
           </el-table-column>
-          <el-table-column label="是否缓存" prop="keepAlive">
+          <el-table-column label="是否缓存" prop="keepAlive" min-width="100px">
             <template #default="{ row }: { row: MenuVo }">
               <el-text :type="row.keepAlive ? 'success' : 'danger'">{{
                 row.keepAlive ? '启用' : '禁用'
               }}</el-text>
             </template>
           </el-table-column>
-          <el-table-column label="菜单排序" prop="sortId"></el-table-column>
-          <el-table-column label="更新时间" prop="updateTime" />
-          <el-table-column label="操作">
+          <el-table-column label="菜单排序" prop="sortId" min-width="100px"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime" min-width="100px" />
+          <el-table-column label="操作" min-width="120px">
             <template #default="{ row }: { row: MenuVo }">
               <el-button-group>
                 <el-button :icon="Edit" type="primary" @click="updateMenu(row)" />
@@ -245,7 +245,12 @@ onMounted(() => {
             <el-input v-model="menuForm.sortId" type="number"></el-input>
           </el-form-item>
           <el-form-item label="菜单图标" prop="icon">
-            <el-popover ref="iconPopoverRef" :width="400" placement="bottom-start" trigger="click">
+            <el-popover
+              ref="iconPopoverRef"
+              :width="appStore.device === 'desktop' ? '400px' : '260px'"
+              placement="bottom-start"
+              trigger="click"
+            >
               <template #reference>
                 <el-input
                   v-model="menuForm.icon"

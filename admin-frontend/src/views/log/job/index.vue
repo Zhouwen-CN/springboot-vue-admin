@@ -99,15 +99,15 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格 -->
       <el-table :border="true" :data="data" show-overflow-tooltip>
-        <el-table-column label="任务名称" prop="jobName"></el-table-column>
-        <el-table-column label="处理器名称" prop="handlerName"></el-table-column>
-        <el-table-column label="处理器参数" prop="handlerParam"></el-table-column>
-        <el-table-column label="第几次执行" prop="fireNum"></el-table-column>
-        <el-table-column label="执行耗时" prop="time"></el-table-column>
-        <el-table-column label="任务状态" prop="status"></el-table-column>
-        <el-table-column label="结果数据" prop="result"></el-table-column>
-        <el-table-column label="开始时间" prop="startTime"></el-table-column>
-        <el-table-column label="结束时间" prop="endTime"></el-table-column>
+        <el-table-column label="任务名称" prop="jobName" min-width="100px"></el-table-column>
+        <el-table-column label="处理器名称" prop="handlerName" min-width="100px"></el-table-column>
+        <el-table-column label="处理器参数" prop="handlerParam" min-width="100px"></el-table-column>
+        <el-table-column label="第几次执行" prop="fireNum" min-width="100px"></el-table-column>
+        <el-table-column label="耗时(ms)" prop="time" min-width="100px"></el-table-column>
+        <el-table-column label="任务状态" prop="status" min-width="100px"></el-table-column>
+        <el-table-column label="结果数据" prop="result" min-width="100px"></el-table-column>
+        <el-table-column label="开始时间" prop="startTime" min-width="100px"></el-table-column>
+        <el-table-column label="结束时间" prop="endTime" min-width="100px"></el-table-column>
       </el-table>
 
       <!-- 分页 -->

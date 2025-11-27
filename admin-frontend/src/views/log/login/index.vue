@@ -65,12 +65,12 @@ onMounted(() => {
     <el-card style="margin-top: 16px">
       <!-- 表格 -->
       <el-table :border="true" :data="data" show-overflow-tooltip>
-        <el-table-column label="用户名称" prop="createUser"></el-table-column>
-        <el-table-column label="操作类型" prop="operation"></el-table-column>
-        <el-table-column label="操作状态" prop="status"></el-table-column>
-        <el-table-column label="ip地址" prop="ip"></el-table-column>
-        <el-table-column label="用户代理" prop="userAgent"></el-table-column>
-        <el-table-column label="创建时间" prop="createTime"></el-table-column>
+        <el-table-column label="用户名称" prop="createUser" min-width="100px"></el-table-column>
+        <el-table-column label="操作类型" prop="operation" min-width="100px"></el-table-column>
+        <el-table-column label="操作状态" prop="status" min-width="100px"></el-table-column>
+        <el-table-column label="ip地址" prop="ip" min-width="100px"></el-table-column>
+        <el-table-column label="用户代理" prop="userAgent" min-width="100px"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime" min-width="100px"></el-table-column>
       </el-table>
 
       <!-- 分页 -->

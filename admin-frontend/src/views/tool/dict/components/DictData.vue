@@ -140,7 +140,11 @@ defineExpose({
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" size="50%" title="字典数据">
+  <el-drawer
+    v-model="drawerVisible"
+    :size="appStore.device === 'desktop' ? '40%' : '80%'"
+    title="字典数据"
+  >
     <!-- 顶部搜索框 -->
     <el-card>
       <el-form inline label-width="auto" @submit.prevent="searchByLabel()">
@@ -177,18 +181,17 @@ defineExpose({
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="45px" />
-          <el-table-column label="标签键" prop="label"> </el-table-column>
-          <el-table-column label="标签值" prop="data"></el-table-column>
-          <el-table-column label="排序" prop="sortId"></el-table-column>
-          <el-table-column label="更新时间" prop="updateTime"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="标签键" prop="label" min-width="100px"> </el-table-column>
+          <el-table-column label="标签值" prop="data" min-width="100px"></el-table-column>
+          <el-table-column label="排序" prop="sortId" min-width="60px"></el-table-column>
+          <el-table-column label="更新时间" prop="updateTime" min-width="100px"></el-table-column>
+          <el-table-column label="操作" min-width="120px">
             <template #default="{ row }: { row: DictDataVo }">
               <el-button-group>
-                <el-button :icon="Edit" size="small" type="primary" @click="modifyDictData(row)">
-                </el-button>
+                <el-button :icon="Edit" type="primary" @click="modifyDictData(row)"> </el-button>
                 <el-popconfirm title="是否删除？" @confirm="removeDictData(row.id)">
                   <template #reference>
-                    <el-button :icon="Delete" size="small" type="danger"></el-button>
+                    <el-button :icon="Delete" type="danger"></el-button>
                   </template>
                 </el-popconfirm>
               </el-button-group>
