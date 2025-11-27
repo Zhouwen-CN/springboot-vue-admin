@@ -8,8 +8,10 @@ import {
 import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
 import type { ThinkingStatus } from 'vue-element-plus-x/types/Thinking'
 import { BubbleList, Prompts, Sender, Welcome, XMarkdown, Thinking } from 'vue-element-plus-x'
-import { ChromeFilled, Cpu, Promotion } from '@element-plus/icons-vue'
+import { ChromeFilled, Cpu } from '@element-plus/icons-vue'
 import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
+import useAppStore from '@/stores/app'
+const appStore = useAppStore()
 
 type MessageItem = BubbleListItemProps & {
   avatar: string
@@ -35,6 +37,10 @@ const isNewConversation = ref(false)
 // 会话列表
 const bubbleListRef = ref<BubbleListInstance>()
 const bubbleListItems = ref<MessageItem[]>([])
+const bubbleListPaddingLeft = computed(() => {
+  return appStore.device === 'desktop' ? '20px' : '0px'
+})
+
 // 监听会话id
 watch(chatId, (value) => {
   if (value) {
@@ -184,6 +190,10 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
     role: isUser ? 'user' : 'ai'
   }
 }
+
+function onCancel() {
+  cancel()
+}
 </script>
 
 <template>
@@ -239,11 +249,13 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
     <!-- 发送框 -->
     <Sender
       v-model="chatForm.prompt"
-      :auto-size="{ minRows: 4, maxRows: 4 }"
+      :loading="loading"
+      :auto-size="{ minRows: 3, maxRows: 3 }"
       class="sender"
-      placeholder="💌 在这里你可以自定义变体后的 prefix 和 action-list"
+      placeholder="请输入内容，shift+enter换行"
       variant="updown"
       @submit="onSubmit"
+      @cancel="onCancel"
     >
       <template #prefix>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
@@ -262,26 +274,13 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
           </div>
         </div>
       </template>
-      <template #action-list>
-        <div style="display: flex; align-items: center; gap: 8px">
-          <el-button color="#626aef" round>
-            <el-icon>
-              <Promotion />
-            </el-icon>
-          </el-button>
-        </div>
-      </template>
     </Sender>
   </div>
 </template>
 
 <style lang="scss" scoped>
-:deep(.el-bubble-start) {
-  padding-left: 20px;
-}
-
-:deep(.el-bubble-end) {
-  padding-right: 20px;
+:deep(.el-bubble-list .el-bubble-start) {
+  padding-left: v-bind(bubbleListPaddingLeft);
 }
 
 .container {
@@ -291,12 +290,8 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
   justify-content: space-between;
 
   .bubble-list {
-    max-height: calc(100vh - $base_header_height - 40px - 160px - 40px);
+    max-height: calc(100vh - $base_header_height - 140px - 40px - 40px);
     flex: 1;
-
-    .welcome {
-      margin: 0 20px;
-    }
 
     .thinking-chain-warp {
       margin-bottom: 12px;
@@ -312,12 +307,8 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
     }
   }
 
-  .prompts {
-    margin: 0 20px;
-  }
-
   .sender {
-    margin: 20px;
+    margin-top: 20px;
 
     .chat-option {
       display: flex;
@@ -328,6 +319,7 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
       border-radius: 15px;
       cursor: pointer;
       line-height: 24px;
+      font-size: var(--el-font-size-base);
     }
 
     .isSelect {

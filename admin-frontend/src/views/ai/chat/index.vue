@@ -101,17 +101,19 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="layout">
-      <div class="aside">
+    <div class="container">
+      <div class="sidebar">
         <Conversations
           v-model:active="chatId"
           :items="chatHistoryVo"
-          :label-max-width="200"
+          :label-max-width="260"
           labelKey="title"
           row-key="conversationId"
           show-tooltip
           showBuiltInMenu
+          showBuiltInMenuType="always"
           showToTopBtn
+          :style="{ width: '260px', display: appStore.device === 'desktop' ? '' : 'none' }"
           @menuCommand="handleMenuCommand"
         >
           <template #header>
@@ -121,6 +123,7 @@ onMounted(() => {
               round
               style="margin: 0 20px"
               type="primary"
+              :style="{ display: appStore.device === 'desktop' ? 'block' : 'none' }"
               @click="chatId = undefined"
             >
               新建会话
@@ -128,7 +131,7 @@ onMounted(() => {
           </template>
         </Conversations>
       </div>
-      <div class="main">
+      <div class="content">
         <ConversationList v-model="chatId" @refresh="refreshConversations"> </ConversationList>
       </div>
     </div>
@@ -165,15 +168,14 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.layout {
+.container {
   display: flex;
-  justify-content: space-between;
 
-  .aside {
+  .sidebar {
     height: calc(100vh - $base_header_height - 40px);
   }
 
-  .main {
+  .content {
     height: calc(100vh - $base_header_height - 40px);
     flex: 1;
   }
