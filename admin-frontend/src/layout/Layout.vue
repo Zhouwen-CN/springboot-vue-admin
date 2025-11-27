@@ -37,9 +37,7 @@ function handleContentClick() {
       class="aside"
       :style="{
         display: appStore.device === 'mobile' && settingStore.hidden ? 'none' : 'block',
-        width: appStore.device === 'mobile' && !settingStore.hidden ? '200px' : 'auto',
-        position: appStore.device === 'mobile' && !settingStore.hidden ? 'fixed' : 'static',
-        zIndex: 1000
+        width: appStore.device === 'mobile' && !settingStore.hidden ? '180px' : 'auto'
       }"
       @click.stop
     >
@@ -50,12 +48,11 @@ function handleContentClick() {
               'margin-right': settingStore.collapse ? '0' : '10px',
               height: appStore.device === 'mobile' ? '26px' : '40px'
             }"
-            alt=""
             src="@/assets/logo.svg"
           />
           <h1
             v-show="!settingStore.collapse"
-            :style="{ fontSize: appStore.device === 'mobile' ? '26px' : '40px' }"
+            :style="{ fontSize: appStore.device === 'mobile' ? '20px' : '40px' }"
           >
             {{ settingStore.appShortName }}
           </h1>
@@ -141,7 +138,6 @@ function handleContentClick() {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 20px;
 
     & > h1 {
       color: white;

@@ -111,7 +111,6 @@ onMounted(() => {
           row-key="conversationId"
           show-tooltip
           showBuiltInMenu
-          showBuiltInMenuType="always"
           showToTopBtn
           :style="{ width: '260px', display: appStore.device === 'desktop' ? '' : 'none' }"
           @menuCommand="handleMenuCommand"

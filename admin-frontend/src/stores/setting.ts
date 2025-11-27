@@ -9,7 +9,7 @@ const useSettingStore = defineStore(
     const {
       VITE_APP_NAME: appName,
       VITE_APP_SHORT_NAME: appShortName,
-      VITE_APP_GITEE_LINK: giteeLink,
+      VITE_APP_PROJECT_LINK: projectLink,
       VITE_APP_AVATAR_URL: avatarUrl
     } = import.meta.env
 
@@ -44,7 +44,7 @@ const useSettingStore = defineStore(
       hidden,
       appName,
       appShortName,
-      giteeLink,
+      projectLink,
       avatarUrl,
       $reset
     }
@@ -52,7 +52,7 @@ const useSettingStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      paths: ['collapse', 'hidden']
+      pick: ['collapse', 'hidden']
     }
   }
 )

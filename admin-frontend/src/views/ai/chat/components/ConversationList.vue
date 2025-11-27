@@ -241,7 +241,6 @@ function onCancel() {
     <Prompts
       v-if="!chatId"
       :items="promptItems"
-      class="prompts"
       title="🐵 提示集组件标题"
       @itemClick="promptItemClickHandler"
     />
@@ -290,7 +289,7 @@ function onCancel() {
   justify-content: space-between;
 
   .bubble-list {
-    max-height: calc(100vh - $base_header_height - 140px - 40px - 40px);
+    max-height: calc(100vh - $base_header_height - 136px - 40px - 40px);
     flex: 1;
 
     .thinking-chain-warp {
@@ -316,17 +315,16 @@ function onCancel() {
       gap: 4px;
       padding: 2px 12px;
       border: 1px solid silver;
-      border-radius: 15px;
+      border-radius: 10px;
       cursor: pointer;
       line-height: 24px;
       font-size: var(--el-font-size-base);
+      font-weight: 300;
     }
 
     .isSelect {
       color: #626aef;
       border: 1px solid #626aef !important;
-      border-radius: 15px;
-      padding: 3px 12px;
     }
   }
 }

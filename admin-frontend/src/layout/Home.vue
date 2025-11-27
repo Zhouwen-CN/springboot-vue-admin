@@ -11,7 +11,7 @@ const settingStore = useSettingStore()
   <div>
     <el-card>
       <div class="box">
-        <img alt="" class="avatar" :src="settingStore.avatarUrl" />
+        <img class="avatar" :src="settingStore.avatarUrl" />
         <div class="message">
           <h3 class="welcome-msg">
             Welcome
@@ -20,12 +20,12 @@ const settingStore = useSettingStore()
           <div>
             <el-link
               :icon="Link"
-              :href="settingStore.giteeLink"
-              class="gitee-link"
+              :href="settingStore.projectLink"
+              class="porject-link"
               target="_blank"
               type="primary"
             >
-              {{ settingStore.appName }} Project Gitee Link
+              {{ settingStore.appName }} Project Link
             </el-link>
           </div>
         </div>
@@ -33,7 +33,7 @@ const settingStore = useSettingStore()
     </el-card>
 
     <div class="welcome-img">
-      <img alt="" src="@/assets/images/welcome.svg" width="400px" />
+      <img src="@/assets/images/welcome.svg" width="400px" />
     </div>
   </div>
 </template>
@@ -60,7 +60,7 @@ const settingStore = useSettingStore()
       font-weight: 700;
     }
 
-    .gitee-link {
+    .porject-link {
       font-size: 16px;
     }
   }
@@ -73,9 +73,9 @@ const settingStore = useSettingStore()
   /*
   60px: 顶部导航
   40px: main padding
-  140px: 卡片
+  155px: 卡片
   2px: 不知道是什么
   */
-  height: calc(100vh - $base_header_height - 40px - 140px - 2px);
+  height: calc(100vh - $base_header_height - 40px - 155px - 2px);
 }
 </style>

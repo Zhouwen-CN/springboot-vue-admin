@@ -97,7 +97,7 @@ const useTagViewStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      paths: ['visitedViews']
+      pick: ['visitedViews']
     }
   }
 )

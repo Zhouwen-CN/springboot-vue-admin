@@ -5,6 +5,10 @@ import App from './App.vue'
 import router from './router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
+// 样式清除
+import 'normalize.css'
+// markdown样式
+import 'github-markdown-css'
 // element plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -15,9 +19,6 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // @ts-ignore
 import noVue3Cron from 'no-vue3-cron'
 import 'no-vue3-cron/lib/noVue3Cron.css' // 引入样式
-// 样式清除
-import './assets/css/reset.scss'
-import 'github-markdown-css'
 // 自定义指令，给表单项添加提示
 import vTip from './directive/vTip'
 import vCopy from './directive/vCopy'

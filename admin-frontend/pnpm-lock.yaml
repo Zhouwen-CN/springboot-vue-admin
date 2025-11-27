@@ -26,6 +26,9 @@ importers:
       no-vue3-cron:
         specifier: ~2.0.0
         version: 2.0.0(typescript@5.9.3)
+      normalize.css:
+        specifier: ^8.0.1
+        version: 8.0.1
       nprogress:
         specifier: ~0.2.0
         version: 0.2.0
@@ -33,8 +36,8 @@ importers:
         specifier: ~3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3))
       pinia-plugin-persistedstate:
-        specifier: ~3.2.3
-        version: 3.2.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3)))
+        specifier: ~4.7.1
+        version: 4.7.1(@nuxt/kit@3.17.3)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3)))
       swagger-ui:
         specifier: ~5.13.0
         version: 5.13.0
@@ -2359,6 +2362,9 @@ packages:
   normalize-wheel-es@1.2.0:
     resolution: {integrity: sha512-Wj7+EJQ8mSuXr2iWfnujrimU35R2W4FAErEyTmJoJ7ucwTn2hOUSsRehMb5RSYkxXGTM7Y9QpvPmp++w5ftoJw==}
 
+  normalize.css@8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
+
   npm-normalize-package-bin@4.0.0:
     resolution: {integrity: sha512-TZKxPvItzai9kN9H/TkmCtx/ZN/hvr3vUycjlfmH0ootY9yFBzNOpiXAdIn1Iteqsvk4lQn6B5PTrt+n6h8k/w==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -2496,10 +2502,19 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  pinia-plugin-persistedstate@3.2.3:
-    resolution: {integrity: sha512-Cm819WBj/s5K5DGw55EwbXDtx+EZzM0YR5AZbq9XE3u0xvXwvX2JnWoFpWIcdzISBHqy9H1UiSIUmXyXqWsQRQ==}
+  pinia-plugin-persistedstate@4.7.1:
+    resolution: {integrity: sha512-WHOqh2esDlR3eAaknPbqXrkkj0D24h8shrDPqysgCFR6ghqP/fpFfJmMPJp0gETHsvrh9YNNg6dQfo2OEtDnIQ==}
     peerDependencies:
-      pinia: ^2.0.0
+      '@nuxt/kit': '>=3.0.0'
+      '@pinia/nuxt': '>=0.10.0'
+      pinia: '>=3.0.0'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      '@pinia/nuxt':
+        optional: true
+      pinia:
+        optional: true
 
   pinia@3.0.4:
     resolution: {integrity: sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==}
@@ -4977,8 +4992,7 @@ snapshots:
 
   define-lazy-prop@3.0.0: {}
 
-  defu@6.1.4:
-    optional: true
+  defu@6.1.4: {}
 
   delayed-stream@1.0.0: {}
 
@@ -6146,6 +6160,8 @@ snapshots:
 
   normalize-wheel-es@1.2.0: {}
 
+  normalize.css@8.0.1: {}
+
   npm-normalize-package-bin@4.0.0: {}
 
   npm-run-all2@8.0.4:
@@ -6298,8 +6314,11 @@ snapshots:
 
   pidtree@0.6.0: {}
 
-  pinia-plugin-persistedstate@3.2.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3))):
+  pinia-plugin-persistedstate@4.7.1(@nuxt/kit@3.17.3)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3))):
     dependencies:
+      defu: 6.1.4
+    optionalDependencies:
+      '@nuxt/kit': 3.17.3
       pinia: 3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3))
 
   pinia@3.0.4(typescript@5.9.3)(vue@3.5.17(typescript@5.9.3)):
