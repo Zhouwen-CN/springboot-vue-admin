@@ -62,7 +62,11 @@ const routeInfo = computed(() => {
 
 // 菜单收起/展开
 function changeCollapse() {
-  settingStore.collapse = !settingStore.collapse
+  if (appStore.device === 'mobile') {
+    settingStore.hidden = !settingStore.hidden
+  } else {
+    settingStore.collapse = !settingStore.collapse
+  }
 }
 
 // 表单校验
@@ -118,7 +122,7 @@ function clean() {
 <template>
   <div class="container">
     <!-- 展开收起按钮 -->
-    <el-icon :size="20" style="margin-right: 10px" @click="changeCollapse">
+    <el-icon :size="20" style="margin-right: 10px" @click.stop="changeCollapse">
       <component :is="settingStore.collapse ? 'Expand' : 'Fold'"> </component>
     </el-icon>
     <!-- 左侧面包屑 -->
@@ -151,7 +155,7 @@ function clean() {
       v-model="dialogVisible"
       title="修改密码"
       :width="appStore.device === 'desktop' ? '50%' : '80%'"
-      :align-center="appStore.device!=='desktop'"
+      :align-center="appStore.device !== 'desktop'"
       body-class="dialog-body"
       @close="clean"
     >

@@ -35,6 +35,7 @@ const useSettingStore = defineStore(
 
     function $reset() {
       collapse.value = false
+      hidden.value = false
     }
 
     return {
@@ -51,7 +52,7 @@ const useSettingStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      paths: ['collapse']
+      paths: ['collapse', 'hidden']
     }
   }
 )

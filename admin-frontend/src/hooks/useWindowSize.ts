@@ -1,5 +1,7 @@
 import useAppStore from '@/stores/app'
+import useSettingStore from '@/stores/setting'
 const appStpre = useAppStore()
+const settingStore = useSettingStore()
 
 /**
  * 保存视口宽高，并判断设备类型
@@ -12,12 +14,17 @@ function useWindowSize() {
     appStpre.windowHeight = window.innerHeight
     if (width <= MOBILE_MAX_WIDTH) {
       appStpre.device = 'mobile'
+      settingStore.collapse = false
+      settingStore.hidden = true
     } else {
       appStpre.device = 'desktop'
+      settingStore.collapse = false
+      settingStore.hidden = false
     }
   }
 
   onMounted(() => {
+    handleResize()
     window.addEventListener('resize', handleResize)
   })
 

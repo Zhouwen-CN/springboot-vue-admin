@@ -231,7 +231,7 @@ onMounted(() => {
       v-model="toggleDialog.show"
       :title="toggleDialog.title"
       :width="appStore.device === 'desktop' ? '50%' : '80%'"
-      :align-center="appStore.device!=='desktop'"
+      :align-center="appStore.device !== 'desktop'"
       @close="clean"
     >
       <template #footer>

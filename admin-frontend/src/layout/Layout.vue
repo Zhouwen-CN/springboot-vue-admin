@@ -15,26 +15,48 @@ const appStore = useAppStore()
 const cachedViews = computed(() => useTagViewStore().cachedViews)
 useWindowSize()
 
-watch(
-  () => appStore.device,
-  (value) => {
-    settingStore.collapse = value === 'mobile';
+// 菜单选择事件
+function handleMenuSelect() {
+  if (appStore.device === 'mobile') {
+    settingStore.hidden = true
   }
-)
+}
+
+// 内容区域点击事件
+function handleContentClick() {
+  if (appStore.device === 'mobile' && !settingStore.hidden) {
+    settingStore.hidden = true
+  }
+}
 </script>
 
 <template>
   <el-container>
     <!-- 侧边栏菜单 -->
-    <el-aside class="aside" width="auto">
+    <el-aside
+      class="aside"
+      :style="{
+        display: appStore.device === 'mobile' && settingStore.hidden ? 'none' : 'block',
+        width: appStore.device === 'mobile' && !settingStore.hidden ? '200px' : 'auto',
+        position: appStore.device === 'mobile' && !settingStore.hidden ? 'fixed' : 'static',
+        zIndex: 1000
+      }"
+      @click.stop
+    >
       <el-scrollbar>
         <div :style="{ margin: settingStore.collapse ? '0' : '0 20px' }" class="aside-header">
           <img
-            :style="{ 'margin-right': settingStore.collapse ? '0' : '10px' }"
+            :style="{
+              'margin-right': settingStore.collapse ? '0' : '10px',
+              height: appStore.device === 'mobile' ? '26px' : '40px'
+            }"
             alt=""
             src="@/assets/logo.svg"
           />
-          <h1 v-show="!settingStore.collapse">
+          <h1
+            v-show="!settingStore.collapse"
+            :style="{ fontSize: appStore.device === 'mobile' ? '26px' : '40px' }"
+          >
             {{ settingStore.appShortName }}
           </h1>
         </div>
@@ -48,6 +70,7 @@ watch(
           style="border: 0"
           text-color="#ffffff"
           unique-opened
+          @select="handleMenuSelect"
         >
           <el-menu-item index="/home">
             <el-icon :size="20">
@@ -61,7 +84,7 @@ watch(
         </el-menu>
       </el-scrollbar>
     </el-aside>
-    <el-container>
+    <el-container @click="handleContentClick">
       <!-- 头部导航 -->
       <el-header class="header">
         <div>
@@ -120,12 +143,7 @@ watch(
     justify-content: center;
     margin: 0 20px;
 
-    & > img {
-      height: 40px;
-    }
-
     & > h1 {
-      font-size: 40px;
       color: white;
     }
   }

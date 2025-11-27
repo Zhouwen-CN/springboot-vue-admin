@@ -136,7 +136,7 @@ onMounted(() => {
       v-model="toggleDialog"
       title="编辑对话名称"
       :width="appStore.device === 'desktop' ? '50%' : '80%'"
-      :align-center="appStore.device!=='desktop'"
+      :align-center="appStore.device !== 'desktop'"
       @close="clean"
     >
       <el-form
