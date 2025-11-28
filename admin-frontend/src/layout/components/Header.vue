@@ -63,9 +63,9 @@ const routeInfo = computed(() => {
 // 菜单收起/展开
 function changeCollapse() {
   if (appStore.device === 'mobile') {
-    settingStore.hidden = !settingStore.hidden
+    settingStore.sidebarHidden = !settingStore.sidebarHidden
   } else {
-    settingStore.collapse = !settingStore.collapse
+    settingStore.sidebarCollapse = !settingStore.sidebarCollapse
   }
 }
 
@@ -123,7 +123,7 @@ function clean() {
   <div class="container">
     <!-- 展开收起按钮 -->
     <el-icon :size="20" style="margin-right: 10px" @click.stop="changeCollapse">
-      <component :is="settingStore.collapse ? 'Expand' : 'Fold'"> </component>
+      <component :is="settingStore.sidebarCollapse ? 'Expand' : 'Fold'"> </component>
     </el-icon>
     <!-- 左侧面包屑 -->
     <el-breadcrumb :separator-icon="ArrowRight" class="breadcrumb">

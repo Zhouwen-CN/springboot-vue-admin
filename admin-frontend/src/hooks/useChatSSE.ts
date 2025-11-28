@@ -19,7 +19,7 @@ export interface ChatVo {
  * @param spaceEscape // 和后端约定好的空格符转义
  * @returns
  */
-function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20') {
+function useChatSSE(lineEscape: string = '\\x0a') {
   let baseUrl = import.meta.env.VITE_APP_BASE_URL
   baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
   const loading = ref(false)
@@ -136,7 +136,7 @@ function useChatSSE(lineEscape: string = '\\x0a', spaceEscape: string = '\\x20')
           if (line.match(/^(\r\n|\r|\n)$/) && (type || data)) {
             const content = data.join('\n')
             if (type === 'message') {
-              const data = content.replaceAll(lineEscape, '\\n').replaceAll(spaceEscape, ' ')
+              const data = content.replaceAll(lineEscape, '\\n')
               onMessageCallback?.(JSON.parse(data) as ChatVo)
             }
             if (type === 'error') {

@@ -14,12 +14,14 @@ function useWindowSize() {
     appStpre.windowHeight = window.innerHeight
     if (width <= MOBILE_MAX_WIDTH) {
       appStpre.device = 'mobile'
-      settingStore.collapse = false
-      settingStore.hidden = true
+      settingStore.sidebarCollapse = false
+      settingStore.sidebarHidden = true
+      settingStore.conversationVisible = false
     } else {
       appStpre.device = 'desktop'
-      settingStore.collapse = false
-      settingStore.hidden = false
+      settingStore.sidebarCollapse = false
+      settingStore.sidebarHidden = false
+      settingStore.conversationVisible = true
     }
   }
 

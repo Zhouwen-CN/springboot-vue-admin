@@ -15,7 +15,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import ConversationList from './components/ConversationList.vue'
 import { Plus } from '@element-plus/icons-vue'
 import useAppStore from '@/stores/app'
+import useSettingStore from '@/stores/setting'
 const appStore = useAppStore()
+const settingStore = useSettingStore()
 
 // 聊条历史
 const chatHistoryVo = ref<ConversationItem<ChatHistoryVo>[]>([])
@@ -68,7 +70,6 @@ const formRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof form>>({
   title: [{ required: true, message: '请输入会话名称', trigger: 'blur' }]
 })
-
 async function onSubmit(formEl: FormInstance | undefined) {
   if (!formEl) return
   loading.value = true
@@ -85,13 +86,22 @@ async function onSubmit(formEl: FormInstance | undefined) {
   }
 }
 
+// 刷新会话历史
 async function refreshConversations() {
   await getChatHistory()
 }
 
+// 清空表单
 function clean() {
   form.conversationId = ''
   form.title = ''
+}
+
+// 内容区域点击事件
+function handleContentClick() {
+  if (appStore.device === 'mobile' && settingStore.conversationVisible) {
+    settingStore.conversationVisible = false
+  }
 }
 
 onMounted(() => {
@@ -102,18 +112,22 @@ onMounted(() => {
 <template>
   <div>
     <div class="container">
-      <div class="sidebar">
+      <div
+        class="sidebar"
+        :style="{ display: settingStore.conversationVisible ? 'block' : 'none' }"
+      >
         <Conversations
           v-model:active="chatId"
           :items="chatHistoryVo"
-          :label-max-width="260"
           labelKey="title"
           row-key="conversationId"
           show-tooltip
           showBuiltInMenu
           showToTopBtn
-          :style="{ width: '260px', display: appStore.device === 'desktop' ? '' : 'none' }"
+          :label-max-width="260"
+          :style="{ width: appStore.device === 'desktop' ? '260px' : '180px' }"
           @menuCommand="handleMenuCommand"
+          @click="handleContentClick"
         >
           <template #header>
             <el-button
@@ -122,7 +136,6 @@ onMounted(() => {
               round
               style="margin: 0 20px"
               type="primary"
-              :style="{ display: appStore.device === 'desktop' ? 'block' : 'none' }"
               @click="chatId = undefined"
             >
               新建会话
@@ -130,8 +143,19 @@ onMounted(() => {
           </template>
         </Conversations>
       </div>
-      <div class="content">
+      <div class="content" @click="handleContentClick">
         <ConversationList v-model="chatId" @refresh="refreshConversations"> </ConversationList>
+
+        <el-button
+          v-if="appStore.device === 'mobile'"
+          class="conversation-toggle-btn"
+          bg
+          text
+          type="primary"
+          icon="Operation"
+          size="small"
+          @click.stop="settingStore.conversationVisible = !settingStore.conversationVisible"
+        ></el-button>
       </div>
     </div>
     <el-dialog
@@ -175,8 +199,16 @@ onMounted(() => {
   }
 
   .content {
+    position: relative;
     height: calc(100vh - $base_header_height - 40px);
     flex: 1;
+
+    .conversation-toggle-btn {
+      position: absolute;
+      top: 40%;
+      left: 0;
+      z-index: 1;
+    }
   }
 }
 </style>

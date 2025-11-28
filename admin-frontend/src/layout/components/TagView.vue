@@ -338,6 +338,8 @@ onMounted(() => {
   background: var(--el-bg-color-overlay);
   border-radius: 4px;
   box-shadow: var(--el-box-shadow-light);
+  list-style-type: none;
+  padding: 0;
 
   li {
     padding: 8px 16px;

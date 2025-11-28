@@ -13,6 +13,7 @@ import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 import useAppStore from '@/stores/app'
 const appStore = useAppStore()
 
+// 聊天列表项类型
 type MessageItem = BubbleListItemProps & {
   avatar: string
   role: 'ai' | 'user'
@@ -21,6 +22,7 @@ type MessageItem = BubbleListItemProps & {
   reasoningContent?: string
 }
 
+// 聊天请求
 const { loading, run, onMessage, onError, cancel } = useChat()
 // 表单
 const chatForm = reactive({
@@ -32,14 +34,12 @@ const chatForm = reactive({
 const chatId = defineModel<string>()
 // 刷新侧边栏
 const emits = defineEmits(['refresh'])
+// 是否是新创建的会话
 const isNewConversation = ref(false)
 
 // 会话列表
 const bubbleListRef = ref<BubbleListInstance>()
 const bubbleListItems = ref<MessageItem[]>([])
-const bubbleListPaddingLeft = computed(() => {
-  return appStore.device === 'desktop' ? '20px' : '0px'
-})
 
 // 监听会话id
 watch(chatId, (value) => {
@@ -57,6 +57,7 @@ watch(chatId, (value) => {
     bubbleListItems.value = []
   }
 })
+
 // 消息转换
 function convertBubbleListItem(messages: ChatMessageDto[]) {
   const result: MessageItem[] = []
@@ -73,8 +74,6 @@ function convertBubbleListItem(messages: ChatMessageDto[]) {
     }
   })
 }
-
-const isSelect = ref(false)
 
 // 提示词集
 function promptItemClickHandler(item: PromptsItemsProps) {
@@ -137,6 +136,7 @@ async function onSubmit() {
   }
 }
 
+// 聊天请求消息回调
 onMessage((data) => {
   const lastItem = bubbleListItems.value[bubbleListItems.value.length - 1]!
   // 当前为加载状态 && 遇到第一个非空内容，取消加载状态
@@ -154,6 +154,7 @@ onMessage((data) => {
   lastItem.content += data.content
 })
 
+// 聊天请求错误回调
 onError((message) => {
   const lastItem = bubbleListItems.value[bubbleListItems.value.length - 1]
   if (lastItem) {
@@ -191,24 +192,41 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
   }
 }
 
+// 取消聊天请求
 function onCancel() {
   cancel()
 }
+
+const isDeepSinking = ref(false)
+const isWebSearch = ref(false)
+
+// 电脑端，ai回复消息左padding 20px
+const bubbleStartPaddingLeft = computed(() => {
+  return appStore.device === 'desktop' ? '20px' : '0px'
+})
+// 移动端，头像隐藏
+const bubbleAvatarVisibleCss = computed(() => {
+  return appStore.device === 'desktop' ? 'block' : 'none'
+})
+// 移动端，动态计算内容最大宽度
+const bubbleContentMaxWidthCss = computed(() => {
+  return appStore.device === 'desktop' ? '800px' : `${appStore.windowWidth - 40}px`
+})
 </script>
 
 <template>
   <div class="container">
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
-      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%">
+      <BubbleList v-if="chatId" ref="bubbleListRef"
+        :list="bubbleListItems" max-height="100%">
         <template #header="{ item }">
           <Thinking
             v-if="item.reasoningContent"
             v-model="item.thinkCollapse"
             :content="item.reasoningContent"
             :status="item.thinkingStatus"
-            class="thinking-chain-warp"
-          />
+            class="thinking-chain-warp" />
         </template>
 
         <template #content="{ item }">
@@ -218,8 +236,7 @@ function onCancel() {
             :markdown="item.content!"
             :themes="{ light: 'github-light', dark: 'github-dark' }"
             class="markdown-body"
-            default-theme-mode="dark"
-          />
+            default-theme-mode="dark" />
           <!-- user 内容 纯文本 -->
           <div v-if="item.role === 'user'" class="user-content">
             {{ item.content }}
@@ -228,48 +245,45 @@ function onCancel() {
       </BubbleList>
 
       <!-- 欢迎卡片 -->
-      <Welcome
-        v-else
-        class="welcome"
-        description="这是描述信息 ~"
-        extra="副标题"
-        icon="https://camo.githubusercontent.com/4ea7fdaabf101c16965c0bd3ead816c9d7726a59b06f0800eb7c9a30212d5a6a/68747470733a2f2f63646e2e656c656d656e742d706c75732d782e636f6d2f656c656d656e742d706c75732d782e706e67"
-        title="欢迎使用 Element Plus X 💖"
-      />
+      <Welcome v-else variant="borderless" :style="{
+        background:
+          'linear-gradient(97deg, rgba(90,196,255,0.12) 0%, rgba(174,136,255,0.12) 100%)'
+      }" title="欢迎使用 Element Plus X 💖"
+        description="用 vue3 对 ant-design-x 的复刻。后续将会集成 AI 工作流编排组件 和 md 多功能渲染组件，给 Vue 开发社区 一个好用的 AI 组件库">
+        <template #image>
+          <img src="https://element-plus-x.com/logo.png"
+            style="width: 80px" />
+        </template>
+      </Welcome>
     </div>
     <!-- 提示词集 -->
-    <Prompts
-      v-if="!chatId"
-      :items="promptItems"
-      title="🐵 提示集组件标题"
-      @itemClick="promptItemClickHandler"
-    />
+    <Prompts v-if="!chatId" :items="promptItems" title="🐵 提示集组件标题"
+      @itemClick="promptItemClickHandler" />
 
     <!-- 发送框 -->
-    <Sender
-      v-model="chatForm.prompt"
-      :loading="loading"
-      :auto-size="{ minRows: 3, maxRows: 3 }"
-      class="sender"
-      placeholder="请输入内容，shift+enter换行"
-      variant="updown"
-      @submit="onSubmit"
-      @cancel="onCancel"
-    >
+    <Sender v-model="chatForm.prompt" :loading="loading"
+      :auto-size="{ minRows: 3, maxRows: 3 }" class="sender"
+      placeholder="请输入内容，shift+enter换行" variant="updown" clearable
+      allowSpeech @submit="onSubmit" @cancel="onCancel">
       <template #prefix>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
-          <div :class="{ isSelect }" class="chat-option" @click="isSelect = !isSelect">
-            <el-icon>
-              <ChromeFilled />
-            </el-icon>
-            <span>联网搜索</span>
-          </div>
-
-          <div :class="{ isSelect }" class="chat-option" @click="isSelect = !isSelect">
+        <div class="sender-prefix">
+          <div
+            :class="{ selected: isDeepSinking }"
+            class="chat-option"
+            @click="isDeepSinking = !isDeepSinking">
             <el-icon>
               <Cpu />
             </el-icon>
             <span>深度思考</span>
+          </div>
+          <div
+            :class="{ selected: isWebSearch }"
+            class="chat-option"
+            @click="isWebSearch = !isWebSearch">
+            <el-icon>
+              <ChromeFilled />
+            </el-icon>
+            <span>联网搜索</span>
           </div>
         </div>
       </template>
@@ -278,8 +292,18 @@ function onCancel() {
 </template>
 
 <style lang="scss" scoped>
-:deep(.el-bubble-list .el-bubble-start) {
-  padding-left: v-bind(bubbleListPaddingLeft);
+:deep(.el-bubble-list) {
+  .el-bubble-start {
+    padding-left: v-bind(bubbleStartPaddingLeft);
+  }
+
+  .el-bubble-avatar {
+    display: v-bind(bubbleAvatarVisibleCss);
+  }
+
+  .el-bubble-content {
+    max-width: v-bind(bubbleContentMaxWidthCss);
+  }
 }
 
 .container {
@@ -289,7 +313,7 @@ function onCancel() {
   justify-content: space-between;
 
   .bubble-list {
-    max-height: calc(100vh - $base_header_height - 136px - 40px - 40px);
+    max-height: calc(100vh - $base_header_height - 136px - 40px - 20px);
     flex: 1;
 
     .thinking-chain-warp {
@@ -306,25 +330,37 @@ function onCancel() {
     }
   }
 
+  :deep(.el-prompts .el-prompts-item) {
+    height: auto;
+  }
+
   .sender {
     margin-top: 20px;
+    // 侧边栏展开时，sender高度会变大，凑合用吧
+    overflow: hidden;
 
-    .chat-option {
+    .sender-prefix {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 2px 12px;
-      border: 1px solid silver;
-      border-radius: 10px;
-      cursor: pointer;
-      line-height: 24px;
-      font-size: var(--el-font-size-base);
-      font-weight: 300;
-    }
+      gap: 8px;
+      flex-wrap: wrap;
 
-    .isSelect {
-      color: #626aef;
-      border: 1px solid #626aef !important;
+      .chat-option {
+        display: flex;
+        align-items: center;
+        padding: 2px 5px;
+        border: 1px solid silver;
+        border-radius: 10px;
+        cursor: pointer;
+        line-height: 24px;
+        font-size: var(--el-font-size-base);
+        font-weight: 300;
+      }
+
+      .selected {
+        color: var(--el-color-primary);
+        border: 1px solid var(--el-color-primary) !important;
+      }
     }
   }
 }

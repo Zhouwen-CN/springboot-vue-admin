@@ -54,7 +54,7 @@ export function useChat() {
       body: prompt,
       headers: {
         'Content-Type': 'text/plain',
-        chatId: chatId
+        'X-Chat-Id': chatId
       }
     })
   }

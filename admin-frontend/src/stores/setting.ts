@@ -2,9 +2,11 @@ const useSettingStore = defineStore(
   'PINIA:SETTING-STORE',
   () => {
     // 侧边栏折叠
-    const collapse = ref(false)
+    const sidebarCollapse = ref(false)
     // 侧边栏隐藏
-    const hidden = ref(false)
+    const sidebarHidden = ref(false)
+    // 会话列表是否可见
+    const conversationVisible = ref(false)
 
     const {
       VITE_APP_NAME: appName,
@@ -34,14 +36,15 @@ const useSettingStore = defineStore(
     }
 
     function $reset() {
-      collapse.value = false
-      hidden.value = false
+      sidebarCollapse.value = false
+      sidebarHidden.value = false
     }
 
     return {
       codegenConfig,
-      collapse,
-      hidden,
+      sidebarCollapse,
+      sidebarHidden,
+      conversationVisible,
       appName,
       appShortName,
       projectLink,
@@ -52,7 +55,7 @@ const useSettingStore = defineStore(
   {
     persist: {
       storage: localStorage,
-      pick: ['collapse', 'hidden']
+      pick: ['sidebarCollapse', 'sidebarHidden']
     }
   }
 )

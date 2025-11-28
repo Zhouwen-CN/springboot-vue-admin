@@ -146,9 +146,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NonTransientAiException.class)
     public void nonTransientAiExceptionHandler(NonTransientAiException e, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
-        val writer = response.getWriter();
-        writer.write("event: error\n");
-        writer.write(String.format("data: %s\n\n", e.getMessage()));
+        // 统一数据格式？
+        response.getWriter().println(String.format("event: error\ndata: %s\n\n",e.getMessage()));
     }
 
     /**

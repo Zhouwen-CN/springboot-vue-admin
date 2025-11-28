@@ -59,12 +59,10 @@ public class ChatController {
     private final ChatMemoryRepository chatMemoryRepository;
     // 和前端约定好的换行符转义
     private static final String LINE_ESCAPE = "\\x0a";
-    // 和前端约定好的空格符转义
-    private static final String SPACE_ESCAPE = "\\x20";
 
     @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(
-            @RequestHeader("chatId") String chatId,
+            @RequestHeader("X-Chat-Id") String chatId,
             @RequestBody @NotBlank String prompt,
             HttpServletRequest request
     ) {
@@ -166,7 +164,6 @@ public class ChatController {
 
     private String transform(String str) {
         return str.transform(s -> s.replace("\n", LINE_ESCAPE))
-                .transform(s -> s.replace(" ", SPACE_ESCAPE))
                 .transform(s -> s.replace("\"", "\\\""));
     }
 

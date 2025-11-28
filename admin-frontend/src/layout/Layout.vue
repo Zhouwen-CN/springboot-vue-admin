@@ -18,14 +18,14 @@ useWindowSize()
 // 菜单选择事件
 function handleMenuSelect() {
   if (appStore.device === 'mobile') {
-    settingStore.hidden = true
+    settingStore.sidebarHidden = true
   }
 }
 
 // 内容区域点击事件
 function handleContentClick() {
-  if (appStore.device === 'mobile' && !settingStore.hidden) {
-    settingStore.hidden = true
+  if (appStore.device === 'mobile' && !settingStore.sidebarHidden) {
+    settingStore.sidebarHidden = true
   }
 }
 </script>
@@ -36,22 +36,25 @@ function handleContentClick() {
     <el-aside
       class="aside"
       :style="{
-        display: appStore.device === 'mobile' && settingStore.hidden ? 'none' : 'block',
-        width: appStore.device === 'mobile' && !settingStore.hidden ? '180px' : 'auto'
+        display: appStore.device === 'mobile' && settingStore.sidebarHidden ? 'none' : 'block',
+        width: appStore.device === 'mobile' && !settingStore.sidebarHidden ? '180px' : 'auto'
       }"
       @click.stop
     >
       <el-scrollbar>
-        <div :style="{ margin: settingStore.collapse ? '0' : '0 20px' }" class="aside-header">
+        <div
+          :style="{ margin: settingStore.sidebarCollapse ? '0' : '0 20px' }"
+          class="aside-header"
+        >
           <img
             :style="{
-              'margin-right': settingStore.collapse ? '0' : '10px',
+              'margin-right': settingStore.sidebarCollapse ? '0' : '10px',
               height: appStore.device === 'mobile' ? '26px' : '40px'
             }"
             src="@/assets/logo.svg"
           />
           <h1
-            v-show="!settingStore.collapse"
+            v-show="!settingStore.sidebarCollapse"
             :style="{ fontSize: appStore.device === 'mobile' ? '20px' : '40px' }"
           >
             {{ settingStore.appShortName }}
@@ -59,7 +62,7 @@ function handleContentClick() {
         </div>
 
         <el-menu
-          :collapse="settingStore.collapse"
+          :collapse="settingStore.sidebarCollapse"
           :default-active="route.path"
           active-text-color="#409eff"
           background-color="#304156"

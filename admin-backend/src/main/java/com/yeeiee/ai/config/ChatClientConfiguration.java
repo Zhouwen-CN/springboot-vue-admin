@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * <p>
- *
+ * 对话客户端配置
  * </p>
  *
  * @author chen
