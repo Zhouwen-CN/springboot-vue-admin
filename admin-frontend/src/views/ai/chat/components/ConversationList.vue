@@ -201,7 +201,7 @@ const isDeepSinking = ref(false)
 const isWebSearch = ref(false)
 
 // 电脑端，ai回复消息左padding 20px
-const bubbleStartPaddingLeft = computed(() => {
+const containerPaddingLeft = computed(() => {
   return appStore.device === 'desktop' ? '20px' : '0px'
 })
 // 移动端，头像隐藏
@@ -218,15 +218,15 @@ const bubbleContentMaxWidthCss = computed(() => {
   <div class="container">
     <div class="bubble-list">
       <!-- 聊天会话列表 -->
-      <BubbleList v-if="chatId" ref="bubbleListRef"
-        :list="bubbleListItems" max-height="100%">
+      <BubbleList v-if="chatId" ref="bubbleListRef" :list="bubbleListItems" max-height="100%">
         <template #header="{ item }">
           <Thinking
             v-if="item.reasoningContent"
             v-model="item.thinkCollapse"
             :content="item.reasoningContent"
             :status="item.thinkingStatus"
-            class="thinking-chain-warp" />
+            class="thinking-chain-warp"
+          />
         </template>
 
         <template #content="{ item }">
@@ -236,7 +236,8 @@ const bubbleContentMaxWidthCss = computed(() => {
             :markdown="item.content!"
             :themes="{ light: 'github-light', dark: 'github-dark' }"
             class="markdown-body"
-            default-theme-mode="dark" />
+            default-theme-mode="dark"
+          />
           <!-- user 内容 纯文本 -->
           <div v-if="item.role === 'user'" class="user-content">
             {{ item.content }}
@@ -245,32 +246,49 @@ const bubbleContentMaxWidthCss = computed(() => {
       </BubbleList>
 
       <!-- 欢迎卡片 -->
-      <Welcome v-else variant="borderless" :style="{
-        background:
-          'linear-gradient(97deg, rgba(90,196,255,0.12) 0%, rgba(174,136,255,0.12) 100%)'
-      }" title="欢迎使用 Element Plus X 💖"
-        description="用 vue3 对 ant-design-x 的复刻。后续将会集成 AI 工作流编排组件 和 md 多功能渲染组件，给 Vue 开发社区 一个好用的 AI 组件库">
+      <Welcome
+        v-else
+        variant="borderless"
+        :style="{
+          background:
+            'linear-gradient(97deg, rgba(90,196,255,0.12) 0%, rgba(174,136,255,0.12) 100%)'
+        }"
+        title="欢迎使用 Element Plus X 💖"
+        description="用 vue3 对 ant-design-x 的复刻。后续将会集成 AI 工作流编排组件 和 md 多功能渲染组件，给 Vue 开发社区 一个好用的 AI 组件库"
+      >
         <template #image>
-          <img src="https://element-plus-x.com/logo.png"
-            style="width: 80px" />
+          <img src="https://element-plus-x.com/logo.png" style="width: 80px" />
         </template>
       </Welcome>
     </div>
     <!-- 提示词集 -->
-    <Prompts v-if="!chatId" :items="promptItems" title="🐵 提示集组件标题"
-      @itemClick="promptItemClickHandler" />
+    <Prompts
+      v-if="!chatId"
+      :items="promptItems"
+      title="🐵 提示集组件标题"
+      @itemClick="promptItemClickHandler"
+    />
 
     <!-- 发送框 -->
-    <Sender v-model="chatForm.prompt" :loading="loading"
-      :auto-size="{ minRows: 3, maxRows: 3 }" class="sender"
-      placeholder="请输入内容，shift+enter换行" variant="updown" clearable
-      allowSpeech @submit="onSubmit" @cancel="onCancel">
+    <Sender
+      v-model="chatForm.prompt"
+      :loading="loading"
+      :auto-size="{ minRows: 3, maxRows: 3 }"
+      class="sender"
+      placeholder="请输入内容，shift+enter换行"
+      variant="updown"
+      clearable
+      allowSpeech
+      @submit="onSubmit"
+      @cancel="onCancel"
+    >
       <template #prefix>
         <div class="sender-prefix">
           <div
             :class="{ selected: isDeepSinking }"
             class="chat-option"
-            @click="isDeepSinking = !isDeepSinking">
+            @click="isDeepSinking = !isDeepSinking"
+          >
             <el-icon>
               <Cpu />
             </el-icon>
@@ -279,7 +297,8 @@ const bubbleContentMaxWidthCss = computed(() => {
           <div
             :class="{ selected: isWebSearch }"
             class="chat-option"
-            @click="isWebSearch = !isWebSearch">
+            @click="isWebSearch = !isWebSearch"
+          >
             <el-icon>
               <ChromeFilled />
             </el-icon>
@@ -293,10 +312,6 @@ const bubbleContentMaxWidthCss = computed(() => {
 
 <style lang="scss" scoped>
 :deep(.el-bubble-list) {
-  .el-bubble-start {
-    padding-left: v-bind(bubbleStartPaddingLeft);
-  }
-
   .el-bubble-avatar {
     display: v-bind(bubbleAvatarVisibleCss);
   }
@@ -311,6 +326,7 @@ const bubbleContentMaxWidthCss = computed(() => {
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
+  margin-left: v-bind(containerPaddingLeft);
 
   .bubble-list {
     max-height: calc(100vh - $base_header_height - 136px - 40px - 20px);

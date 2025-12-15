@@ -16,7 +16,6 @@ export interface ChatVo {
 /**
  * chat sse hook
  * @param lineEscape // 和后端约定好的换行符转义
- * @param spaceEscape // 和后端约定好的空格符转义
  * @returns
  */
 function useChatSSE(lineEscape: string = '\\x0a') {

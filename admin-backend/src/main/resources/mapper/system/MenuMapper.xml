@@ -34,9 +34,7 @@
             a.keep_alive as keepAlive,
             a.menu_type as menuType,
             a.sort_id as sortId,
-            a.create_user as createUser,
             a.create_time as createTime,
-            a.update_user as updateUser,
             a.update_time as updateTime
         from t_menu a
         join (
