@@ -45,16 +45,23 @@ export function reqDeleteChatConversationById(conversationId: string) {
   return request.delete<void>(`/ai/chat/conversation/${conversationId}`)
 }
 
+export interface ChatForm {
+    conversationId: string
+    prompt: string
+    enableThinking: boolean
+    enableSearch: boolean
+}
+
 // 聊天请求
 export function useChat() {
   const { loading, run, onMessage, onError, cancel } = useChatSSE()
-  function innerRun(chatId: string, prompt: string) {
+
+    function innerRun(chatForm: ChatForm) {
     return run('/ai/chat', {
       method: 'post',
-      body: prompt,
+        body: JSON.stringify(chatForm),
       headers: {
-        'Content-Type': 'text/plain',
-        'X-Chat-Id': chatId
+          'Content-Type': 'application/json'
       }
     })
   }

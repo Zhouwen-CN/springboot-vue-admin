@@ -5,7 +5,7 @@ import com.yeeiee.ai.domain.entity.ChatHistory;
 
 /**
  * <p>
- * AI聊天记录表 Mapper 接口
+ * AI对话记录表 Mapper 接口
  * </p>
  *
  * @author chen

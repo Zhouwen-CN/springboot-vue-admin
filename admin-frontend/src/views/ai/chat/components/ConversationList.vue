@@ -1,16 +1,12 @@
 <script lang="ts" setup>
-import {
-  type ChatMessageDto,
-  reqAddChatConversation,
-  reqGetChatConversationList,
-  useChat
-} from '@/api/ai/chat'
-import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
-import type { ThinkingStatus } from 'vue-element-plus-x/types/Thinking'
-import { BubbleList, Prompts, Sender, Welcome, XMarkdown, Thinking } from 'vue-element-plus-x'
-import { ChromeFilled, Cpu } from '@element-plus/icons-vue'
-import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
+import {type ChatMessageDto, reqAddChatConversation, reqGetChatConversationList, useChat} from '@/api/ai/chat'
+import type {BubbleListInstance, BubbleListItemProps} from 'vue-element-plus-x/types/BubbleList'
+import type {ThinkingStatus} from 'vue-element-plus-x/types/Thinking'
+import {BubbleList, Prompts, Sender, Thinking, Welcome, XMarkdown} from 'vue-element-plus-x'
+import {ChromeFilled, Cpu} from '@element-plus/icons-vue'
+import type {PromptsItemsProps} from 'vue-element-plus-x/types/Prompts'
 import useAppStore from '@/stores/app'
+
 const appStore = useAppStore()
 
 // 聊天列表项类型
@@ -27,7 +23,9 @@ const { loading, run, onMessage, onError, cancel } = useChat()
 // 表单
 const chatForm = reactive({
   conversationId: '',
-  prompt: ''
+  prompt: '',
+  enableThinking: false,
+  enableSearch: false
 })
 
 // 会话 id
@@ -122,7 +120,10 @@ async function onSubmit() {
     bubbleListItems.value.push(createMessage(true, false, prompt))
     bubbleListItems.value.push(createMessage(false, false))
     // 聊天请求
-    await run(chatForm.conversationId, prompt)
+    await run({
+      ...chatForm,
+      prompt
+    })
   } catch (e) {
     console.error('Fetch error:', e)
   } finally {
@@ -196,9 +197,6 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
 function onCancel() {
   cancel()
 }
-
-const isDeepSinking = ref(false)
-const isWebSearch = ref(false)
 
 // 电脑端，ai回复消息左padding 20px
 const containerPaddingLeft = computed(() => {
@@ -278,16 +276,15 @@ const bubbleContentMaxWidthCss = computed(() => {
       placeholder="请输入内容，shift+enter换行"
       variant="updown"
       clearable
-      allowSpeech
       @submit="onSubmit"
       @cancel="onCancel"
     >
       <template #prefix>
         <div class="sender-prefix">
           <div
-            :class="{ selected: isDeepSinking }"
+              :class="{ selected: chatForm.enableThinking }"
             class="chat-option"
-            @click="isDeepSinking = !isDeepSinking"
+              @click="chatForm.enableThinking = !chatForm.enableThinking"
           >
             <el-icon>
               <Cpu />
@@ -295,9 +292,9 @@ const bubbleContentMaxWidthCss = computed(() => {
             <span>深度思考</span>
           </div>
           <div
-            :class="{ selected: isWebSearch }"
+              :class="{ selected: chatForm.enableSearch }"
             class="chat-option"
-            @click="isWebSearch = !isWebSearch"
+              @click="chatForm.enableSearch = !chatForm.enableSearch"
           >
             <el-icon>
               <ChromeFilled />

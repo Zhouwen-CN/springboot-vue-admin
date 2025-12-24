@@ -6,7 +6,7 @@ import com.yeeiee.ai.domain.entity.ChatHistory;
 
 /**
  * <p>
- * AI聊天记录表 服务类
+ * AI对话记录表 服务类
  * </p>
  *
  * @author chen

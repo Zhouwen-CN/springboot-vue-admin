@@ -7,7 +7,7 @@ import lombok.ToString;
 
 /**
  * <p>
- * AI聊天记录视图
+ * AI对话记录视图
  * </p>
  *
  * @author chen
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "ChatHistoryVo", description = "AI聊天记录视图")
+@Schema(name = "ChatHistoryVo", description = "AI对话记录视图")
 public class ChatHistoryVo {
 
     @Schema(description = "会话id")

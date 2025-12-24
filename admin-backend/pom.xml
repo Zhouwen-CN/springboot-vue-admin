@@ -228,9 +228,9 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <!-- https://springdoc.cn/spring-boot/howto.html#howto.build.create-an-executable-jar-with-maven -->
                 <executions>
                     <execution>
-                        <id>repackage</id>
                         <goals>
                             <goal>repackage</goal>
                         </goals>

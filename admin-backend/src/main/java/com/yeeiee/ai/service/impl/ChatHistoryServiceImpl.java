@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * AI聊天记录表 服务实现类
+ * AI对话记录表 服务实现类
  * </p>
  *
  * @author chen

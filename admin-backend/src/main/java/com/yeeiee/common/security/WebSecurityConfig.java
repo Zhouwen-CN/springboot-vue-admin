@@ -9,8 +9,10 @@ import com.yeeiee.common.security.user.UserAuthenticationProcessingFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.actuate.context.ShutdownEndpoint;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -41,18 +43,8 @@ public class WebSecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    private static final String[] STATIC_LIST = new String[]{
-            "/",
-            "/index.html",
-            "/favicon.ico",
-            "/js/**.js",
-            "/css/**.css",
-            "/images/**",
-            "/assets/**"
-    };
-
-    private static final String H2_CONSOLE_PATH = "/h2/**";
+    @Value("${spring.h2.console.path:/h2-console/**}")
+    private String h2ConsolePath;
 
 
     private void commonHttpSetting(HttpSecurity http) throws Exception {
@@ -122,15 +114,15 @@ public class WebSecurityConfig {
         );
         http.authorizeHttpRequests(authorize ->
                         authorize
+                                // 首页 && 刷新token
+                                .requestMatchers(HttpMethod.GET, "/", "/index.html", "/user/refresh").permitAll()
                                 // 静态资源
-                                .requestMatchers(HttpMethod.GET, STATIC_LIST).permitAll()
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 // h2 console
-                                .requestMatchers(H2_CONSOLE_PATH).permitAll()
+                                .requestMatchers(h2ConsolePath).permitAll()
                                 // actuator 端点
                                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
                                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                                // 刷新token
-                                .requestMatchers(HttpMethod.GET, "/user/refresh").permitAll()
                                 // 获取用户所属的菜单列表
                                 .requestMatchers(HttpMethod.GET, "/menu", "/user/logout/**").authenticated()
                                 // 只有 admin 角色才能访问权限管理

@@ -3,6 +3,7 @@ package com.yeeiee.ai.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.yeeiee.ai.domain.entity.ChatHistory;
 import com.yeeiee.ai.domain.form.ChatConversationRenameForm;
+import com.yeeiee.ai.domain.form.ChatForm;
 import com.yeeiee.ai.domain.vo.ChatHistoryVo;
 import com.yeeiee.ai.service.ChatHistoryService;
 import com.yeeiee.common.utils.BeanUtil;
@@ -19,21 +20,14 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -42,7 +36,7 @@ import java.util.Optional;
 
 /**
  * <p>
- * AI聊天 控制器
+ * AI对话 控制器
  * </p>
  *
  * @author chen
@@ -51,19 +45,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/ai/chat")
-@Tag(name = "AI聊天 控制器")
+@Tag(name = "AI对话 控制器")
 public class ChatController {
 
+    // 和前端约定好的换行符转义
+    private static final String LINE_ESCAPE = "\\x0a";
     private final ChatClient chatClient;
     private final ChatHistoryService chatHistoryService;
     private final ChatMemoryRepository chatMemoryRepository;
-    // 和前端约定好的换行符转义
-    private static final String LINE_ESCAPE = "\\x0a";
 
-    @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(
-            @RequestHeader("X-Chat-Id") String chatId,
-            @RequestBody @NotBlank String prompt,
+            @RequestBody @Validated ChatForm chatForm,
             HttpServletRequest request
     ) {
 
@@ -73,17 +66,28 @@ public class ChatController {
                 SecurityContextHolder.getContext()
         );
 
+        val conversationId = chatForm.getConversationId();
         val userId = SecurityUserUtil.getSecurityUser().getId();
         val exists = chatHistoryService.exists(
                 Wrappers.<ChatHistory>lambdaQuery()
                         .eq(ChatHistory::getUserId, userId)
-                        .eq(ChatHistory::getConversationId, chatId)
+                        .eq(ChatHistory::getConversationId, conversationId)
         );
         if (!exists) {
-            throw new NonTransientAiException("聊天会话不存在: " + chatId);
+            throw new NonTransientAiException("聊天会话不存在: " + conversationId);
         }
-        return chatClient.prompt(prompt)
-                .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, chatId))
+        return chatClient.prompt(chatForm.getPrompt())
+                .options(
+                        OpenAiChatOptions.builder()
+                                .extraBody(
+                                        Map.of(
+                                                "enable_thinking", chatForm.getEnableThinking(),
+                                                "enable_search", chatForm.getEnableSearch()
+                                        )
+                                )
+                                .build()
+                )
+                .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .stream()
                 .chatResponse()
                 .map(chatResponse -> {

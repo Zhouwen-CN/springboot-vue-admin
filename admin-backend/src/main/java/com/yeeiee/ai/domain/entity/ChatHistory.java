@@ -1,10 +1,6 @@
 package com.yeeiee.ai.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.KeySequence;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * AI聊天记录表
+ * AI对话记录表
  * </p>
  *
  * @author chen

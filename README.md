@@ -8,7 +8,7 @@
 - 🎉注重实用性、健壮性，尽量精简
 - 🎉maven会将前端打包好的文件放入springboot静态资源目录，同时具备 `部署方便` 和 `单页面应用` 优势（当然也可以分别部署）
 - 🎉打包好后，直接java -jar就能启动，无需再配置nginx
-- 🎉支持多种数据源，目前支持（mysql、oracle、postgresql）
+- 🎉支持多种数据源，目前支持（h2、mysql、oracle、postgresql）
 
 ## 目前已实现
 
@@ -34,14 +34,17 @@
 
 AI 大模型
 
-- AI 对话（开发中）
+- AI 对话
+- RAG（开发中）
 
 ## 功能模块
 
 | 包名                   | 模块                 |
 |----------------------|--------------------|
 | com.yeeiee.ai        | AI相关模块             |
+| com.yeeiee.cache     | 缓存模块               |
 | com.yeeiee.codegen   | 代码生成相关模块           |
+| com.yeeiee.common    | 一些配置、工具、切面、异常、指标   |
 | com.yeeiee.scheduler | 定时任务相关模块           |
 | com.yeeiee.system    | 系统模块（RBAC、字典、日志啥的） |
 
@@ -50,8 +53,8 @@ AI 大模型
 | 依赖                 | 版本      |
 |--------------------|---------|
 | JDK                | 17+     |
-| Spring-Boot        | 3.5.7   |
-| Spring-Ai          | 1.0.3   |
+| Spring-Boot        | 3.5.8   |
+| Spring-Ai          | 1.1.2   |
 | Mybatis-Plus       | 3.5.14  |
 | Node               | 22+     |
 | pnpm               | 10+     |
@@ -62,11 +65,6 @@ AI 大模型
 ## tips
 
 `maven` 打包需要本地拥有 `pnpm` 环境，否则前端无法打包
-
-idea打开最好右键排除掉一些不需要索引的文件夹
-
-- admin-backend/src/main/resources/static
-- admin-frontend/dist
 
 ## 项目截图
 
@@ -85,3 +83,5 @@ idea打开最好右键排除掉一些不需要索引的文件夹
 ![代码生成](images/7代码生成.png)
 
 ![定时任务](images/8定时任务.png)
+
+![AI对话](images/9AI对话.png)
