@@ -58,6 +58,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.quartz-scheduler</groupId>
+                    <artifactId>quartz</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- postgresql报错：https://github.com/quartz-scheduler/quartz/commit/f5cb52773cda11bad6fe863fee0bf2b80abfe0b0 -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.5.2</version>
         </dependency>
 
         <!-- validate -->

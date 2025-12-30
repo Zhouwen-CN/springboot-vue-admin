@@ -215,18 +215,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val accessTokenClaims = jwtTokenProvider.getClaimsIgnoreExpired(token)
                 .orElseThrow(() -> new RefreshTokenException("token校验失败"));
 
-        // 如果当前accessToken未过期，直接返回
-        val expiration = accessTokenClaims.getExpiration();
-        if (expiration.after(new Date())) {
-            return;
-        }
-
         val userId = Long.valueOf(accessTokenClaims.getSubject());
         val user = this.lambdaQuery()
                 .eq(User::getId, userId)
                 .one();
 
         val refreshToken = user.getRefreshToken();
+
+        // 如果当前accessToken未过期，直接返回
+        val expiration = accessTokenClaims.getExpiration();
+        if (refreshToken != null && expiration.after(new Date())) {
+            return;
+        }
+
         val claimsOptional = jwtTokenProvider.getClaims(refreshToken);
         if (claimsOptional.isEmpty()) {
             throw new RefreshTokenException("token已过期");

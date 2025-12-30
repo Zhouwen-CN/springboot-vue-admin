@@ -216,7 +216,7 @@ create table t_chat_history (
     update_time timestamp default CURRENT_TIMESTAMP comment '更新时间'
 ) comment 'AI对话记录表';
 
-# D:\env\apache-maven-3.9.8\repository\org\springframework\ai\spring-ai-model-chat-memory-repository-jdbc\1.0.3\spring-ai-model-chat-memory-repository-jdbc-1.0.3.jar!\org\springframework\ai\chat\memory\repository\jdbc\schema-mysql.sql
+-- spring ai chat memory
 CREATE TABLE IF NOT EXISTS SPRING_AI_CHAT_MEMORY (
     `conversation_id` VARCHAR(36) NOT NULL,
     `content` TEXT NOT NULL,

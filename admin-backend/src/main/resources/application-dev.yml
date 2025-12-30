@@ -32,9 +32,9 @@ spring:
   datasource:
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
-      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
-      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+      url: ${JDBC_URL:jdbc:mysql://127.0.0.1:3306/sv_admin}
+      username: ${JDBC_USERNAME:root}
+      password: ${JDBC_PASSWORD:123456}
       hikari:
         pool-name: master
         maximum-pool-size: 5 #最大连接数
@@ -46,9 +46,9 @@ spring:
         max-lifetime: 1200000 #最大存活时间，20分钟
     quartz:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAMSl4JIYdxI+R/g7XOPydE1
-      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
-      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+      url: ${JDBC_URL:jdbc:mysql://127.0.0.1:3306/sv_admin}
+      username: ${JDBC_USERNAME:root}
+      password: ${JDBC_PASSWORD:123456}
       hikari:
         pool-name: quartz
         maximum-pool-size: 5 #最大连接数
@@ -63,9 +63,9 @@ spring:
 #  datasource:
 #    master:
 #      driver-class-name: oracle.jdbc.OracleDriver
-#      url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
-#      username: root
-#      password: 123456
+#      url: ${JDBC_URL:jdbc:oracle:thin:@//127.0.0.1:1521/XEPDB1}
+#      username: ${JDBC_USERNAME:root}
+#      password: ${JDBC_PASSWORD:123456}
 #      hikari:
 #        pool-name: master
 #        maximum-pool-size: 5 #最大连接数
@@ -77,9 +77,9 @@ spring:
 #        max-lifetime: 1200000 #最大存活时间，20分钟
 #    quartz:
 #      driver-class-name: oracle.jdbc.OracleDriver
-#      url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
-#      username: root
-#      password: 123456
+#      url: ${JDBC_URL:jdbc:oracle:thin:@//127.0.0.1:1521/XEPDB1}
+#      username: ${JDBC_USERNAME:root}
+#      password: ${JDBC_PASSWORD:123456}
 #      hikari:
 #        pool-name: quartz
 #        maximum-pool-size: 5 #最大连接数
@@ -94,9 +94,9 @@ spring:
 #  datasource:
 #    master:
 #      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://localhost:5432/sv_admin
-#      username: root
-#      password: 123456
+#      url: ${JDBC_URL:jdbc:postgresql://127.0.0.1:5432/sv_admin}
+#      username: ${JDBC_USERNAME:root}
+#      password: ${JDBC_PASSWORD:123456}
 #      hikari:
 #        pool-name: master
 #        maximum-pool-size: 5 #最大连接数
@@ -108,9 +108,9 @@ spring:
 #        max-lifetime: 1200000 #最大存活时间，20分钟
 #    quartz:
 #      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://localhost:5432/sv_admin
-#      username: root
-#      password: 123456
+#      url: ${JDBC_URL:jdbc:postgresql://127.0.0.1:5432/sv_admin}
+#      username: ${JDBC_USERNAME:root}
+#      password: ${JDBC_PASSWORD:123456}
 #      hikari:
 #        pool-name: quartz
 #        maximum-pool-size: 5 #最大连接数

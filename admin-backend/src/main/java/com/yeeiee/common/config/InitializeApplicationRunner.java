@@ -25,11 +25,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InitializeApplicationRunner implements ApplicationRunner {
 
+    private static final String CURRENT_DATASOURCE_NAME = "master";
     private final DataSourceService dataSourceService;
     private final DataSourceProperties dataSourceProperties;
     private final SchedulerManager schedulerManager;
     private final JobService jobService;
-    private static final String CURRENT_DATASOURCE_NAME = "master";
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -69,7 +69,7 @@ public class InitializeApplicationRunner implements ApplicationRunner {
      * @throws SchedulerException 调度异常
      */
     private void initQuartzJob() throws SchedulerException {
-        // schedulerManager.clean();
+        // schedulerManager.clear();
 
         val jobList = jobService.lambdaQuery()
                 .list();

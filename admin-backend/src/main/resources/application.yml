@@ -9,6 +9,11 @@ spring:
   profiles:
     active: dev
 
+  # 路径匹配，用旧的
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   # 事务配置
   transaction:
     default-timeout: 60s #事务超时时间
@@ -150,7 +155,6 @@ springdoc:
 mybatis-plus:
   configuration:
     jdbc-type-for-null: "null" #解决oracle插入null值报错：一定得带双引号或者单引号，不然值设置不进去
-    auto-mapping-unknown-column-behavior: failing #通过该配置可指定 MyBatis 在自动映射过程中遇到未知列或者未知属性时如何处理
   global-config:
     db-config:
       id-type: none #由 EnvironmentConfiguration 动态设置成 AUTO 或者 INPUT 模式

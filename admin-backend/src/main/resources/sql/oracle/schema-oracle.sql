@@ -472,3 +472,41 @@ CREATE INDEX idx_job_log_create_time ON t_job_log(create_time DESC);
 CREATE SEQUENCE t_job_log_seq
 START WITH 1
 INCREMENT BY 1;
+
+
+create table t_chat_history(
+   id NUMBER(18) primary key,
+   user_id NUMBER(18) not null,
+   conversation_id varchar2(25) not null,
+   title varchar2(255) not null,
+   create_time DATE default SYSDATE,
+   update_time DATE default SYSDATE
+);
+comment on table t_chat_history is 'ai对话记录表';
+comment on column t_chat_history.id is '主键';
+comment on column t_chat_history.user_id is '用户id';
+comment on column t_chat_history.conversation_id is '会话id';
+comment on column t_chat_history.title is '标题';
+comment on column t_chat_history.create_time is '创建时间';
+comment on column t_chat_history.update_time is '更新时间';
+
+CREATE SEQUENCE t_chat_history_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+-- spring ai chat memory
+CREATE TABLE SPRING_AI_CHAT_MEMORY (
+    CONVERSATION_ID VARCHAR2(36 CHAR) NOT NULL,
+    CONTENT CLOB NOT NULL,
+    "TYPE" VARCHAR2(10 CHAR) NOT NULL CHECK (
+        "TYPE" IN (
+        'USER',
+        'ASSISTANT',
+        'SYSTEM',
+        'TOOL')
+    ),
+    "TIMESTAMP" TIMESTAMP NOT NULL
+);
+
+CREATE INDEX SPRING_AI_CHAT_MEMORY_CONVERSATION_ID_TIMESTAMP_IDX
+    ON SPRING_AI_CHAT_MEMORY(CONVERSATION_ID,'TIMESTAMP');

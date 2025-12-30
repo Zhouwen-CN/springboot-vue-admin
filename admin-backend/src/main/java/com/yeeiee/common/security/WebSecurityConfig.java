@@ -43,7 +43,7 @@ public class WebSecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Value("${spring.h2.console.path:/h2-console/**}")
+    @Value("${spring.h2.console.path:/h2-console")
     private String h2ConsolePath;
 
 
@@ -119,7 +119,7 @@ public class WebSecurityConfig {
                                 // 静态资源
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 // h2 console
-                                .requestMatchers(h2ConsolePath).permitAll()
+                                .requestMatchers(h2ConsolePath + "/**").permitAll()
                                 // actuator 端点
                                 .requestMatchers(EndpointRequest.to(ShutdownEndpoint.class)).hasAuthority("admin")
                                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()

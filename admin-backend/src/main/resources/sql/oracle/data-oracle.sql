@@ -29,6 +29,8 @@ INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (15, 1, 15);
 INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (16, 1, 16);
 INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (17, 1, 17);
 INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (18, 1, 18);
+INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (19, 1, 19);
+INSERT INTO t_role_menu(id, role_id, menu_id) VALUES (20, 1, 20);
 
 -- 菜单表
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (1, '权限管理', '/auth', 'Lock', 0, 0, 0);
@@ -46,9 +48,11 @@ INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VAL
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (13, '操作日志', '/log/ops', 'List', 11, 0, 1);
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (14, '异常日志', '/log/error', 'Failed', 11, 0, 1);
 INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (15, '调度日志', '/log/job', 'BellFilled', 11, 0, 1);
-INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (16, '菜单测试', '/test', 'CameraFilled', 0, 0, 0);
-INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (17, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 16, 0, 1);
-INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (18, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 16, 0, 1);
+INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (16, 'AI 大模型', '/ai', 'Platform', 0, 0, 0);
+INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (17, 'AI 对话', '/ai/chat', 'ChatDotRound', 16, 0, 1);
+INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (18, '菜单测试', '/test', 'CameraFilled', 0, 0, 0);
+INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (19, '菜单测试-sub1', '/test/sub1', 'SwitchFilled', 18, 0, 1);
+INSERT INTO t_menu(id, title, access_path, icon, pid, keep_alive, menu_type) VALUES (20, '菜单测试-sub2', '/test/sub2', 'PictureFilled', 18, 0, 1);
 
 -- 字典类型表
 insert into t_dict_type(id, name, dict_enable) values (1, '菜单类型', 1);

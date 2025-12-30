@@ -469,3 +469,34 @@ COMMENT ON COLUMN t_job_log.update_time IS '更新时间';
 CREATE SEQUENCE t_job_log_seq
 START WITH 1
 INCREMENT BY 1;
+
+create table t_chat_history(
+    id bigint primary key,
+    user_id bigint not null,
+    conversation_id varchar(25) not null,
+    title varchar(255) not null,
+    create_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+comment on table t_chat_history is 'ai对话记录表';
+comment on column t_chat_history.id is '主键';
+comment on column t_chat_history.user_id is '用户id';
+comment on column t_chat_history.conversation_id is '会话id';
+comment on column t_chat_history.title is '标题';
+comment on column t_chat_history.create_time is '创建时间';
+comment on column t_chat_history.update_time is '更新时间';
+
+CREATE SEQUENCE t_chat_history_seq
+START WITH 1
+INCREMENT BY 1;
+
+-- spring ai chat memory
+CREATE TABLE IF NOT EXISTS SPRING_AI_CHAT_MEMORY (
+    conversation_id VARCHAR(36) NOT NULL,
+    content TEXT NOT NULL,
+    type VARCHAR(10) NOT NULL CHECK (type IN ('USER', 'ASSISTANT', 'SYSTEM', 'TOOL')),
+    "timestamp" TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS SPRING_AI_CHAT_MEMORY_CONVERSATION_ID_TIMESTAMP_IDX
+    ON SPRING_AI_CHAT_MEMORY(conversation_id, "timestamp");

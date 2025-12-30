@@ -85,3 +85,72 @@ AI 大模型
 ![定时任务](images/8定时任务.png)
 
 ![AI对话](images/9AI对话.png)
+
+## docker 数据测试环境
+
+### 镜像源
+
+```shell
+echo docker.1ms.run > ~/mirror
+```
+
+### mysql
+
+```shell
+docker run -itd \
+-p 3306:3306 \
+-v ~/docker/mysql/data:/var/lib/mysql \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/mysql/schema-mysql.sql:/docker-entrypoint-initdb.d/1_schema-mysql.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/mysql/quartz-schema-mysql.sql:/docker-entrypoint-initdb.d/2_quartz-schema-mysql.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/mysql/data-mysql.sql:/docker-entrypoint-initdb.d/3_data-mysql.sql:ro \
+-e TZ=Asia/Shanghai \
+-e MYSQL_ROOT_PASSWORD=123456 \
+-e MYSQL_DATABASE=sv_admin \
+--name mysql \
+$(cat ~/mirror)/mysql
+```
+
+### postgresql
+
+```shell
+docker run -itd \
+-p 5432:5432 \
+-v ~/docker/postgresql/data:/var/lib/postgresql \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/postgresql/schema-postgresql.sql:/docker-entrypoint-initdb.d/1_schema-postgresql.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/postgresql/quartz-schema-postgresql.sql:/docker-entrypoint-initdb.d/2_quartz-schema-postgresql.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/postgresql/data-postgresql.sql:/docker-entrypoint-initdb.d/3_data-postgresql.sql:ro \
+-e TZ=Asia/Shanghai \
+-e POSTGRES_USER=root \
+-e POSTGRES_PASSWORD=123456 \
+-e POSTGRES_DB=sv_admin \
+--name postgresql \
+$(cat ~/mirror)/postgres
+```
+
+### oracle
+
+系统管理员
+
+- SID: XE
+- user: system
+- password: 123456
+
+用户账号
+
+- service name: XEPDB1
+- username: root
+- password: 123456
+
+```shell
+docker run -itd \
+-p 1521:1521 \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/oracle/schema-oracle.sql:/tmp/schema-oracle.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/oracle/quartz-schema-oracle.sql:/tmp/quartz-schema-oracle.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/oracle/data-oracle.sql:/tmp/data-oracle.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/oracle/1_create_user.sql:/docker-entrypoint-initdb.d/1_create_user.sql:ro \
+-v ~/springboot-vue-admin/admin-backend/src/main/resources/sql/oracle/2_create_schema.sh:/docker-entrypoint-initdb.d/2_create_schema.sh:ro \
+-e TZ=Asia/Shanghai \
+-e ORACLE_PASSWORD=123456 \
+--name oracle \
+$(cat ~/mirror)/gvenzl/oracle-xe:18-slim-faststart
+```
