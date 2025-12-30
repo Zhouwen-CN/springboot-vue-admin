@@ -19,8 +19,8 @@ import java.util.function.Consumer;
 
 /**
  * <pre>
- * web client hc5 配置
- * 每一个 {@link WebClient.Builder} 都具有下面相同的配置
+ *     web client hc5 配置
+ *     每一个 {@link WebClient.Builder} 都具有下面相同的配置
  * </pre>
  *
  * @author chen

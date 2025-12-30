@@ -23,12 +23,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * <p>
- * jackson 配置
  * <pre>
+ *     jackson 配置
  *     web的序列化和redis的序列化会冲突，各用各的
  * </pre>
- * </p>
  *
  * @author chen
  * @since 2024-04-27

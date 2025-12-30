@@ -10,15 +10,19 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Configuration
+/**
+ * <pre>
+ *     redis cache 配置
+ *     参考：org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration
+ * </pre>
+ *
+ * @author chen
+ * @since 2025-12-30
+ */
+@Configuration("customRedisCacheConfiguration")
 @ConditionalOnProperty(prefix = "spring.cache", name = "type", havingValue = "redis")
 public class RedisCacheConfiguration {
-    /**
-     * cache redis 配置
-     *
-     * @param cacheProperties cache配置
-     * @return redis cache配置
-     */
+
     @Bean
     public org.springframework.data.redis.cache.RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties, @Qualifier("redisObjectMapper") ObjectMapper objectMapper) {
         // 序列化

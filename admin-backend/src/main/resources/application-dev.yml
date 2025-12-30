@@ -1,5 +1,11 @@
 spring:
-  # 数据源配置（h2）
+  # 缓存配置
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=100,expireAfterAccess=5m
+
+# 数据源配置（h2）
 #  datasource:
 #    master:
 #      driver-class-name: org.h2.Driver
@@ -123,6 +129,9 @@ spring:
 
 # 指标监控
 management:
+  health:
+    redis:
+      enabled: false #redis未启用
   endpoints:
     web:
       exposure:

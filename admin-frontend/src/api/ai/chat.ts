@@ -46,22 +46,22 @@ export function reqDeleteChatConversationById(conversationId: string) {
 }
 
 export interface ChatForm {
-    conversationId: string
-    prompt: string
-    enableThinking: boolean
-    enableSearch: boolean
+  conversationId: string
+  prompt: string
+  enableThinking: boolean
+  enableSearch: boolean
 }
 
 // 聊天请求
 export function useChat() {
   const { loading, run, onMessage, onError, cancel } = useChatSSE()
 
-    function innerRun(chatForm: ChatForm) {
+  function innerRun(chatForm: ChatForm) {
     return run('/ai/chat', {
       method: 'post',
-        body: JSON.stringify(chatForm),
+      body: JSON.stringify(chatForm),
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
     })
   }

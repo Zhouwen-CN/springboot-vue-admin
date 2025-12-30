@@ -5,13 +5,40 @@ spring:
       cache:
         cachecontrol:
           max-age: 1d
+
+  # 缓存配置
+  cache:
+    type: redis
+    redis:
+      key-prefix: "sv-admin::" #缓存key前缀
+      time-to-live: 1h #缓存过期时间
+      cache-null-values: false #是否存储空值
+      use-key-prefix: true #是否使用key前缀
+
+  # redis配置
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:123456}
+      database: 0
+      connect-timeout: 5s #连接超时
+      timeout: 5s #读取超时
+      lettuce:
+        pool:
+          max-active: 8 #最大连接数
+          max-idle: 5 #最大空闲连接数
+          min-idle: 1 #最小空闲连接数
+          max-wait: 5s #从连接池获取连接超时时间
+          time-between-eviction-runs: 5m #空闲连接检查间隔
+
   # 数据源配置
   datasource:
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAPM/hJh5RrthzLmHcnxjKXV8/ifnUkmOzHAmDNM8BT5cw==
-      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
-      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+      url: ${JDBC_URL:jdbc:mysql://127.0.0.1:3306/sv_admin}
+      username: ${JDBC_USERNAME:root}
+      password: ${JDBC_PASSWORD:123456}
       hikari:
         pool-name: master
         maximum-pool-size: 5 #最大连接数
@@ -23,9 +50,9 @@ spring:
         max-lifetime: 1200000 #最大存活时间，20分钟
     quartz:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: mpw:T4ZxUrad99IczkCHrNZZ7dcIMiJAIEYw/1jEKlH9GAMSl4JIYdxI+R/g7XOPydE1
-      username: mpw:wWnm4OWZ3leMSP3yyKjyDQ==
-      password: mpw:skR0PmgRHk6TEa77ZCgF+A==
+      url: ${JDBC_URL:jdbc:mysql://127.0.0.1:3306/sv_admin}
+      username: ${JDBC_USERNAME:root}
+      password: ${JDBC_PASSWORD:123456}
       hikari:
         pool-name: quartz
         maximum-pool-size: 5 #最大连接数
@@ -41,14 +68,14 @@ logging:
   level:
     root: info
   file:
-    name: ./logs/springboot-vue-admin.log
+    name: ./logs/sv-admin.log
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss
   logback:
     rollingpolicy:
       total-size-cap: 50MB
 
-# 关闭监控，公网容易被搞
+# 关闭监控
 management:
   endpoints:
     web:

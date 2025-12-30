@@ -19,8 +19,8 @@ import java.util.function.Consumer;
 
 /**
  * <pre>
- * rest client hc5 配置
- * 每一个 {@link RestClient.Builder} 都具有下面相同的配置
+ *     rest client hc5 配置
+ *     每一个 {@link RestClient.Builder} 都具有下面相同的配置
  * </pre>
  *
  * @author chen
@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 @Configuration
 @ConfigurationProperties(prefix = "custom.http.rest-client")
 public class RestClientConfiguration {
-
     private PoolConfig pool = new PoolConfig();
     private ConnectConfig connect = new ConnectConfig();
 

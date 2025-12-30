@@ -25,12 +25,12 @@ import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
  */
 @Configuration
 public class AIThreadPoolConfiguration {
+
     @Bean(name = "aiTaskExecutionProperties")
     @ConfigurationProperties(prefix = "spring.task.execution.ai")
     public TaskExecutionProperties aiTaskExecutionProperties() {
         return new TaskExecutionProperties();
     }
-
 
     @Bean(name = "aiThreadPoolTaskExecutorBuilder")
     public ThreadPoolTaskExecutorBuilder aiThreadPoolTaskExecutorBuilder(
@@ -52,7 +52,6 @@ public class AIThreadPoolConfiguration {
 
     @Lazy
     @Bean(name = TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME)
-    @ConditionalOnThreading(Threading.PLATFORM)
     public ThreadPoolTaskExecutor applicationTaskExecutor(
             @Qualifier("aiThreadPoolTaskExecutorBuilder") ThreadPoolTaskExecutorBuilder threadPoolTaskExecutorBuilder
     ) {

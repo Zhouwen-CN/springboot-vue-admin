@@ -1,10 +1,15 @@
 <script lang="ts" setup>
-import {type ChatMessageDto, reqAddChatConversation, reqGetChatConversationList, useChat} from '@/api/ai/chat'
-import type {BubbleListInstance, BubbleListItemProps} from 'vue-element-plus-x/types/BubbleList'
-import type {ThinkingStatus} from 'vue-element-plus-x/types/Thinking'
-import {BubbleList, Prompts, Sender, Thinking, Welcome, XMarkdown} from 'vue-element-plus-x'
-import {ChromeFilled, Cpu} from '@element-plus/icons-vue'
-import type {PromptsItemsProps} from 'vue-element-plus-x/types/Prompts'
+import {
+  type ChatMessageDto,
+  reqAddChatConversation,
+  reqGetChatConversationList,
+  useChat
+} from '@/api/ai/chat'
+import type { BubbleListInstance, BubbleListItemProps } from 'vue-element-plus-x/types/BubbleList'
+import type { ThinkingStatus } from 'vue-element-plus-x/types/Thinking'
+import { BubbleList, Prompts, Sender, Thinking, Welcome, XMarkdown } from 'vue-element-plus-x'
+import { ChromeFilled, Cpu } from '@element-plus/icons-vue'
+import type { PromptsItemsProps } from 'vue-element-plus-x/types/Prompts'
 import useAppStore from '@/stores/app'
 
 const appStore = useAppStore()
@@ -189,7 +194,8 @@ function createMessage(isUser: boolean, isHistory: boolean, message = ''): Messa
     thinkingStatus: 'start',
     thinkCollapse: false,
     reasoningContent: '',
-    role: isUser ? 'user' : 'ai'
+    role: isUser ? 'user' : 'ai',
+    maxWidth: maxWidth.value
   }
 }
 
@@ -198,17 +204,18 @@ function onCancel() {
   cancel()
 }
 
-// 电脑端，ai回复消息左padding 20px
+// 电脑端，内容区 padding left 20px
 const containerPaddingLeft = computed(() => {
   return appStore.device === 'desktop' ? '20px' : '0px'
 })
+
 // 移动端，头像隐藏
 const bubbleAvatarVisibleCss = computed(() => {
   return appStore.device === 'desktop' ? 'block' : 'none'
 })
-// 移动端，动态计算内容最大宽度
-const bubbleContentMaxWidthCss = computed(() => {
-  return appStore.device === 'desktop' ? '800px' : `${appStore.windowWidth - 40}px`
+
+const maxWidth = computed(() => {
+  return appStore.device === 'desktop' ? '70%' : '100%'
 })
 </script>
 
@@ -224,6 +231,7 @@ const bubbleContentMaxWidthCss = computed(() => {
             :content="item.reasoningContent"
             :status="item.thinkingStatus"
             class="thinking-chain-warp"
+            :maxWidth="maxWidth"
           />
         </template>
 
@@ -282,9 +290,9 @@ const bubbleContentMaxWidthCss = computed(() => {
       <template #prefix>
         <div class="sender-prefix">
           <div
-              :class="{ selected: chatForm.enableThinking }"
+            :class="{ selected: chatForm.enableThinking }"
             class="chat-option"
-              @click="chatForm.enableThinking = !chatForm.enableThinking"
+            @click="chatForm.enableThinking = !chatForm.enableThinking"
           >
             <el-icon>
               <Cpu />
@@ -292,9 +300,9 @@ const bubbleContentMaxWidthCss = computed(() => {
             <span>深度思考</span>
           </div>
           <div
-              :class="{ selected: chatForm.enableSearch }"
+            :class="{ selected: chatForm.enableSearch }"
             class="chat-option"
-              @click="chatForm.enableSearch = !chatForm.enableSearch"
+            @click="chatForm.enableSearch = !chatForm.enableSearch"
           >
             <el-icon>
               <ChromeFilled />
@@ -311,10 +319,6 @@ const bubbleContentMaxWidthCss = computed(() => {
 :deep(.el-bubble-list) {
   .el-bubble-avatar {
     display: v-bind(bubbleAvatarVisibleCss);
-  }
-
-  .el-bubble-content {
-    max-width: v-bind(bubbleContentMaxWidthCss);
   }
 }
 

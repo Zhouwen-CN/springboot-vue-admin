@@ -41,7 +41,8 @@ static
 node_modules
 dist
 .trae
+.env
+logs
 
 # h2
 *.db
-.env
