@@ -9,6 +9,12 @@ spring:
   profiles:
     active: dev
 
+  # 开发工具
+  devtools:
+    # 热加载
+    restart:
+      additional-paths: src/main/java
+
   # 路径匹配，用旧的，新的老报错
   mvc:
     pathmatch:
