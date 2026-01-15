@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "RoleForm", description = "角色表单")
+@Schema(description = "角色表单")
 public class RoleForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "角色id")

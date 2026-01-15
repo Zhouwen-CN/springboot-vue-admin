@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "JobForm", description = "定时任务表单")
+@Schema(description = "定时任务表单")
 public class JobForm {
 
     @NotNull(groups = {GroupingValidate.Update.class})

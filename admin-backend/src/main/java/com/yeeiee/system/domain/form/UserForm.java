@@ -24,7 +24,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "UserForm", description = "用户表单")
+@Schema(description = "用户表单")
 public class UserForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "用户id")

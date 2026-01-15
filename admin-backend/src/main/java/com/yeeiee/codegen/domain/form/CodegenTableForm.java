@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableForm", description = "代码生成表单")
+@Schema(description = "代码生成表单")
 public class CodegenTableForm {
     @NotNull
     @Schema(description = "主键")

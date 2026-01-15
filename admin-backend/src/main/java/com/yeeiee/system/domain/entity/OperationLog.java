@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_operation_log")
 @KeySequence("t_operation_log_seq")
-@Schema(name = "OperationLog", description = "操作日志表")
+@Schema(description = "操作日志表")
 public class OperationLog {
 
     @Schema(description = "主键")

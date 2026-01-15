@@ -21,21 +21,21 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @Setter
-@Schema(title = "R", description = "响应视图")
+@Schema(description = "响应视图")
 public final class R<T> {
 
-    @Schema(title = "是否成功")
+    @Schema(description = "是否成功")
     private boolean success;
 
     @Nullable
-    @Schema(title = "数据")
+    @Schema(description = "数据")
     private T data;
 
-    @Schema(title = "状态码")
+    @Schema(description = "状态码")
     private int code;
 
     @Nullable
-    @Schema(title = "消息")
+    @Schema(description = "消息")
     private String message;
 
     public static R<Void> ok() {

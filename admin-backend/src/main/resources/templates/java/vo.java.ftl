@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "${table.className}Vo", description = "${table.tableComment?remove_ending('表')}视图")
+@Schema(description = "${table.tableComment?remove_ending('表')}视图")
 public class ${table.className}Vo {
 
 <#list columns as column>

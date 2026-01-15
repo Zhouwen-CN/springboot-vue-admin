@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DataSourceSelectorVo", description = "数据源配置选择器视图")
+@Schema(description = "数据源配置选择器视图")
 public class DataSourceSelectorVo {
     @Schema(description = "主键")
     private Long id;

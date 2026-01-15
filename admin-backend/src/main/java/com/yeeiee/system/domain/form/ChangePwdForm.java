@@ -26,7 +26,7 @@ import org.hibernate.validator.constraints.Length;
         confirmField = "confirmPwd",
         message = "两次输入的密码不一致"
 )
-@Schema(name = "ChangePwdForm", description = "修改密码表单")
+@Schema(description = "修改密码表单")
 public class ChangePwdForm {
     @NotNull
     @Length(min = 5, max = 15)

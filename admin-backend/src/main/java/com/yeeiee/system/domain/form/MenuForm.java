@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "MenuForm", description = "菜单表单")
+@Schema(description = "菜单表单")
 public class MenuForm {
 
     @NotNull(groups = {GroupingValidate.Update.class})

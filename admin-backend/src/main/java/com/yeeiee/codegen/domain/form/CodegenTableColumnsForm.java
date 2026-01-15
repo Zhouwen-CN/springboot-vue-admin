@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableColumnsForm", description = "代码生成表单")
+@Schema(description = "代码生成表单")
 public class CodegenTableColumnsForm {
     @NotNull
     @Schema(description = "表信息")

@@ -21,7 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "PageVo", description = "分页视图")
+@Schema(description = "分页视图")
 public class PageVo<T> {
     @Schema(description = "数据列表")
     private List<T> records;

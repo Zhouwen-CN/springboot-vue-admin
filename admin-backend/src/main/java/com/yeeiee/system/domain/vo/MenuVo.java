@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Schema(name = "MenuVo", description = "菜单视图")
+@Schema(description = "菜单视图")
 public class MenuVo {
 
     @Schema(description = "主键")

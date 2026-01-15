@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_dict_data")
 @KeySequence("t_dict_data_seq")
-@Schema(name = "DictData", description = "字典数据表")
+@Schema(description = "字典数据表")
 public class DictData {
 
     @Schema(description = "主键")

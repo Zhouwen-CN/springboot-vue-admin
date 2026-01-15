@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "JobSelectorVo", description = "定时任务选择器视图")
+@Schema(description = "定时任务选择器视图")
 public class JobSelectorVo {
     @Schema(description = "主键")
     private Long id;

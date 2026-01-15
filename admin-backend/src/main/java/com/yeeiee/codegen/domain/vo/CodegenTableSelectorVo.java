@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableSelectorVo", description = "代码生成表选择器视图")
+@Schema(description = "代码生成表选择器视图")
 public class CodegenTableSelectorVo {
     @Schema(description = "表名称")
     private String name;

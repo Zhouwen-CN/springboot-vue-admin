@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DictDataSelectorVo", description = "字典数据选择器视图")
+@Schema(description = "字典数据选择器视图")
 public class DictDataSelectorVo {
     @Schema(description = "标签建")
     private String label;

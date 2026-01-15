@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DataSourceVo", description = "数据源配置表视图")
+@Schema(description = "数据源配置表视图")
 public class DataSourceVo {
     @Schema(description = "主键")
     private Long id;

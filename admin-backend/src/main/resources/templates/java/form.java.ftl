@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "${table.className}Form", description = "${table.tableComment?remove_ending('表')}表单")
+@Schema(description = "${table.tableComment?remove_ending('表')}表单")
 public class ${table.className}Form {
 
 <#list columns as column>

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "RoleVo", description = "角色表视图")
+@Schema(description = "角色表视图")
 public class RoleVo {
 
     @Schema(description = "主键")

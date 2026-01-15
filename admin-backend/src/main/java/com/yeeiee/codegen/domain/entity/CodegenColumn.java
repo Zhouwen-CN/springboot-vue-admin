@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_codegen_column")
 @KeySequence("t_codegen_column_seq")
-@Schema(name = "CodegenColumn", description = "代码生成字段表")
+@Schema(description = "代码生成字段表")
 public class CodegenColumn {
 
     @Schema(description = "主键")

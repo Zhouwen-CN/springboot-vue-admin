@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_role_menu")
 @KeySequence("t_role_menu_seq")
-@Schema(name = "RoleMenu", description = "角色菜单关系表")
+@Schema(description = "角色菜单关系表")
 public class RoleMenu {
 
     @Schema(description = "主键")

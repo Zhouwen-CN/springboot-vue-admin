@@ -22,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DataSourceForm", description = "数据源配置表单")
+@Schema(description = "数据源配置表单")
 public class DataSourceForm {
     @NotNull(groups = {GroupingValidate.Update.class})
     @Schema(description = "主键")

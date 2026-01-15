@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "UserVo", description = "用户视图")
+@Schema(description = "用户视图")
 public class UserVo {
     @Schema(description = "用户id")
     private Long id;

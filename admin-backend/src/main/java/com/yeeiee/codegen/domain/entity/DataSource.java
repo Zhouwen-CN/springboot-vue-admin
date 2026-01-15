@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_data_source")
 @KeySequence("t_data_source_seq")
-@Schema(name = "DataSource", description = "数据源配置表")
+@Schema(description = "数据源配置表")
 public class DataSource {
 
     @Schema(description = "主键")

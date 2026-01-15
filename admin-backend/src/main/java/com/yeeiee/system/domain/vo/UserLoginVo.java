@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "UserLoginVo", description = "用户登入视图")
+@Schema(description = "用户登入视图")
 public class UserLoginVo {
     @Schema(description = "用户id")
     private Long id;

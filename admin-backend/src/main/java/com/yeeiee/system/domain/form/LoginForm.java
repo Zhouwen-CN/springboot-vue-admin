@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "LoginForm", description = "用户登入表单")
+@Schema(description = "用户登入表单")
 public class LoginForm {
     @NotBlank
     @Length(min = 5, max = 15)

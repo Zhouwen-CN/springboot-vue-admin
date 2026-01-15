@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableVo", description = "代码生成表视图")
+@Schema(description = "代码生成表视图")
 public class CodegenTableVo {
     @Schema(description = "主键")
     private Long id;

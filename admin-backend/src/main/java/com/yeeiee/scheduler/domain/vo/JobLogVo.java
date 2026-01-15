@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "JobLogVo", description = "定时任务日志视图")
+@Schema(description = "定时任务日志视图")
 public class JobLogVo {
 
     @Schema(description = "主键")

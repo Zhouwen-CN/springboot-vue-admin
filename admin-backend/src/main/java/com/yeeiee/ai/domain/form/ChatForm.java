@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "ChatForm", description = "AI对话表单")
+@Schema(description = "AI对话表单")
 public class ChatForm {
     @NotBlank
     @Schema(description = "会话id")

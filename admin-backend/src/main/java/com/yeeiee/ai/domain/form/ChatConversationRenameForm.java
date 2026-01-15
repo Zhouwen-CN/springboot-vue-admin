@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "ChatConversationRenameForm", description = "AI对话重命名表单")
+@Schema(description = "AI对话重命名表单")
 public class ChatConversationRenameForm {
     @NotBlank
     @Schema(description = "会话ID")

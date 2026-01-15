@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DictTypeVo", description = "字典类型视图")
+@Schema(description = "字典类型视图")
 public class DictTypeVo {
 
     @Schema(description = "主键")

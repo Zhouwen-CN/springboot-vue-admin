@@ -20,7 +20,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenPreviewVo", description = "代码生成预览视图")
+@Schema(description = "代码生成预览视图")
 public class CodegenPreviewVo {
     @Schema(description = "文件路径")
     private String filePath;

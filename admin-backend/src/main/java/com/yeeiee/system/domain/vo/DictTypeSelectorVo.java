@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DictTypeSelectorVo", description = "字典类型选择器视图")
+@Schema(description = "字典类型选择器视图")
 public class DictTypeSelectorVo {
     @Schema(description = "主键")
     private Long id;

@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "DictTypeForm", description = "字典类型表单")
+@Schema(description = "字典类型表单")
 public class DictTypeForm {
 
     @NotNull(groups = {GroupingValidate.Update.class})

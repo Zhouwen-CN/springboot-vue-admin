@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @ToString
 @TableName("t_role")
 @KeySequence("t_role_seq")
-@Schema(name = "Role", description = "角色表")
+@Schema(description = "角色表")
 public class Role {
 
     @Schema(description = "主键")

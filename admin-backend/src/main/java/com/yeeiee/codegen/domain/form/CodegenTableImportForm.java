@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenTableImportForm", description = "代码生成导入表单")
+@Schema(description = "代码生成导入表单")
 public class CodegenTableImportForm {
     @NotNull
     @Schema(description = "数据源配置的编号")

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "RoleSelectorVo", description = "角色选择器视图")
+@Schema(description = "角色选择器视图")
 public class RoleSelectorVo {
     @Schema(description = "角色id")
     private Long id;

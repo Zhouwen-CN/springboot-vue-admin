@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Schema(name = "CodegenColumnVo", description = "代码生成字段视图")
+@Schema(description = "代码生成字段视图")
 public class CodegenColumnVo {
 
     @Schema(description = "主键")

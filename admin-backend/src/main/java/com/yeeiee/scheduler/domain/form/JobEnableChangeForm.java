@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 @ToString
-@Schema(name = "JobEnableChangeForm", description = "定时任务状态修改表单")
+@Schema(description = "定时任务状态修改表单")
 public class JobEnableChangeForm {
 
     @NotBlank
